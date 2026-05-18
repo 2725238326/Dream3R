@@ -1,0 +1,187 @@
+{
+  "abl_gate": "ABL-memory-0",
+  "abl_memory_0_status": "pass",
+  "config": {
+    "batch_size": 2,
+    "evidence_tokens": 8,
+    "frames": 12,
+    "groups": 4,
+    "loop_offset": 6,
+    "memory_max": 256,
+    "patch_tokens": 64,
+    "retrieval_k": 8,
+    "seeds": [
+      20260508,
+      20260509,
+      20260510
+    ],
+    "state_tokens": 32,
+    "token_dim": 128,
+    "window": 4
+  },
+  "cycle": "031",
+  "expected_shapes": {
+    "bus.conflict_score": [
+      2,
+      12
+    ],
+    "bus.dynamic_ratio": [
+      2,
+      12
+    ],
+    "bus.expected_future_use": [
+      2,
+      12
+    ],
+    "bus.permanence_score": [
+      2,
+      12
+    ],
+    "bus.reset_mask": [
+      2,
+      12
+    ],
+    "evidence_tokens": [
+      2,
+      12,
+      8,
+      128
+    ],
+    "expected_loop_id": [
+      2,
+      12
+    ],
+    "frame_tokens": [
+      2,
+      12,
+      64,
+      128
+    ],
+    "group_id": [
+      2,
+      12,
+      64
+    ],
+    "is_corrupt": [
+      2,
+      12,
+      64
+    ],
+    "is_dynamic": [
+      2,
+      12,
+      64
+    ],
+    "point_tokens": [
+      2,
+      12,
+      64,
+      128
+    ]
+  },
+  "oracle_bus": {
+    "conflict_score": {
+      "dtype": "float32",
+      "hash": "cc7d57788394456001ede13237e197ebe760e3d2c14dc47de496d6086e8a8b96",
+      "shape": [
+        2,
+        12
+      ],
+      "source": "fixture_metadata",
+      "tag": "oracle_bus"
+    },
+    "dynamic_ratio": {
+      "dtype": "float32",
+      "hash": "af5c4e858edda9df8fa56f08bb3cdbe3c70d608916476189ab4830efc3ab25fd",
+      "shape": [
+        2,
+        12
+      ],
+      "source": "fixture_metadata",
+      "tag": "oracle_bus"
+    },
+    "expected_future_use": {
+      "dtype": "float32",
+      "hash": "ab1cd55d06821b8f66f0a0a5d18a3995d3d083e0232f337dfa5224eeca7af1e0",
+      "shape": [
+        2,
+        12
+      ],
+      "source": "fixture_metadata",
+      "tag": "oracle_bus"
+    },
+    "permanence_score": {
+      "dtype": "float32",
+      "hash": "9b4409fe8a5fbfa03df77b593bb6f4dc3e89d38f7e0b13019ef612d1afeb35c1",
+      "shape": [
+        2,
+        12
+      ],
+      "source": "fixture_metadata",
+      "tag": "oracle_bus"
+    },
+    "reset_mask": {
+      "dtype": "int32",
+      "hash": "47677a268a41e3c73912489545f5d6a57d21e7448ad37f73fbf5b02e332d7a2f",
+      "shape": [
+        2,
+        12
+      ],
+      "source": "fixture_metadata",
+      "tag": "oracle_bus"
+    }
+  },
+  "prototype": "memory_v03_p0",
+  "raw_label_hashes": {
+    "expected_loop_id": "bc4bd3a1e2a5a92267fd339d7856f5c7ec925835c6feba37bda6c3495cc39aa9",
+    "group_id": "41197ce479949ac6d7520288c5441d7f8c394291008f618b098afb2ffde1b522",
+    "is_corrupt": "4cb23420e5428471c03f71f1a63abc4c9232696c42cf92970ab8c0edb249d081",
+    "is_dynamic": "0baf929156fef490e440da50032b47ad6d2b9a58f91765c492a41487ce56dd12"
+  },
+  "raw_label_policy": {
+    "construction_and_audit_only": [
+      "group_id",
+      "is_dynamic",
+      "is_corrupt",
+      "expected_loop_id"
+    ],
+    "forbidden_as_variant_inputs": true
+  },
+  "tensor_hashes": {
+    "evidence_tokens": "db41602918c1d088d95be4455f2bd3db2827bddbce2504475472a2cd56180567",
+    "frame_tokens": "676b0c3ca60d173da2f486fdc25d186213815736602a775ba53e2ec81baa8965",
+    "point_tokens": "d31987f08a773ff4fadbe205673da02c5eedcc117f39ed82b9d803e8f06294af"
+  },
+  "variant_input_audit": {
+    "actual_inputs": [
+      "frame_tokens",
+      "evidence_tokens",
+      "point_tokens",
+      "bus.dynamic_ratio",
+      "bus.conflict_score",
+      "bus.permanence_score",
+      "bus.expected_future_use",
+      "bus.reset_mask"
+    ],
+    "allowed_inputs": [
+      "frame_tokens",
+      "evidence_tokens",
+      "point_tokens",
+      "bus.dynamic_ratio",
+      "bus.conflict_score",
+      "bus.permanence_score",
+      "bus.expected_future_use",
+      "bus.reset_mask"
+    ],
+    "forbidden_inputs": [
+      "group_id",
+      "is_dynamic",
+      "is_corrupt",
+      "expected_loop_id",
+      "future_use_label"
+    ],
+    "forbidden_present": [],
+    "missing_allowed": [],
+    "passed": true
+  }
+}

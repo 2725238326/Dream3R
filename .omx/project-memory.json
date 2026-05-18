@@ -1,0 +1,9 @@
+{
+  "notes": [
+    {
+      "category": "architecture",
+      "content": "Dream workspace context: read TASK_SNAPSHOT.md first, then AGENT_MASTER_PROMPT.md/README/INDEX/WORKFLOW_STATUS before substantive work. Cycle 032 (2026-05-09) is closed/idle; v0.3 codebase lives at E:\\kykt\\Dream\\code\\dream3r locally and is verified on server at /hdd3/kykt26/code/dream3r/dream3r. Hard rule F-002: local = editing/markdown, Python execution/tests/training/profiling on BUAA-Server only. Current project posture: architecture-first 3R, candidate-not-final/no-all-in; C2 Memory v0.3 focus but code review should respect evidence boundaries and REVIEW_PROMPT.md contracts.",
+      "timestamp": "2026-05-09T10:38:33.897Z"
+    }
+  ]
+}

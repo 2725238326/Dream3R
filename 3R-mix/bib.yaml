@@ -1,0 +1,304 @@
+# DEPRECATED — Typst-era bibliography snapshot, no longer maintained.
+# Current canonical bibliography is `references.bib` (BibTeX, used by main.tex).
+# See README.md and NEW_CHAT_HANDOFF.md.
+
+dust3r:
+    type: Article
+    title: "DUSt3R: Geometric 3D Vision Made Easy"
+    author: ["Wang, Shuzhe", "Leroy, Vincent", "Cabon, Yohann", "Chidlovskii, Boris", "Revaud, Jerome"]
+    date: 2023
+    url: https://arxiv.org/abs/2312.14132
+
+mast3r:
+    type: Article
+    title: "Grounding Image Matching in 3D with MASt3R"
+    author: ["Leroy, Vincent", "Cabon, Yohann", "Revaud, Jerome"]
+    date: 2024
+    url: https://arxiv.org/abs/2406.09756
+
+mast3r_sfm:
+    type: Article
+    title: "MASt3R-SfM: a Fully-Integrated Solution for Unconstrained Structure-from-Motion"
+    author: ["Duisterhof, Bardienus", "Zust, Lojze", "Weinzaepfel, Philippe", "Leroy, Vincent", "Cabon, Yohann", "Revaud, Jerome"]
+    date: 2024
+    url: https://arxiv.org/abs/2409.19152
+
+mvdust3rplus:
+    type: Article
+    title: "MV-DUSt3R+: Single-Stage Scene Reconstruction from Sparse Views In 2 Seconds"
+    author: ["Tang, Zhenggang", "Fan, Yuchen", "Wang, Dilin", "Xu, Hongyu", "Ranjan, Rakesh", "Schwing, Alexander", "Yan, Zhicheng"]
+    date: 2024
+    url: https://arxiv.org/abs/2412.06974
+
+fast3r:
+    type: Article
+    title: "Fast3R: Towards 3D Reconstruction of 1000+ Images in One Forward Pass"
+    author: ["Yang, Jianing", "Sax, Alexander", "Liang, Kevin J.", "Henaff, Mikael", "Tang, Hao", "Cao, Ang", "Chai, Joyce", "Meier, Franziska", "Feiszli, Matt"]
+    date: 2025
+    url: https://arxiv.org/abs/2501.13928
+
+vggt:
+    type: Article
+    title: "VGGT: Visual Geometry Grounded Transformer"
+    author: ["Wang, Jianyuan", "Chen, Minghao", "Karaev, Nikita", "Vedaldi, Andrea", "Rupprecht, Christian", "Novotny, David"]
+    date: 2025
+    url: https://arxiv.org/abs/2503.11651
+
+mapanything:
+    type: Article
+    title: "MapAnything: Universal Feed-Forward Metric 3D Reconstruction"
+    author: ["Keetha, Nikhil", "Mueller, Norman", "Schoenberger, Johannes", "Porzi, Lorenzo", "Zhang, Yuchen", "Fischer, Tobias", "Knapitsch, Arno", "Zauss, Duncan", "Weber, Ethan", "Antunes, Nelson", "Luiten, Jonathon", "Lopez-Antequera, Manuel", "Bulo, Samuel Rota", "Richardt, Christian", "Ramanan, Deva", "Scherer, Sebastian", "Kontschieder, Peter"]
+    date: 2025
+    url: https://arxiv.org/abs/2509.13414
+
+align3r:
+    type: Article
+    title: "Align3R: Aligned Monocular Depth Estimation for Dynamic Videos"
+    author: ["Lu, Jiahao", "Huang, Tianyu", "Li, Peng", "Dou, Zhiyang", "Lin, Cheng", "Cui, Zhiming", "Dong, Zhen", "Yeung, Sai-Kit", "Wang, Wenping", "Liu, Yuan"]
+    date: 2024
+    url: https://arxiv.org/abs/2412.03079
+
+pow3r:
+    type: Article
+    title: "Pow3R: Empowering Unconstrained 3D Reconstruction with Camera and Scene Priors"
+    author: ["Jang, Wonbong", "Weinzaepfel, Philippe", "Leroy, Vincent", "Agapito, Lourdes", "Revaud, Jerome"]
+    date: 2025
+    url: https://arxiv.org/abs/2503.17316
+
+cut3r:
+    type: Article
+    title: "Continuous 3D Perception Model with Persistent State"
+    author: ["Wang, Qianqian", "Zhang, Yifei", "Holynski, Aleksander", "Efros, Alexei A.", "Kanazawa, Angjoo"]
+    date: 2025
+    url: https://arxiv.org/abs/2501.12387
+
+spann3r:
+    type: Article
+    title: "3D Reconstruction with Spatial Memory"
+    author: ["Wang, Hengyi", "Agapito, Lourdes"]
+    date: 2024
+    url: https://arxiv.org/abs/2408.16061
+
+point3r:
+    type: Article
+    title: "Point3R: Streaming 3D Reconstruction with Explicit Spatial Pointer Memory"
+    author: ["Wu, Yuqi", "Zheng, Wenzhao", "Zhou, Jie", "Lu, Jiwen"]
+    date: 2025
+    url: https://arxiv.org/abs/2507.02863
+
+stream3r:
+    type: Article
+    title: "STream3R: Scalable Sequential 3D Reconstruction with Causal Transformer"
+    author: ["Lan, Yushi", "Luo, Yihang", "Hong, Fangzhou", "Zhou, Shangchen", "Chen, Honghua", "Lyu, Zhaoyang", "Yang, Shuai", "Dai, Bo", "Loy, Chen Change", "Pan, Xingang"]
+    date: 2025
+    url: https://arxiv.org/abs/2508.10893
+
+long3r:
+    type: Article
+    title: "LONG3R: Long Sequence Streaming 3D Reconstruction"
+    author: ["Chen, Zhuoguang", "Qin, Minghui", "Yuan, Tianyuan", "Liu, Zhe", "Zhao, Hang"]
+    date: 2025
+    url: https://arxiv.org/abs/2507.18255
+
+loger:
+    type: Article
+    title: "LoGeR: Long-Context Geometric Reconstruction with Hybrid Memory"
+    author: ["Zhang, Junyi", "Herrmann, Charles", "Hur, Junhwa", "Sun, Chen", "Yang, Ming-Hsuan", "Cole, Forrester", "Darrell, Trevor", "Sun, Deqing"]
+    date: 2026
+    url: https://arxiv.org/abs/2603.03269
+
+mem3r:
+    type: Article
+    title: "Mem3R: Streaming 3D Reconstruction with Hybrid Memory via Test-Time Training"
+    author: ["Liu, Changkun", "Yang, Jiezhi", "Li, Zeman", "Deng, Yuan", "Guo, Jiancong", "Ballan, Luca"]
+    date: 2026
+    url: https://arxiv.org/abs/2604.07279
+
+ovggt:
+    type: Article
+    title: "OVGGT: O(1) Constant-Cost Streaming Visual Geometry Transformer"
+    author: ["Lu, Si-Yu", "Chen, Po-Ting", "Hsu, Hui-Che", "Jhong, Sin-Ye", "Cheng, Wen-Huang", "Chen, Yung-Yao"]
+    date: 2026
+    url: https://arxiv.org/abs/2603.05959
+
+pas3r:
+    type: Article
+    title: "PAS3R: Pose-Adaptive Streaming 3D Reconstruction for Long Video Sequences"
+    author: ["Xu, Lanbo", "Guo, Liang", "Jiang, Caigui", "Wang, Cheng"]
+    date: 2026
+    url: https://arxiv.org/abs/2603.21436
+
+filt3r:
+    type: Article
+    title: "FILT3R: Latent State Adaptive Kalman Filter for Streaming 3D Reconstruction"
+    author: ["Jin, Seonghyun", "Ye, Jong Chul"]
+    date: 2026
+    url: https://arxiv.org/abs/2603.18493
+
+longstream:
+    type: Article
+    title: "LongStream: Long-Sequence Streaming Autoregressive Visual Geometry"
+    author: ["Cheng, Chong", "Chen, Xianda", "Xie, Tao", "Yin, Wei", "Ren, Weiqiang", "Zhang, Qian", "Guo, Xiaoyang", "Wang, Hao"]
+    date: 2026
+    url: https://arxiv.org/abs/2602.13172
+
+monst3r:
+    type: Article
+    title: "MonST3R: A Simple Approach for Estimating Geometry in the Presence of Motion"
+    author: ["Zhang, Junyi", "Herrmann, Charles", "Hur, Junhwa", "Jampani, Varun", "Darrell, Trevor", "Cole, Forrester", "Sun, Deqing", "Yang, Ming-Hsuan"]
+    date: 2024
+    url: https://arxiv.org/abs/2410.03825
+
+pomato:
+    type: Article
+    title: "POMATO: Marrying Pointmap Matching with Temporal Motion for Dynamic 3D Reconstruction"
+    author: ["Zhang, Songyan", "Ge, Yongtao", "Tian, Jinyuan", "Xu, Guangkai", "Chen, Hao", "Lv, Chen", "Shen, Chunhua"]
+    date: 2025
+    url: https://arxiv.org/abs/2504.05692
+
+d2ust3r:
+    type: Article
+    title: "D^2USt3R: Enhancing 3D Reconstruction for Dynamic Scenes"
+    author: ["Han, Jisang", "An, Honggyu", "Jung, Jaewoo", "Narihira, Takuya", "Seo, Junyoung", "Fukuda, Kazumi", "Kim, Chaehyun", "Hong, Sunghwan", "Mitsufuji, Yuki", "Kim, Seungryong"]
+    date: 2025
+    url: https://arxiv.org/abs/2504.06264
+
+easi3r:
+    type: Article
+    title: "Easi3R: Estimating Disentangled Motion from DUSt3R Without Training"
+    author: ["Chen, Xingyu", "Chen, Yue", "Xiu, Yuliang", "Geiger, Andreas", "Chen, Anpei"]
+    date: 2025
+    url: https://arxiv.org/abs/2503.24391
+
+raymap3r:
+    type: Article
+    title: "RayMap3R: Inference-Time RayMap for Dynamic 3D Reconstruction"
+    author: ["Wang, Feiran", "Shang, Zezhou", "Liu, Gaowen", "Yan, Yan"]
+    date: 2026
+    url: https://arxiv.org/abs/2603.20588
+
+test3r:
+    type: Article
+    title: "Test3R: Learning to Reconstruct 3D at Test Time"
+    author: ["Yuan, Yuheng", "Shen, Qiuhong", "Wang, Shizun", "Yang, Xingyi", "Wang, Xinchao"]
+    date: 2025
+    url: https://arxiv.org/abs/2506.13750
+
+ttt3r:
+    type: Article
+    title: "TTT3R: 3D Reconstruction as Test-Time Training"
+    author: ["Chen, Xingyu", "Chen, Yue", "Xiu, Yuliang", "Geiger, Andreas", "Chen, Anpei"]
+    date: 2025
+    url: https://arxiv.org/abs/2509.26645
+
+gcut3r:
+    type: Article
+    title: "G-CUT3R: Guided 3D Reconstruction with Camera and Depth Prior Integration"
+    author: ["Khafizov, Ramil", "Komarichev, Artem", "Rakhimov, Ruslan", "Wonka, Peter", "Burnaev, Evgeny"]
+    date: 2025
+    url: https://arxiv.org/abs/2508.11379
+
+splatt3r:
+    type: Article
+    title: "Splatt3R: Zero-shot Gaussian Splatting from Uncalibrated Image Pairs"
+    author: ["Smart, Brandon", "Zheng, Chuanxia", "Laina, Iro", "Prisacariu, Victor Adrian"]
+    date: 2024
+    url: https://arxiv.org/abs/2408.13912
+
+instantsplat:
+    type: Article
+    title: "InstantSplat: Sparse-view Gaussian Splatting in Seconds"
+    author: ["Fan, Zhiwen", "Cong, Wenyan", "Wen, Kairun", "Wang, Kevin", "Zhang, Jian", "Ding, Xinghao", "Xu, Danfei", "Ivanovic, Boris", "Pavone, Marco", "Pavlakos, Georgios", "Wang, Zhangyang", "Wang, Yue"]
+    date: 2024
+    url: https://arxiv.org/abs/2403.20309
+
+noposplat:
+    type: Article
+    title: "No Pose, No Problem: Surprisingly Simple 3D Gaussian Splats from Sparse Unposed Images"
+    author: ["Ye, Botao", "Liu, Sifei", "Xu, Haofei", "Li, Xueting", "Pollefeys, Marc", "Yang, Ming-Hsuan", "Peng, Songyou"]
+    date: 2024
+    url: https://arxiv.org/abs/2410.24207
+
+gaussian_splatting_3d:
+    type: Article
+    title: "3D Gaussian Splatting for Real-Time Radiance Field Rendering"
+    author: ["Kerbl, Bernhard", "Kopanas, Georgios", "Leimkuehler, Thomas", "Drettakis, George"]
+    date: 2023
+    url: https://arxiv.org/abs/2308.04079
+
+gaussian_splatting_4d:
+    type: Article
+    title: "4D Gaussian Splatting for Real-Time Dynamic Scene Rendering"
+    author: ["Wu, Guanjun", "Yi, Taoran", "Fang, Jiemin", "Xie, Lingxi", "Zhang, Xiaopeng", "Wei, Wei", "Liu, Wenyu", "Tian, Qi", "Wang, Xinggang"]
+    date: 2023
+    url: https://arxiv.org/abs/2310.08528
+
+rotor_4dgs:
+    type: Article
+    title: "4D-Rotor Gaussian Splatting: Towards Efficient Novel View Synthesis for Dynamic Scenes"
+    author: ["Duan, Yuanxing", "Wei, Fangyin", "Dai, Qiyu", "He, Yuhang", "Chen, Wenzheng", "Chen, Baoquan"]
+    date: 2024
+    url: https://arxiv.org/abs/2402.03307
+
+depth_anything:
+    type: Article
+    title: "Depth Anything: Unleashing the Power of Large-Scale Unlabeled Data"
+    author: ["Yang, Lihe", "Kang, Bingyi", "Huang, Zilong", "Xu, Xiaogang", "Feng, Jiashi", "Zhao, Hengshuang"]
+    date: 2024
+    url: https://arxiv.org/abs/2401.10891
+
+depth_anything_v2:
+    type: Article
+    title: "Depth Anything V2"
+    author: ["Yang, Lihe", "Kang, Bingyi", "Huang, Zilong", "Zhao, Zhen", "Xu, Xiaogang", "Feng, Jiashi", "Zhao, Hengshuang"]
+    date: 2024
+    url: https://arxiv.org/abs/2406.09414
+
+dinov2:
+    type: Article
+    title: "DINOv2: Learning Robust Visual Features without Supervision"
+    author: ["Oquab, Maxime", "Darcet, Timothee", "Moutakanni, Theo", "Vo, Huy", "Szafraniec, Marc", "Khalidov, Vasil", "et al."]
+    date: 2023
+    url: https://arxiv.org/abs/2304.07193
+
+dinov3:
+    type: Article
+    title: "DINOv3"
+    author: ["Simeoni, Oriane", "Vo, Huy V.", "Seitzer, Maximilian", "Baldassarre, Federico", "Oquab, Maxime", "Jose, Cijo", "et al."]
+    date: 2025
+    url: https://arxiv.org/abs/2508.10104
+
+cotracker:
+    type: Article
+    title: "CoTracker: It is Better to Track Together"
+    author: ["Karaev, Nikita", "Rocco, Ignacio", "Graham, Benjamin", "Neverova, Natalia", "Vedaldi, Andrea", "Rupprecht, Christian"]
+    date: 2023
+    url: https://arxiv.org/abs/2307.07635
+
+sam2:
+    type: Article
+    title: "SAM 2: Segment Anything in Images and Videos"
+    author: ["Ravi, Nikhila", "Gabeur, Valentin", "Hu, Yuan-Ting", "Hu, Ronghang", "Ryali, Chaitanya", "Ma, Tengyu", "Khedr, Haitham", "et al."]
+    date: 2024
+    url: https://arxiv.org/abs/2408.00714
+
+spatialtracker:
+    type: Article
+    title: "SpatialTracker: Tracking Any 2D Pixels in 3D Space"
+    author: ["Xiao, Yuxi", "Wang, Qianqian", "Zhang, Shangzhan", "Xue, Nan", "Peng, Sida", "Shen, Yujun", "Zhou, Xiaowei"]
+    date: 2024
+    url: https://arxiv.org/abs/2404.04319
+
+depth_pro:
+    type: Article
+    title: "Depth Pro: Sharp Monocular Metric Depth in Less Than a Second"
+    author: ["Bochkovskii, Aleksei", "Delaunoy, Amael", "Germain, Hugo", "Santos, Marcel", "Zhou, Yichao", "Richter, Stephan R.", "Koltun, Vladlen"]
+    date: 2024
+    url: https://arxiv.org/abs/2410.02073
+
+metric3dv2:
+    type: Article
+    title: "Metric3Dv2: A Versatile Monocular Geometric Foundation Model for Zero-shot Metric Depth and Surface Normal Estimation"
+    author: ["Hu, Mu", "Yin, Wei", "Zhang, Chi", "Cai, Zhipeng", "Long, Xiaoxiao", "Wang, Kaixuan", "Chen, Hao", "Yu, Gang", "Shen, Chunhua", "Shen, Shaojie"]
+    date: 2024
+    url: https://arxiv.org/abs/2404.15506

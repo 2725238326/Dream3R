@@ -1,0 +1,10 @@
+abl_id,status,admissible,metric_name,metric_value,notes
+ABL-memory-0,pass,true,validity_checks_passed,22/22,fixture/logging validity gate only
+ABL-memory-1,not_run_scope_deferred,false,not_applicable,,reserved for later cycles; no implementation or claim in cycle 031
+ABL-memory-2,not_run_scope_deferred,false,not_applicable,,reserved for later cycles; no implementation or claim in cycle 031
+ABL-memory-3,not_run_scope_deferred,false,not_applicable,,reserved for later cycles; no implementation or claim in cycle 031
+ABL-memory-4,not_run_scope_deferred,false,not_applicable,,reserved for later cycles; no implementation or claim in cycle 031
+ABL-memory-5,not_run_scope_deferred,false,not_applicable,,reserved for later cycles; no implementation or claim in cycle 031
+ABL-memory-6,not_run_scope_deferred,false,not_applicable,,reserved for later cycles; no implementation or claim in cycle 031
+ABL-memory-7,not_run_scope_deferred,false,not_applicable,,reserved for later cycles; no implementation or claim in cycle 031
+ABL-memory-8,not_run_scope_deferred,false,not_applicable,,reserved for later cycles; no implementation or claim in cycle 031
