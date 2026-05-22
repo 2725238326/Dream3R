@@ -41,6 +41,14 @@ def _summarize_window(index: int, sample: Dict[str, Any],
         promoted = _tensor_mean(retrieval_log.get("promoted_to_stable"))
         selected_distance = _tensor_mean(retrieval_log.get("selected_3d_distances"))
 
+    effective_top_k = None
+    sliding_branch_fired = False
+    if isinstance(retrieval_log, dict):
+        effective_top_k = retrieval_log.get("effective_top_k")
+        active_mask = retrieval_log.get("branch_active_mask")
+        if isinstance(active_mask, torch.Tensor) and active_mask.dim() >= 2:
+            sliding_branch_fired = bool(active_mask[..., 2].any().item())
+
     return {
         "index": index,
         "sequence_name": sample["sequence_name"],
@@ -53,6 +61,8 @@ def _summarize_window(index: int, sample: Dict[str, Any],
         "conflict_score_mean": round(_tensor_mean(outputs.get("conflict_score")), 6),
         "recommended_action": outputs["recommended_action"].detach().cpu().tolist(),
         "nsa_branch_mean": branch_summary,
+        "effective_top_k": effective_top_k,
+        "sliding_branch_fired": sliding_branch_fired,
     }
 
 

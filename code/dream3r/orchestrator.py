@@ -465,6 +465,19 @@ class V04Pipeline(nn.Module):
             "backend_status": composer.backend_status,
             "expert_backend_status": expert.backend_status,
         }
+        offpath_dict = None
+        if repair_report.offpath_verification is not None:
+            ov = repair_report.offpath_verification
+            offpath_dict = {
+                "expert_id": ov.expert_id,
+                "backend": ov.backend,
+                "triggered_by": ov.triggered_by,
+                "pointmap_shape": ov.pointmap_shape,
+                "confidence_mean": ov.confidence_mean,
+                "accepted_as_main_output": ov.accepted_as_main_output,
+                "metadata": ov.metadata,
+            }
+
         repair_action_log = {
             "final_action": repair_report.final_action,
             "final_action_name": repair_report.final_action_name,
@@ -485,6 +498,7 @@ class V04Pipeline(nn.Module):
                 for a in repair_report.attempts
             ],
             "implemented_actions": list(REPAIR_ACTION_NAMES.keys()),
+            "offpath_verification": offpath_dict,
         }
 
         memory_log = {

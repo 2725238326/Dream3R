@@ -34,6 +34,7 @@ from dream3r.bus import EvidenceLabel
 from dream3r.contracts import (
     REPAIR_ACTION_NAMES,
     CriticDecision,
+    OffpathVerification,
     RepairAttempt,
     RepairReport,
 )
@@ -63,6 +64,7 @@ class RepairExecutor:
         self._capped = False
         self._reroute_hint = False
         self._final_action = 0
+        self._offpath_verification: Optional[OffpathVerification] = None
 
     # ---------- lifecycle ----------
 
@@ -72,6 +74,7 @@ class RepairExecutor:
         self._capped = False
         self._reroute_hint = False
         self._final_action = 0
+        self._offpath_verification = None
 
     def finalize(self) -> RepairReport:
         return RepairReport(
@@ -82,6 +85,7 @@ class RepairExecutor:
             reroute_hint=self._reroute_hint,
             attempts=list(self._attempts),
             capped=self._capped,
+            offpath_verification=self._offpath_verification,
         )
 
     # ---------- execution ----------
@@ -126,6 +130,9 @@ class RepairExecutor:
                          "reroute_hint=True; orchestrator selects alternative expert",
                          True, True, "no model rerun for action=3")
             return primary_output
+
+        if action == 4:
+            return self._test3r_offpath(primary_output, forward_kwargs)
 
         # Any unknown action falls back to no_repair so a stub action code
         # never triggers an unbounded loop.
@@ -185,6 +192,96 @@ class RepairExecutor:
                          f"rerun raised {type(exc).__name__}: {exc}",
                          True, False, "fallback to primary output")
             return primary_output
+
+    def _test3r_offpath(self, primary_output, forward_kwargs):
+        """Dispatch Test3R as an off-path verification expert.
+
+        The off-path result does NOT replace the main output. It is recorded
+        in repair_action_log["offpath_verification"] for auditing.
+        """
+        composer = getattr(self.model, "composer", None)
+        registry = getattr(composer, "registry", None) if composer else None
+
+        if registry is None or "test3r" not in registry.names:
+            self._record(4, "test3r_offpath_verify",
+                         "Test3R off-path requested but registry not available",
+                         True, False, "no registry or test3r not registered")
+            self._offpath_verification = OffpathVerification(
+                expert_id="test3r",
+                backend="stub",
+                triggered_by="critic_conflict",
+                pointmap_shape=[],
+                confidence_mean=0.0,
+                accepted_as_main_output=False,
+                metadata={"error": "registry_unavailable"},
+            )
+            return primary_output
+
+        # Find test3r adapter index
+        names = sorted(registry.names)
+        try:
+            test3r_idx = names.index("test3r")
+        except ValueError:
+            test3r_idx = -1
+
+        # Attempt dispatch
+        images = forward_kwargs.get("x")
+        if images is not None and images.dim() == 5:
+            try:
+                expert_out = composer.dispatch(
+                    test3r_idx, images,
+                    context={"critic_confidence": None, "regime_probs": None},
+                )
+                adapter = registry.get("test3r")
+                is_loaded = bool(getattr(adapter, "is_loaded", False))
+                backend = "real" if is_loaded else "fallback"
+
+                conf_mean = 0.0
+                pm_shape = []
+                if expert_out is not None:
+                    pm_shape = list(expert_out.pointmap.shape)
+                    conf_mean = float(expert_out.confidence.mean().item())
+
+                self._offpath_verification = OffpathVerification(
+                    expert_id="test3r",
+                    backend=backend,
+                    triggered_by="critic_conflict",
+                    pointmap_shape=pm_shape,
+                    confidence_mean=conf_mean,
+                    accepted_as_main_output=False,
+                    metadata=expert_out.metadata if expert_out else {},
+                )
+                self._record(4, "test3r_offpath_verify",
+                             f"Test3R off-path dispatched, backend={backend}",
+                             True, True, "offpath result recorded, not replacing main")
+            except Exception as exc:  # noqa: BLE001
+                self._offpath_verification = OffpathVerification(
+                    expert_id="test3r",
+                    backend="stub",
+                    triggered_by="critic_conflict",
+                    pointmap_shape=[],
+                    confidence_mean=0.0,
+                    accepted_as_main_output=False,
+                    metadata={"error": f"{type(exc).__name__}: {exc}"},
+                )
+                self._record(4, "test3r_offpath_verify",
+                             f"Test3R dispatch raised {type(exc).__name__}",
+                             True, False, "fallback to primary output")
+        else:
+            self._offpath_verification = OffpathVerification(
+                expert_id="test3r",
+                backend="stub",
+                triggered_by="critic_conflict",
+                pointmap_shape=[],
+                confidence_mean=0.0,
+                accepted_as_main_output=False,
+                metadata={"error": "no_raw_images"},
+            )
+            self._record(4, "test3r_offpath_verify",
+                         "Test3R off-path requested but no raw images available",
+                         True, False, "cannot dispatch without images")
+
+        return primary_output
 
     def _inject_previous_action(self, action_code: int) -> None:
         """Publish a synthetic recommended_action so the next forward sees it.

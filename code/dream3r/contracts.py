@@ -10,11 +10,12 @@ dict, and the orchestrator wraps that dict into these contracts. Adding a
 real DINOv3 backend / real expert backend later does not require changing
 these signatures, only the producer side.
 
-Repair action codes (v0.4 convention):
+Repair action codes (v0.4 / v0.5 convention):
     0 = no_repair
-    1 = local_rerun        (re-run perception+memory with deeper retrieval)
-    2 = window_rerun       (re-run the full window forward, capped by max_repair_attempts)
-    3 = reroute_model      (force composer to pick a different expert)
+    1 = local_rerun           (re-run perception+memory with deeper retrieval)
+    2 = window_rerun          (re-run the full window forward, capped by max_repair_attempts)
+    3 = reroute_model         (force composer to pick a different expert)
+    4 = test3r_offpath_verify (dispatch Test3R off-path; result does NOT replace main output)
 """
 
 from dataclasses import dataclass, field
@@ -30,6 +31,7 @@ REPAIR_ACTION_NAMES = {
     1: "local_rerun",
     2: "window_rerun",
     3: "reroute_model",
+    4: "test3r_offpath_verify",
 }
 
 BACKEND_REAL = "real"
@@ -177,6 +179,23 @@ class RepairAttempt:
 
 
 @dataclass
+class OffpathVerification:
+    """Result of a Test3R off-path verification dispatch.
+
+    This is a side-channel result that does NOT replace the main output.
+    It records the off-path expert's pointmap shape, confidence, and
+    whether the off-path result was accepted (always False in v0.5 scaffold).
+    """
+    expert_id: str
+    backend: str  # "real" | "fallback" | "stub"
+    triggered_by: str  # reason code
+    pointmap_shape: List[int] = field(default_factory=list)
+    confidence_mean: float = 0.0
+    accepted_as_main_output: bool = False
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
 class RepairReport:
     """Repair executor summary for one pipeline.forward call."""
     final_action: int
@@ -186,6 +205,7 @@ class RepairReport:
     reroute_hint: bool
     attempts: List[RepairAttempt] = field(default_factory=list)
     capped: bool = False
+    offpath_verification: Optional['OffpathVerification'] = None
 
 
 # ---------------------------------------------------------------------------
