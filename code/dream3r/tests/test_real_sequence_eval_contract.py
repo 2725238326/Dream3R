@@ -86,6 +86,8 @@ def test_run_real_sequence_eval_contract_with_mocked_model():
 
     assert result["dataset"] == "kitti_rectified"
     assert result["recurrence_backend"] == "fake_backend"
+    assert result["memory_use_nsa"] is True
+    assert result["enable_stable_memory"] is True
     assert result["window_count"] == 1
     assert result["metrics"]["n_samples"] == 1
     assert result["windows"][0]["sequence_name"] == "fake_seq"

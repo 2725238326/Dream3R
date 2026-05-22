@@ -4,7 +4,7 @@ import argparse
 import json
 import time
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 import torch
 
@@ -63,17 +63,21 @@ def run_real_sequence_eval(
     max_sequences: int = 1,
     recurrence: str = "mamba_hybrid",
     device_name: str = "auto",
+    config_overrides: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     device = torch.device(
         "cuda" if device_name == "auto" and torch.cuda.is_available()
         else "cpu" if device_name == "auto"
         else device_name
     )
-    cfg = load_config(overrides={
+    overrides = {
         "use_backbone": False,
         "state_recurrence_type": recurrence,
         "active_to_stable_threshold": 0.0,
-    })
+    }
+    if config_overrides:
+        overrides.update(config_overrides)
+    cfg = load_config(overrides=overrides)
     dataset = KITTIRectifiedSequenceDataset(
         data_root=data_root,
         n_frames=cfg["n_frames_per_window"],
@@ -126,6 +130,8 @@ def run_real_sequence_eval(
             recurrence_module, "backend", recurrence_module.__class__.__name__
         ),
         "recurrence_backend_error": getattr(recurrence_module, "backend_error", ""),
+        "memory_use_nsa": bool(cfg.get("memory_use_nsa", True)),
+        "enable_stable_memory": bool(cfg.get("enable_stable_memory", True)),
         "window_count": limit,
         "metrics": evaluator.compute().to_dict(),
         "windows": windows,
@@ -142,6 +148,8 @@ def main():
         choices=["cross_attention", "mamba_hybrid"],
         default="mamba_hybrid",
     )
+    parser.add_argument("--disable-nsa", action="store_true")
+    parser.add_argument("--disable-stable-memory", action="store_true")
     parser.add_argument("--device", default="auto")
     parser.add_argument(
         "--output",
@@ -155,6 +163,10 @@ def main():
         max_sequences=args.max_sequences,
         recurrence=args.recurrence,
         device_name=args.device,
+        config_overrides={
+            "memory_use_nsa": not args.disable_nsa,
+            "enable_stable_memory": not args.disable_stable_memory,
+        },
     )
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
