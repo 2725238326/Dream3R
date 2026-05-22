@@ -1,8 +1,59 @@
 # Dream Task Snapshot
 
-Last updated: 2026-05-22 (v0.4 architecture closure round, parallel to proposal track: added `code/dream3r/contracts.py` + `repair.py` + `orchestrator.py` + 3 new test files + `ARCHITECTURE_V04_STATUS.md`; 24 new tests + 130 pre-existing tests all pass; v0.3 model.py / modules.py / bus.py / anchor_bank.py / nsa_attention.py / composer_experts/* are byte-identical to before this round; driven by `ARCHITECTURE_V04_AGENT_PROMPT.md`. Proposal-track last-updated note follows.) Last updated: 2026-05-17 (post cycle 042: user 指令开题报告扩展为双支柱项目 — 支柱 A Dream3R 新架构模型 (已有 §1-§9) + 支柱 B KYKT 聚合管理平台 (待新增); PROPOSAL_EXPANSION_PLAN.md + AGENT_HANDOFF_PROPOSAL_EXPANSION.md 已创建; 待其他 agent 执行扩展写作)
+Last updated: 2026-05-22 (cycle 043 architecture-focus round after user re-prioritization "架构是最重要的内容; 开题报告和综述放一边": W20 SOTA Feature Matrix expanded at `code/dream3r/SOTA_FEATURE_MATRIX.md` (family-grouped 2nd pass) + v0.5 axes spec drafted at `specs/SPEC-20260522-001-dream3r-v05-axes.md` (8 axes A1-A8 with explicit `closes_iff`); markdown only; v0.3 + v0.4 code byte-identical; both candidate-not-final per DEC-20260501-004; sync chain applied. Earlier last-updated note follows.) Last updated: 2026-05-22 (v0.4 architecture closure round, parallel to proposal track: added `code/dream3r/contracts.py` + `repair.py` + `orchestrator.py` + 3 new test files + `ARCHITECTURE_V04_STATUS.md`; 24 new tests + 130 pre-existing tests all pass; v0.3 model.py / modules.py / bus.py / anchor_bank.py / nsa_attention.py / composer_experts/* are byte-identical to before this round; driven by `ARCHITECTURE_V04_AGENT_PROMPT.md`. Proposal-track last-updated note follows.) Last updated: 2026-05-17 (post cycle 042: user 指令开题报告扩展为双支柱项目 — 支柱 A Dream3R 新架构模型 (已有 §1-§9) + 支柱 B KYKT 聚合管理平台 (待新增); PROPOSAL_EXPANSION_PLAN.md + AGENT_HANDOFF_PROPOSAL_EXPANSION.md 已创建; 待其他 agent 执行扩展写作)
 
-Status: **idle** (v0.4 architecture closure shipped 2026-05-22 — markdown updates done, code + tests live, `ARCHITECTURE_V04_STATUS.md` records what is closed vs stub/fallback/proxy; proposal track cycle 042 closeout preserved below)
+Status: **idle** (cycle 043 architecture-focus round shipped 2026-05-22 — `code/dream3r/SOTA_FEATURE_MATRIX.md` family-grouped 2nd pass + `specs/SPEC-20260522-001-dream3r-v05-axes.md` 8 axes A1-A8 drafted; both candidate-not-final; no code change; v0.3 + v0.4 layers byte-identical; v0.4 closure shipped earlier this day preserved below; proposal track cycle 042 closeout preserved further below)
+
+## Cycle 043 Architecture-Focus Round (2026-05-22)
+
+```text
+task_id:    cycle-043-arch-focus-2026-05-22
+phase:      markdown-only planning artifact on top of v0.4 closure
+status:     done — both artifacts written + sync chain (INDEX / WORKFLOW_STATUS / TASK_SNAPSHOT / cycles)
+driver:     user re-prioritization 2026-05-22; menu option A+B (SOTA matrix + v0.5 axes spec)
+priority:   architecture > platform; Track C proposal + Track B survey parked
+```
+
+Files added / updated this cycle:
+
+| File | Role |
+| --- | --- |
+| `code/dream3r/SOTA_FEATURE_MATRIX.md` | W20 second pass: 8 family sections (Direct pair / Many-view streaming / Memory primitive comparators / Monocular priors / Test-time + Critic / Attention + state / Permanence + dynamic / Rendering + 4D); 30+ external methods mapped to Dream3R modules + honest status labels (real-wired vs deterministic fallback vs stub vs comparator-only). Supersedes 2026-05-10 first pass; preserves its differentiation list + evidence map |
+| `specs/SPEC-20260522-001-dream3r-v05-axes.md` | v0.5 axes spec: 8 axes A1-A8 (DINOv3-S backbone real / per-adapter ckpt loading / dynamic_mask_proxy → D2 promotion / VGGT adapter + capability_card v2.2 / Test3R Critic-triggered off-path / NSA sliding branch utility / GaussianHead conditional entry kept deferred / tttLRM A1 sub-action). Each axis carries explicit `closes_iff` + required actions + dependencies + non-promises + evidence label. v0.5 additive to v0.4 by default. Each axis closure requires its own DEC |
+| `cycles/CYCLE-20260522-001.md` | cycle 043 log |
+| `INDEX.md` + `WORKFLOW_STATUS.md` + `TASK_SNAPSHOT.md` | sync chain |
+| `~/.claude/projects/e--Dream3R/memory/MEMORY.md` + `feedback_track_priorities.md` | auto-memory: priority feedback recorded |
+
+Explicit non-claims:
+
+- No v0.5 axis has been validated; each closure requires its own DEC referencing `closes_iff`.
+- No code changed; v0.3 + v0.4 layers remain byte-identical.
+- `OnlineX` + `AnchorSplat` flagged as roadmap drafting artifacts (no SRC row, no mapping); not silently included.
+- MoGe-2 has an adapter in `method_profiles.py` but **no `SRC-*` row** in `registry/source_registry.md` — inventory hygiene item, not closed.
+- KITTI smoke pointmap L2 = 20.4747 preserved as "integration evidence, not trained quality."
+
+Next admissible direction (per `WORKFLOW_STATUS.md` Recommended Next User Decision):
+
+```text
+A. Review SPEC-20260522-001 + select which v0.5 axes to promote
+   first via DEC. Sprint-1 candidates (all F-002 server gated):
+   A1 DINOv3-S / A2 adapter ckpt loading / A4 VGGT + capability_card v2.2
+   / A6 NSA sliding branch utility.
+
+B. Markdown-only architecture follow-up (no DEC needed):
+   - W22 visualization pack (matplotlib + existing JSON)
+   - W26 STREAM3R_RELATION.md design writeup
+   - Resolve OnlineX / AnchorSplat ambiguity in NEXT_PHASE_ROADMAP.md
+   - Add MoGe-2 SRC row to source_registry.md
+   - v0.4 contract edge-case tests
+
+C. Platform / KYKT integration scoping (planning level only;
+   KYKT navigation + Codex frontend edits remain blocked).
+
+D. Or pause + reassess.
+```
+
+---
 
 ## v0.4 Architecture Closure (2026-05-22)
 

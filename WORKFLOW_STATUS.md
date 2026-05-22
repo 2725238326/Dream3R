@@ -81,7 +81,7 @@ Use this prompt when preparing KYKT frontend design work for Gemini CLI.
 | Source registry | active; cycle 013 mining pass added SRC-2026-009..015 (7 new rows: MapAnything / Julian Ost AAAI-2026 driving permanence / tttLRM / awesome-dust3r curated index / DUSt3R-MASt3R-VGGT MVS evaluation / NTIRE 2026 / VGGT) | `registry/source_registry.md` |
 | Research unit registry | seeded | `registry/research_unit_registry.md` |
 | Decision registry | seeded | `registry/decision_registry.md` |
-| Cycle logs | active | `cycles/CYCLE-20260517-001.md` (cycle 040 done; Dream3R 开题报告 § 5 实验设计与评测协议 + § 7 研究进展与已完成工作 + § 8 研究计划与时间安排 dual-draft 起草 + STYLE_CONTRACT 43→48 rows + 5 corrective edits on G3a "cycle"-leak + G3b lowercase repo-name leak per cycle 036 + cycle 039 precedent + sync chain); `cycles/CYCLE-20260516-004.md` (cycle 039 done; Dream3R 开题报告 § 3 + § 6 dual-draft 起草 + STYLE_CONTRACT 41→43 rows + 7 corrective edits per side on G4 negation-context + sync chain); `cycles/CYCLE-20260516-003.md` (cycle 038 done; Dream3R 开题报告 § 4 研究方案 / Dream3R v0.3 架构 dual-draft 起草 + STYLE_CONTRACT 22→41 rows + sync chain); `cycles/CYCLE-20260516-002.md` (cycle 037 done; Dream3R 开题报告 § 2 国内外研究现状 dual-draft 起草 + STYLE_CONTRACT §6 sync log + sync chain); `cycles/CYCLE-20260516-001.md` (cycle 036 done; advisor submission packaging + Dream3R 开题报告 dual-draft kickoff + risk register v1.2 + sync chain); `cycles/CYCLE-20260515-001.md` (cycle 035 done; survey-driven markdown deliverables + 4 risk register additions + sync chain); `cycles/CYCLE-20260511-001.md` (cycle 034 done; KITTI real-data smoke + Mamba/Gaussian + Track B 3R-mix kickoff); `cycles/CYCLE-20260510-001.md` (cycle 033 done; W1-W16 v0.3 architecture advancement); `cycles/CYCLE-20260508-008.md` (cycle 031 local Memory v0.3 P0 scaffold) |
+| Cycle logs | active | `cycles/CYCLE-20260522-001.md` (cycle 043 done; W20 SOTA Feature Matrix family-grouped second pass at `code/dream3r/SOTA_FEATURE_MATRIX.md` + v0.5 axes spec at `specs/SPEC-20260522-001-dream3r-v05-axes.md` with 8 axes A1-A8; markdown only; v0.3 + v0.4 code byte-identical; both candidate-not-final; sync chain applied to INDEX.md + WORKFLOW_STATUS.md + TASK_SNAPSHOT.md); `cycles/CYCLE-20260517-003.md` (cycle 042 done; Dream3R 开题报告 final revision + PDF compilation + advisor submission packaging — proposal track functionally closed); `cycles/CYCLE-20260517-001.md` (cycle 040 done; Dream3R 开题报告 § 5 + § 7 + § 8 dual-draft 起草 + STYLE_CONTRACT 43→48 rows + 5 corrective edits + sync chain); `cycles/CYCLE-20260516-004.md` (cycle 039 done; Dream3R 开题报告 § 3 + § 6 dual-draft 起草 + STYLE_CONTRACT 41→43 rows + 7 corrective edits per side on G4 negation-context + sync chain); `cycles/CYCLE-20260516-003.md` (cycle 038 done; Dream3R 开题报告 § 4 研究方案 / Dream3R v0.3 架构 dual-draft 起草 + STYLE_CONTRACT 22→41 rows + sync chain); `cycles/CYCLE-20260516-002.md` (cycle 037 done; Dream3R 开题报告 § 2 国内外研究现状 dual-draft 起草 + STYLE_CONTRACT §6 sync log + sync chain); `cycles/CYCLE-20260516-001.md` (cycle 036 done; advisor submission packaging + Dream3R 开题报告 dual-draft kickoff + risk register v1.2 + sync chain); `cycles/CYCLE-20260515-001.md` (cycle 035 done; survey-driven markdown deliverables + 4 risk register additions + sync chain); `cycles/CYCLE-20260511-001.md` (cycle 034 done; KITTI real-data smoke + Mamba/Gaussian + Track B 3R-mix kickoff); `cycles/CYCLE-20260510-001.md` (cycle 033 done; W1-W16 v0.3 architecture advancement); `cycles/CYCLE-20260508-008.md` (cycle 031 local Memory v0.3 P0 scaffold) |
 | Dream3R v0.3 code (Track A) | active; server-verified at `/hdd3/kykt26/code/dream3r/`; first KITTI real-data smoke on `2011_09_26_drive_0001_sync_02` window pair (pointmap L2 20.47 = integration evidence, not trained quality) | `code/dream3r/REVIEW_PROMPT.md`, `code/dream3r/RECENT_PROGRESS.md`, `code/dream3r/NEXT_PHASE_ROADMAP.md` |
 | Dream3R v0.4 architecture closure | **active**; closed loops shipped 2026-05-22: typed `contracts.py` + `RepairExecutor` (action 0/1/2/3 with `max_repair_attempts=1`) + `V04Pipeline` orchestrator + 24 new contract tests; 130 pre-existing tests still pass; v0.3 code unchanged. Stub/fallback list lives in `ARCHITECTURE_V04_STATUS.md`: DINOv3-S backbone, MoGe-2 / DepthAnything / Test3R adapter checkpoints, and dynamic-mask-as-final-D2 all explicitly NOT claimed | `ARCHITECTURE_V04_STATUS.md`, `code/dream3r/contracts.py`, `code/dream3r/repair.py`, `code/dream3r/orchestrator.py`, `code/dream3r/tests/test_v04_*.py` |
 | Dream3R W20 SOTA Feature Matrix | **active**; cycle 043 family-grouped second pass shipped 2026-05-22: 8 family sections (Direct pairwise / Many-view streaming / Memory primitive comparators / Monocular priors / Test-time + Critic / Attention + state recurrence / Permanence + dynamic / Rendering + 4D); 30+ external methods mapped to Dream3R modules with explicit `real-wired (no local ckpt)` / `deterministic fallback` / `stub` / `mechanism integrated` / `contract-only` / `comparator-only` / `named, not in registry` status; Gap Report identifies OnlineX + AnchorSplat as roadmap drafting artifacts and MoGe-2 SRC row as missing; supersedes the 2026-05-10 first pass while preserving its differentiation list + evidence map | `code/dream3r/SOTA_FEATURE_MATRIX.md`, cross-links `ARCHITECTURE_V04_STATUS.md`, `composer_experts/method_profiles.py`, `registry/source_registry.md` |
@@ -134,40 +134,55 @@ Use this prompt when preparing KYKT frontend design work for Gemini CLI.
 
 ## Recommended Next User Decision
 
-Cycle 042 closeout recommendation (cycle 042 closed 2026-05-17; proposal track (Track C, cycles 036-042) functionally closed; Track A architecture-first mainline unchanged):
+Cycle 043 architecture-focus recommendation (cycle 043 closed 2026-05-22; user re-prioritized 2026-05-22 "架构是最重要的内容; 开题报告和综述放一边; 平台更新放到日程"; Track A architecture-first mainline confirmed primary; Track B/C parked):
 
 ```text
-Cycle 042 completed 最终修订 + PDF 编译 + advisor 提交 packaging
-per DEC-20260517-003. Deliverables:
-  - proposal_external_v1_2026-05-17.pdf (263 KB, pandoc+xelatex)
-  - SUBMISSION_PACKAGE_ADVISOR_PROPOSAL_2026-05-17.md (cover note)
-  - SUBMISSION_RECORD_PROPOSAL_2026-05-17.md (metadata + checklist)
-  - references.bib (44 entries from Track B survey pool)
-G3a/G3b vocab firewall on cover note: 0 hits. STYLE_CONTRACT v1
-closed (50 rows, 7 sync log entries). Proposal track summary:
-7 cycles, 9 sections, ~19300 内 + ~15000 外 字, 14 corrective
-edits total, 50 vocab substitution rows.
+Cycle 043 completed W20 SOTA Feature Matrix expansion +
+v0.5 axes spec drafting in markdown-only mode (no code change;
+v0.3 + v0.4 layers byte-identical). Deliverables:
+  - code/dream3r/SOTA_FEATURE_MATRIX.md (family-grouped 2nd pass)
+  - specs/SPEC-20260522-001-dream3r-v05-axes.md (8 axes A1-A8)
+Both candidate-not-final per DEC-20260501-004. v0.5 is additive
+to v0.4 by default; v0.3 main forward stays byte-identical
+unless an axis closure DEC says otherwise.
 
-Next admissible direction (each requires user action or DEC):
+Next admissible direction under current priority (architecture > platform;
+proposal + survey parked):
 
-  A. User reviews PDF + cover note and provides feedback →
-     revision cycle 043 if needed.
+  A. User reviews SOTA matrix + v0.5 axes spec, selects
+     which axes to promote first via DEC. Highest-leverage
+     candidates per the spec's Recommended Sequencing table:
+       Sprint 1 (server, F-002): A1 DINOv3-S, A2 per-adapter
+                                   ckpt loading, A4 VGGT adapter,
+                                   A6 NSA sliding branch utility
+       Sprint 2 (server, F-002): A3 dynamic_mask promotion,
+                                   A5 Test3R Critic off-path
+       Deferred: A7 GaussianHead main-forward (renderer DEC),
+                 A8 tttLRM A1 sub-action (W25 plan)
 
-  B. User executes actual proposal submission (fills
-     SUBMISSION_RECORD_PROPOSAL slots: recipient / channel /
-     submitted_at).
+  B. Markdown-only architecture follow-ups (no server, no DEC needed):
+       - W22 visualization pack (uses existing JSON; matplotlib)
+       - W26 STREAM3R_RELATION.md design writeup
+       - W21 ablation table reorganization
+       - resolve OnlineX / AnchorSplat roadmap drafting artifacts
+       - add MoGe-2 SRC row to source_registry.md
 
-  C. User executes Track B survey submission (packaging ready
-     with SHA256 pre-filled since cycle 037).
+  C. Platform / KYKT integration scoping (per user 2026-05-22
+     "后续平台更新也得放到日程里"). Scoping only; KYKT
+     navigation + Codex frontend edits remain blocked per
+     existing rules.
 
-  D. Return to Track A architecture-first mainline (W19+ /
-     ablation execution / v0.4 spec delta). Each step requires
-     independent DEC + F-002 server authorization.
+  D. User executes Track C 开题报告 submission (cycle 042
+     packaging ready since 2026-05-17) — out of current priority
+     but not closed.
 
-  E. Pause and reassess.
+  E. User executes Track B survey submission (cycle 037 SHA256
+     pre-filled) — out of current priority but not closed.
+
+  F. Pause and reassess.
 ```
 
-Track A architecture-first remains the mainline per DEC-20260506-001. The Dream3R 开题报告 is candidate-not-final per DEC-20260501-011 — all 9 sections complete with appropriate caveats (plan-only ABL gated on F-002, 集成证据 非训练后质量, candidate timeline). Both Track B survey and Track C proposal deliverables are packaged; actual submission for both is the user's post-cycle action.
+Track A architecture-first remains the mainline per DEC-20260506-001 and is now also confirmed primary by the 2026-05-22 user re-prioritization. The Dream3R 开题报告 (Track C) and 3R-mix survey (Track B) deliverables are both packaged at cycle 042 / cycle 037 closeout state; submission is the user's post-cycle action whenever they choose to re-open those tracks.
 
 Still blocked on user approval:
 
@@ -182,6 +197,7 @@ Still blocked on user approval:
 - declaring teacher-demo readiness
 - discarding any non-finalist track (Cross-Modal, Active Perception)
 - **showing any of the 4 demo storyboards** (Critic / Memory / Permanence / Composer; all `draft`; promotion to `approved-for-showing` requires a separate per-finalist DEC)
+- **closing any v0.5 axis A1-A8** (each axis closure requires its own DEC referencing SPEC-20260522-001 `closes_iff` clauses)
 
 ## Guidance File Sync Rule
 
