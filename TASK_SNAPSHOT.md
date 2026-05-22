@@ -1,8 +1,65 @@
 # Dream Task Snapshot
 
-Last updated: 2026-05-17 (post cycle 042: user 指令开题报告扩展为双支柱项目 — 支柱 A Dream3R 新架构模型 (已有 §1-§9) + 支柱 B KYKT 聚合管理平台 (待新增); PROPOSAL_EXPANSION_PLAN.md + AGENT_HANDOFF_PROPOSAL_EXPANSION.md 已创建; 待其他 agent 执行扩展写作)
+Last updated: 2026-05-22 (v0.4 architecture closure round, parallel to proposal track: added `code/dream3r/contracts.py` + `repair.py` + `orchestrator.py` + 3 new test files + `ARCHITECTURE_V04_STATUS.md`; 24 new tests + 130 pre-existing tests all pass; v0.3 model.py / modules.py / bus.py / anchor_bank.py / nsa_attention.py / composer_experts/* are byte-identical to before this round; driven by `ARCHITECTURE_V04_AGENT_PROMPT.md`. Proposal-track last-updated note follows.) Last updated: 2026-05-17 (post cycle 042: user 指令开题报告扩展为双支柱项目 — 支柱 A Dream3R 新架构模型 (已有 §1-§9) + 支柱 B KYKT 聚合管理平台 (待新增); PROPOSAL_EXPANSION_PLAN.md + AGENT_HANDOFF_PROPOSAL_EXPANSION.md 已创建; 待其他 agent 执行扩展写作)
 
-Status: **idle** (cycle 042 closed; 开题报告扩展规划已就绪 — 双支柱: Dream3R 新架构 (已完成 §1-§9 ~15000 外字) + KYKT 聚合管理平台 (待写 ~6000-9000 字); PROPOSAL_EXPANSION_PLAN.md + AGENT_HANDOFF_PROPOSAL_EXPANSION.md ready for other agent execution; PDF v1 exists at 263 KB but will need recompilation after expansion)
+Status: **idle** (v0.4 architecture closure shipped 2026-05-22 — markdown updates done, code + tests live, `ARCHITECTURE_V04_STATUS.md` records what is closed vs stub/fallback/proxy; proposal track cycle 042 closeout preserved below)
+
+## v0.4 Architecture Closure (2026-05-22)
+
+```text
+task_id:    v04-arch-closure-2026-05-22
+phase:      additive layer on top of v0.3 code
+status:     done — 24/24 new tests pass; 130/130 existing tests pass; v0.3 code byte-identical
+driver:     ARCHITECTURE_V04_AGENT_PROMPT.md
+verification: ARCHITECTURE_V04_STATUS.md
+```
+
+Files added (no v0.3 files modified):
+
+| File | Role |
+| --- | --- |
+| `code/dream3r/contracts.py` | Typed dataclasses for every module boundary; v0.4 action codes 0/1/2/3 |
+| `code/dream3r/repair.py` | `RepairExecutor` closing the critic -> rerun / reroute loop |
+| `code/dream3r/orchestrator.py` | `V04Pipeline` wrapping Dream3R with closed loops |
+| `code/dream3r/tests/test_v04_architecture_contract.py` | 11 tests on full `ReconstructionOutput` |
+| `code/dream3r/tests/test_repair_executor_contract.py` | 6 tests on real rerun + reroute + cap behaviour |
+| `code/dream3r/tests/test_composer_dispatch_contract.py` | 7 tests on real composer dispatch + reroute |
+| `ARCHITECTURE_V04_STATUS.md` | Per-axis checklist, test commands, explicit stub list |
+
+Test commands (verified local):
+
+```bash
+cd E:/Dream3R/code
+python -m pytest dream3r/tests/test_v04_architecture_contract.py \
+                 dream3r/tests/test_repair_executor_contract.py \
+                 dream3r/tests/test_composer_dispatch_contract.py -q
+# -> 24 passed
+
+python -m pytest dream3r/tests/ -q \
+    --ignore=dream3r/tests/test_dinov2_backbone.py \
+    --ignore=dream3r/tests/test_fast3r_integration.py \
+    --ignore=dream3r/tests/test_mast3r_integration.py \
+    --ignore=dream3r/tests/test_spann3r_integration.py
+# -> 130 passed
+```
+
+Explicit non-claims (no false `real` claims emitted):
+
+- DINOv3-S backbone is NOT loaded; `backend_status["perception"]["backend"]` is `stub` / `fallback`.
+- 5 of 7 adapters (Spann3R / CUT3R / MoGe-2 / DepthAnything / Test3R) return deterministic fallback outputs; their `is_loaded=False` and `backend` are `fallback` / `stub`.
+- MASt3R / Fast3R loaders are wired but locally have no checkpoint; `backend` is `fallback`.
+- Permanence's `dynamic_mask_proxy` is named proxy in the contract; NOT claimed as final D2 asset.
+- 4DGS / GaussianHead is NOT pulled into v0.4 main forward (per agent prompt's exclusion rule).
+
+Next minimal experiments (each gated on user / server):
+
+1. Server-side: load MASt3R adapter on `/hdd3/kykt26/` and re-run `test_v04_architecture_contract.py` with `use_backbone=True`; verify at least one `out.expert.backend_status["backend"] == "real"`.
+2. KITTI 5-tick smoke: confirm `repair_action_log["n_attempts"]` is bounded across ticks and `route_log["reroute_applied"]` flips True on at least one high-conflict tick.
+3. Compare cumulative pointmap L2 against the v0.3 baseline (`20.4747` per `RECENT_PROGRESS.md` line 78) — no regression expected without training.
+
+---
+
+## Proposal track snapshot (preserved from prior session)
 
 ## Why this file exists
 

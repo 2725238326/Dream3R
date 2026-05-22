@@ -1,6 +1,8 @@
 # Dream Research Workspace
 
-Last updated: 2026-05-08 (cycle 031: C2 Memory v0.3 local P0 scaffold created; ABL-memory-0 passed as fixture/logging validity gate; cycle 024 scaffold remains engineering baseline only)
+Last updated: 2026-05-22 (v0.4 architecture closure round: `code/dream3r/contracts.py` + `repair.py` + `orchestrator.py` + 3 new test files + `ARCHITECTURE_V04_STATUS.md` added; 24 new + 130 existing tests pass; v0.3 code byte-identical. See `ARCHITECTURE_V04_STATUS.md` for the per-axis checklist and explicit stub/fallback/proxy list.)
+
+Earlier last updated: 2026-05-08 (cycle 031: C2 Memory v0.3 local P0 scaffold created; ABL-memory-0 passed as fixture/logging validity gate; cycle 024 scaffold remains engineering baseline only)
 
 ## Purpose
 
