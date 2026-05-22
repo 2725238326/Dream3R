@@ -133,7 +133,7 @@ class Dream3RLoss(nn.Module):
             pred = outputs["region_logits"]
             gt = targets["region_label"].long()
             B, S, C = pred.shape
-            l = F.cross_entropy(pred.view(B * S, C), gt.view(B * S))
+            l = F.cross_entropy(pred.reshape(B * S, C), gt.reshape(B * S))
             losses["permanence_p4"] = l
             total = total + self.w["permanence_p4"] * l
 

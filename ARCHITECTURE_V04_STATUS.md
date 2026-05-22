@@ -261,3 +261,46 @@ Per the autonomous-decision rules in `ARCHITECTURE_V04_AGENT_PROMPT.md`:
 6. The `dynamic_mask_proxy` field is explicitly named proxy in the
    contract, and the per-axis status table flags it as `[~]`. No
    false D2-final claim is emitted.
+
+---
+
+## v0.5 Progress (2026-05-22)
+
+### Code changes
+
+| File | Change |
+|------|--------|
+| `contracts.py` | Added `OffpathVerification` dataclass; action 4 (`test3r_offpath_verify`) in `REPAIR_ACTION_NAMES`; `offpath_verification` field in `RepairReport` |
+| `repair.py` | Added `_test3r_offpath()` handler for action 4; imports `OffpathVerification`; reset/export in `begin_call`/`finalize` |
+| `orchestrator.py` | Added `offpath_verification` dict serialization into `repair_action_log` |
+| `evaluate_real_sequence.py` | Added `effective_top_k`, `sliding_branch_fired` to per-window JSON summary |
+
+### New test files
+
+| File | Tests | Coverage |
+|------|-------|----------|
+| `tests/test_v04_edge_cases.py` | 7 | batch=2, no raw images, all log fields, repair log schema, backend labeling, contract_log signals, evidence shape |
+| `tests/test_v04_multitick_state.py` | 8 | memory carry, object slots, bus signals, bank occupancy, repair cap reset, NSA branch export, drift stability, sliding branch |
+| `tests/test_v04_test3r_offpath.py` | 7 | action 4 returns primary, offpath recorded, fallback dispatch, no-images stub, repair_action_log key, action names, adapter fallback |
+
+### Server verification
+
+- All 39 tests pass on server (BUAA-Server, conda env dream3r, Python 3.10, torch 2.5.1+cu121).
+- v0.3 core files (model.py, modules.py, bus.py, anchor_bank.py, nsa_attention.py, composer_experts/*) remain byte-identical.
+
+### v0.5 axis status
+
+| Axis | Status | Note |
+|------|--------|------|
+| A1 (DINOv3-S backbone) | Not started | Requires checkpoint |
+| A2 (Real expert adapter) | Fallback only | Requires checkpoint loading |
+| A3 (Dynamic mask promotion) | Proxy | `dynamic_mask_proxy` is not D2 final |
+| A4 (Critic scoring) | Stub | Geometric consistency stub, needs server evidence |
+| A5 (Test3R off-path) | **Scaffold complete** | action 4 implemented, fallback only, not closed |
+| A6 (NSA sliding branch) | **Fields exported** | `effective_top_k`, `sliding_branch_fired` in JSON; server KITTI run needed |
+| A7 (Loss function) | Not started | — |
+| A8 (End-to-end demo) | Not started | — |
+
+### Runbook
+
+See `code/dream3r/V05_SERVER_RUNBOOK.md` for server sync, test commands, KITTI eval, and field checklist.
