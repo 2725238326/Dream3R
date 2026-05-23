@@ -35,7 +35,7 @@ class ExpertAdapter(ABC):
     attention_regime: str = "full"  # "full" | "linear" | "sparse"
 
     REGIMES = ["indoor_static", "outdoor_static", "dynamic_scene",
-               "sparse_view", "dense_sequential"]
+               "sparse_view", "dense_sequential", "feed_forward_manyview"]
 
     @abstractmethod
     def forward(self, images: torch.Tensor,

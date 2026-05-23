@@ -6,12 +6,14 @@ from typing import Dict, List
 import torch
 
 
+# capability_card schema v2.2 — adds feed_forward_manyview (A4 / DEC-20260523)
 REGIME_ORDER = [
     "indoor_static",
     "outdoor_static",
     "dynamic_scene",
     "sparse_view",
     "dense_sequential",
+    "feed_forward_manyview",
 ]
 
 FEATURE_ORDER = [
@@ -25,6 +27,7 @@ FEATURE_ORDER = [
     "low_latency",
     "dynamic_robustness",
     "sparse_view_robustness",
+    "feed_forward_geometry",
 ]
 
 
@@ -244,6 +247,44 @@ METHOD_PROFILES: Dict[str, MethodProfile] = {
             "dense_sequential": 0.58,
         },
         source_urls=["https://arxiv.org/abs/2506.13750"],
+    ),
+    "vggt": MethodProfile(
+        name="vggt",
+        family="feed-forward visual geometry transformer",
+        implementation_status="stub",
+        advantages=[
+            "single forward pass over unordered image set",
+            "simultaneous camera + pointmap + depth prediction",
+            "geometry-aware cross-attention (no iterative matching)",
+            "Meta open-source, available on HuggingFace",
+        ],
+        limitations=[
+            "no temporal state or streaming capability",
+            "no dynamic scene handling",
+            "requires all images available at once (not causal)",
+        ],
+        feature_scores={
+            "pairwise_matching": 0.6,
+            "large_scale_context": 0.9,
+            "streaming_state": 0.0,
+            "spatial_memory": 0.0,
+            "monocular_metric_geometry": 0.7,
+            "monocular_relative_depth": 0.7,
+            "test_time_refinement": 0.0,
+            "low_latency": 0.8,
+            "dynamic_robustness": 0.2,
+            "sparse_view_robustness": 0.9,
+            "feed_forward_geometry": 0.95,
+        },
+        regime_scores={
+            "indoor_static": 0.75,
+            "outdoor_static": 0.80,
+            "dynamic_scene": 0.30,
+            "sparse_view": 0.90,
+            "dense_sequential": 0.25,
+            "feed_forward_manyview": 0.95,
+        },
+        source_urls=["https://arxiv.org/abs/2503.11651"],
     ),
 }
 

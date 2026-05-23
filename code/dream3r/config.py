@@ -71,7 +71,7 @@ DEFAULTS = {
     "critic_geometric_clean_bias": -2.0,
 
     # Composer (C5) — v0.3 router
-    "n_regimes": 5,
+    "n_regimes": 6,
     "n_models": 8,
     "d_routing": 64,
     "cost_alpha": 0.5,

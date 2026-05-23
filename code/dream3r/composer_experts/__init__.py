@@ -45,10 +45,11 @@ class ExpertRegistry:
         from .moge2_adapter import MoGe2Adapter
         from .depthanything_adapter import DepthAnythingAdapter
         from .test3r_adapter import Test3RAdapter
+        from .vggt_adapter import VGGTAdapter
 
         for cls in [MASt3RAdapter, Fast3RAdapter, Spann3RAdapter,
                     CUT3RAdapter, MoGe2Adapter, DepthAnythingAdapter,
-                    Test3RAdapter]:
+                    Test3RAdapter, VGGTAdapter]:
             self.register_class(cls.name, cls)
 
     @property
