@@ -13,10 +13,7 @@ from .base_adapter import ExpertAdapter, ExpertOutput
 
 
 DEFAULT_MAST3R_REPO = "/hdd3/kykt26/code/mast3r"
-DEFAULT_MAST3R_CHECKPOINT = (
-    "/hdd3/kykt26/code/mast3r/checkpoints/"
-    "MASt3R_ViTLarge_BaseDecoder_512_catmlpdpt_metric.pth"
-)
+DEFAULT_MAST3R_CHECKPOINT = "/hdd3/kykt26/checkpoints/mast3r-vitl"
 
 
 class MASt3RAdapter(ExpertAdapter):

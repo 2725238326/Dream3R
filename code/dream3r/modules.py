@@ -10,6 +10,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import math
 import time
+from pathlib import Path
 from typing import Optional, Dict, List
 
 from dream3r.nsa_attention import NSAAttention
@@ -21,6 +22,41 @@ from dream3r.composer_experts.base_adapter import ExpertOutput
 # ---------------------------------------------------------------------------
 # C1: Perceiver
 # ---------------------------------------------------------------------------
+
+class _ONNXBackbone(nn.Module):
+    """Frozen ONNX feature extractor used when official PyTorch weights are gated."""
+
+    def __init__(self, model_path: str):
+        super().__init__()
+        import onnxruntime as ort
+
+        path = Path(model_path)
+        if path.is_dir():
+            path = path / "onnx" / "model.onnx"
+        available = ort.get_available_providers()
+        providers = (
+            ["CUDAExecutionProvider", "CPUExecutionProvider"]
+            if "CUDAExecutionProvider" in available else ["CPUExecutionProvider"]
+        )
+        self.session = ort.InferenceSession(str(path), providers=providers)
+        self.input_name = self.session.get_inputs()[0].name
+        self.register_buffer(
+            "image_mean",
+            torch.tensor([0.485, 0.456, 0.406], dtype=torch.float32).view(1, 3, 1, 1),
+            persistent=False,
+        )
+        self.register_buffer(
+            "image_std",
+            torch.tensor([0.229, 0.224, 0.225], dtype=torch.float32).view(1, 3, 1, 1),
+            persistent=False,
+        )
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        pixel_values = (x.detach().to(dtype=torch.float32) - self.image_mean) / self.image_std
+        inputs = pixel_values.cpu().numpy()
+        outputs = self.session.run(None, {self.input_name: inputs})
+        return torch.from_numpy(outputs[0]).to(device=x.device, dtype=torch.float32)
+
 
 class Perceiver(nn.Module):
     """Per-frame backbone plus trainable geometry/evidence heads."""
@@ -40,6 +76,7 @@ class Perceiver(nn.Module):
         "dinov2_vitl14": "dinov2_vitl14",
         "dinov3": "dinov2_vitb14",
     }
+    DINOV3_ONNX_TYPES = {"dinov3_vitb16", "dinov3_vitb16_onnx"}
 
     def __init__(self, d_model: int = 768, n_evidence: int = 17,
                  d_evidence: int = 32, img_size: int = 224,
@@ -95,7 +132,9 @@ class Perceiver(nn.Module):
 
     def _try_load_backbone(self):
         try:
-            if self.backbone_type.startswith("dinov2") or self.backbone_type == "dinov3":
+            if self.backbone_type in self.DINOV3_ONNX_TYPES:
+                self._load_dinov3_onnx_backbone()
+            elif self.backbone_type.startswith("dinov2") or self.backbone_type == "dinov3":
                 self._load_dino_backbone()
             else:
                 self._try_load_timm_backbone(pretrained=False)
@@ -105,6 +144,12 @@ class Perceiver(nn.Module):
             self._try_load_timm_backbone(pretrained=False, preserve_error=True)
             if self.backbone_load_error is None:
                 self.backbone_load_error = original_error
+
+    def _load_dinov3_onnx_backbone(self):
+        checkpoint = self.backbone_checkpoint_path
+        if not checkpoint:
+            checkpoint = "/hdd3/kykt26/checkpoints/dinov3-vitb16-onnx/onnx/model.onnx"
+        self._finalize_backbone(_ONNXBackbone(checkpoint), 768)
 
     def _load_dino_backbone(self):
         hub_name = self.DINO_HUB_NAMES.get(self.backbone_type)
@@ -163,9 +208,15 @@ class Perceiver(nn.Module):
             )
         if features.dim() == 2:
             features = features.unsqueeze(1)
+        patch_count = (flat.shape[-2] // 16) * (flat.shape[-1] // 16)
+        if features.shape[1] > 1 and self.backbone_type.startswith("dinov3"):
+            if features.shape[1] == patch_count + 5:
+                return features[:, 5:]
+            if features.shape[1] == patch_count + 1:
+                return features[:, 1:]
         if features.shape[1] > 1 and self.backbone_type.startswith("dinov2"):
             return features
-        if features.shape[1] > 1 and features.shape[1] != (flat.shape[-1] // 16) ** 2:
+        if features.shape[1] > 1 and features.shape[1] != patch_count:
             return features[:, 1:]
         return features
 

@@ -142,6 +142,14 @@ PRESETS = {
         "gpus": "0,1",
         "batch_size": 2,
     },
+    "small_real": {
+        **DEFAULTS,
+        "use_backbone": True,
+        "backbone_type": "dinov3_vitb16_onnx",
+        "backbone_checkpoint_path": "/hdd3/kykt26/checkpoints/dinov3-vitb16-onnx/onnx/model.onnx",
+        "batch_size": 1,
+        "gpus": "0",
+    },
     "base": {
         **DEFAULTS,
         "use_backbone": True,

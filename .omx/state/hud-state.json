@@ -1,6 +1,6 @@
 {
-  "last_turn_at": "2026-05-23T06:21:31.457Z",
-  "turn_count": 21,
-  "last_progress_at": "2026-05-23T06:21:31.457Z",
-  "last_agent_output": "已经开始并推进了两件事：\n\n1. **训练可观测性已修正**\n   - 原 GPU0 PID `3005990` 还在跑，但仍不写 `train_v05_bus_fix.log`。\n   - 我在 G"
+  "last_turn_at": "2026-05-23T10:16:26.343Z",
+  "turn_count": 28,
+  "last_progress_at": "2026-05-23T10:16:26.343Z",
+  "last_agent_output": "T1.1 和 T1.2 已经推进并验证通过：\n\n- T1.1：官方 HF DINOv3-B 被拒后，按你批准改走公开 DINOv3-B ONNX fallback。服务器真实 ONNX smoke 输"
 }
