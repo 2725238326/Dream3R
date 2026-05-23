@@ -1291,8 +1291,9 @@ class ComposerRouter(nn.Module):
 
         regime_embed = self.regime_encoder(regime_probs)
         if critic_confidence is not None:
-            conf_mod = self.confidence_gate(critic_confidence)
-            regime_embed = regime_embed + conf_mod
+            conf_in = critic_confidence.to(self.confidence_gate.weight.dtype)
+            conf_mod = self.confidence_gate(conf_in)
+            regime_embed = regime_embed + conf_mod.to(regime_embed.dtype)
 
         learned_logits = self.routing_head(regime_embed)
         combined = table_match + 0.1 * learned_logits - cost_penalty

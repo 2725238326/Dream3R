@@ -8,6 +8,12 @@ from typing import Any, Dict, Optional
 
 import torch
 
+try:
+    from tqdm.auto import tqdm
+    HAS_TQDM = True
+except ImportError:
+    HAS_TQDM = False
+
 from dream3r.config import config_to_model_args, load_config
 from dream3r.data_kitti import KITTIRectifiedSequenceDataset
 from dream3r.evaluate import Evaluator
@@ -107,7 +113,13 @@ def run_real_sequence_eval(
     windows = []
 
     limit = min(max_windows, len(dataset))
-    for i in range(limit):
+    iterator = range(limit)
+    if HAS_TQDM:
+        iterator = tqdm(iterator, desc=f"KITTI eval [{recurrence}]",
+                        total=limit, unit="win", dynamic_ncols=True,
+                        mininterval=0.5)
+
+    for i in iterator:
         sample = dataset[i]
         x = sample["features"].unsqueeze(0).to(device)
         targets = {
@@ -125,10 +137,19 @@ def run_real_sequence_eval(
         )
         elapsed_ms = (time.perf_counter() - start) * 1000.0
         evaluator.update(outputs, targets)
-        windows.append(_summarize_window(i, sample, outputs, elapsed_ms))
+        window_summary = _summarize_window(i, sample, outputs, elapsed_ms)
+        windows.append(window_summary)
         prev_memory = outputs.get("latent_state_tokens")
         prev_slots = outputs.get("object_track_set")
         prev_slot_poses = outputs.get("object_slot_poses")
+
+        if HAS_TQDM:
+            iterator.set_postfix({
+                "ms": f"{elapsed_ms:.0f}",
+                "bank": f"{window_summary['bank_occupancy']:.2f}",
+                "drift": f"{window_summary['latent_drift_proxy']:.3f}",
+                "promo": f"{window_summary['stable_promotion_rate']:.2f}",
+            })
 
     recurrence_module = model.memory.state_recurrence
     return {

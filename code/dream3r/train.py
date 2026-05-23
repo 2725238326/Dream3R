@@ -35,6 +35,12 @@ import torch.distributed as dist
 from torch.nn.parallel import DistributedDataParallel as DDP
 from torch.utils.data import DataLoader, DistributedSampler
 
+try:
+    from tqdm.auto import tqdm
+    HAS_TQDM = True
+except ImportError:
+    HAS_TQDM = False
+
 from dream3r.config import load_config, save_config, config_to_model_args
 from dream3r.model import Dream3R
 from dream3r.losses import Dream3RLoss
@@ -363,7 +369,13 @@ def train(cfg: dict):
         if is_main_process():
             print(f"Resumed from {resume_path} (epoch {start_epoch}, step {global_step})")
 
-    for epoch in range(start_epoch, cfg["epochs"]):
+    use_tqdm = HAS_TQDM and is_main_process()
+    epoch_iter = range(start_epoch, cfg["epochs"])
+    if use_tqdm:
+        epoch_iter = tqdm(epoch_iter, desc="Epochs", position=0,
+                          unit="ep", dynamic_ncols=True)
+
+    for epoch in epoch_iter:
         if sampler:
             sampler.set_epoch(epoch)
 
@@ -374,7 +386,18 @@ def train(cfg: dict):
         epoch_loss = 0.0
         t0 = time.time()
 
-        for batch_idx, batch in enumerate(train_loader):
+        if use_tqdm:
+            step_iter = tqdm(
+                enumerate(train_loader),
+                total=len(train_loader),
+                desc=f"  ep{epoch+1:02d}/{cfg['epochs']} [{stage}]",
+                position=1, leave=False, unit="batch",
+                dynamic_ncols=True, mininterval=0.5,
+            )
+        else:
+            step_iter = enumerate(train_loader)
+
+        for batch_idx, batch in step_iter:
             optimizer.zero_grad(set_to_none=True)
             tbptt = cfg.get("tbptt_detach_every", 1)
 
@@ -392,8 +415,17 @@ def train(cfg: dict):
                 nn.utils.clip_grad_norm_(model.parameters(), cfg["grad_clip"])
                 optimizer.step()
 
-            epoch_loss += losses["total"].item()
+            loss_val = losses["total"].item()
+            epoch_loss += loss_val
             global_step += 1
+
+            if use_tqdm:
+                postfix = {"loss": f"{loss_val:.3f}", "lr": f"{lr:.1e}"}
+                if "pointmap" in losses:
+                    postfix["pm"] = f"{losses['pointmap'].item():.3f}"
+                if "critic_p1" in losses:
+                    postfix["c1"] = f"{losses['critic_p1'].item():.3f}"
+                step_iter.set_postfix(postfix)
 
             if is_main_process() and global_step % cfg["log_every"] == 0:
                 if writer:
@@ -418,12 +450,20 @@ def train(cfg: dict):
                                           outputs["route_regret"].mean().item(), global_step)
                     writer.add_scalar("train/lr", lr, global_step)
 
+        if use_tqdm:
+            step_iter.close()
+
         dt = time.time() - t0
         avg = epoch_loss / max(len(train_loader), 1)
 
         if is_main_process():
-            print(f"  epoch {epoch+1:3d}/{cfg['epochs']}  loss={avg:.4f}  "
-                  f"lr={lr:.2e}  stage={stage}  time={dt:.1f}s")
+            msg = (f"  epoch {epoch+1:3d}/{cfg['epochs']}  loss={avg:.4f}  "
+                   f"lr={lr:.2e}  stage={stage}  time={dt:.1f}s")
+            if use_tqdm:
+                tqdm.write(msg)
+                epoch_iter.set_postfix(loss=f"{avg:.3f}", stage=stage)
+            else:
+                print(msg, flush=True)
 
             if writer:
                 writer.add_scalar("epoch/loss", avg, epoch)
