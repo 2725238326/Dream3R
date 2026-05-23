@@ -118,9 +118,9 @@ def test_spatial_memory_gradient():
 
 
 def test_composer_router_basic():
-    router = ComposerRouter(n_regimes=5, d_routing=32)
+    router = ComposerRouter(n_regimes=6, d_routing=32)
     B = 2
-    regime = torch.softmax(torch.randn(B, 5), dim=-1)
+    regime = torch.softmax(torch.randn(B, 6), dim=-1)
     out = router(regime)
 
     assert "capability_match" in out
@@ -132,9 +132,9 @@ def test_composer_router_basic():
 
 
 def test_composer_router_with_confidence():
-    router = ComposerRouter(n_regimes=5, d_routing=32)
+    router = ComposerRouter(n_regimes=6, d_routing=32)
     B = 2
-    regime = torch.softmax(torch.randn(B, 5), dim=-1)
+    regime = torch.softmax(torch.randn(B, 6), dim=-1)
     conf = torch.rand(B, 1)
 
     out = router(regime, critic_confidence=conf)
@@ -144,11 +144,11 @@ def test_composer_router_with_confidence():
 def test_composer_router_with_registry():
     reg = ExpertRegistry()
     reg.register_all_defaults()
-    router = ComposerRouter(n_regimes=5, d_routing=32, expert_registry=reg)
+    router = ComposerRouter(n_regimes=6, d_routing=32, expert_registry=reg)
     router.load_from_registry()
 
     B = 1
-    regime = torch.softmax(torch.randn(B, 5), dim=-1)
+    regime = torch.softmax(torch.randn(B, 6), dim=-1)
     out = router(regime)
 
     expert_id = out["selected_expert"][0].item()
@@ -163,13 +163,13 @@ def test_composer_router_with_registry():
 def test_composer_router_prefers_mast3r_for_static_indoor_without_cost_penalty():
     reg = ExpertRegistry()
     reg.register_all_defaults()
-    router = ComposerRouter(n_regimes=5, d_routing=32, cost_alpha=0.0, expert_registry=reg)
+    router = ComposerRouter(n_regimes=6, d_routing=32, cost_alpha=0.0, expert_registry=reg)
     router.load_from_registry()
     with torch.no_grad():
         router.routing_head.weight.zero_()
         router.routing_head.bias.zero_()
 
-    regime = torch.tensor([[1.0, 0.0, 0.0, 0.0, 0.0]])
+    regime = torch.tensor([[1.0, 0.0, 0.0, 0.0, 0.0, 0.0]])
     out = router(regime)
     selected_name = sorted(reg.names)[out["selected_expert"].item()]
 
@@ -177,8 +177,8 @@ def test_composer_router_prefers_mast3r_for_static_indoor_without_cost_penalty()
 
 
 def test_composer_router_gradient():
-    router = ComposerRouter(n_regimes=5, d_routing=32)
-    regime = torch.randn(1, 5, requires_grad=True)
+    router = ComposerRouter(n_regimes=6, d_routing=32)
+    regime = torch.randn(1, 6, requires_grad=True)
     regime_soft = torch.softmax(regime, dim=-1)
     out = router(regime_soft)
     loss = out["routing_logits"].sum()

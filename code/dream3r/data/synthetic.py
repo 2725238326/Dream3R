@@ -37,7 +37,7 @@ class SyntheticSequenceDataset(Dataset):
     def __init__(self, n_sequences: int = 100, n_frames: int = 4,
                  height: int = 224, width: int = 224,
                  n_patches: int = 196, n_slots: int = 16,
-                 n_regimes: int = 5, d_model: int = 768,
+                 n_regimes: int = 6, d_model: int = 768,
                  seed: int = 42,
                  sequence_length: int = 1,
                  inject_dynamics: bool = True,

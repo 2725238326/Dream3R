@@ -34,9 +34,9 @@ def _build():
 def test_dispatch_returns_one_of_seven_known_experts():
     pipeline, feats, imgs = _build()
     out = pipeline(images=imgs, features=feats)
-    seven = {"mast3r", "fast3r", "spann3r", "cut3r", "moge2",
-             "depthanything", "test3r"}
-    assert out.expert.expert_name in seven, out.expert.expert_name
+    known = {"mast3r", "fast3r", "spann3r", "cut3r", "moge2",
+             "depthanything", "test3r", "vggt"}
+    assert out.expert.expert_name in known, out.expert.expert_name
 
 
 def test_expert_output_replaces_perception_pointmap_in_final_output():
@@ -130,7 +130,7 @@ def test_seven_expert_registry_is_attached():
         reroute_hint=False,
     ).backend_status
     assert composer_bs["registry_attached"] is True
-    assert len(composer_bs["adapter_status"]) == 7
+    assert len(composer_bs["adapter_status"]) == 8
 
 
 if __name__ == "__main__":

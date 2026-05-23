@@ -93,6 +93,12 @@ class MemoryBus(nn.Module):
         self._signals.clear()
         self._handoffs.clear()
 
+    def hard_reset(self):
+        """Fully clear all state — use between sequences/batches."""
+        self._signals.clear()
+        self._previous_signals.clear()
+        self._handoffs.clear()
+
     def publish(self, signal_name: str, tensor: torch.Tensor,
                 label: EvidenceLabel, producer: str, timestep: int):
         expected_owner = self._owner_table.get(signal_name)

@@ -20,7 +20,7 @@ n_params = sum(p.numel() for p in model.parameters())
 print(f"Model params: {n_params:,}", flush=True)
 
 ds = SyntheticSequenceDataset(
-    n_sequences=10, n_frames=4, n_slots=16, n_regimes=5,
+    n_sequences=10, n_frames=4, n_slots=16, n_regimes=6,
     d_model=768, sequence_length=2, seed=42,
 )
 dl = DataLoader(ds, batch_size=2, collate_fn=collate_synthetic)

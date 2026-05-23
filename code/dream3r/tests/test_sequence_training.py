@@ -33,7 +33,7 @@ def test_synthetic_dataset_sequence_shapes():
 
     assert sample["features"].shape == (3, 3, 8, 768)
     assert sample["pointmap_gt"].shape == (3, 3, 8, 3)
-    assert sample["regime"].shape == (3, 5)
+    assert sample["regime"].shape == (3, 6)
     assert sample["region_label"].shape == (3, 16)
 
 

@@ -52,7 +52,7 @@ def test_composer_dispatch_uses_loaded_fast3r_when_enabled():
         return
     fast3r.load_checkpoint()
 
-    router = ComposerRouter(n_regimes=5, d_routing=32, cost_alpha=0.0, expert_registry=reg)
+    router = ComposerRouter(n_regimes=6, d_routing=32, cost_alpha=0.0, expert_registry=reg)
     router.load_from_registry()
     fast3r_id = sorted(reg.names).index("fast3r")
     out = router.dispatch(fast3r_id, torch.randn(1, 2, 3, 224, 224))

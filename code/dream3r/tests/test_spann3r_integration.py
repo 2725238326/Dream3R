@@ -52,7 +52,7 @@ def test_composer_dispatch_uses_loaded_spann3r_when_enabled():
         return
     spann3r.load_checkpoint()
 
-    router = ComposerRouter(n_regimes=5, d_routing=32, cost_alpha=0.0, expert_registry=reg)
+    router = ComposerRouter(n_regimes=6, d_routing=32, cost_alpha=0.0, expert_registry=reg)
     router.load_from_registry()
     spann3r_id = sorted(reg.names).index("spann3r")
     out = router.dispatch(spann3r_id, torch.randn(1, 2, 3, 224, 224))

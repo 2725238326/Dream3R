@@ -62,7 +62,7 @@ class Dream3R(nn.Module):
             d_critic     = c.get("d_critic", 256)
             critic_geo_scale = c.get("critic_geometric_conflict_scale", 8.0)
             critic_geo_bias = c.get("critic_geometric_clean_bias", -2.0)
-            n_regimes    = c.get("n_regimes", 5)
+            n_regimes    = c.get("n_regimes", 6)
             n_models     = c.get("n_models", 8)
 
             self.memory = MemorySSM_v01(
@@ -103,7 +103,7 @@ class Dream3R(nn.Module):
             d_critic     = c.get("d_critic", 256)
             critic_geo_scale = c.get("critic_geometric_conflict_scale", 8.0)
             critic_geo_bias = c.get("critic_geometric_clean_bias", -2.0)
-            n_regimes    = c.get("n_regimes", 5)
+            n_regimes    = c.get("n_regimes", 6)
             d_routing    = c.get("d_routing", 64)
             cost_alpha   = c.get("cost_alpha", 0.5)
 
@@ -178,7 +178,10 @@ class Dream3R(nn.Module):
         B = x.shape[0]
         device = x.device
         t = timestep
-        self.bus.reset()
+        if t == 0:
+            self.bus.hard_reset()
+        else:
+            self.bus.reset()
         timings = {}
 
         t0 = time.perf_counter()
@@ -275,7 +278,7 @@ class Dream3R(nn.Module):
 
         # === Composer ===
         t0 = time.perf_counter()
-        n_regimes = 5
+        n_regimes = 6
         if isinstance(self.composer, ComposerRouter):
             n_regimes = self.composer.n_regimes
         elif isinstance(self.composer, Composer_v01):
@@ -400,7 +403,7 @@ CONFIGS = {
         "d_model": 768, "n_evidence": 17, "d_evidence": 32,
         "d_state": 256, "n_ssm_layers": 6,
         "d_slot": 128, "n_slots": 16,
-        "d_critic": 256, "n_regimes": 5, "n_models": 8,
+        "d_critic": 256, "n_regimes": 6, "n_models": 8,
         "use_backbone": False, "img_size": 224,
         "backbone_type": "none", "backbone_freeze": True,
         "backbone_checkpoint_path": "",
@@ -419,7 +422,7 @@ CONFIGS = {
         "stable_recall_strength": 0.25,
         "stability_prune_bonus": 1.0,
         "d_slot": 128, "n_slots": 16,
-        "d_critic": 256, "n_regimes": 5,
+        "d_critic": 256, "n_regimes": 6,
         "d_routing": 64, "cost_alpha": 0.5,
         "use_backbone": False, "img_size": 224,
         "backbone_type": "none", "backbone_freeze": True,
@@ -439,7 +442,7 @@ CONFIGS = {
         "stable_recall_strength": 0.25,
         "stability_prune_bonus": 1.0,
         "d_slot": 128, "n_slots": 16,
-        "d_critic": 256, "n_regimes": 5,
+        "d_critic": 256, "n_regimes": 6,
         "d_routing": 64, "cost_alpha": 0.5,
         "use_backbone": True, "img_size": 224,
         "backbone_type": "dinov2_vitb14", "backbone_freeze": True,
@@ -452,7 +455,7 @@ CONFIGS = {
         "bank_capacity": 512, "nsa_select_k": 16, "nsa_heads": 8,
         "sliding_window": 8,
         "d_slot": 256, "n_slots": 32,
-        "d_critic": 512, "n_regimes": 5,
+        "d_critic": 512, "n_regimes": 6,
         "d_routing": 128, "cost_alpha": 0.5,
         "use_backbone": True, "img_size": 224,
     },

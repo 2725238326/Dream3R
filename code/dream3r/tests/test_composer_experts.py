@@ -8,8 +8,8 @@ from dream3r.composer_experts.base_adapter import ExpertAdapter
 def test_registry_registration():
     reg = ExpertRegistry()
     reg.register_all_defaults()
-    assert len(reg.names) == 7
-    expected = {"mast3r", "fast3r", "spann3r", "cut3r", "moge2", "depthanything", "test3r"}
+    assert len(reg.names) == 8
+    expected = {"mast3r", "fast3r", "spann3r", "cut3r", "moge2", "depthanything", "test3r", "vggt"}
     assert set(reg.names) == expected
 
 
@@ -17,7 +17,7 @@ def test_capability_matrix():
     reg = ExpertRegistry()
     reg.register_all_defaults()
     matrix = reg.capability_matrix()
-    assert matrix.shape == (7, 5)
+    assert matrix.shape == (8, 6)
     assert (matrix >= 0).all() and (matrix <= 1).all()
 
 
@@ -32,7 +32,7 @@ def test_method_profiles_extract_3r_advantages():
     assert "external spatial memory for image collections" in profiles["spann3r"].advantages
 
     feature_matrix = reg.feature_matrix()
-    assert feature_matrix.shape[0] == 7
+    assert feature_matrix.shape[0] == 8
     assert feature_matrix.shape[1] >= 8
     assert feature_matrix.max() <= 1
     assert feature_matrix.min() >= 0
@@ -59,7 +59,7 @@ def test_latency_vector():
     reg = ExpertRegistry()
     reg.register_all_defaults()
     latency = reg.latency_vector()
-    assert latency.shape == (7,)
+    assert latency.shape == (8,)
     assert (latency > 0).all()
 
     fastest = reg.get("depthanything")
@@ -122,7 +122,7 @@ def test_capability_tensor():
 
     adapter = reg.get("mast3r")
     ct = adapter.capability_tensor()
-    assert ct.shape == (5,)
+    assert ct.shape == (6,)
     assert ct.sum() > 0
 
 

@@ -44,7 +44,7 @@ def test_composer_dispatch_uses_loaded_mast3r_when_enabled():
     mast3r = reg.get("mast3r")
     mast3r.load_checkpoint()
 
-    router = ComposerRouter(n_regimes=5, d_routing=32, cost_alpha=0.0, expert_registry=reg)
+    router = ComposerRouter(n_regimes=6, d_routing=32, cost_alpha=0.0, expert_registry=reg)
     router.load_from_registry()
     mast3r_id = sorted(reg.names).index("mast3r")
     out = router.dispatch(mast3r_id, torch.randn(1, 2, 3, 224, 224))

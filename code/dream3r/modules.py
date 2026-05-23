@@ -1231,7 +1231,7 @@ class ComposerRouter(nn.Module):
         self.cost_alpha = cost_alpha
         self.registry = expert_registry
 
-        n_experts = 7
+        n_experts = len(expert_registry.names) if expert_registry is not None else 8
         self.register_buffer(
             "capability_cards",
             torch.ones(n_experts, n_regimes) / n_regimes,
