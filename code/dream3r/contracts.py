@@ -92,7 +92,8 @@ class PermanenceOutput:
     """C3 Permanence contract.
 
     dynamic_logits:        [B, S, 3]   region classifier logits (suppress/admit/defer)
-    dynamic_mask_proxy:    [B, S]      bool mask True where slot is dynamic-suppressed
+    dynamic_mask_proxy:    [B, S]      bool proxy mask True where slot is dynamic-suppressed
+    dynamic_mask_final:    [B, S]      optional final D2 mask; coexists with proxy during transition
     dynamic_ratio:         [B, S, 1]   per-slot dynamic ratio
     suppress_static_write: [B, S]      CR-2 handoff signal (binding on Memory)
     object_track_set:      [B, S, D]   slot embeddings
@@ -100,6 +101,7 @@ class PermanenceOutput:
     """
     dynamic_logits: torch.Tensor
     dynamic_mask_proxy: torch.Tensor
+    dynamic_mask_final: Optional[torch.Tensor]
     dynamic_ratio: torch.Tensor
     suppress_static_write: torch.Tensor
     object_track_set: torch.Tensor
@@ -222,6 +224,7 @@ class ReconstructionOutput:
     confidence: torch.Tensor
     dynamic_logits: torch.Tensor
     dynamic_mask_proxy: torch.Tensor
+    dynamic_mask_final: Optional[torch.Tensor]
     evidence: torch.Tensor                  # evidence_tokens from selected expert
     selected_expert: torch.Tensor           # final expert id (post-reroute)
     backend_status: Dict[str, Any]

@@ -1,6 +1,6 @@
 # Cross-Spec Signal Contract
 
-Last updated: 2026-05-05 (cycle 011 S4; v2 -> v2.1 additive revision: forward-reference null protocol formalized; v2 substance unchanged; alpha unchanged at 0.5 inferred; 8x8 grid partition + identity_consistency threshold pinning deferred, not promoted)
+Last updated: 2026-05-23 (cycle 20260523; v2.1 -> v2.2 additive revision: Composer capability_card gains `feed_forward_manyview` regime for VGGT; v2 cost substance and v2.1 forward-reference protocol unchanged)
 
 Status: active contract; revision policy below.
 
@@ -101,7 +101,7 @@ What Permanence does NOT publish:
 
 ### Composer SPEC-20260504-001 publishes
 
-- `capability_card(model_id)`: per-model capability profile across input regimes (static pair, many-view, streaming, dynamic, sparse-view, etc.). v2 adds a `cost_normalized` axis (paper-derived from per-paper cost claims; relative-ordering paper-proven, absolute scaling inferred).
+- `capability_card(model_id)`: per-model capability profile across input regimes (static pair, many-view, streaming, dynamic, sparse-view, feed-forward many-view, etc.). v2 adds a `cost_normalized` axis (paper-derived from per-paper cost claims; relative-ordering paper-proven, absolute scaling inferred). v2.2 adds the `feed_forward_manyview` regime so VGGT is not collapsed into Fast3R's dense sequential row.
 - `sample_regime_card(input)`: per-input regime classification
 - `capability_match(model_id, input)`: scalar match score in [0, 1] from card join. **v2**: now exposes both a capability-only spread and a `cost_adjusted_match` formed by weighting the capability-only spread with `cost_normalized` at `alpha = 0.5` (initial value, inferred). Consumers may use either; CR-4 arbitrates ties on the cost-adjusted spread under v2.
 - `route_recommendation(input)`: ordered list of model_ids from best to worst expected capability_match. Under v2, the ordering may flip vs v1 in cost-asymmetric regimes.
@@ -197,6 +197,10 @@ This protocol formalizes a pattern already exercised in:
 - `cases/CASE-20260504-MEMORY-01.md` line 85 (Critic forward-reference null; closed by reading cycle-009 CRITIC-03 fallback path)
 
 Existing case cards that use the pattern are NOT retroactively edited to match v2.1 wording. Per Discipline rule 3 (Surgical Edits), v2.1 documents the protocol, not changes the cards. Future case cards drafted after 2026-05-05 use the v2.1 wording above.
+
+## v2.2 Change Log
+
+- 2026-05-23 (v0.5 A4 closure): contract promoted from v2.1 to v2.2 per `decisions/DEC-20260523-002-a4-vggt-capability-v22.md`. v2.2 is **additive only**: it adds `feed_forward_manyview` to Composer's capability-card regime vocabulary and leaves `cost_normalized`, `cost_adjusted_match`, CR-1..CR-6, alpha=0.5, and the v2.1 forward-reference null protocol unchanged. The code-level schema is `composer_experts.method_profiles.REGIME_ORDER` with six regimes.
 
 ## v2.1 Change Log
 

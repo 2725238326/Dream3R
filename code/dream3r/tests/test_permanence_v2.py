@@ -3,6 +3,7 @@
 import torch
 
 from dream3r.bus import EvidenceLabel, MemoryBus
+from dream3r.model import _select_cr2_suppress_mask
 from dream3r.modules import Permanence
 
 
@@ -12,8 +13,30 @@ def test_permanence_returns_per_slot_dynamic_ratio_and_suppress():
     out = perm(torch.randn(2, 5, 32))
 
     assert out["dynamic_ratio"].shape == (2, 4, 1)
+    assert out["dynamic_mask_proxy"].shape == (2, 4)
+    assert out["dynamic_mask_proxy"].dtype == torch.bool
     assert out["suppress_static_write"].shape == (2, 4)
     assert out["slot_match_indices"].shape == (2, 4)
+
+
+def test_cr2_prefers_dynamic_mask_final_then_proxy():
+    proxy = torch.tensor([[False, True, False]])
+    final = torch.tensor([[True, False, False]])
+
+    selected, source = _select_cr2_suppress_mask({
+        "dynamic_mask_proxy": proxy,
+        "dynamic_mask_final": final,
+        "suppress_static_write": torch.zeros(1, 3),
+    })
+    assert source == "dynamic_mask_final"
+    assert torch.equal(selected, final.float())
+
+    selected, source = _select_cr2_suppress_mask({
+        "dynamic_mask_proxy": proxy,
+        "suppress_static_write": torch.zeros(1, 3),
+    })
+    assert source == "dynamic_mask_proxy"
+    assert torch.equal(selected, proxy.float())
 
 
 def test_cr2_aggregation_is_not_any_slot_suppress():

@@ -65,13 +65,14 @@ def test_v04_output_has_all_required_top_level_fields():
 
     required = [
         "pointmap", "confidence", "dynamic_logits", "dynamic_mask_proxy",
-        "evidence", "selected_expert", "backend_status", "conflict_score",
+        "dynamic_mask_final", "evidence", "selected_expert", "backend_status", "conflict_score",
         "memory_log", "route_log", "repair_action_log", "contract_log",
         "architecture_version",
     ]
     for name in required:
         assert hasattr(out, name), f"missing top-level field {name}"
-        assert getattr(out, name) is not None, f"field {name} is None"
+        if name != "dynamic_mask_final":
+            assert getattr(out, name) is not None, f"field {name} is None"
 
 
 def test_v04_typed_submodule_contracts_present():
@@ -135,9 +136,11 @@ def test_permanence_output_has_dynamic_mask_proxy_and_suppress_handoff():
     perm = out.permanence
     assert perm.dynamic_logits.shape[-1] == 3
     assert perm.dynamic_mask_proxy.dtype == torch.bool
+    assert perm.dynamic_mask_final is None or perm.dynamic_mask_final.dtype == torch.bool
     assert perm.dynamic_ratio.shape[-1] == 1
     assert perm.suppress_static_write.shape[0] == feats.shape[0]
     assert perm.object_track_set.dim() == 3
+    assert perm.stable_promotion_log["cr2_suppress_source"] == "dynamic_mask_proxy"
 
 
 def test_critic_decision_uses_v04_action_codes():

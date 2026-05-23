@@ -497,7 +497,8 @@ class Permanence(nn.Module):
         mint_input = torch.cat([slots, conflict_expanded], dim=-1)  # [B, S, d_slot+1]
         mint_confidence = torch.sigmoid(self.mint_gate(mint_input)).squeeze(-1)  # [B, S]
 
-        suppress = (region_logits.argmax(dim=-1) == 0).float()
+        dynamic_mask_proxy = (region_logits.argmax(dim=-1) != 0)
+        suppress = dynamic_mask_proxy.float()
         slot_translation = torch.einsum("bsn,bnd->bsd", attn, input_positions)
         identity_quat = input_positions.new_zeros(B, self.n_slots, 4)
         identity_quat[..., 0] = 1.0
@@ -516,6 +517,7 @@ class Permanence(nn.Module):
             "object_track_set": slots,
             "object_slot_poses": slot_poses,
             "region_logits": region_logits,
+            "dynamic_mask_proxy": dynamic_mask_proxy,
             "dynamic_ratio": dynamic_ratio,
             "suppress_static_write": suppress,
             "mint_confidence": mint_confidence,

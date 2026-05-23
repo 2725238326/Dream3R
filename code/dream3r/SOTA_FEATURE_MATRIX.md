@@ -1,6 +1,6 @@
 # Dream3R SOTA Feature Matrix
 
-Last updated: 2026-05-22 (W20 expansion pass after v0.4 architecture closure; supersedes 2026-05-10 first pass while preserving its differentiation / evidence-map sections at the end)
+Last updated: 2026-05-23 (v0.5 A4/A6/A8 closure pass; supersedes 2026-05-22 W20 expansion while preserving its differentiation / evidence-map sections at the end)
 
 Status: family-grouped second pass. Every method named in `NEXT_PHASE_ROADMAP.md` W20 plus the three monocular priors already wired into the Composer expert registry is covered. Methods named in the roadmap but absent from `registry/source_registry.md` are explicitly flagged as drafting artifacts.
 
@@ -31,6 +31,7 @@ When the three sources above disagree, this matrix records the disagreement unde
 - `real-wired (no local ckpt)` — adapter loader path exists, real checkpoint loads on server; locally degrades to fallback because no checkpoint is resolvable.
 - `deterministic fallback` — adapter exists, image-derived deterministic output; v0.4 `ComposerDecision.backend_status.backend == "fallback"`. Not a model.
 - `stub` — adapter exists but neither real nor fallback path produces a meaningful 3R signal; `backend == "stub"`.
+- `scaffold` — typed policy / updater surface exists and is unit-tested, but the learned or server-validated behavior is deferred.
 - `mechanism integrated` — not an adapter; mechanism lives inside a Dream3R core module (e.g., NSA inside `C2 SpatialMemory`).
 - `contract-only` — tensor / dataclass contract exists but is **not** in the main forward path (per `ARCHITECTURE_V04_STATUS.md`).
 - `comparator-only` — referenced in literature / spec; no code wiring; cited for evidence framing.
@@ -55,7 +56,7 @@ When the three sources above disagree, this matrix records the disagreement unde
 | Fast3R | SRC-2025-001 | many-image single-pass reconstruction; reduced sequential error | needs batched views to expose advantage | C5 Composer expert `fast3r_adapter`; `method_profiles["fast3r"]` | real-wired (no local ckpt); local conda blocked on `omegaconf` per `WORKFLOW_STATUS.md` Track A | `tests/test_fast3r_integration.py` (server-only) | server env fix (`omegaconf`) before any real Fast3R route comparison |
 | Spann3R | SRC-2024-011 | external spatial memory; ordered/unordered dense reconstruction | retrieval-policy-dependent quality | C5 Composer expert `spann3r_adapter`; conceptual analog of `AnchorBank` per `method_profiles["spann3r"]` | real-wired (no local ckpt) | `tests/test_spann3r_integration.py` (server-only); `CASE-20260504-MEMORY-02` cycle 010 used Spann3R regime | no L2 case showing Spann3R-as-expert vs Dream3R AnchorBank head-to-head; W23 plan covers this |
 | CUT3R | SRC-2025-002 | persistent latent state for continuous perception; streaming-friendly | state drift needs explicit critic/memory control | C5 Composer expert `cut3r_adapter`; analog of `StateTokenRecurrence` per `SPINE_MEMORY.md` | deterministic fallback | `composer_experts/method_profiles.py` declares `implementation_status="stub"`; no real adapter checkpoint resolution | adapter `load_checkpoint(path)` not implemented; CR-3 retrieval boost path was designed against this comparator |
-| VGGT | SRC-2026-015 | feed-forward visual-geometry transformer; Meta open-source | no Dream3R adapter; cycle 009 + 012 capability cards explicitly omit VGGT | not yet absorbed; candidate for new Composer expert + capability_card v2.2 row per cycle 014 plan | comparator-only | `CASE-COMPOSER-05` cycle 014 = explicit per-card VGGT gap addendum | adapter implementation gap; capability_card schema needs v2.2 to fit feed-forward many-view profile distinct from Fast3R |
+| VGGT | SRC-2026-015 | feed-forward visual-geometry transformer; Meta open-source | no temporal state; real checkpoint not downloaded in local/server handoff | C5 Composer expert `vggt_adapter`; `method_profiles["vggt"]`; capability_card v2.2 `feed_forward_manyview` regime distinct from Fast3R dense sequential | deterministic fallback | `tests/test_vggt_integration.py`; `DEC-20260523-002` closes contract/adapter surface; backend reports `fallback` until checkpoint authorization | real VGGT checkpoint load + server tick still deferred to future A2-style checkpoint DEC |
 | STream3R | SRC-2026-001 | causal transformer + session-bounded streaming state | session state ≠ unbounded scene memory (see `literature/CRITICAL_NOTES.md`) | comparator for `build_state_recurrence` choice; W26 design study planned | comparator-only | `SPINE_MEMORY.md` Required Reading entry; not wired | W26 `STREAM3R_RELATION.md` needs drafting before any optional `causal_decoder_adapter.py` |
 | SLAM3R | SRC-2024-010 | sliding-window dense SLAM via pointmap prediction + registration | windowed SLAM, not streaming state recurrence | comparator for window-policy under C5 Composer / C4 Critic | comparator-only | `SPINE_MEMORY.md` Advanced not yet; cited in `RU-014/015` | window-policy never benchmarked against Dream3R sliding-window choice |
 | MV-DUSt3R+ | SRC-2025-005 | sparse-view pose-free RGB reconstruction; multi-view extension | not streaming | candidate Composer expert (sparse-view regime row) | comparator-only | `SPINE_COMPOSER.md` Required Reading | no adapter; could fill the sparse-view route currently dominated by MASt3R |
@@ -90,7 +91,7 @@ When the three sources above disagree, this matrix records the disagreement unde
 |---|---|---|---|---|---|---|---|
 | Test3R | SRC-2025-007 | test-time self-supervised consistency refinement | high latency; selective use | C5 Composer expert `test3r_adapter`; also conceptual analog for C4 Critic-triggered slow verification | deterministic fallback | `composer_experts/method_profiles.py` `implementation_status="stub"`; `SPINE_CRITIC.md` Required Reading | adapter `load_checkpoint`; v0.4 `RepairExecutor` actions 1/2/3 use internal rerun (see `repair.py`) rather than Test3R off-path dispatch — bridging this is a v0.5 axis |
 | TTT3R | SRC-2025-004 | test-time update rule for CUT3R recurrent state | per-pair, not long-context | comparator for `RepairExecutor` action 1 (local rerun) | comparator-only | `SPINE_MEMORY.md` Advanced Reading; `SPINE_CRITIC.md` Required Reading | Dream3R `_local_rerun` injects `recommended_action=1` and bumps CR-3 retrieval — not the TTT3R update rule itself; gap is whether this is sufficient |
-| tttLRM | SRC-2026-011 | test-time training at long-context / sequence scale | sequence-level drift target ≠ per-pair | candidate for v0.5 long-context A1 sub-action; W25 TTT plan target | comparator-only | `SPINE_MEMORY.md` Advanced Reading; `CRITICAL_NOTES.md` tttLRM vs TTT3R distinction | W25 `test_time_adapt.py` + `TTT_PLAN.md` not yet drafted |
+| tttLRM | SRC-2026-011 | test-time training at long-context / sequence scale | sequence-level drift target != per-pair; real gradient step not implemented yet | C2 Memory A1 action policy scaffold: `MemoryA1Action.TEST_TIME_TRAIN`, `StateUpdatePolicy`, `TTTStateUpdater`, W25 `TTT_PLAN.md` | scaffold | `tests/test_memory_action_policy.py` (14 tests); `DEC-20260523-003` closes policy-scaffold surface | replace scaffold with real TTT gradient step, train policy, and record long-sequence server tick in W25 |
 | CTRL | SRC-2025-008 | critic-revision via RL-trained critic | RL training cost | comparator for C4 Critic learning regime (Dream3R Critic is heuristic, not RL-learned) | comparator-only | `SPINE_CRITIC.md` Required Reading; `RU-011` linked | not on near-term roadmap |
 | SEAL | SRC-2025-009 | self-edit driven adaptation | LLM-domain mechanism transfer | comparator for v0.5 TTT scope | comparator-only | `RU-012` linked | architecture-transfer only |
 | G-CUT3R | SRC-2025-014 | guided CUT3R with depth / calibration / pose priors | needs auxiliary priors at inference | comparator for guided-prior injection at C1 Perceiver | comparator-only | `RU-002/015` linked | guided-prior contract design not started |
@@ -99,7 +100,7 @@ When the three sources above disagree, this matrix records the disagreement unde
 
 | Method | SRC | Core strength | Limitation | Dream3R module that absorbs it | Implementation status | Evidence / test | Remaining gap |
 |---|---|---|---|---|---|---|---|
-| Native Sparse Attention (NSA) | external (DeepSeek arXiv 2502.11089; not in source_registry.md) | trainable sparse access: compressed + selected + sliding branches | requires careful branch routing; sliding branch can drop to 0 weight | C2 `NSAAttention` (three branches realized as `compressed`, `selected`, `sliding`) | mechanism integrated | `tests/test_nsa_*`; `RECENT_PROGRESS.md` Tier 2 KITTI shows branch weights (compressed 0.393 / selected 0.607 / sliding 0.000) | sliding branch effectively unused in current KITTI smoke; W21 ablation must report whether sliding ever fires under longer sequences |
+| Native Sparse Attention (NSA) | external (DeepSeek arXiv 2502.11089; not in source_registry.md) | trainable sparse access: compressed + selected + sliding branches | requires careful branch routing; short low-bank windows can correctly suppress sliding | C2 `NSAAttention` (three branches realized as `compressed`, `selected`, `sliding`) | mechanism integrated | `tests/test_nsa_*`; `cycles/CYCLE-20260523-001.md`; 128-window KITTI evidence plus bank ablation | RESOLVED by `DEC-20260523-001`: sliding fires on long sequences/post-saturation; 2-window zero is expected under low bank occupancy |
 | Mamba (S6) | SRC-2023-001 | selective state-space sequence modeling, linear-time | Mamba-only vision is not always better (see MambaOut) | `build_state_recurrence(type="mamba_hybrid")` factory in C2; `MemorySSM_v01` hybrid path | mechanism integrated | `tests/test_state_recurrence_factory.py`; `demo_mamba_path` on server; `RECENT_PROGRESS.md` Tier 1 | local fast path uses `mamba_ssm` only when available; `use_fast_path=False` documented; W21 ablation `mamba_hybrid` vs `cross_attention` synthetic-only so far |
 | Mamba-2 / SSD | SRC-2024-006 | state-space duality; efficient state layer | architecture-transfer; not 3R-specific | candidate refinement for `build_state_recurrence`; not separately wired | comparator-only | none direct | out of scope until W21 ablation closes cross-attn vs mamba_hybrid |
 | VMamba | SRC-2024-007 | 2D selective scan routes | vision-only; not state-recurrence-for-3R | comparator for spatial scan in C1 Perceiver | comparator-only | `RU-009` linked | not on near-term roadmap |
@@ -148,31 +149,33 @@ Counted across Sections 1-8, by status (methods listed in multiple sections coun
 | Status | Count | Methods |
 |---|---:|---|
 | real-wired (no local ckpt) | 4 | MASt3R, Fast3R, Spann3R, DINOv2 |
-| deterministic fallback | 4 | CUT3R, MoGe-2, Depth Anything V2, Test3R |
+| deterministic fallback | 5 | CUT3R, MoGe-2, Depth Anything V2, Test3R, VGGT |
 | stub | 1 | DINOv3 |
+| scaffold | 1 | tttLRM-style Memory A1 action policy |
 | mechanism integrated | 3 | NSA, Mamba (S6), Slot Attention / ISA |
 | contract-only | 1 (family) | 3DGS family (Splatt3R / InstantSplat / NoPoSplat / MV-DUSt3R+) via GaussianHead |
-| comparator-only | 25+ | DUSt3R, MASt3R-SfM, VGGT, STream3R, SLAM3R, MV-DUSt3R+, OVGGT, LongStream, Point3R, Mem3R, LONG3R, LoGeR, PAS3R, FILT3R, Depth Pro, Metric3D v2, TTT3R, tttLRM, CTRL, SEAL, G-CUT3R, Mamba-2/SSD, VMamba, MambaOut, FlashAttention-3, Kimi Linear, MonST3R, POMATO, D^2USt3R, Easi3R, RayMap3R, SAM 2, CoTracker, SpatialTracker, Julian Ost AAAI-2026, ActiveSplat, ActiveGS |
+| comparator-only | 23+ | DUSt3R, MASt3R-SfM, STream3R, SLAM3R, MV-DUSt3R+, OVGGT, LongStream, Point3R, Mem3R, LONG3R, LoGeR, PAS3R, FILT3R, Depth Pro, Metric3D v2, TTT3R, CTRL, SEAL, G-CUT3R, Mamba-2/SSD, VMamba, MambaOut, FlashAttention-3, Kimi Linear, MonST3R, POMATO, D^2USt3R, Easi3R, RayMap3R, SAM 2, CoTracker, SpatialTracker, Julian Ost AAAI-2026, ActiveSplat, ActiveGS |
 | named, not in registry | 2 | OnlineX, AnchorSplat |
 
-C5 Composer's seven expert adapters (MASt3R, Fast3R, Spann3R, CUT3R, MoGe-2, Depth Anything V2, Test3R) are exactly the seven registered by `ExpertRegistry.register_all_defaults`; v0.4 `ComposerDecision.backend_status` reports the real/fallback/stub label per adapter at forward time.
+C5 Composer's eight expert adapters (MASt3R, Fast3R, Spann3R, CUT3R, MoGe-2, Depth Anything V2, Test3R, VGGT) are exactly the eight registered by `ExpertRegistry.register_all_defaults`; v0.5 `ComposerDecision.backend_status` reports the real/fallback/stub label per adapter at forward time.
 
 ## Gap Report (what this matrix exposes for the next planning round)
 
-1. **Composer adapter checkpoint gap**: 5 of 7 adapters are deterministic-fallback locally. Only MASt3R and Fast3R have the real loader path wired; Fast3R is additionally blocked by `omegaconf` in the dream3r conda env. → Closing this is gated by F-002 server authorization + per-adapter `load_checkpoint`.
-2. **VGGT gap is structural, not just a missing row**: cycle 014's `CASE-COMPOSER-05` already flagged this. VGGT is a feed-forward many-view profile that does not fit cleanly into Fast3R's row; capability_card schema needs v2.2 before adding the adapter.
+1. **Composer adapter checkpoint gap**: 5 of 8 adapters are deterministic-fallback locally (CUT3R, MoGe-2, Depth Anything V2, Test3R, VGGT). MASt3R, Fast3R, and Spann3R have real loader paths; Fast3R is additionally blocked by `omegaconf` in the dream3r conda env. Closing the remaining real-checkpoint gap is gated by F-002 server authorization + per-adapter `load_checkpoint`.
+2. **VGGT structural gap - RESOLVED (DEC-20260523-002)**: VGGT now has a Composer adapter and a distinct `feed_forward_manyview` capability-card v2.2 row. The remaining VGGT gap is checkpoint authorization / real inference, not schema fit.
 3. **DINOv3 stub is the only true stub**: the v0.4 `Perceiver.backbone_status` honestly returns `backend="stub"` when DINOv3 is requested. v0.5 spec must pin a concrete release.
 4. **3DGS contract-only is deliberate, not a gap**: per agent prompt + W27. Do not promote in v0.5 without a renderer-install DEC and a license audit (see `R-4DGS-LIC-1` in `WORK_RISK_REGISTER.md`).
 5. **Memory comparators (Point3R / Mem3R / LONG3R / LoGeR / PAS3R / FILT3R / OVGGT / LongStream / SLAM3R) never benchmarked**: W21 ablation suite was designed to cover memory-primitive variants; the table column would otherwise stay empty.
 6. **"OnlineX" and "AnchorSplat" should be resolved or removed**: as named, they are roadmap drafting artifacts. They are noted here as a flag to the W20 author rather than silently ignored.
 7. **NSA sliding branch — RESOLVED (DEC-20260523-001)**: 2-window KITTI smoke showed sliding-branch weight 0.000; this was the correct sparse-routing decision under low bank occupancy. 128-window long-sequence evaluation confirms sliding fires at 100% rate (weight ~28%) once bank saturates (K=256, by window 12). No code change needed. See `cycles/CYCLE-20260523-001.md` for full evidence.
-8. **Permanence dynamic mask is proxy, not D2**: v0.4 emits `dynamic_mask_proxy`. Promotion to a D2 final asset is a v0.5 spec axis, not a v0.4 deliverable.
+8. **Permanence dynamic mask is proxy, not D2**: v0.5 A3 has started locally by adding optional `dynamic_mask_final` alongside `dynamic_mask_proxy` and making CR-2 prefer final then fall back to proxy. This is not an A3 closure: no D2 promotion criterion or real-data validation exists yet.
 9. **Test3R as Critic-triggered off-path**: the v0.4 `RepairExecutor` actions 1/2 use internal rerun (model.forward with bus-injected `recommended_action`). Test3R-as-an-actual-off-path is wired only through Composer dispatch, never triggered by Critic. This is a design choice, not an oversight; v0.5 may revisit.
-10. **MoGe-2 SRC row missing**: present in `method_profiles.py` but not in `source_registry.md`. Inventory hygiene action.
+10. **A8 Memory A1 policy scaffold - RESOLVED at scaffold level (DEC-20260523-003)**: `memory_action.py` adds six A1 sub-actions plus `StateUpdatePolicy` and `TTTStateUpdater`. Real tttLRM gradient-step training and long-sequence server evidence are deferred to W25.
+11. **MoGe-2 SRC row missing**: present in `method_profiles.py` but not in `source_registry.md`. Inventory hygiene action.
 
 ## Dream3R Differentiation
 
-This restates the 2026-05-10 first-pass differentiation list, with v0.4 layer additions appended:
+This restates the 2026-05-10 first-pass differentiation list, with v0.4/v0.5 layer additions appended:
 
 1. A 3R reconstruction path produces pointmap, confidence, and evidence tokens (C1 → C5).
 2. Active state tokens evolve per streaming window (C2 + `build_state_recurrence`).
@@ -180,16 +183,18 @@ This restates the 2026-05-10 first-pass differentiation list, with v0.4 layer ad
 4. NSA fuses active state, selected stable anchors, and sliding recent context (`nsa_attention.py`).
 5. Critic checks geometric consistency and emits repair actions (Sampson / depth / covisibility).
 6. Permanence tracks object slots with reference poses (`Permanence` + ISA).
-7. ComposerRouter exposes external 3R methods as routeable expert capabilities (7 adapters registered).
+7. ComposerRouter exposes external 3R methods as routeable expert capabilities (8 adapters registered, including VGGT).
 8. Mamba recurrence can replace cross-attention recurrence without changing the rest of the control graph (`build_state_recurrence(type=...)`).
 9. GaussianHead defines the future renderable representation contract — explicitly NOT in the v0.4 main forward.
 10. **(v0.4)** `RepairExecutor` closes critic → rerun feedback loop with bounded re-attempts (`max_repair_attempts` default 1).
 11. **(v0.4)** Typed `ReconstructionOutput` aggregate contract; every submodule has its own typed output dataclass; backend honesty enforced via `backend_status` labels.
 12. **(v0.4)** Reroute path (`action=3 / reroute_hint=True`) picks `route_recommendation[:, 1]` without rerunning the model.
+13. **(v0.5 A4)** capability_card v2.2 separates `feed_forward_manyview` from dense sequential routing so VGGT can be represented honestly.
+14. **(v0.5 A8)** Memory A1 sub-action selection now has a typed scaffold for future trained long-context updates.
 
 ## Evidence Map
 
-Preserved from the 2026-05-10 first pass and extended with v0.4 entries:
+Preserved from the 2026-05-10 first pass and extended with v0.4/v0.5 entries:
 
 | Claim | Current Evidence |
 |---|---|
@@ -207,6 +212,9 @@ Preserved from the 2026-05-10 first pass and extended with v0.4 entries:
 | **(v0.4)** Composer dispatch flows into final output | `test_expert_output_replaces_perception_pointmap_in_final_output` |
 | **(v0.4)** Reroute changes selected expert | `test_reroute_hint_changes_selected_expert` |
 | **(v0.4)** Memory → Critic cross-module read | `test_contract_log_records_cross_module_reads` |
+| **(v0.5 A4)** VGGT adapter + capability_card v2.2 | `test_vggt_integration.py`, `DEC-20260523-002` |
+| **(v0.5 A6)** NSA sliding branch fires on long sequences | `cycles/CYCLE-20260523-001.md`, `DEC-20260523-001` |
+| **(v0.5 A8)** Memory A1 action policy scaffold exists | `test_memory_action_policy.py`, `planning/TTT_PLAN.md`, `DEC-20260523-003` |
 
 ## Missing Evidence
 
@@ -219,15 +227,15 @@ The following must not be overclaimed yet — preserved from 2026-05-10 first pa
 - Test-time adaptation gains (W25).
 - Renderer-backed Gaussian output (W27).
 - Critic threshold calibration on real data (W24).
-- Adapter quality comparisons (5 of 7 are deterministic fallback locally).
-- VGGT-as-a-real-route (no adapter yet).
+- Adapter quality comparisons (5 of 8 are deterministic fallback locally).
+- VGGT-as-a-real-route with a downloaded checkpoint and server tick (`backend == "real"`).
 
 ## Related Files
 
 - `code/dream3r/NEXT_PHASE_ROADMAP.md` — W20 origin of this matrix.
 - `code/dream3r/ATTENTION_RESEARCH_MATRIX.md` — narrower companion focused on attention / state mechanisms; rows here cross-link.
 - `code/dream3r/ARCHITECTURE_V04_STATUS.md` — the per-axis v0.4 closure checklist this matrix cross-links.
-- `code/dream3r/composer_experts/method_profiles.py` — canonical 7-expert profile table.
+- `code/dream3r/composer_experts/method_profiles.py` — canonical 8-expert profile table.
 - `registry/source_registry.md` — `SRC-*` IDs cited above.
 - `literature/SPINE_*.md` — required vs advanced reading per finalist.
 - `units/REPRODUCTION_READINESS_MATRIX.md` — reproduction-readiness layer (separate axis from the mapping here).

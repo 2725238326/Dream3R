@@ -222,15 +222,20 @@ class V04Pipeline(nn.Module):
 
     def _build_permanence(self, raw: Dict[str, torch.Tensor]) -> PermanenceOutput:
         region_logits = raw["region_logits"]
-        dynamic_mask_proxy = (region_logits.argmax(dim=-1) != 0)
+        dynamic_mask_proxy = raw.get("dynamic_mask_proxy")
+        if dynamic_mask_proxy is None:
+            dynamic_mask_proxy = (region_logits.argmax(dim=-1) != 0)
+        dynamic_mask_final = raw.get("dynamic_mask_final")
         stable_promotion_log = {
             "mint_confidence": raw.get("mint_confidence"),
             "slot_match_indices": raw.get("slot_match_indices"),
             "slot_match_scores": raw.get("slot_match_scores"),
+            "cr2_suppress_source": raw.get("cr2_suppress_source"),
         }
         return PermanenceOutput(
             dynamic_logits=region_logits,
             dynamic_mask_proxy=dynamic_mask_proxy,
+            dynamic_mask_final=dynamic_mask_final,
             dynamic_ratio=raw["dynamic_ratio"],
             suppress_static_write=raw["suppress_static_write"],
             object_track_set=raw["object_track_set"],
@@ -524,6 +529,7 @@ class V04Pipeline(nn.Module):
             confidence=expert.confidence,
             dynamic_logits=permanence.dynamic_logits,
             dynamic_mask_proxy=permanence.dynamic_mask_proxy,
+            dynamic_mask_final=permanence.dynamic_mask_final,
             evidence=expert.evidence_tokens,
             selected_expert=composer.selected_expert,
             backend_status=backend_status,

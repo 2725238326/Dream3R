@@ -26,6 +26,17 @@ from dream3r.modules import (
 from dream3r.composer_experts import ExpertRegistry
 
 
+def _select_cr2_suppress_mask(perm_out: Dict[str, torch.Tensor]) -> tuple[torch.Tensor, str]:
+    """Select CR-2 source: final D2 mask first, then proxy, then legacy handoff."""
+    final_mask = perm_out.get("dynamic_mask_final")
+    if final_mask is not None:
+        return final_mask.float(), "dynamic_mask_final"
+    proxy_mask = perm_out.get("dynamic_mask_proxy")
+    if proxy_mask is not None:
+        return proxy_mask.float(), "dynamic_mask_proxy"
+    return perm_out["suppress_static_write"].float(), "suppress_static_write"
+
+
 class Dream3R(nn.Module):
 
     def __init__(self, cfg: Optional[dict] = None):
@@ -219,8 +230,9 @@ class Dream3R(nn.Module):
 
         self.bus.publish("dynamic_ratio", perm_out["dynamic_ratio"],
                          EvidenceLabel.INFERRED, "permanence", t)
+        cr2_suppress_mask, cr2_suppress_source = _select_cr2_suppress_mask(perm_out)
         self.bus.publish_handoff("suppress_static_write",
-                                perm_out["suppress_static_write"],
+                                cr2_suppress_mask,
                                 "permanence", t)
 
         # === Memory ===
@@ -356,10 +368,13 @@ class Dream3R(nn.Module):
             "object_slot_poses": perm_out["object_slot_poses"],
             "dynamic_ratio": perm_out["dynamic_ratio"],
             "region_logits": perm_out["region_logits"],
+            "dynamic_mask_proxy": perm_out["dynamic_mask_proxy"],
+            "dynamic_mask_final": perm_out.get("dynamic_mask_final"),
             "mint_confidence": perm_out["mint_confidence"],
             "slot_match_indices": perm_out["slot_match_indices"],
             "slot_match_scores": perm_out["slot_match_scores"],
-            "suppress_static_write": perm_out["suppress_static_write"],
+            "suppress_static_write": cr2_suppress_mask,
+            "cr2_suppress_source": cr2_suppress_source,
             "cr2_per_slot_suppress": cr2_per_slot,
             "capability_match": comp_out["capability_match"],
             "route_recommendation": comp_out["route_recommendation"],
