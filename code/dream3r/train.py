@@ -45,6 +45,7 @@ from dream3r.config import load_config, save_config, config_to_model_args
 from dream3r.model import Dream3R
 from dream3r.losses import Dream3RLoss
 from dream3r.data.synthetic import SyntheticSequenceDataset, DTUDataset
+from dream3r.data.kitti_long import KITTILongSequenceDataset, collate_kitti_long
 
 
 # ---------------------------------------------------------------------------
@@ -109,6 +110,7 @@ class MultiStageScheduler:
     def __init__(self, optimizer, cfg: dict, model: nn.Module = None):
         self.optimizer = optimizer
         self.model = model
+        self.train_mode = cfg.get("train_mode", "full")
         self.warmup = cfg.get("warmup_epochs", 5)
         self.total = cfg.get("epochs", 100)
         self.base_lr = cfg.get("lr", 1e-4)
@@ -136,6 +138,8 @@ class MultiStageScheduler:
 
     def _apply_freeze(self, stage: str):
         if self.model is None:
+            return
+        if self.train_mode == "memory_only":
             return
         m = self.model.module if hasattr(self.model, "module") else self.model
 
@@ -171,6 +175,24 @@ def build_datasets(cfg: dict):
     if cfg.get("dataset", "synthetic") == "dtu":
         train_ds = DTUDataset(cfg.get("data_root", "/hdd3/kykt26/data/dtu"), "train")
         val_ds = DTUDataset(cfg.get("data_root", "/hdd3/kykt26/data/dtu"), "val")
+    elif cfg.get("dataset", "synthetic") == "kitti_long":
+        kwargs = {
+            "root": cfg.get("data_root", "/hdd3/kykt26/data"),
+            "sequence_length": cfg.get("kitti_window_frames", 8),
+            "overlap": cfg.get("kitti_window_overlap", 4),
+            "windows_per_sample": cfg.get("kitti_windows_per_sample", 4),
+            "min_sequence_frames": cfg.get("kitti_min_sequence_frames", 50),
+            "max_frames_per_sequence": cfg.get("kitti_max_frames_per_sequence", 100),
+            "max_sequences": cfg.get("kitti_max_sequences", 0),
+            "n_patches": cfg.get("n_patches", 196),
+            "d_model": cfg.get("d_model", 768),
+            "n_regimes": cfg.get("n_regimes", 6),
+            "n_slots": cfg.get("n_slots", 16),
+        }
+        train_ds = KITTILongSequenceDataset(**kwargs)
+        val_kwargs = dict(kwargs)
+        val_kwargs["max_sequences"] = max(1, min(2, kwargs["max_sequences"] or 2))
+        val_ds = KITTILongSequenceDataset(**val_kwargs)
     else:
         train_ds = SyntheticSequenceDataset(
             n_sequences=cfg.get("n_train_sequences", 500),
@@ -196,6 +218,40 @@ def build_datasets(cfg: dict):
 def collate_synthetic(batch):
     keys = batch[0].keys()
     return {k: torch.stack([b[k] for b in batch]) for k in keys}
+
+
+def collate_for_dataset(cfg: dict):
+    if cfg.get("dataset") == "kitti_long":
+        return collate_kitti_long
+    return collate_synthetic
+
+
+def apply_train_mode(model: nn.Module, cfg: dict) -> int:
+    raw = model.module if hasattr(model, "module") else model
+    if cfg.get("train_mode") != "memory_only":
+        return sum(p.numel() for p in raw.parameters() if p.requires_grad)
+
+    for param in raw.parameters():
+        param.requires_grad = False
+    for param in raw.memory.parameters():
+        param.requires_grad = True
+
+    raw.perceiver.eval()
+    raw.permanence.eval()
+    raw.critic.eval()
+    raw.composer.eval()
+    return sum(p.numel() for p in raw.memory.parameters() if p.requires_grad)
+
+
+def set_runtime_train_mode(model: nn.Module, cfg: dict):
+    if cfg.get("train_mode") != "memory_only":
+        return
+    raw = model.module if hasattr(model, "module") else model
+    raw.memory.train()
+    raw.perceiver.eval()
+    raw.permanence.eval()
+    raw.critic.eval()
+    raw.composer.eval()
 
 
 def _window_value(value: torch.Tensor, t: int, sequence_length: int) -> torch.Tensor:
@@ -237,11 +293,13 @@ def _forward_sequence(model: nn.Module, batch: dict, loss_fn: nn.Module,
     last_outputs = None
     loss_sums = {}
     prev_pointmap_pred = None
+    prev_selected_indices = None
 
     for t in range(sequence_length):
         x_t = x[:, t] if sequence_length > 1 else x
         regime_t = regime[:, t] if sequence_length > 1 and regime.dim() == 3 else regime
         targets_t = _make_targets(batch, device, t, sequence_length)
+        prev_state_for_loss = prev_state
 
         outputs = model(
             x_t, regime_t,
@@ -249,6 +307,10 @@ def _forward_sequence(model: nn.Module, batch: dict, loss_fn: nn.Module,
             prev_object_slots=prev_slots,
             timestep=t,
         )
+        if prev_state_for_loss is not None and "latent_state_tokens" in outputs:
+            outputs["prev_latent_state_tokens"] = prev_state_for_loss
+        if prev_selected_indices is not None:
+            outputs["prev_nsa_selected_indices"] = prev_selected_indices
         if prev_pointmap_pred is not None:
             outputs["prev_pointmap"] = prev_pointmap_pred.detach()
         losses = loss_fn(outputs, targets_t)
@@ -266,6 +328,8 @@ def _forward_sequence(model: nn.Module, batch: dict, loss_fn: nn.Module,
             if prev_slots is not None:
                 prev_slots = prev_slots.detach()
         prev_pointmap_pred = outputs["pointmap"]
+        if "nsa_selected_indices" in outputs:
+            prev_selected_indices = outputs["nsa_selected_indices"].detach()
         last_outputs = outputs
 
     loss_avg = {
@@ -300,11 +364,15 @@ def train(cfg: dict):
     if cfg.get("gradient_checkpointing", False):
         raw = model.module if hasattr(model, "module") else model
         raw.enable_gradient_checkpointing(True)
+    trainable_params = apply_train_mode(model, cfg)
 
     if is_main_process():
         n_params = sum(p.numel() for p in model.parameters())
         version = cfg.get("version", "v03")
-        print(f"Dream3R [{version}]: {n_params:,} params | {world_size} GPU(s) | AMP={cfg['amp']}")
+        print(
+            f"Dream3R [{version}]: {n_params:,} params | "
+            f"trainable={trainable_params:,} | {world_size} GPU(s) | AMP={cfg['amp']}"
+        )
 
     loss_fn = Dream3RLoss(weights={
         "pointmap": cfg["w_pointmap"],
@@ -322,27 +390,34 @@ def train(cfg: dict):
         "covisibility_consistency": cfg.get("w_covisibility_consistency", 0.05),
         "drift_consistency": cfg.get("w_drift_consistency", 0.1),
         "state_drift_regularization": cfg.get("w_state_drift_regularization", 0.01),
+        "memory_consistency": cfg.get("w_memory_consistency", 0.0),
+        "cross_window_pointmap": cfg.get("w_cross_window_pointmap", 0.0),
+        "anchor_reuse": cfg.get("w_anchor_reuse", 0.0),
     }).to(device)
 
+    trainable = [p for p in model.parameters() if p.requires_grad]
+    if not trainable:
+        raise RuntimeError("No trainable parameters for current train_mode")
     optimizer = torch.optim.AdamW(
-        model.parameters(), lr=cfg["lr"], weight_decay=cfg["weight_decay"],
+        trainable, lr=cfg["lr"], weight_decay=cfg["weight_decay"],
     )
     scheduler = MultiStageScheduler(optimizer, cfg, model=model)
     use_amp = cfg["amp"] and device.type == "cuda"
     scaler = torch.amp.GradScaler("cuda") if use_amp else None
 
     train_ds, val_ds = build_datasets(cfg)
+    collate_fn = collate_for_dataset(cfg)
     sampler = DistributedSampler(train_ds) if is_ddp else None
     train_loader = DataLoader(
         train_ds, batch_size=cfg["batch_size"],
         sampler=sampler, shuffle=(sampler is None),
         num_workers=cfg["num_workers"], pin_memory=True,
-        drop_last=True, collate_fn=collate_synthetic,
+        drop_last=True, collate_fn=collate_fn,
     )
     val_loader = DataLoader(
         val_ds, batch_size=cfg["batch_size"], shuffle=False,
         num_workers=cfg["num_workers"], pin_memory=True,
-        collate_fn=collate_synthetic,
+        collate_fn=collate_fn,
     )
 
     writer = None
@@ -383,6 +458,7 @@ def train(cfg: dict):
         stage = scheduler.get_stage(epoch)
 
         model.train()
+        set_runtime_train_mode(model, cfg)
         epoch_loss = 0.0
         t0 = time.time()
 

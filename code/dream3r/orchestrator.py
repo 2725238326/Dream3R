@@ -247,12 +247,14 @@ class V04Pipeline(nn.Module):
         recommended = raw["recommended_action"].long()
         conflict = raw["conflict_score"]
 
-        # Map the v0.3 Critic's 6-way head (0=no, 1=local, 2=reroute, 3..5=stub)
-        # onto the v0.4 4-way contract (0=no, 1=local, 2=window, 3=reroute).
+        # Map the v0.3 Critic's 6-way head onto the v0.4/v0.5 contract:
+        # 0=no, 1=local, 2=reroute, 4=Test3R off-path.
         v04_action = torch.zeros_like(recommended)
         v04_action = torch.where(recommended == 1, torch.ones_like(recommended), v04_action)
         v04_action = torch.where(recommended == 2,
                                  torch.full_like(recommended, 3), v04_action)
+        v04_action = torch.where(recommended == 4,
+                                 torch.full_like(recommended, 4), v04_action)
 
         # Escalate local rerun to window rerun when the conflict signal is
         # severe (sigmoid > 0.85). This keeps cascading repair bounded by

@@ -89,6 +89,7 @@ def test_action_one_triggers_real_local_rerun():
         },
     )
     assert new is not primary, "local rerun must return a fresh forward dict"
+    assert (new["pointmap"] - primary["pointmap"]).abs().max().item() > 0
     report = pipeline.repair.finalize()
     assert report.final_action == 1
     assert report.n_attempts == 1
@@ -111,6 +112,7 @@ def test_action_two_triggers_window_rerun_and_respects_max_attempts():
                                   forward_fn=pipeline._call_model,
                                   forward_kwargs=forward_kwargs)
     assert new is not primary
+    assert (new["pointmap"] - primary["pointmap"]).abs().max().item() > 0
 
     # Second call within the same call-window: cap should kick in and
     # return the latest output without another rerun.

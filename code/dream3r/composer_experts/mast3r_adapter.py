@@ -114,8 +114,9 @@ class MASt3RAdapter(ExpertAdapter):
             self._model_device = device
 
         B, N = images.shape[:2]
-        img1 = images[:, 0]
-        img2 = images[:, 1] if N >= 2 else images[:, 0]
+        normalized = images.clamp(0.0, 1.0) * 2.0 - 1.0
+        img1 = normalized[:, 0]
+        img2 = normalized[:, 1] if N >= 2 else normalized[:, 0]
         H, W = img1.shape[-2:]
         shape = torch.tensor([[H, W]], device=device).expand(B, -1)
         view1 = {

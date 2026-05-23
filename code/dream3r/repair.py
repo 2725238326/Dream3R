@@ -152,12 +152,13 @@ class RepairExecutor:
                          True, False, "cap hit; returning primary output")
             return primary_output
 
+        rerun_kwargs = self._with_input_augmentation(forward_kwargs, magnitude=1e-4)
         self._inject_previous_action(1)
         try:
-            new_output = forward_fn(**forward_kwargs)
+            new_output = forward_fn(**rerun_kwargs)
             self._n_real_attempts += 1
             self._record(1, "critic_local_rerun",
-                         "rerun model with action=1 to deepen Memory retrieval",
+                         "rerun model with action=1 and deterministic local augmentation",
                          True, True, "")
             return new_output
         except Exception as exc:  # noqa: BLE001 — surface failure into log, do not crash pipeline
@@ -174,7 +175,7 @@ class RepairExecutor:
                          True, False, "cap hit; returning primary output")
             return primary_output
 
-        rerun_kwargs = dict(forward_kwargs)
+        rerun_kwargs = self._with_input_augmentation(forward_kwargs, magnitude=2e-4)
         rerun_kwargs["prev_memory_state"] = None
         rerun_kwargs["prev_object_slots"] = None
         rerun_kwargs["prev_object_slot_poses"] = None
@@ -303,6 +304,15 @@ class RepairExecutor:
         tensor = torch.full((B, 1), float(action_code), device=device)
         bus.publish("recommended_action", tensor,
                     EvidenceLabel.INFERRED, "critic", timestep=-1)
+
+    @staticmethod
+    def _with_input_augmentation(forward_kwargs: Dict[str, Any],
+                                 magnitude: float) -> Dict[str, Any]:
+        rerun_kwargs = dict(forward_kwargs)
+        x = rerun_kwargs.get("x")
+        if torch.is_tensor(x):
+            rerun_kwargs["x"] = x + magnitude
+        return rerun_kwargs
 
     def _record(self, action_code: int, reason: str, note: str,
                 triggered_by_critic: bool, succeeded: bool,

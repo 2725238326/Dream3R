@@ -15,7 +15,7 @@ from .fallback import image_fallback_output
 
 
 DEFAULT_FAST3R_REPO = "/hdd3/kykt26/code/fast3r"
-DEFAULT_FAST3R_CHECKPOINT_DIR = "/hdd3/kykt26/models/fast3r/Fast3R_ViT_Large_512"
+DEFAULT_FAST3R_CHECKPOINT_DIR = "/hdd3/kykt26/checkpoints/fast3r/Fast3R_ViT_Large_512"
 
 
 def _scaled_dot_product_attention(q, k, v, attn_mask=None, dropout_p=0.0,
@@ -75,6 +75,10 @@ class Fast3RAdapter(ExpertAdapter):
     def _missing_dependency(self) -> Optional[str]:
         if importlib.util.find_spec("omegaconf") is None:
             return "missing dependency: omegaconf"
+        if importlib.util.find_spec("hydra") is None:
+            return "missing dependency: hydra-core"
+        if importlib.util.find_spec("lightning") is None:
+            return "missing dependency: lightning"
         if importlib.util.find_spec("huggingface_hub") is None:
             return "missing dependency: huggingface_hub"
         return None
@@ -117,7 +121,10 @@ class Fast3RAdapter(ExpertAdapter):
     def _build_views(self, images: torch.Tensor):
         B, N, _, H, W = images.shape
         true_shape = torch.tensor([[H, W]], device=images.device).expand(B, -1)
-        normalized = images.clamp(-1.0, 1.0)
+        normalized = images
+        if images.min() >= 0.0 and images.max() <= 1.0:
+            normalized = images * 2.0 - 1.0
+        normalized = normalized.clamp(-1.0, 1.0)
         views = []
         for idx in range(N):
             views.append({

@@ -36,6 +36,9 @@ class Dream3RLoss(nn.Module):
             "covisibility_consistency": 0.05,
             "drift_consistency": 0.1,
             "state_drift_regularization": 0.01,
+            "memory_consistency": 0.0,
+            "cross_window_pointmap": 0.0,
+            "anchor_reuse": 0.0,
         }
 
     @staticmethod
@@ -52,6 +55,67 @@ class Dream3RLoss(nn.Module):
         from dream3r.modules import Critic
         log = Critic.compute_geometric_consistency(pointmap_pair, confidence_pair)
         return (log["covisible_inconsistency"] + log["confidence_disagreement"]).mean()
+
+    @staticmethod
+    def cross_window_pointmap_loss(pred: torch.Tensor,
+                                   pred_prev: torch.Tensor,
+                                   gt: torch.Tensor,
+                                   gt_prev: torch.Tensor,
+                                   mask: torch.Tensor,
+                                   prev_mask: torch.Tensor) -> torch.Tensor:
+        overlap = mask * prev_mask
+        pred_delta = pred - pred_prev
+        gt_delta = gt - gt_prev
+        return (((pred_delta - gt_delta) ** 2) * overlap.unsqueeze(-1)).sum() / (
+            overlap.sum() * 3 + 1e-8
+        )
+
+    @staticmethod
+    def memory_consistency_loss(current_state: torch.Tensor,
+                                previous_state: torch.Tensor,
+                                pointmap_change: torch.Tensor = None) -> torch.Tensor:
+        diff = (current_state - previous_state.detach()).pow(2)
+        per_sample = diff.mean(dim=tuple(range(1, diff.dim())))
+        if pointmap_change is None:
+            return per_sample.mean()
+        change = pointmap_change.float().clamp(0, 1).view(pointmap_change.shape[0], -1).mean(dim=1)
+        return (per_sample * (1.0 - change)).mean()
+
+    @staticmethod
+    def anchor_reuse_loss(outputs: Dict[str, torch.Tensor],
+                          targets: Dict[str, torch.Tensor]) -> torch.Tensor:
+        terms = []
+        branch_weights = outputs.get("nsa_branch_weights")
+        if isinstance(branch_weights, torch.Tensor) and branch_weights.shape[-1] >= 2:
+            selected_weight = branch_weights[..., 1].float()
+            target = targets.get("anchor_reuse_target")
+            if isinstance(target, torch.Tensor):
+                target = target.to(selected_weight.device).float()
+                if target.shape != selected_weight.shape:
+                    target = target.expand_as(selected_weight)
+            else:
+                target = torch.ones_like(selected_weight)
+            terms.append(F.mse_loss(selected_weight, target))
+
+        current_idx = outputs.get("nsa_selected_indices")
+        previous_idx = outputs.get("prev_nsa_selected_indices")
+        if previous_idx is None:
+            previous_idx = targets.get("prev_nsa_selected_indices")
+        if isinstance(current_idx, torch.Tensor) and isinstance(previous_idx, torch.Tensor):
+            current_idx = current_idx.long()
+            previous_idx = previous_idx.to(current_idx.device).long()
+            valid = (current_idx >= 0) & (previous_idx >= 0)
+            if valid.any():
+                reuse = (current_idx[valid] == previous_idx[valid]).float().mean()
+                terms.append(1.0 - reuse)
+
+        if terms:
+            return torch.stack([term.float() for term in terms]).mean()
+        device = next(
+            value.device for value in outputs.values()
+            if isinstance(value, torch.Tensor)
+        )
+        return torch.tensor(0.0, device=device)
 
     def forward(self, outputs: Dict[str, torch.Tensor],
                 targets: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
@@ -78,14 +142,13 @@ class Dream3RLoss(nn.Module):
             gt_prev = targets["prev_pointmap"]
             mask = targets.get("pointmap_mask", torch.ones_like(gt[..., 0]))
             prev_mask = targets.get("prev_pointmap_mask", mask)
-            overlap = mask * prev_mask
-            pred_delta = pred - pred_prev
-            gt_delta = gt - gt_prev
-            l_geo = (((pred_delta - gt_delta) ** 2) * overlap.unsqueeze(-1)).sum() / (
-                overlap.sum() * 3 + 1e-8
+            l_geo = self.cross_window_pointmap_loss(
+                pred, pred_prev, gt, gt_prev, mask, prev_mask
             )
             losses["geometric_consistency"] = l_geo
             total = total + self.w.get("geometric_consistency", 0.05) * l_geo
+            losses["cross_window_pointmap"] = l_geo
+            total = total + self.w.get("cross_window_pointmap", 0.0) * l_geo
 
         critic_geo_log = outputs.get("critic_geometric_log", {})
         if isinstance(critic_geo_log, dict):
@@ -208,6 +271,29 @@ class Dream3RLoss(nn.Module):
             l_state = drift.pow(2).mean()
             losses["state_drift_regularization"] = l_state
             total = total + self.w.get("state_drift_regularization", 0.01) * l_state
+
+        current_state = outputs.get("latent_state_tokens", outputs.get("latent_state"))
+        previous_state = outputs.get(
+            "prev_latent_state_tokens",
+            outputs.get("prev_latent_state", targets.get("prev_latent_state_tokens")),
+        )
+        if (
+            isinstance(current_state, torch.Tensor)
+            and isinstance(previous_state, torch.Tensor)
+            and current_state.shape == previous_state.shape
+        ):
+            l_mem = self.memory_consistency_loss(
+                current_state,
+                previous_state,
+                targets.get("pointmap_change"),
+            )
+            losses["memory_consistency"] = l_mem
+            total = total + self.w.get("memory_consistency", 0.0) * l_mem
+
+        if "nsa_branch_weights" in outputs or "nsa_selected_indices" in outputs:
+            l_anchor = self.anchor_reuse_loss(outputs, targets)
+            losses["anchor_reuse"] = l_anchor
+            total = total + self.w.get("anchor_reuse", 0.0) * l_anchor
 
         losses["total"] = total
         return losses
