@@ -118,8 +118,8 @@ def test_train_router_only_with_metrics_makes_router_respond_to_critic_confidenc
             regime_labels=str(regime_path),
             oracle_labels=str(oracle_path),
             output_dir=str(output_dir),
-            epochs=200,
-            lr=0.05,
+            epochs=2000,
+            lr=0.1,
             batch_size=4,
             d_routing=16,
         )
