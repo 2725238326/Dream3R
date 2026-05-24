@@ -5,7 +5,7 @@ import json
 import time
 from collections import Counter
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional, Tuple
 
 import torch
 import torch.nn.functional as F
@@ -24,7 +24,18 @@ def _two_expert_registry() -> ExpertRegistry:
     return registry
 
 
-def _load_examples(regime_labels: str, oracle_labels: str) -> Tuple[torch.Tensor, torch.Tensor, List[str], List[str]]:
+def _load_examples(
+    regime_labels: str,
+    oracle_labels: str,
+) -> Tuple[
+    torch.Tensor,
+    torch.Tensor,
+    Optional[torch.Tensor],
+    Optional[float],
+    Optional[float],
+    List[str],
+    List[str],
+]:
     regime_data = json.loads(Path(regime_labels).read_text(encoding="utf-8"))
     oracle_data = json.loads(Path(oracle_labels).read_text(encoding="utf-8"))
     expert_order = oracle_data["expert_order"]
@@ -44,7 +55,43 @@ def _load_examples(regime_labels: str, oracle_labels: str) -> Tuple[torch.Tensor
         [int(oracle_data["labels"][seq]) for seq in sequences],
         dtype=torch.long,
     )
-    return x, y, sequences, expert_order
+
+    # Optional critic-confidence augmentation: derive alt-expert labels and
+    # eval-matched conf values from per-expert metrics, so that the router's
+    # confidence_gate actually receives gradient during training.
+    alt_y: Optional[torch.Tensor] = None
+    conf_high_val: Optional[float] = None
+    conf_low_val: Optional[float] = None
+    metrics = oracle_data.get("metrics")
+    if metrics and all(seq in metrics for seq in sequences):
+        alt_labels: List[int] = []
+        all_vals: List[float] = []
+        for seq in sequences:
+            seq_metrics = metrics[seq]
+            ordered = sorted(
+                expert_order,
+                key=lambda name: seq_metrics.get(name, float("inf")),
+            )
+            alt_name = ordered[1] if len(ordered) >= 2 else ordered[0]
+            alt_labels.append(expert_order.index(alt_name))
+            all_vals.extend(
+                float(seq_metrics[name]) for name in expert_order
+                if name in seq_metrics
+            )
+        if alt_labels and all_vals:
+            alt_y = torch.tensor(alt_labels, dtype=torch.long)
+            # Match the eval-time transform from model.py forward:
+            # critic_confidence = 1 - sigmoid(prev_conflict_score),
+            # where prev_conflict_score is the critic's regression of abs_rel.
+            min_val = min(all_vals)
+            max_val = max(all_vals)
+            conf_high_val = float(
+                1.0 - torch.sigmoid(torch.tensor(min_val)).item()
+            )
+            conf_low_val = float(
+                1.0 - torch.sigmoid(torch.tensor(max_val)).item()
+            )
+    return x, y, alt_y, conf_high_val, conf_low_val, sequences, expert_order
 
 
 def _accuracy(logits: torch.Tensor, target: torch.Tensor) -> float:
@@ -63,7 +110,10 @@ def train_router_only(
     seed: int = 7,
 ) -> Dict[str, object]:
     torch.manual_seed(seed)
-    x, y, sequences, expert_order = _load_examples(regime_labels, oracle_labels)
+    (
+        x, y, alt_y, conf_high_val, conf_low_val,
+        sequences, expert_order,
+    ) = _load_examples(regime_labels, oracle_labels)
 
     registry = _two_expert_registry()
     router_order = sorted(registry.names)
@@ -93,14 +143,36 @@ def train_router_only(
         initial_logits = router(x)["routing_logits"]
         initial_acc = _accuracy(initial_logits, y)
 
+    augment = (
+        alt_y is not None
+        and conf_high_val is not None
+        and conf_low_val is not None
+    )
+
     n = x.shape[0]
     for epoch in range(epochs):
-        perm = torch.randperm(n)
+        perm_n = torch.randperm(n)
+        perm_h = torch.randperm(n) if augment else None
+        perm_l = torch.randperm(n) if augment else None
         total_loss = 0.0
         for start in range(0, n, batch_size):
-            idx = perm[start:start + batch_size]
+            idx = perm_n[start:start + batch_size]
             out = router(x[idx])
             loss = F.cross_entropy(out["routing_logits"], y[idx])
+
+            if augment:
+                idx_h = perm_h[start:start + batch_size]
+                conf_h = torch.full((idx_h.numel(), 1), conf_high_val)
+                out_h = router(x[idx_h], critic_confidence=conf_h)
+                loss_h = F.cross_entropy(out_h["routing_logits"], y[idx_h])
+
+                idx_l = perm_l[start:start + batch_size]
+                conf_l = torch.full((idx_l.numel(), 1), conf_low_val)
+                out_l = router(x[idx_l], critic_confidence=conf_l)
+                loss_l = F.cross_entropy(out_l["routing_logits"], alt_y[idx_l])
+
+                loss = (loss + loss_h + loss_l) / 3.0
+
             optimizer.zero_grad(set_to_none=True)
             loss.backward()
             optimizer.step()
@@ -130,7 +202,21 @@ def train_router_only(
         "target_counts": dict(Counter(y.tolist())),
         "prediction_counts": dict(Counter(predictions)),
         "sequences": sequences,
+        "augmented_with_critic_confidence": bool(augment),
+        "conf_high_val": conf_high_val,
+        "conf_low_val": conf_low_val,
     }
+    if augment:
+        with torch.no_grad():
+            conf_h_eval = torch.full((n, 1), conf_high_val)
+            conf_l_eval = torch.full((n, 1), conf_low_val)
+            pred_high = router(x, critic_confidence=conf_h_eval)["routing_logits"].argmax(dim=-1)
+            pred_low = router(x, critic_confidence=conf_l_eval)["routing_logits"].argmax(dim=-1)
+        summary["high_conf_accuracy_vs_best"] = float((pred_high == y).float().mean().item())
+        summary["low_conf_accuracy_vs_alt"] = float((pred_low == alt_y).float().mean().item())
+        summary["low_conf_flip_rate_vs_no_conf"] = float(
+            (pred_low != torch.tensor(predictions)).float().mean().item()
+        )
     torch.save({
         "router_state_dict": router.state_dict(),
         "expert_order": expert_order,
