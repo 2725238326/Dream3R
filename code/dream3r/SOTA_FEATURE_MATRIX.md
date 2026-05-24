@@ -1,6 +1,6 @@
 # Dream3R SOTA Feature Matrix
 
-Last updated: 2026-05-23 (v0.5 A4/A6/A8 closure pass; supersedes 2026-05-22 W20 expansion while preserving its differentiation / evidence-map sections at the end)
+Last updated: 2026-05-25 (Stage 4 in_progress: ComposerRouter `confidence_gate` upgraded to regime-aware MLP; supersedes 2026-05-23 v0.5 A4/A6/A8 closure pass while preserving its differentiation / evidence-map sections at the end)
 
 Status: family-grouped second pass. Every method named in `NEXT_PHASE_ROADMAP.md` W20 plus the three monocular priors already wired into the Composer expert registry is covered. Methods named in the roadmap but absent from `registry/source_registry.md` are explicitly flagged as drafting artifacts.
 
@@ -191,6 +191,7 @@ This restates the 2026-05-10 first-pass differentiation list, with v0.4/v0.5 lay
 12. **(v0.4)** Reroute path (`action=3 / reroute_hint=True`) picks `route_recommendation[:, 1]` without rerunning the model.
 13. **(v0.5 A4)** capability_card v2.2 separates `feed_forward_manyview` from dense sequential routing so VGGT can be represented honestly.
 14. **(v0.5 A8)** Memory A1 sub-action selection now has a typed scaffold for future trained long-context updates.
+15. **(Stage 4 entry)** ComposerRouter `confidence_gate` is now a regime-aware MLP (`Linear(1+n_regimes, d_routing) -> GELU -> Linear(d_routing, d_routing)`) instead of the previous global `Linear(1, d_routing)`. The old gate could not represent per-regime routing flips because per-sample gradients on its shared weight cancelled exactly. The new gate consumes `[critic_confidence, regime_probs]` and lets training produce different `conf_mod` directions per regime. Backward-compatible `load_state_dict` migrates legacy checkpoints by dropping the untrained legacy gate keys.
 
 ## Evidence Map
 
@@ -215,6 +216,7 @@ Preserved from the 2026-05-10 first pass and extended with v0.4/v0.5 entries:
 | **(v0.5 A4)** VGGT adapter + capability_card v2.2 | `test_vggt_integration.py`, `DEC-20260523-002` |
 | **(v0.5 A6)** NSA sliding branch fires on long sequences | `cycles/CYCLE-20260523-001.md`, `DEC-20260523-001` |
 | **(v0.5 A8)** Memory A1 action policy scaffold exists | `test_memory_action_policy.py`, `planning/TTT_PLAN.md`, `DEC-20260523-003` |
+| **(Stage 4 entry)** Regime-aware `confidence_gate` learns per-regime low-conf flip on synthetic supervision | `tests/test_router_only_training.py::test_train_router_only_with_metrics_makes_router_respond_to_critic_confidence`, `cycles/CYCLE-20260525-stage4-router-regime-aware-gate.md` |
 
 ## Missing Evidence
 
@@ -229,6 +231,7 @@ The following must not be overclaimed yet — preserved from 2026-05-10 first pa
 - Critic threshold calibration on real data (W24).
 - Adapter quality comparisons (5 of 8 are deterministic fallback locally).
 - VGGT-as-a-real-route with a downloaded checkpoint and server tick (`backend == "real"`).
+- **Regime-aware `confidence_gate` actually changes routes on real KITTI under critic-on / repair-off mode**: the synthetic test proves the gate *can* flip routing per-regime, but the server retrain of `router_only_v1` and the rerun of `eval_repair_pipeline_ablation` that produces `critic_changed_route_count > 0` have not yet been done. Stage 4 closure is gated on this.
 
 ## Related Files
 

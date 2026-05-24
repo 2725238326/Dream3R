@@ -1299,8 +1299,36 @@ class ComposerRouter(nn.Module):
             nn.GELU(),
             nn.Linear(d_routing, d_routing),
         )
-        self.confidence_gate = nn.Linear(1, d_routing)
+        # Regime-aware confidence gate. A single global Linear(1, d_routing)
+        # cannot express per-regime routing flips (e.g. dense->expert_b AND
+        # sparse->expert_a in the same low-conf batch), because the implied
+        # gradients on its shared weight cancel. Conditioning the gate on
+        # regime_probs lets it learn a per-regime conf_mod direction.
+        self.confidence_gate = nn.Sequential(
+            nn.Linear(1 + n_regimes, d_routing),
+            nn.GELU(),
+            nn.Linear(d_routing, d_routing),
+        )
         self.routing_head = nn.Linear(d_routing, n_experts)
+
+    def load_state_dict(self, state_dict, strict: bool = True):
+        # Backward compatibility for legacy checkpoints whose
+        # confidence_gate was nn.Linear(1, d_routing) instead of the new
+        # regime-aware MLP. The legacy gate was always randomly initialised
+        # in production checkpoints, so dropping its keys (and letting the
+        # new MLP keep its random init) is semantically equivalent.
+        sd = dict(state_dict)
+        legacy_w = sd.get("confidence_gate.weight")
+        is_legacy = (
+            isinstance(legacy_w, torch.Tensor)
+            and legacy_w.dim() == 2
+            and legacy_w.shape[1] == 1
+        )
+        if is_legacy:
+            sd.pop("confidence_gate.weight", None)
+            sd.pop("confidence_gate.bias", None)
+            return super().load_state_dict(sd, strict=False)
+        return super().load_state_dict(sd, strict=strict)
 
     def set_capability_cards(self, cards: torch.Tensor):
         self.capability_cards.copy_(cards)
@@ -1344,8 +1372,11 @@ class ComposerRouter(nn.Module):
 
         regime_embed = self.regime_encoder(regime_probs)
         if critic_confidence is not None:
-            conf_in = critic_confidence.to(self.confidence_gate.weight.dtype)
-            conf_mod = self.confidence_gate(conf_in)
+            gate_dtype = self.confidence_gate[0].weight.dtype
+            conf_in = critic_confidence.to(gate_dtype)
+            regime_in = regime_probs.to(gate_dtype)
+            gate_input = torch.cat([conf_in, regime_in], dim=-1)
+            conf_mod = self.confidence_gate(gate_input)
             regime_embed = regime_embed + conf_mod.to(regime_embed.dtype)
 
         learned_logits = self.routing_head(regime_embed)

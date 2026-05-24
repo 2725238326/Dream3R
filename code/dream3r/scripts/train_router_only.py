@@ -94,27 +94,6 @@ def _load_examples(
     return x, y, alt_y, conf_high_val, conf_low_val, sequences, expert_order
 
 
-def _absorb_conf_shift(router: "ComposerRouter", shift: float) -> None:
-    """Fold a constant input shift into the gate's bias.
-
-    During augmented training we feed `c - shift` to `confidence_gate` so
-    that loss_h and loss_l push the gate's weight in the same direction in
-    routing-head space (instead of cancelling). After training we absorb the
-    shift back into the bias so the saved gate produces identical outputs
-    when called with raw conf at eval-time:
-
-        W @ (c - shift) + b_trained == W @ c + (b_trained - shift * W)
-
-    The transform is exact for `nn.Linear(1, d_routing)`.
-    """
-    with torch.no_grad():
-        weight = router.confidence_gate.weight
-        # weight: (d_routing, 1); squeeze last dim -> (d_routing,)
-        router.confidence_gate.bias.copy_(
-            router.confidence_gate.bias - shift * weight.squeeze(-1)
-        )
-
-
 def _accuracy(logits: torch.Tensor, target: torch.Tensor) -> float:
     pred = logits.argmax(dim=-1)
     return float((pred == target).float().mean().item())
@@ -164,33 +143,44 @@ def train_router_only(
         and conf_high_val is not None
         and conf_low_val is not None
     )
-    # Centre the conf input around the midpoint of the eval band so that
-    # loss_h and loss_l drive confidence_gate.weight in the same direction.
-    conf_shift = (
-        0.5 * (conf_high_val + conf_low_val) if augment else 0.0
-    )
 
     optimizer = torch.optim.AdamW(router.parameters(), lr=lr, weight_decay=1e-4)
     with torch.no_grad():
         initial_logits = router(x)["routing_logits"]
         initial_acc = _accuracy(initial_logits, y)
 
-    # Stage 1: train regime_encoder + routing_head on the no-conf path. This
-    # preserves the Stage-3 behaviour of router(x) (no critic_confidence) and
-    # establishes a stable regime_embed -> oracle mapping. We cap the number
-    # of stage-1 epochs in augmented mode to keep the routing-head magnitude
-    # moderate; otherwise the regime contribution to logit_y - logit_alt
-    # becomes so confident that the narrow-band confidence_gate cannot
-    # produce a large-enough swing to flip the argmax at eval time.
+    # Joint training: regime_encoder + routing_head + confidence_gate are
+    # trained together. In augmented mode each step combines
+    #   loss_n = CE(router(x),               y)        # no-conf path
+    #   loss_h = CE(router(x, conf=conf_h),  y)        # high-conf reinforces oracle
+    #   loss_l = CE(router(x, conf=conf_l),  alt_y)    # low-conf flips to alt expert
+    # The regime-aware MLP gate (modules.ComposerRouter) lets per-regime
+    # gradients separate, so we no longer need a two-stage schedule or a
+    # conf-input shift trick.
     n = x.shape[0]
-    stage1_epochs = min(epochs, 200) if augment else epochs
-    for epoch in range(stage1_epochs):
-        perm = torch.randperm(n)
+    for epoch in range(epochs):
+        perm_n = torch.randperm(n)
+        perm_h = torch.randperm(n) if augment else None
+        perm_l = torch.randperm(n) if augment else None
         total_loss = 0.0
         for start in range(0, n, batch_size):
-            idx = perm[start:start + batch_size]
+            idx = perm_n[start:start + batch_size]
             out = router(x[idx])
             loss = F.cross_entropy(out["routing_logits"], y[idx])
+
+            if augment:
+                idx_h = perm_h[start:start + batch_size]
+                conf_h = torch.full((idx_h.numel(), 1), conf_high_val)
+                out_h = router(x[idx_h], critic_confidence=conf_h)
+                loss_h = F.cross_entropy(out_h["routing_logits"], y[idx_h])
+
+                idx_l = perm_l[start:start + batch_size]
+                conf_l = torch.full((idx_l.numel(), 1), conf_low_val)
+                out_l = router(x[idx_l], critic_confidence=conf_l)
+                loss_l = F.cross_entropy(out_l["routing_logits"], alt_y[idx_l])
+
+                loss = (loss + loss_h + loss_l) / 3.0
+
             optimizer.zero_grad(set_to_none=True)
             loss.backward()
             optimizer.step()
@@ -204,50 +194,8 @@ def train_router_only(
             writer.add_scalar("router/loss", avg_loss, epoch)
             writer.add_scalar("router/accuracy", acc, epoch)
 
-    # Stage 2: freeze regime_encoder + routing_head and train confidence_gate
-    # alone on (conf_high->y, conf_low->alt) pairs. With other params frozen
-    # the gate is forced to carry the discriminative signal; otherwise the
-    # optimizer reaches a degenerate solution where the gate output lies in
-    # the orthogonal complement of (R_y - R_alt).
-    if augment:
-        for name, param in router.named_parameters():
-            if "confidence_gate" not in name:
-                param.requires_grad = False
-        gate_optimizer = torch.optim.AdamW(
-            router.confidence_gate.parameters(), lr=lr, weight_decay=0.0,
-        )
-        for epoch in range(epochs):
-            perm_h = torch.randperm(n)
-            perm_l = torch.randperm(n)
-            for start in range(0, n, batch_size):
-                idx_h = perm_h[start:start + batch_size]
-                conf_h = torch.full(
-                    (idx_h.numel(), 1), conf_high_val - conf_shift,
-                )
-                out_h = router(x[idx_h], critic_confidence=conf_h)
-                loss_h = F.cross_entropy(out_h["routing_logits"], y[idx_h])
-
-                idx_l = perm_l[start:start + batch_size]
-                conf_l = torch.full(
-                    (idx_l.numel(), 1), conf_low_val - conf_shift,
-                )
-                out_l = router(x[idx_l], critic_confidence=conf_l)
-                loss_l = F.cross_entropy(out_l["routing_logits"], alt_y[idx_l])
-
-                loss = (loss_h + loss_l) / 2.0
-                gate_optimizer.zero_grad(set_to_none=True)
-                loss.backward()
-                gate_optimizer.step()
-
-        for name, param in router.named_parameters():
-            if "confidence_gate" not in name:
-                param.requires_grad = True
-
     if writer:
         writer.close()
-
-    if augment:
-        _absorb_conf_shift(router, conf_shift)
 
     with torch.no_grad():
         final_logits = router(x)["routing_logits"]

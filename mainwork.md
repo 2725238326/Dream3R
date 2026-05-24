@@ -131,8 +131,31 @@ Stage 1 (MVR)        ──→ Stage 2 (Memory)    ──→ Stage 3 (Composer)
 | 1 | ✅ done | 2026-05-23 | 2026-05-23 | DEC-20260523-004 |
 | 2 | ✅ done | 2026-05-23 | 2026-05-23 | DEC-20260523-005 |
 | 3 | ✅ done | 2026-05-23 | 2026-05-23 | DEC-20260523-006 |
-| 4 | 🔲 pending | — | — | — |
+| 4 | � in_progress | 2026-05-25 | — | — |
 | 5 | 🔲 optional | — | — | — |
+
+### Stage 4 当前状态（2026-05-25）
+
+T4.1（Critic 训练）和 T4.2（repair action 接通）已通过 focused tests。
+T4.3（hard sequence ablation）阻塞在 `critic_changed_route_count = 0`：
+critic 的 confidence 信号没让下一 tick routing 发生变化。
+
+**根因已定位、本地已修**：`ComposerRouter.confidence_gate` 旧版是
+`nn.Linear(1, d_routing)`，全局共享线性 gate 在 per-regime 翻转的监督下梯度
+精确抵消。已升级为 regime-aware MLP `Linear(1+n_regimes, d_routing) → GELU →
+Linear(d_routing, d_routing)`，并加 `load_state_dict` 兼容旧 checkpoint。
+本地 227 测试通过，per-regime 翻转可复现。详见
+`cycles/CYCLE-20260525-stage4-router-regime-aware-gate.md`。
+
+**剩余工作（必须服务器跑）**：
+
+1. `scp` 三个文件到 server。
+2. 重训 `router_only_v1`（新 gate 第一次拿到真梯度）。
+3. 重跑 `dream3r.scripts.eval_repair_pipeline_ablation`。
+4. 确认 `critic_changed_route_count > 0` 且 `t4_3 = true`。
+5. 写 `cycles/CYCLE-YYYYMMDD-stage4-closure.md` + `decisions/DEC-YYYYMMDD-NNN-stage4-critic-closure.md`。
+
+下一个 agent 的提示词在 `HANDOFF_PROMPT_NEXT.md`。
 
 ---
 

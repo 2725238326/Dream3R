@@ -160,6 +160,37 @@ It should not yet be described as:
 
 > a trained SOTA real-data 3R model.
 
+## Stage 4 In Progress (2026-05-25)
+
+ComposerRouter `confidence_gate` was upgraded from `nn.Linear(1, d_routing)`
+to a regime-aware MLP `Linear(1+n_regimes, d_routing) -> GELU -> Linear(d_routing, d_routing)`.
+
+Why: the previous global linear gate could not represent per-regime routing
+flips under low critic confidence. The per-regime gradients on its shared
+weight cancelled exactly when dense and sparse samples appeared in the same
+low-conf batch. Pipeline ablation showed `critic_changed_route_count = 0`
+and `t4_3 = false`.
+
+What changed locally and is verified:
+
+- `code/dream3r/modules.py` ComposerRouter: new regime-aware gate, forward
+  feeds `[critic_confidence, regime_probs]`, `load_state_dict` migrates legacy
+  `confidence_gate.weight` of shape `(d_routing, 1)` away.
+- `code/dream3r/scripts/train_router_only.py`: simplified joint training with
+  no-conf, conf-high, conf-low losses combined per step. Conf-shift trick
+  removed.
+- `code/dream3r/tests/test_router_only_training.py`: new test asserts
+  `low_conf_flip_rate_vs_no_conf > 0.0` and per-sequence flip on reload.
+- Local: 227 passed, 2 skipped.
+
+What is not yet done:
+
+- Server retrain of `router_only_v1` with the new gate.
+- Server rerun of `dream3r.scripts.eval_repair_pipeline_ablation`.
+- Stage 4 closure DEC.
+
+Reference: `cycles/CYCLE-20260525-stage4-router-regime-aware-gate.md`.
+
 ## Immediate Next Work
 
 1. Real-data ablation table using the same variant names as synthetic ablation.
