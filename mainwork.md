@@ -132,7 +132,7 @@ Stage 1 (MVR)        ──→ Stage 2 (Memory)    ──→ Stage 3 (Composer)
 | 2 | ✅ done | 2026-05-23 | 2026-05-23 | DEC-20260523-005 |
 | 3 | ✅ done | 2026-05-23 | 2026-05-23 | DEC-20260523-006 |
 | 4 | ✅ done | 2026-05-25 | 2026-05-25 | DEC-20260525-001 |
-| 5 | 🔶 partial (S1 expanded) | 2026-05-25 | — | DEC-20260525-002 (12-win), DEC-20260525-003 (59-win) |
+| 5 | 🔶 S1 sealed (cross-dataset deferred) | 2026-05-25 | 2026-05-25 (S1) | DEC-20260525-003 (S1 headline), DEC-20260525-004 (distill defer), DEC-20260525-005 (cross-dataset defer) |
 
 ### Stage 4 闭合状态（2026-05-25）
 
@@ -241,6 +241,22 @@ Honest claim: "router predicts oracle's expert on 78% of held-out KITTI
 windows" + "closure-set abs_rel improvement of 7.60% over best single expert".
 Not a SOTA claim, not a cross-dataset claim.
 
+### Stage 5 S1 final seal (2026-05-25, DEC-20260525-005)
+
+S1 closes at the 59-window KITTI expanded result above. Cross-dataset
+validation (ETH3D Low-res many-view was the proposed target) is deferred:
+the server cannot reach eth3d.net (TCP timeout, same symptom as ping
+github.com 100% loss), and local-download-then-scp was declined due to
+bandwidth constraints on both ends. See
+`decisions/DEC-20260525-005-deferred-cross-dataset-validation.md` for the
+preserved plan (target archives, upload path, dataloader/oracle/eval
+sketches, trigger conditions). No code or checkpoint changes.
+
+Also deferred at the same point: distilled-adapter architecture
+(`decisions/DEC-20260525-004-deferred-distilled-adapter-architecture.md`).
+Both deferrals leave the Router → full real model design as the
+authoritative Stage 5 S1 closure architecture.
+
 ---
 
 ## 6. 与现有文档的关系
@@ -255,6 +271,13 @@ Not a SOTA claim, not a cross-dataset claim.
 
 **下一个 agent 看完本文件后**：
 1. 阅读 `CLAUDE.md`
-2. 阅读 `cycles/CYCLE-20260525-stage5-s1-three-expert.md`
-3. 优先审阅 Stage 5 S1 strengthened closure：`results_regime_stats.json` 是否支撑 `learned_uses_ge_3_experts == true` 与 best-single improvement
-4. 下一步在不下载大文件的前提下推进 Stage 5 剩余 stretch（如 second-dataset plan 或 CUT3R/VGGT real-checkpoint authorization path）
+2. 阅读 Stage 5 S1 闭合链：`cycles/CYCLE-20260525-stage5-s1-three-expert.md` →
+   `cycles/CYCLE-20260525-stage5-s1-kitti-expand.md` → `decisions/DEC-20260525-003-stage5-s1-expand-closure.md`
+3. 阅读两个 deferral 决定：`decisions/DEC-20260525-004-deferred-distilled-adapter-architecture.md`
+   和 `decisions/DEC-20260525-005-deferred-cross-dataset-validation.md`，
+   不要在 trigger 条件未满足时回头开这两条线
+4. Stage 5 剩余 stretch 的合法推进方向（按 mainwork §2 表）：
+   - S2 Permanence 真实信号训练
+   - S3 加 CUT3R / VGGT 等真实 checkpoint（需用户授权下载大权重）
+   - GS（Gaussian Splatting）扩展
+   选哪条都请先问用户当前 demo 目标是否还需扩展。
