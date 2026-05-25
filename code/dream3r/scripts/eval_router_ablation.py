@@ -5,7 +5,7 @@ import json
 import math
 import random
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 import torch
@@ -15,11 +15,25 @@ from dream3r.scripts.train_router_only import _expert_registry, _feature_tensor
 
 
 def _load_router(checkpoint: str, n_regimes: int,
-                 expert_order: List[str] | None = None) -> ComposerRouter:
+                 expert_order: List[str] | None = None,
+                 expected_feature_mode: Optional[str] = None,
+                 ) -> Tuple[ComposerRouter, Dict[str, object]]:
     ckpt = torch.load(checkpoint, map_location="cpu", weights_only=False)
     order = expert_order or ckpt.get("expert_order") or ckpt.get("summary", {}).get("expert_order")
     if order is None:
         order = ["fast3r", "mast3r"]
+    summary = ckpt.get("summary") or {}
+    ckpt_feature_meta = summary.get("feature_meta") or {}
+    ckpt_feature_mode = ckpt_feature_meta.get("feature_mode") or summary.get("feature_mode")
+    if (
+        expected_feature_mode is not None
+        and ckpt_feature_mode is not None
+        and expected_feature_mode != ckpt_feature_mode
+    ):
+        raise ValueError(
+            f"feature_mode mismatch: checkpoint trained with '{ckpt_feature_mode}' "
+            f"but eval requested '{expected_feature_mode}'"
+        )
     registry = _expert_registry(list(order))
     router = ComposerRouter(
         n_regimes=n_regimes,
@@ -29,7 +43,7 @@ def _load_router(checkpoint: str, n_regimes: int,
     )
     router.load_state_dict(ckpt["router_state_dict"])
     router.eval()
-    return router
+    return router, ckpt_feature_meta
 
 
 def _mean_for_routes(metrics: Dict[str, Dict[str, float]],
@@ -64,20 +78,36 @@ def evaluate_router_ablation(
     output: str,
     random_seed: int = 7,
     feature_mode: str = "regime",
+    sequence_filter: Optional[List[str]] = None,
 ) -> Dict[str, object]:
     regime_data = json.loads(Path(regime_labels).read_text(encoding="utf-8"))
     oracle_data = json.loads(Path(oracle_labels).read_text(encoding="utf-8"))
     expert_order = oracle_data["expert_order"]
     metrics = oracle_data["metrics"]
     sequences = sorted(seq for seq in oracle_data["labels"] if seq in regime_data["labels"])
+    if sequence_filter is not None:
+        filter_set = set(sequence_filter)
+        sequences = [seq for seq in sequences if seq in filter_set]
     if not sequences:
         raise ValueError("no overlapping sequences to evaluate")
 
-    x, feature_meta = _feature_tensor(regime_data, sequences, feature_mode)
-    router = _load_router(
+    ckpt_peek = torch.load(router_checkpoint, map_location="cpu", weights_only=False)
+    ckpt_feature_meta = (ckpt_peek.get("summary") or {}).get("feature_meta") or {}
+    frozen_stats: Optional[Dict[str, object]] = None
+    if feature_mode == "regime_stats" and ckpt_feature_meta.get("stat_mean") is not None:
+        frozen_stats = {
+            "stat_mean": ckpt_feature_meta["stat_mean"],
+            "stat_std": ckpt_feature_meta["stat_std"],
+        }
+
+    x, feature_meta = _feature_tensor(
+        regime_data, sequences, feature_mode, frozen_stats=frozen_stats,
+    )
+    router, _ = _load_router(
         router_checkpoint,
         n_regimes=x.shape[1],
         expert_order=expert_order,
+        expected_feature_mode=feature_mode,
     )
     with torch.no_grad():
         pred_ids = router(x)["routing_logits"].argmax(dim=-1).tolist()

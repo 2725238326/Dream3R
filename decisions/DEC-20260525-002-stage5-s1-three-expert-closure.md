@@ -111,3 +111,30 @@ Artifacts:
 The next high-value task is independent review of the strengthened closure,
 then either a real-data ablation table or the next Stage 5 stretch item with
 fresh server evidence.
+
+## Held-Out Diagnostic (added 2026-05-25 after closure)
+
+A 12-fold leave-one-out cross-validation has been run on the strengthened
+router pipeline, as the cheapest held-out check available on this closure set.
+Server artifact: `/hdd3/kykt26/code/dream3r/runs/stage5_s1_router_loo/results_loo.json`.
+
+```text
+learned_loo_mean: 0.1875902141
+oracle_loo_mean:  0.1636828103
+always_mast3r:    0.1906146836
+relative_improvement_vs_best_single: 0.0158669279  # 1.59%, below 5%
+loo_route_accuracy_vs_oracle: 0.3333  # chance on 3 classes
+learned_loo_expert_counts: fast3r=3, mast3r=4, spann3r=5
+```
+
+This is a held-out diagnostic, not a closure revision. The original closure
+judgement (closure-set ablation under three real experts, learned routes
+matching oracle on the same 12 windows used for training) is unchanged.
+What LOO contributes is the explicit boundary: the 14.13% closure gain
+reflects training-set memorization at N=12, not a generalizable routing
+policy on held-out KITTI windows of the same domain. Any forward claim that
+"router learns useful routing" must be carried by either a larger KITTI
+window set or a second dataset.
+
+The closure remains marked as 12-window KITTI closure ablation, exactly as
+the original limitation states.

@@ -208,3 +208,87 @@ def test_train_router_only_with_metrics_makes_router_respond_to_critic_confidenc
         assert (avoid_alt_pred == y).any(), "router did not avoid previous alternate expert"
         assert (zero_avoid_best_pred == alt_y).any(), "zero-conf did not avoid previous best expert"
         assert (zero_avoid_alt_pred == y).any(), "zero-conf did not avoid previous alternate expert"
+
+
+def test_train_router_only_respects_sequence_filter():
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        regime_path = root / "regime_labels.json"
+        oracle_path = root / "oracle_labels.json"
+        output_dir = root / "router"
+
+        regime_path.write_text(json.dumps({
+            "labels": {
+                "dense_a": [0.02, 0.12, 0.05, 0.05, 0.7, 0.06],
+                "dense_b": [0.02, 0.12, 0.05, 0.05, 0.68, 0.08],
+                "sparse_a": [0.02, 0.15, 0.05, 0.68, 0.05, 0.05],
+                "sparse_b": [0.02, 0.15, 0.05, 0.66, 0.07, 0.05],
+            }
+        }), encoding="utf-8")
+        oracle_path.write_text(json.dumps({
+            "expert_order": ["fast3r", "mast3r"],
+            "labels": {
+                "dense_a": 0,
+                "dense_b": 0,
+                "sparse_a": 1,
+                "sparse_b": 1,
+            },
+        }), encoding="utf-8")
+
+        summary = train_router_only(
+            regime_labels=str(regime_path),
+            oracle_labels=str(oracle_path),
+            output_dir=str(output_dir),
+            epochs=40,
+            lr=0.05,
+            batch_size=3,
+            d_routing=16,
+            sequence_filter=["dense_a", "sparse_a", "sparse_b"],
+        )
+
+        assert summary["n_examples"] == 3
+        assert set(summary["sequences"]) == {"dense_a", "sparse_a", "sparse_b"}
+
+
+def test_train_router_only_records_frozen_stats_metadata():
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        regime_path = root / "regime_labels.json"
+        oracle_path = root / "oracle_labels.json"
+        output_dir = root / "router"
+
+        regime_path.write_text(json.dumps({
+            "labels": {
+                "a": [0.02, 0.12, 0.05, 0.05, 0.7, 0.06],
+                "b": [0.02, 0.12, 0.05, 0.05, 0.68, 0.08],
+                "c": [0.02, 0.15, 0.05, 0.68, 0.05, 0.05],
+                "d": [0.02, 0.15, 0.05, 0.66, 0.07, 0.05],
+            },
+            "features": {
+                "a": {"frame_count": 100, "depth_mean": 15, "valid_ratio": 0.3, "depth_temporal_change": 0.01, "oxts_available": 1, "mean_speed": 2, "speed_std": 0.5},
+                "b": {"frame_count": 110, "depth_mean": 16, "valid_ratio": 0.3, "depth_temporal_change": 0.02, "oxts_available": 1, "mean_speed": 2, "speed_std": 0.6},
+                "c": {"frame_count": 70, "depth_mean": 11, "valid_ratio": 0.2, "depth_temporal_change": 0.01, "oxts_available": 1, "mean_speed": 1, "speed_std": 0.2},
+                "d": {"frame_count": 75, "depth_mean": 12, "valid_ratio": 0.2, "depth_temporal_change": 0.02, "oxts_available": 1, "mean_speed": 1, "speed_std": 0.3},
+            },
+        }), encoding="utf-8")
+        oracle_path.write_text(json.dumps({
+            "expert_order": ["fast3r", "mast3r"],
+            "labels": {"a": 0, "b": 0, "c": 1, "d": 1},
+        }), encoding="utf-8")
+
+        summary = train_router_only(
+            regime_labels=str(regime_path),
+            oracle_labels=str(oracle_path),
+            output_dir=str(output_dir),
+            epochs=40,
+            lr=0.05,
+            batch_size=4,
+            d_routing=16,
+            feature_mode="regime_stats",
+        )
+
+        meta = summary["feature_meta"]
+        assert meta["feature_mode"] == "regime_stats"
+        assert meta["stats_frozen"] is False
+        assert len(meta["stat_mean"]) == 7
+        assert len(meta["stat_std"]) == 7

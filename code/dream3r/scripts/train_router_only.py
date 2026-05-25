@@ -53,6 +53,7 @@ def _load_examples(
     regime_labels: str,
     oracle_labels: str,
     feature_mode: str = "regime",
+    sequence_filter: Optional[List[str]] = None,
 ) -> Tuple[
     torch.Tensor,
     torch.Tensor,
@@ -72,6 +73,9 @@ def _load_examples(
         seq for seq in sorted(oracle_data["labels"])
         if seq in regime_data["labels"]
     ]
+    if sequence_filter is not None:
+        filter_set = set(sequence_filter)
+        sequences = [seq for seq in sequences if seq in filter_set]
     if not sequences:
         raise ValueError("no overlapping sequences between regime and oracle labels")
 
@@ -133,6 +137,7 @@ def _feature_tensor(
     regime_data: Dict[str, object],
     sequences: List[str],
     feature_mode: str = "regime",
+    frozen_stats: Optional[Dict[str, object]] = None,
 ) -> Tuple[torch.Tensor, Dict[str, object]]:
     regime_x = torch.tensor(
         [regime_data["labels"][seq] for seq in sequences],
@@ -162,8 +167,22 @@ def _feature_tensor(
             raise ValueError(f"missing stats for sequence: {seq}")
         rows.append([float(stats_data[seq].get(key, 0.0)) for key in STAT_FEATURE_KEYS])
     stats = torch.tensor(rows, dtype=torch.float32)
-    mean = stats.mean(dim=0, keepdim=True)
-    std = stats.std(dim=0, keepdim=True, unbiased=False).clamp_min(1e-6)
+    if frozen_stats is not None:
+        mean_list = frozen_stats.get("stat_mean")
+        std_list = frozen_stats.get("stat_std")
+        if mean_list is None or std_list is None:
+            raise ValueError("frozen_stats requires stat_mean and stat_std")
+        if len(mean_list) != len(STAT_FEATURE_KEYS) or len(std_list) != len(STAT_FEATURE_KEYS):
+            raise ValueError(
+                f"frozen_stats shape mismatch: expected {len(STAT_FEATURE_KEYS)} keys"
+            )
+        mean = torch.tensor(mean_list, dtype=torch.float32).unsqueeze(0)
+        std = torch.tensor(std_list, dtype=torch.float32).unsqueeze(0).clamp_min(1e-6)
+        stats_frozen = True
+    else:
+        mean = stats.mean(dim=0, keepdim=True)
+        std = stats.std(dim=0, keepdim=True, unbiased=False).clamp_min(1e-6)
+        stats_frozen = False
     norm_stats = (stats - mean) / std
     x = torch.cat([regime_x, norm_stats], dim=-1)
     return x, {
@@ -173,6 +192,7 @@ def _feature_tensor(
         "stat_keys": list(STAT_FEATURE_KEYS),
         "stat_mean": [float(v) for v in mean.squeeze(0).tolist()],
         "stat_std": [float(v) for v in std.squeeze(0).tolist()],
+        "stats_frozen": stats_frozen,
     }
 
 
@@ -252,12 +272,16 @@ def train_router_only(
     class_balance_alpha: float = 0.0,
     disable_critic_augmentation: bool = False,
     feature_mode: str = "regime",
+    sequence_filter: Optional[List[str]] = None,
 ) -> Dict[str, object]:
     torch.manual_seed(seed)
     (
         x, y, alt_y, conf_high_val, conf_low_val, conf_threshold_val,
         sequences, expert_order, feature_meta,
-    ) = _load_examples(regime_labels, oracle_labels, feature_mode=feature_mode)
+    ) = _load_examples(
+        regime_labels, oracle_labels, feature_mode=feature_mode,
+        sequence_filter=sequence_filter,
+    )
     if disable_critic_augmentation:
         alt_y = None
         conf_high_val = None

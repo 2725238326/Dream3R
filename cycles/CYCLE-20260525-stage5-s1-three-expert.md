@@ -264,6 +264,72 @@ oracle_expert_counts: fast3r=2, mast3r=8, spann3r=2
 - The evidence is a 12-window KITTI closure set. It is not SOTA evidence, a
   cross-dataset result, or a held-out generalization claim.
 
+## Leave-One-Out Held-Out Check Addendum
+
+To stress-test the closure result, a 12-fold leave-one-out cross-validation was
+run with the `regime_stats` feature mode. Each fold retrained the router on the
+11 remaining windows (with normalization stats frozen to those 11) and
+predicted the expert for the held-out window. Aggregated across the 12 folds:
+
+```text
+/hdd3/kykt26/code/dream3r/runs/stage5_s1_router_loo/results_loo.json
+learned_loo_mean: 0.1875902141
+oracle_loo_mean: 0.1636828103
+always_mast3r:   0.1906146836
+relative_improvement_vs_best_single: 0.0158669279
+loo_route_accuracy_vs_oracle: 0.3333333333
+learned_loo_expert_counts: fast3r=3, mast3r=4, spann3r=5
+```
+
+Reading:
+
+- `beats_best_single` is still true on LOO mean, but the margin (1.59%) is well
+  below the 5% threshold that the closure result clears (14.13%).
+- The LOO route accuracy is 33% on 3 classes, which is at chance level and
+  worse than the "always mast3r" baseline of 67% (8/12) on routing decisions.
+- The fold-level expert distribution drifts away from the oracle distribution
+  (`fast3r=2, mast3r=8, spann3r=2` → `fast3r=3, mast3r=4, spann3r=5`),
+  suggesting the closure-set 14.13% gain reflects training-set memorization,
+  not a generalizable routing signal at N=12.
+
+This LOO result is a held-out diagnostic, not a closure regression. The
+original closure judgement (closure-set ablation, three real experts, learned
+matches oracle on the same set used for training) remains intact. What LOO
+adds is the explicit "do not generalize from 12-window closure to held-out
+windows of the same domain" boundary.
+
+Implication: any claim that the learned router "learns" a routing policy
+needs to be carried by either (a) a larger KITTI window set, or (b) a
+multi-dataset rerun. The current strengthened closure should not be cited as
+held-out evidence.
+
+## Frozen Normalization Stats Fix
+
+A latent risk in the strengthened path was that `_feature_tensor` recomputed
+the normalization mean/std on whatever sequence subset it was called with.
+On the closure run this was harmless because train and eval used the same 12
+windows. But it would silently drift on any held-out subset (LOO, future
+S4 datasets). The fix:
+
+- `_feature_tensor` accepts optional `frozen_stats` and records
+  `stats_frozen` in feature_meta.
+- `evaluate_router_ablation` reads `stat_mean`/`stat_std` from the checkpoint
+  summary and applies them as frozen_stats for eval.
+- `_load_router` returns `(router, ckpt_feature_meta)` and raises if the eval
+  `feature_mode` does not match the checkpoint's.
+
+Re-running the original strengthened ablation under the fixed code reproduces
+the closure metrics exactly:
+
+```text
+/hdd3/kykt26/code/dream3r/runs/stage5_s1_router_ablation/results_regime_stats_reverify.json
+learned_router: 0.1636828103   (identical to results_regime_stats.json)
+oracle_router: 0.1636828103
+always_mast3r: 0.1906146836
+relative_improvement_vs_best_single: 0.1412896043
+feature_meta.stats_frozen: true
+```
+
 ## Boundary
 
 Touched:
@@ -271,8 +337,12 @@ Touched:
 - `code/dream3r/scripts/build_oracle_expert_labels.py`
 - `code/dream3r/scripts/train_router_only.py`
 - `code/dream3r/scripts/eval_router_ablation.py`
+- `code/dream3r/scripts/eval_router_loo.py` (new, LOO cross-validation)
+- `code/dream3r/scripts/eval_repair_pipeline_ablation.py` (`_load_router` tuple unpacking)
 - `code/dream3r/tests/test_oracle_expert_labels.py`
 - `code/dream3r/tests/test_router_ablation_eval.py`
+- `code/dream3r/tests/test_router_only_training.py`
+- `code/dream3r/tests/test_router_loo.py` (new)
 
 Not touched:
 

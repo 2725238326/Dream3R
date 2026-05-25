@@ -99,7 +99,7 @@ def evaluate_repair_pipeline_ablation(
     raw_action = critic_out["repair_logits"].argmax(dim=-1)
     contract_action = _critic_to_contract_action(raw_action)
 
-    router = _load_router(router_checkpoint, n_regimes=len(regime_data["regime_order"]))
+    router, _ = _load_router(router_checkpoint, n_regimes=len(regime_data["regime_order"]))
 
     rows = []
     prev_critic_conflict: Optional[float] = None

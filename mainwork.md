@@ -167,6 +167,29 @@ Stage 5 S1（≥3 real expert Composer ablation）已闭合，见
 
 Limit: this is still a 12-window KITTI closure ablation, not a SOTA or cross-dataset generalization claim. The earlier 6D regime-probability-only router did not select Spann3R; the current strengthened result depends on adding online regime-label `features` to the ablation router input.
 
+LOO held-out check (2026-05-25):
+
+- `learned_loo_mean = 0.1875902141`, `oracle_loo_mean = 0.1636828103`,
+  `always_mast3r = 0.1906146836`
+- `relative_improvement_vs_best_single = 0.0158669279` (1.59%, below the
+  closure-set 5% threshold)
+- `loo_route_accuracy_vs_oracle = 0.3333` (chance level on 3 classes)
+- Held-out distribution drifts to `fast3r=3, mast3r=4, spann3r=5` vs oracle
+  `fast3r=2, mast3r=8, spann3r=2`
+
+Reading: the strengthened closure 14.13% gain reflects training-set
+memorization on N=12, not a generalizable routing policy. Any future "router
+learns" claim needs a larger window set or a second dataset.
+
+Code hygiene fixes:
+
+- `_feature_tensor` normalization stats are now frozen from the checkpoint at
+  eval time (`feature_meta.stats_frozen=true`), eliminating silent drift on
+  held-out subsets.
+- `_load_router` raises on `feature_mode` mismatch between checkpoint and eval.
+- Re-running the original strengthened ablation under the fix reproduces the
+  closure number byte-identically.
+
 ---
 
 ## 6. 与现有文档的关系
