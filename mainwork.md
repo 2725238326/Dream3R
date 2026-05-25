@@ -132,7 +132,7 @@ Stage 1 (MVR)        ──→ Stage 2 (Memory)    ──→ Stage 3 (Composer)
 | 2 | ✅ done | 2026-05-23 | 2026-05-23 | DEC-20260523-005 |
 | 3 | ✅ done | 2026-05-23 | 2026-05-23 | DEC-20260523-006 |
 | 4 | ✅ done | 2026-05-25 | 2026-05-25 | DEC-20260525-001 |
-| 5 | 🔶 partial (S1 strengthened) | 2026-05-25 | — | DEC-20260525-002 (S1) |
+| 5 | 🔶 partial (S1 expanded) | 2026-05-25 | — | DEC-20260525-002 (12-win), DEC-20260525-003 (59-win) |
 
 ### Stage 4 闭合状态（2026-05-25）
 
@@ -189,6 +189,57 @@ Code hygiene fixes:
 - `_load_router` raises on `feature_mode` mismatch between checkpoint and eval.
 - Re-running the original strengthened ablation under the fix reproduces the
   closure number byte-identically.
+
+### Stage 5 S1 expanded closure (2026-05-25, DEC-20260525-003)
+
+Window count expanded from 12 to 59 via `--max-per-regime 25` against the same
+246-sequence regime label pool. Three real experts unchanged. Server artifacts:
+
+- `/hdd3/kykt26/code/dream3r/runs/stage5_s1_expand_oracle/oracle_expert_labels.json`
+- `/hdd3/kykt26/checkpoints/router_stage5_s1_expand_v1/latest.pt`
+- `/hdd3/kykt26/code/dream3r/runs/stage5_s1_expand_router_ablation/results.json`
+- `/hdd3/kykt26/code/dream3r/runs/stage5_s1_expand_router_loo/results_loo.json`
+
+59-window oracle distribution is far more balanced than 12-window snapshot:
+
+```text
+12-window: mast3r=8 (67%), fast3r=2 (17%), spann3r=2 (17%)
+59-window: mast3r=31 (53%), spann3r=24 (41%), fast3r=4 (7%)
+```
+
+Closure ablation on 59 windows (passes 5% gate with margin):
+
+```text
+learned_router: 0.1485612884
+oracle_router:  0.1481787252
+always_mast3r:  0.1607782668  (best single)
+relative_improvement_vs_best_single: 7.60%
+learned_expert_counts: fast3r=4, mast3r=31, spann3r=24   (matches oracle exactly)
+route_regime_cramers_v: 0.4718
+stage5_s1: true
+```
+
+Held-out 59-fold LOO (strong route accuracy, modest abs_rel margin):
+
+```text
+learned_loo_mean: 0.1571985500
+oracle_loo_mean:  0.1481787252
+always_mast3r:    0.1607782668
+relative_improvement_vs_best_single: 2.23%   (still below 5% gate held-out)
+loo_route_accuracy_vs_oracle: 78%            (vs 33% chance for 3-class)
+learned_loo_expert_counts: fast3r=6, mast3r=26, spann3r=27
+```
+
+Reading: at N=59, the router predicts the oracle expert on 78% of held-out
+windows (well above chance), confirming it learns a generalizable in-domain
+routing policy. The held-out abs_rel margin is small because MASt3R and
+Spann3R are close on outdoor KITTI; full oracle headroom over best-single is
+only 7.86%, and LOO captures 28% of that ceiling. The 12-window LOO 33%
+chance-level result was an N-too-small artefact.
+
+Honest claim: "router predicts oracle's expert on 78% of held-out KITTI
+windows" + "closure-set abs_rel improvement of 7.60% over best single expert".
+Not a SOTA claim, not a cross-dataset claim.
 
 ---
 
