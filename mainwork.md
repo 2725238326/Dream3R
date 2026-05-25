@@ -132,7 +132,7 @@ Stage 1 (MVR)        ──→ Stage 2 (Memory)    ──→ Stage 3 (Composer)
 | 2 | ✅ done | 2026-05-23 | 2026-05-23 | DEC-20260523-005 |
 | 3 | ✅ done | 2026-05-23 | 2026-05-23 | DEC-20260523-006 |
 | 4 | ✅ done | 2026-05-25 | 2026-05-25 | DEC-20260525-001 |
-| 5 | 🔶 S1 sealed (cross-dataset deferred) | 2026-05-25 | 2026-05-25 (S1) | DEC-20260525-003 (S1 headline), DEC-20260525-004 (distill defer), DEC-20260525-005 (cross-dataset defer) |
+| 5 | 🔶 S1 KITTI sealed, cross-dataset re-activated | 2026-05-25 | 2026-05-25 (S1 KITTI) | DEC-20260525-003 (S1 headline), DEC-20260525-004 (distill defer), DEC-20260525-005 (cross-dataset defer, trigger #2 fired 2026-05-25 evening) |
 
 ### Stage 4 闭合状态（2026-05-25）
 
@@ -257,6 +257,24 @@ Also deferred at the same point: distilled-adapter architecture
 Both deferrals leave the Router → full real model design as the
 authoritative Stage 5 S1 closure architecture.
 
+### Stage 5 cross-dataset re-activation (2026-05-25 evening)
+
+DEC-20260525-005 trigger #2 (user bandwidth) fired on 2026-05-25 evening.
+User downloaded ETH3D Low-res many-view Training set locally and scp'd 4
+archives (~3.9 GB total) to `/hdd3/kykt26/data/eth3d/low_res_many_view/raw/`:
+
+```text
+multi_view_training_rig.7z              1.7G
+multi_view_training_rig_undistorted.7z  1.5G
+multi_view_training_rig_occlusion.7z    405M
+multi_view_training_rig_scan_eval.7z    289M
+```
+
+DEC-005's preserved cross-dataset plan is now active. Stage 5 will close
+fully via a forthcoming `DEC-20260525-006-cross-dataset-closure.md` once
+the ETH3D oracle + transfer eval finishes. Handoff to the next agent:
+`mainwork/HANDOFF-20260525-evening.md`.
+
 ---
 
 ## 6. 与现有文档的关系
@@ -271,13 +289,13 @@ authoritative Stage 5 S1 closure architecture.
 
 **下一个 agent 看完本文件后**：
 1. 阅读 `CLAUDE.md`
-2. 阅读 Stage 5 S1 闭合链：`cycles/CYCLE-20260525-stage5-s1-three-expert.md` →
+2. 阅读 `mainwork/HANDOFF-20260525-evening.md`（本轮接续指南，自包含）
+3. 阅读 Stage 5 S1 闭合链：`cycles/CYCLE-20260525-stage5-s1-three-expert.md` →
    `cycles/CYCLE-20260525-stage5-s1-kitti-expand.md` → `decisions/DEC-20260525-003-stage5-s1-expand-closure.md`
-3. 阅读两个 deferral 决定：`decisions/DEC-20260525-004-deferred-distilled-adapter-architecture.md`
-   和 `decisions/DEC-20260525-005-deferred-cross-dataset-validation.md`，
-   不要在 trigger 条件未满足时回头开这两条线
-4. Stage 5 剩余 stretch 的合法推进方向（按 mainwork §2 表）：
-   - S2 Permanence 真实信号训练
-   - S3 加 CUT3R / VGGT 等真实 checkpoint（需用户授权下载大权重）
-   - GS（Gaussian Splatting）扩展
-   选哪条都请先问用户当前 demo 目标是否还需扩展。
+4. 阅读 cross-dataset 复活的依据：`decisions/DEC-20260525-005-deferred-cross-dataset-validation.md`
+   （trigger #2 已在 2026-05-25 evening 触发，ETH3D 已上传到
+   `/hdd3/kykt26/data/eth3d/low_res_many_view/raw/`）
+5. 阅读仍在 defer 的决定：`decisions/DEC-20260525-004-deferred-distilled-adapter-architecture.md`，
+   trigger 未满足，不要主动开这条线
+6. 按 HANDOFF 推进：Track A (demo 打包) + Cross-dataset closure 双闭合；
+   Track B (S5 tttLRM) 留到 cross-dataset 闭合后再说

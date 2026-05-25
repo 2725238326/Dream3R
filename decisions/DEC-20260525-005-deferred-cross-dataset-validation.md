@@ -2,8 +2,27 @@
 
 ## Status
 
-Deferred. Stage 5 S1 closes at DEC-20260525-003 (59-window KITTI expanded).
-Cross-dataset validation is recorded as future work, not implemented.
+Deferred (2026-05-25 morning) → **Trigger #2 fired (2026-05-25 evening)**.
+
+The deferral is no longer active. User downloaded ETH3D Low-res many-view
+Training archives locally and scp'd them to the server. The preserved plan
+in the "What is preserved for future pickup" section below is now the
+active work plan for the next agent. Closure will be recorded in a
+forthcoming `DEC-20260525-006-cross-dataset-closure.md`.
+
+Status update (2026-05-25 evening):
+
+- Server now has `/hdd3/kykt26/data/eth3d/low_res_many_view/raw/` containing:
+  - `multi_view_training_rig.7z` (1.7G)
+  - `multi_view_training_rig_undistorted.7z` (1.5G)
+  - `multi_view_training_rig_occlusion.7z` (405M)
+  - `multi_view_training_rig_scan_eval.7z` (289M)
+- Extraction target dir created: `/hdd3/kykt26/data/eth3d/low_res_many_view/training/`
+- Handoff: `mainwork/HANDOFF-20260525-evening.md`
+
+The original deferral rationale (network/bandwidth constraint) and the
+preserved plan below remain accurate as historical context; only the
+deferral state itself has changed.
 
 ## Context
 
