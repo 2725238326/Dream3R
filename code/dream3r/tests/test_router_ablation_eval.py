@@ -104,7 +104,7 @@ def test_eval_router_ablation_supports_stage5_three_experts():
                 "dynamic_a": [0.02, 0.12, 0.70, 0.06, 0.04, 0.06],
                 "dynamic_b": [0.02, 0.12, 0.68, 0.08, 0.04, 0.06],
             },
-            "stats": {
+            "features": {
                 "dense_a": {"frame_count": 100, "depth_mean": 15, "valid_ratio": 0.3, "depth_temporal_change": 0.01, "oxts_available": 1, "mean_speed": 2, "speed_std": 0.5},
                 "dense_b": {"frame_count": 110, "depth_mean": 16, "valid_ratio": 0.3, "depth_temporal_change": 0.02, "oxts_available": 1, "mean_speed": 2, "speed_std": 0.6},
                 "sparse_a": {"frame_count": 70, "depth_mean": 11, "valid_ratio": 0.2, "depth_temporal_change": 0.01, "oxts_available": 1, "mean_speed": 1, "speed_std": 0.2},
@@ -162,6 +162,7 @@ def test_eval_router_ablation_supports_stage5_three_experts():
 
         assert result["expert_order"] == ["fast3r", "mast3r", "spann3r"]
         assert result["feature_mode"] == "regime_stats"
+        assert result["feature_meta"]["stat_source"] == "features"
         assert result["success"]["beats_spann3r"]
         assert result["success"]["beats_best_single"]
         assert result["success"]["improves_best_single_ge_5pct"]

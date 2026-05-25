@@ -37,7 +37,7 @@
 | 2 Memory | ✅ done | DEC-20260523-005 |
 | 3 Composer | ✅ done | DEC-20260523-006 |
 | **4 Critic + Repair** | ✅ done | DEC-20260525-001 |
-| 5 Stretch | 🔶 partial (S1 done) | DEC-20260525-002；看 `mainwork/STAGE-5-STRETCH.md` |
+| 5 Stretch | 🔶 partial (S1 strengthened) | DEC-20260525-002；看 `mainwork/STAGE-5-STRETCH.md` |
 
 ### Stage 4 已闭合
 
@@ -58,11 +58,11 @@ t4_3                       = true
 
 ---
 
-## 3. Stage 5 S1 已闭合
+## 3. Stage 5 S1 已强化闭合
 
-S1 把 learned router 从两专家（MASt3R + Fast3R）推进到了三候选真实专家（Fast3R + MASt3R + Spann3R），并完成真实 KITTI ablation。
+S1 把 learned router 从两专家（MASt3R + Fast3R）推进到了三候选真实专家（Fast3R + MASt3R + Spann3R），并完成真实 KITTI ablation。随后补上 `regime_stats/features` router ablation，使 learned router 实际选择三专家并匹配 oracle routes。
 
-最终服务器证据：
+基础三专家证据：
 
 ```text
 expert_order: [fast3r, mast3r, spann3r]
@@ -74,7 +74,7 @@ relative_improvement_vs_best_single: 0.0962807369
 stage5_s1: true
 ```
 
-重要限制：
+基础 6D-router 限制（保留为诊断，不是最终强化结果）：
 
 ```text
 learned_expert_counts: fast3r=3, mast3r=9, spann3r=0
@@ -82,19 +82,35 @@ oracle_expert_counts: fast3r=2, mast3r=8, spann3r=2
 learned_uses_ge_3_experts: false
 ```
 
-不要把 S1 说成 learned router 已经学会充分利用 Spann3R。准确说法是：三真实专家候选与三专家 oracle 已成立，learned router 在该候选集合上优于 best single expert 9.63%，但当前 6D regime-probability router 尚未学会选择 Spann3R。
+强化服务器证据：
 
-## 3. 下一阶段任务：richer-router-feature pass
+```text
+router checkpoint: /hdd3/kykt26/checkpoints/router_stage5_s1_regime_stats_v1/latest.pt
+router ablation: /hdd3/kykt26/code/dream3r/runs/stage5_s1_router_ablation/results_regime_stats.json
+feature_mode: regime_stats
+stat_source: features
+learned_router: 0.1636828103
+oracle_router: 0.1636828103
+always_mast3r: 0.1906146836
+relative_improvement_vs_best_single: 0.1412896043
+learned_expert_counts: fast3r=2, mast3r=8, spann3r=2
+oracle_expert_counts: fast3r=2, mast3r=8, spann3r=2
+learned_uses_ge_3_experts: true
+stage5_s1: true
+```
 
-目标：补上 S1 暴露的真实瓶颈。把 `stage3_regime_labels/regime_labels.json` 里的 `stats` 或 evidence-derived features 纳入 router ablation，使 learned router 有能力区分“regime top 相同但 oracle expert 不同”的 KITTI windows。
+准确说法：三真实专家候选、三专家 oracle、feature-augmented learned router 三者都成立；在 12-window KITTI closure set 上 learned router 与 oracle route 一致，相对 best single expert 改善 14.13%。不要把它写成 SOTA、跨数据集泛化或 held-out result。
+
+## 3. 下一阶段任务：审阅强化闭合，再开 Stage 5 剩余项
+
+第一优先级：审阅 `regime_stats/features` 这次强化闭合是否符合真实证据边界。
 
 执行顺序：
 
-1. 读 `cycles/CYCLE-20260525-stage5-s1-three-expert.md` 的 Limitations 和 Diagnostics。
-2. 检查 `runs/stage3_regime_labels/regime_labels.json` 的 `stats` 字段，挑出不泄漏目标指标、可在线获得的特征。
-3. 给 router-only training/eval 加一个显式 feature-augmented mode，不改 `model.py` 主 forward，先作为 ablation 分支跑。
-4. 在 server 上复跑 Stage 5 S1 oracle/router ablation。
-5. 只有当 learned router 的 `learned_uses_ge_3_experts == true` 且 best-single improvement 仍 >=5% 时，才写新的 closure 或 addendum。
+1. 读 `cycles/CYCLE-20260525-stage5-s1-three-expert.md` 的 Richer Router Feature Addendum。
+2. 核验 server artifact：`results_regime_stats.json` 与 `router_stage5_s1_regime_stats_v1/summary.json`。
+3. 确认 feature source 是 `stage3_regime_labels/regime_labels.json` 的 `features`，不是 oracle metrics。
+4. 如果审阅通过，再推进下一个 Stage 5 stretch：real-data ablation table、second-dataset plan，或 CUT3R/VGGT real-checkpoint authorization path。
 
 ---
 
@@ -181,4 +197,4 @@ learned_uses_ge_3_experts: false
 
 ## 7. 一句话总结
 
-**Stage 4 与 Stage 5 S1 已闭合；下一棒优先做 richer-router-feature pass，让三专家 learned router 真正学会选择 Spann3R，而不是只把 Spann3R 放进候选池。**
+**Stage 4 与 Stage 5 S1 strengthened closure 已闭合；下一棒先审阅 `regime_stats/features` 证据边界，再推进 Stage 5 剩余 stretch。**

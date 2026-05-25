@@ -147,9 +147,15 @@ def _feature_tensor(
     if feature_mode != "regime_stats":
         raise ValueError(f"unsupported feature_mode: {feature_mode}")
 
+    stats_source = "stats"
     stats_data = regime_data.get("stats")
     if not isinstance(stats_data, dict):
-        raise ValueError("feature_mode=regime_stats requires regime label stats")
+        stats_source = "features"
+        stats_data = regime_data.get("features")
+    if not isinstance(stats_data, dict):
+        raise ValueError(
+            "feature_mode=regime_stats requires regime label stats/features"
+        )
     rows = []
     for seq in sequences:
         if seq not in stats_data:
@@ -163,6 +169,7 @@ def _feature_tensor(
     return x, {
         "feature_mode": feature_mode,
         "regime_width": int(regime_x.shape[1]),
+        "stat_source": stats_source,
         "stat_keys": list(STAT_FEATURE_KEYS),
         "stat_mean": [float(v) for v in mean.squeeze(0).tolist()],
         "stat_std": [float(v) for v in std.squeeze(0).tolist()],

@@ -132,7 +132,7 @@ Stage 1 (MVR)        ──→ Stage 2 (Memory)    ──→ Stage 3 (Composer)
 | 2 | ✅ done | 2026-05-23 | 2026-05-23 | DEC-20260523-005 |
 | 3 | ✅ done | 2026-05-23 | 2026-05-23 | DEC-20260523-006 |
 | 4 | ✅ done | 2026-05-25 | 2026-05-25 | DEC-20260525-001 |
-| 5 | 🔶 partial (S1 done) | 2026-05-25 | — | DEC-20260525-002 (S1) |
+| 5 | 🔶 partial (S1 strengthened) | 2026-05-25 | — | DEC-20260525-002 (S1) |
 
 ### Stage 4 闭合状态（2026-05-25）
 
@@ -158,11 +158,14 @@ Stage 5 S1（≥3 real expert Composer ablation）已闭合，见
 
 - Spann3R real integration: `2 passed, 8 warnings`
 - Three-expert oracle: `expert_order = [fast3r, mast3r, spann3r]`, `oracle_counts = {mast3r: 8, fast3r: 2, spann3r: 2}`
-- Router ablation: `learned_router = 0.1722621613`, `best_single_expert = mast3r`, `always_mast3r = 0.1906146836`
-- Improvement: `relative_improvement_vs_best_single = 0.0962807369`, `stage5_s1 = true`
+- Strengthened router checkpoint: `/hdd3/kykt26/checkpoints/router_stage5_s1_regime_stats_v1/latest.pt`
+- Strengthened router ablation: `/hdd3/kykt26/code/dream3r/runs/stage5_s1_router_ablation/results_regime_stats.json`
+- Feature mode: `regime_stats`, using online regime-label `features` keys (`frame_count`, `depth_mean`, `valid_ratio`, `depth_temporal_change`, `oxts_available`, `mean_speed`, `speed_std`)
+- Router ablation: `learned_router = 0.1636828103`, `oracle_router = 0.1636828103`, `best_single_expert = mast3r`, `always_mast3r = 0.1906146836`
+- Improvement: `relative_improvement_vs_best_single = 0.1412896043`, `learned_uses_ge_3_experts = true`, `stage5_s1 = true`
 - Regression check: Stage 4 repair pipeline remains `t4_3 = true`
 
-Limit: the final learned router uses three real candidates and beats the best single expert, but its selected routes are `fast3r = 3`, `mast3r = 9`, `spann3r = 0`. Spann3R wins oracle on two real windows, but current 6D regime-probability routing does not exploit those cases.
+Limit: this is still a 12-window KITTI closure ablation, not a SOTA or cross-dataset generalization claim. The earlier 6D regime-probability-only router did not select Spann3R; the current strengthened result depends on adding online regime-label `features` to the ablation router input.
 
 ---
 
@@ -179,5 +182,5 @@ Limit: the final learned router uses three real candidates and beats the best si
 **下一个 agent 看完本文件后**：
 1. 阅读 `CLAUDE.md`
 2. 阅读 `cycles/CYCLE-20260525-stage5-s1-three-expert.md`
-3. 优先推进 richer-router-feature pass：把 regime-label `stats` 或 evidence-derived features 纳入路由 ablation
-4. 所有新数字继续只从 server artifact 写入 closure 文档
+3. 优先审阅 Stage 5 S1 strengthened closure：`results_regime_stats.json` 是否支撑 `learned_uses_ge_3_experts == true` 与 best-single improvement
+4. 下一步在不下载大文件的前提下推进 Stage 5 剩余 stretch（如 second-dataset plan 或 CUT3R/VGGT real-checkpoint authorization path）

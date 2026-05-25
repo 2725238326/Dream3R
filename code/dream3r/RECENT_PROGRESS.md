@@ -210,12 +210,16 @@ Verification:
 ## Stage 5 S1 Closed (2026-05-25)
 
 Stage 5 S1 closes the first >=3 real-expert Composer ablation on KITTI.
+It was strengthened in the same 2026-05-25 pass by adding online regime-label
+features to router-only training/eval.
 
 Final server artifacts:
 
 - Oracle labels: `/hdd3/kykt26/code/dream3r/runs/stage5_s1_oracle_labels/oracle_expert_labels.json`
-- Router checkpoint: `/hdd3/kykt26/checkpoints/router_stage5_s1_v1/latest.pt`
-- Router ablation: `/hdd3/kykt26/code/dream3r/runs/stage5_s1_router_ablation/results.json`
+- Baseline router checkpoint: `/hdd3/kykt26/checkpoints/router_stage5_s1_v1/latest.pt`
+- Baseline router ablation: `/hdd3/kykt26/code/dream3r/runs/stage5_s1_router_ablation/results.json`
+- Strengthened router checkpoint: `/hdd3/kykt26/checkpoints/router_stage5_s1_regime_stats_v1/latest.pt`
+- Strengthened router ablation: `/hdd3/kykt26/code/dream3r/runs/stage5_s1_router_ablation/results_regime_stats.json`
 - Closure cycle: `cycles/CYCLE-20260525-stage5-s1-three-expert.md`
 - Decision: `decisions/DEC-20260525-002-stage5-s1-three-expert-closure.md`
 
@@ -224,19 +228,23 @@ Final server evidence:
 - Spann3R real integration: `2 passed, 8 warnings`
 - Three-expert oracle: `expert_order = [fast3r, mast3r, spann3r]`
 - Oracle counts: `mast3r = 8`, `fast3r = 2`, `spann3r = 2`
-- Router ablation: `learned_router = 0.1722621613`, `always_mast3r = 0.1906146836`, `oracle_router = 0.1636828103`
-- Best-single improvement: `relative_improvement_vs_best_single = 0.0962807369`
-- Success: `candidate_count_ge_3 = true`, `oracle_uses_ge_3_experts = true`, `stage5_s1 = true`
+- Baseline 6D-router ablation: `learned_router = 0.1722621613`, `always_mast3r = 0.1906146836`, `oracle_router = 0.1636828103`
+- Strengthened feature-mode: `regime_stats`, using regime-label `features` as source
+- Strengthened router training: `final_accuracy = 1.0`, `prediction_counts = {fast3r: 2, mast3r: 8, spann3r: 2}`
+- Strengthened router ablation: `learned_router = 0.1636828103`, `oracle_router = 0.1636828103`, `always_mast3r = 0.1906146836`
+- Best-single improvement: `relative_improvement_vs_best_single = 0.1412896043`
+- Success: `candidate_count_ge_3 = true`, `oracle_uses_ge_3_experts = true`, `learned_uses_ge_3_experts = true`, `stage5_s1 = true`
 
-Important limitation: the final learned router does not select Spann3R
-(`learned_expert_counts = {fast3r: 3, mast3r: 9, spann3r: 0}`), even though
-Spann3R wins oracle on two real windows. This is closure for a three-candidate
-ablation, not proof that the current 6D regime-probability router exploits all
-third-expert opportunities.
+Important limitation: this remains a 12-window KITTI closure ablation, not a
+SOTA or held-out generalization claim. The earlier 6D regime-probability-only
+router did not select Spann3R
+(`learned_expert_counts = {fast3r: 3, mast3r: 9, spann3r: 0}`); the strengthened
+result depends on online regime-label features and should be presented as an
+ablation branch, not silently folded into the main forward path.
 
 ## Immediate Next Work
 
-1. Richer-router-feature pass: add regime-label `stats` or evidence-derived features to separate cases with identical regime probabilities but different oracle experts.
+1. Review the strengthened Stage 5 S1 evidence and closure wording.
 2. Real-data ablation table using the same variant names as synthetic ablation.
 3. Critic calibration on real geometry distributions.
 4. Expert routing quality report with real/fallback adapter availability.

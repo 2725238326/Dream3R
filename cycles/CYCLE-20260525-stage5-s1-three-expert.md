@@ -13,6 +13,9 @@ The third expert is Spann3R. No new checkpoint was downloaded in this cycle; the
 - Generalized router training and router ablation from two hard-coded experts to an `expert_order` read from oracle labels/checkpoints.
 - Added `--disable-critic-augmentation` for router-only Stage 5 ablations, so Stage 4 critic-confidence training does not distort the no-critic router evaluation target.
 - Added optional class-balance alpha for diagnostics on small imbalanced expert-label sets.
+- Added `--feature-mode regime_stats` for router-only ablations. It augments
+  regime probabilities with online regime-label `features` and records the
+  source/normalization metadata in checkpoint and eval outputs.
 - Extended router-ablation output with learned/oracle expert usage counts.
 - Added schema tests for three-expert router training/eval.
 
@@ -36,6 +39,16 @@ python -m pytest \
   dream3r/tests/test_repair_pipeline_ablation_eval.py -q
 
 10 passed, 1 warning
+```
+
+Focused tests after `regime_stats` feature-source compatibility:
+
+```text
+python -m pytest \
+  dream3r/tests/test_router_ablation_eval.py \
+  dream3r/tests/test_router_only_training.py -q
+
+5 passed
 ```
 
 Stage 4 regression check after the shared router-loader change:
@@ -154,12 +167,102 @@ stage5_s1: false
 
 This supports the final choice: use the checkpoint that optimizes real abs-rel, not the one that cosmetically selects every expert.
 
+## Richer Router Feature Addendum
+
+The first attempt at `feature_mode=regime_stats` failed because the real Stage 3
+regime artifact stores online sequence statistics under `features`, not
+`stats`:
+
+```text
+/hdd3/kykt26/code/dream3r/runs/stage3_regime_labels/regime_labels.json
+top-level keys: regime_order, label_source, labels, features, sanity, skipped_empty
+feature keys: frame_count, depth_mean, valid_ratio, depth_temporal_change,
+              oxts_available, mean_speed, speed_std
+```
+
+The loader now accepts both schema names and records `stat_source`. No target
+metric or oracle metric is used as router input.
+
+Training command:
+
+```text
+python -m dream3r.scripts.train_router_only \
+  --preset router_only \
+  --oracle-labels /hdd3/kykt26/code/dream3r/runs/stage5_s1_oracle_labels/oracle_expert_labels.json \
+  --output-dir /hdd3/kykt26/checkpoints/router_stage5_s1_regime_stats_v1 \
+  --epochs 2000 \
+  --lr 0.05 \
+  --batch-size 12 \
+  --disable-critic-augmentation \
+  --feature-mode regime_stats
+```
+
+Training summary:
+
+```text
+/hdd3/kykt26/checkpoints/router_stage5_s1_regime_stats_v1/summary.json
+n_examples: 12
+feature_mode: regime_stats
+stat_source: features
+final_accuracy: 1.0
+target_counts: mast3r=8, fast3r=2, spann3r=2
+prediction_counts: mast3r=8, fast3r=2, spann3r=2
+```
+
+Ablation command:
+
+```text
+python -m dream3r.scripts.eval_router_ablation \
+  --regime-labels /hdd3/kykt26/code/dream3r/runs/stage3_regime_labels/regime_labels.json \
+  --oracle-labels /hdd3/kykt26/code/dream3r/runs/stage5_s1_oracle_labels/oracle_expert_labels.json \
+  --router-checkpoint /hdd3/kykt26/checkpoints/router_stage5_s1_regime_stats_v1/latest.pt \
+  --output /hdd3/kykt26/code/dream3r/runs/stage5_s1_router_ablation/results_regime_stats.json \
+  --feature-mode regime_stats
+```
+
+Strengthened final metrics:
+
+```text
+/hdd3/kykt26/code/dream3r/runs/stage5_s1_router_ablation/results_regime_stats.json
+learned_router: 0.1636828103
+oracle_router: 0.1636828103
+always_mast3r: 0.1906146836
+always_fast3r: 0.2252575532
+always_spann3r: 0.2086918801
+random_routing: 0.2293711156
+best_single_expert: mast3r
+relative_improvement_vs_best_single: 0.1412896043
+route_regime_cramers_v: 0.6123724357
+```
+
+Strengthened success fields:
+
+```text
+candidate_count_ge_3: true
+oracle_uses_ge_3_experts: true
+learned_uses_ge_3_experts: true
+beats_best_single: true
+improves_best_single_ge_5pct: true
+stage5_s1: true
+```
+
+The strengthened learned routes match the oracle routes on this 12-window
+closure set:
+
+```text
+learned_expert_counts: fast3r=2, mast3r=8, spann3r=2
+oracle_expert_counts: fast3r=2, mast3r=8, spann3r=2
+```
+
 ## Limitations
 
-- The third real expert is in the candidate set and wins oracle on two real KITTI windows, but the final learned router does not select Spann3R.
-- This means Stage 5 S1 closes only as a three-candidate learned-router ablation, not as proof that the current 6D regime-probability router can exploit every useful third-expert case.
-- Several oracle conflicts are not separable from current router inputs alone. Example: some dynamic windows share identical regime probabilities but have different oracle experts.
-- The next credible step is to add richer router features from the existing regime-label `stats` block or from per-sequence evidence, then rerun this same ablation.
+- The original 6D regime-probability-only router did not select Spann3R. That
+  limitation is preserved as a diagnostic baseline, not the final strengthened
+  S1 result.
+- The strengthened result depends on online regime-label `features` and is an
+  ablation branch; it has not been promoted into `model.py` main forward.
+- The evidence is a 12-window KITTI closure set. It is not SOTA evidence, a
+  cross-dataset result, or a held-out generalization claim.
 
 ## Boundary
 
@@ -180,4 +283,9 @@ Not touched:
 
 ## Conclusion
 
-Stage 5 S1 is closed under the explicit router-ablation gate: the learned router with a three-real-expert candidate set improves over the best single expert by 9.62807369% on the 12-window KITTI sample set, with all numbers coming from server artifacts.
+Stage 5 S1 is closed under the explicit router-ablation gate. The baseline
+three-real-expert learned router improves over the best single expert by
+9.62807369%. The strengthened `regime_stats/features` learned router selects
+all three real experts, matches the oracle routes on the 12-window closure set,
+and improves over the best single expert by 14.12896043%. All numbers come from
+server artifacts.
