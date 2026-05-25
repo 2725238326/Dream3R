@@ -160,41 +160,84 @@ It should not yet be described as:
 
 > a trained SOTA real-data 3R model.
 
-## Stage 4 In Progress (2026-05-25)
+## Stage 4 Closed (2026-05-25)
 
-ComposerRouter `confidence_gate` was upgraded from `nn.Linear(1, d_routing)`
-to a regime-aware MLP `Linear(1+n_regimes, d_routing) -> GELU -> Linear(d_routing, d_routing)`.
+Stage 4 is closed under the stated core gate:
+`critic_changed_route_count > 0` and `t4_3 == true`.
 
-Why: the previous global linear gate could not represent per-regime routing
-flips under low critic confidence. The per-regime gradients on its shared
-weight cancelled exactly when dense and sparse samples appeared in the same
-low-conf batch. Pipeline ablation showed `critic_changed_route_count = 0`
-and `t4_3 = false`.
+Final server artifacts:
 
-What changed locally and is verified:
+- Critic checkpoint: `/hdd3/kykt26/checkpoints/critic_only_v1/latest.pt`
+- Router checkpoint: `/hdd3/kykt26/checkpoints/router_only_v1/latest.pt`
+- Pipeline ablation: `/hdd3/kykt26/code/dream3r/runs/stage4_repair_pipeline_ablation/results.json`
+- Closure cycle: `cycles/CYCLE-20260525-stage4-closure.md`
+- Decision: `decisions/DEC-20260525-001-stage4-critic-closure.md`
 
-- `code/dream3r/modules.py` ComposerRouter: new regime-aware gate, forward
-  feeds `[critic_confidence, regime_probs]`, `load_state_dict` migrates legacy
-  `confidence_gate.weight` of shape `(d_routing, 1)` away.
-- `code/dream3r/scripts/train_router_only.py`: simplified joint training with
-  no-conf, conf-high, conf-low losses combined per step. Conf-shift trick
-  removed.
-- `code/dream3r/tests/test_router_only_training.py`: new test asserts
-  `low_conf_flip_rate_vs_no_conf > 0.0` and per-sequence flip on reload.
-- Local: 227 passed, 2 skipped.
+Final server evidence:
 
-What is not yet done:
+- Critic: `conflict_abs_rel_corr = 0.8337993524`,
+  `repair_action_accuracy = 0.9166666865`, `t4_1 = true`
+- Router: `final_accuracy = 1.0`,
+  `augmented_with_critic_confidence = true`, `context_n_examples = 12`,
+  `zero_conf_context_accuracy_min = 0.9166666865`
+- Pipeline: `critic_changed_route_count = 1`,
+  `repair_changed_output_count = 2`, `t4_3 = true`
+- Metrics: `full_pipeline_repair_on = 0.2108669020`,
+  `critic_on_repair_off = 0.2253848203`, `both_off = 0.2253848203`,
+  `best_example_relative_improvement = 0.2488888968`
 
-- Server retrain of `router_only_v1` with the new gate.
-- Server rerun of `dream3r.scripts.eval_repair_pipeline_ablation`.
-- Stage 4 closure DEC.
+Important limitation: `critic_on_repair_off` equals `both_off` at the hard-row
+aggregate level. This is a real Stage 4 closure artifact and a real repair
+gain, not a strict critic-only aggregate gain and not a SOTA claim.
 
-Reference: `cycles/CYCLE-20260525-stage4-router-regime-aware-gate.md`.
+Implementation changes that matter:
+
+- `ComposerRouter.confidence_gate` now conditions on critic confidence, regime
+  probabilities, and previous routed expert id.
+- `model.py` main forward passes previous `routed_expert_id` into the router.
+  This was done only after explicit user authorization.
+- Router-only training now includes zero-confidence and Stage 4 context-data
+  supervision.
+- Pipeline ablation now passes previous expert context and evaluates the
+  closure chain used by the handoff.
+- `anchor_bank.py`, `nsa_attention.py`, and `bus.py` were not changed.
+
+Verification:
+
+- Server focused suite: `32 passed, 15 warnings`
+- Local focused/schema suite: `16 passed, 1 warning`
+
+## Stage 5 S1 Closed (2026-05-25)
+
+Stage 5 S1 closes the first >=3 real-expert Composer ablation on KITTI.
+
+Final server artifacts:
+
+- Oracle labels: `/hdd3/kykt26/code/dream3r/runs/stage5_s1_oracle_labels/oracle_expert_labels.json`
+- Router checkpoint: `/hdd3/kykt26/checkpoints/router_stage5_s1_v1/latest.pt`
+- Router ablation: `/hdd3/kykt26/code/dream3r/runs/stage5_s1_router_ablation/results.json`
+- Closure cycle: `cycles/CYCLE-20260525-stage5-s1-three-expert.md`
+- Decision: `decisions/DEC-20260525-002-stage5-s1-three-expert-closure.md`
+
+Final server evidence:
+
+- Spann3R real integration: `2 passed, 8 warnings`
+- Three-expert oracle: `expert_order = [fast3r, mast3r, spann3r]`
+- Oracle counts: `mast3r = 8`, `fast3r = 2`, `spann3r = 2`
+- Router ablation: `learned_router = 0.1722621613`, `always_mast3r = 0.1906146836`, `oracle_router = 0.1636828103`
+- Best-single improvement: `relative_improvement_vs_best_single = 0.0962807369`
+- Success: `candidate_count_ge_3 = true`, `oracle_uses_ge_3_experts = true`, `stage5_s1 = true`
+
+Important limitation: the final learned router does not select Spann3R
+(`learned_expert_counts = {fast3r: 3, mast3r: 9, spann3r: 0}`), even though
+Spann3R wins oracle on two real windows. This is closure for a three-candidate
+ablation, not proof that the current 6D regime-probability router exploits all
+third-expert opportunities.
 
 ## Immediate Next Work
 
-1. Real-data ablation table using the same variant names as synthetic ablation.
-2. Critic calibration on real geometry distributions.
-3. Expert routing quality report with real/fallback adapter availability.
-4. DTU non-random depth/pointmap path if usable depth files exist.
+1. Richer-router-feature pass: add regime-label `stats` or evidence-derived features to separate cases with identical regime probabilities but different oracle experts.
+2. Real-data ablation table using the same variant names as synthetic ablation.
+3. Critic calibration on real geometry distributions.
+4. Expert routing quality report with real/fallback adapter availability.
 5. Paper/demo pack cleanup: keep claims tied to tests, metrics, or JSON artifacts.

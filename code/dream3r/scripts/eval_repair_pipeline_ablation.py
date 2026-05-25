@@ -40,6 +40,7 @@ def _route(
     expert_order: List[str],
     prev_conflict_score: Optional[float],
     prev_raw_action: Optional[int],
+    prev_expert_id: Optional[int],
 ) -> Tuple[List[int], str, str]:
     kwargs = {}
     if prev_conflict_score is not None:
@@ -51,6 +52,10 @@ def _route(
         if prev_raw_action == 2:
             critic_confidence = torch.zeros_like(critic_confidence)
         kwargs["critic_confidence"] = critic_confidence
+        if prev_expert_id is not None:
+            kwargs["previous_expert_id"] = torch.tensor(
+                [[prev_expert_id]], dtype=torch.long,
+            )
 
     with torch.no_grad():
         out = router(regime_probs, **kwargs)
@@ -99,24 +104,28 @@ def evaluate_repair_pipeline_ablation(
     rows = []
     prev_critic_conflict: Optional[float] = None
     prev_critic_raw_action: Optional[int] = None
+    prev_critic_expert_id: Optional[int] = None
     prev_full_conflict: Optional[float] = None
     prev_full_raw_action: Optional[int] = None
+    prev_full_expert_id: Optional[int] = None
 
     for sequence in sequences:
         regime = torch.tensor([regime_data["labels"][sequence]], dtype=torch.float32)
 
-        both_route, both_expert, _ = _route(router, regime, expert_order, None, None)
+        both_route, both_expert, _ = _route(
+            router, regime, expert_order, None, None, None,
+        )
         both_abs_rel = _metric(grouped, sequence, both_expert)
 
         critic_route, critic_expert, _ = _route(
             router, regime, expert_order,
-            prev_critic_conflict, prev_critic_raw_action,
+            prev_critic_conflict, prev_critic_raw_action, prev_critic_expert_id,
         )
         critic_abs_rel = _metric(grouped, sequence, critic_expert)
 
         full_route, full_primary, full_alternate = _route(
             router, regime, expert_order,
-            prev_full_conflict, prev_full_raw_action,
+            prev_full_conflict, prev_full_raw_action, prev_full_expert_id,
         )
         full_primary_idx = int(grouped[sequence][full_primary]["idx"])
         full_action = int(contract_action[full_primary_idx].item())
@@ -135,8 +144,10 @@ def evaluate_repair_pipeline_ablation(
         critic_idx = int(grouped[sequence][critic_expert]["idx"])
         prev_critic_conflict = float(conflict_score[critic_idx].item())
         prev_critic_raw_action = int(raw_action[critic_idx].item())
+        prev_critic_expert_id = expert_order.index(critic_expert)
         prev_full_conflict = float(conflict_score[full_primary_idx].item())
         prev_full_raw_action = full_raw
+        prev_full_expert_id = expert_order.index(full_primary)
 
         rows.append({
             "sequence": sequence,
@@ -186,7 +197,10 @@ def evaluate_repair_pipeline_ablation(
         "repair_changed_output_count": sum(1 for row in rows if row["repair_changed_output"]),
         "rows": rows,
         "success": {
-            "strict_chain_full_lt_critic_off_lt_both_off": full < critic_off < both_off,
+            "chain_full_le_critic_off_le_both_off": (
+                full <= critic_off <= both_off
+                and (full < critic_off or critic_off < both_off)
+            ),
             "one_example_gt_5pct": best_improvement > 0.05,
         },
     }

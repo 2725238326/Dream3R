@@ -11,12 +11,16 @@ import numpy as np
 import torch
 
 from dream3r.modules import ComposerRouter
-from dream3r.scripts.train_router_only import _two_expert_registry
+from dream3r.scripts.train_router_only import _expert_registry, _feature_tensor
 
 
-def _load_router(checkpoint: str, n_regimes: int) -> ComposerRouter:
+def _load_router(checkpoint: str, n_regimes: int,
+                 expert_order: List[str] | None = None) -> ComposerRouter:
     ckpt = torch.load(checkpoint, map_location="cpu", weights_only=False)
-    registry = _two_expert_registry()
+    order = expert_order or ckpt.get("expert_order") or ckpt.get("summary", {}).get("expert_order")
+    if order is None:
+        order = ["fast3r", "mast3r"]
+    registry = _expert_registry(list(order))
     router = ComposerRouter(
         n_regimes=n_regimes,
         d_routing=ckpt["router_state_dict"]["regime_encoder.0.weight"].shape[0],
@@ -59,6 +63,7 @@ def evaluate_router_ablation(
     router_checkpoint: str,
     output: str,
     random_seed: int = 7,
+    feature_mode: str = "regime",
 ) -> Dict[str, object]:
     regime_data = json.loads(Path(regime_labels).read_text(encoding="utf-8"))
     oracle_data = json.loads(Path(oracle_labels).read_text(encoding="utf-8"))
@@ -68,8 +73,12 @@ def evaluate_router_ablation(
     if not sequences:
         raise ValueError("no overlapping sequences to evaluate")
 
-    router = _load_router(router_checkpoint, n_regimes=len(regime_data["regime_order"]))
-    x = torch.tensor([regime_data["labels"][seq] for seq in sequences], dtype=torch.float32)
+    x, feature_meta = _feature_tensor(regime_data, sequences, feature_mode)
+    router = _load_router(
+        router_checkpoint,
+        n_regimes=x.shape[1],
+        expert_order=expert_order,
+    )
     with torch.no_grad():
         pred_ids = router(x)["routing_logits"].argmax(dim=-1).tolist()
     learned_routes = {
@@ -82,8 +91,6 @@ def evaluate_router_ablation(
         seq: expert_order[rng.randrange(len(expert_order))]
         for seq in sequences
     }
-    fast3r_routes = {seq: "fast3r" for seq in sequences}
-    mast3r_routes = {seq: "mast3r" for seq in sequences}
     oracle_routes = {
         seq: expert_order[int(oracle_data["labels"][seq])]
         for seq in sequences
@@ -96,33 +103,79 @@ def evaluate_router_ablation(
     }
     regimes = [top_regimes[seq] for seq in sequences]
     learned_experts = [learned_routes[seq] for seq in sequences]
+    oracle_experts = [oracle_routes[seq] for seq in sequences]
+    learned_expert_counts = {
+        name: learned_experts.count(name)
+        for name in expert_order
+    }
+    oracle_expert_counts = {
+        name: oracle_experts.count(name)
+        for name in expert_order
+    }
 
     metrics_out = {
         "learned_router": _mean_for_routes(metrics, learned_routes),
-        "always_mast3r": _mean_for_routes(metrics, mast3r_routes),
-        "always_fast3r": _mean_for_routes(metrics, fast3r_routes),
         "random_routing": _mean_for_routes(metrics, random_routes),
         "oracle_router": _mean_for_routes(metrics, oracle_routes),
     }
+    single_expert_means = {}
+    for name in expert_order:
+        routes = {seq: name for seq in sequences}
+        value = _mean_for_routes(metrics, routes)
+        single_expert_means[name] = value
+        metrics_out[f"always_{name}"] = value
+    best_single_expert = min(single_expert_means, key=single_expert_means.get)
+    best_single_value = single_expert_means[best_single_expert]
+    learned_value = metrics_out["learned_router"]
+    rel_improvement = (
+        (best_single_value - learned_value) / best_single_value
+        if best_single_value > 0
+        else 0.0
+    )
+    regime_route_v = _cramers_v(regimes, learned_experts)
+    success = {
+        f"beats_{name}": learned_value < value
+        for name, value in single_expert_means.items()
+    }
+    success.update({
+        "candidate_count_ge_3": len(expert_order) >= 3,
+        "oracle_uses_ge_3_experts": sum(v > 0 for v in oracle_expert_counts.values()) >= 3,
+        "learned_uses_ge_3_experts": sum(v > 0 for v in learned_expert_counts.values()) >= 3,
+        "beats_best_single": learned_value < best_single_value,
+        "improves_best_single_ge_5pct": rel_improvement >= 0.05,
+        "correlation_gt_0_3": regime_route_v > 0.3,
+    })
     result = {
         "metric": oracle_data.get("summary", {}).get("metric", "abs_rel"),
         "n_sequences": len(sequences),
         "expert_order": expert_order,
+        "feature_mode": feature_mode,
+        "feature_meta": feature_meta,
+        "learned_expert_counts": learned_expert_counts,
+        "oracle_expert_counts": oracle_expert_counts,
         "metrics": metrics_out,
+        "best_single_expert": best_single_expert,
+        "relative_improvement_vs_best_single": float(rel_improvement),
         "routes": {
             "learned_router": learned_routes,
             "random_routing": random_routes,
             "oracle_router": oracle_routes,
         },
         "top_regimes": top_regimes,
-        "route_regime_cramers_v": _cramers_v(regimes, learned_experts),
-        "success": {
-            "beats_mast3r": metrics_out["learned_router"] < metrics_out["always_mast3r"],
-            "beats_fast3r": metrics_out["learned_router"] < metrics_out["always_fast3r"],
-            "correlation_gt_0_3": _cramers_v(regimes, learned_experts) > 0.3,
-        },
+        "route_regime_cramers_v": regime_route_v,
+        "success": success,
     }
-    result["success"]["stage3"] = all(result["success"].values())
+    result["success"]["stage3"] = (
+        result["success"].get("beats_fast3r", False)
+        and result["success"].get("beats_mast3r", False)
+        and result["success"]["correlation_gt_0_3"]
+    )
+    result["success"]["stage5_s1"] = (
+        len(expert_order) >= 3
+        and result["success"]["oracle_uses_ge_3_experts"]
+        and result["success"]["improves_best_single_ge_5pct"]
+        and result["success"]["correlation_gt_0_3"]
+    )
 
     output_path = Path(output)
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -149,6 +202,11 @@ def main():
         default="/hdd3/kykt26/code/dream3r/runs/stage3_router_ablation/results.json",
     )
     parser.add_argument("--random-seed", type=int, default=7)
+    parser.add_argument(
+        "--feature-mode",
+        choices=["regime", "regime_stats"],
+        default="regime",
+    )
     args = parser.parse_args()
 
     result = evaluate_router_ablation(
@@ -157,6 +215,7 @@ def main():
         router_checkpoint=args.router_checkpoint,
         output=args.output,
         random_seed=args.random_seed,
+        feature_mode=args.feature_mode,
     )
     print(json.dumps(result, indent=2))
 

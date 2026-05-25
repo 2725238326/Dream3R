@@ -1,22 +1,28 @@
-"""Build Stage 3 oracle expert labels from real MASt3R/Fast3R metrics."""
+"""Build oracle expert labels from real expert pointmap metrics."""
 
 import argparse
 import gc
 import json
 from collections import Counter, defaultdict
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional, Tuple
 
 import torch
 import torch.nn.functional as F
 
 from dream3r.composer_experts.fast3r_adapter import Fast3RAdapter
 from dream3r.composer_experts.mast3r_adapter import MASt3RAdapter
+from dream3r.composer_experts.spann3r_adapter import Spann3RAdapter
 from dream3r.composer_experts.method_profiles import REGIME_ORDER
 from dream3r.data.kitti_long import KITTILongSequenceDataset
 
 
-EXPERT_ORDER = ["fast3r", "mast3r"]
+DEFAULT_EXPERT_ORDER = ["fast3r", "mast3r"]
+EXPERT_CLASSES = {
+    "fast3r": Fast3RAdapter,
+    "mast3r": MASt3RAdapter,
+    "spann3r": Spann3RAdapter,
+}
 
 
 def _top_regime(probs: List[float], order: List[str]) -> str:
@@ -72,13 +78,21 @@ def _pointmap_abs_rel(pred: torch.Tensor, target: torch.Tensor,
     return float(rel[valid].mean().item())
 
 
+def _normalize_expert_order(expert_order: Optional[List[str]] = None) -> List[str]:
+    order = list(expert_order or DEFAULT_EXPERT_ORDER)
+    unknown = [name for name in order if name not in EXPERT_CLASSES]
+    if unknown:
+        raise ValueError(f"unsupported experts: {unknown}")
+    if len(set(order)) != len(order):
+        raise ValueError(f"duplicate expert in order: {order}")
+    return order
+
+
 def _load_adapter(name: str):
-    if name == "fast3r":
-        adapter = Fast3RAdapter()
-    elif name == "mast3r":
-        adapter = MASt3RAdapter()
-    else:
-        raise ValueError(f"unsupported expert: {name}")
+    try:
+        adapter = EXPERT_CLASSES[name]()
+    except KeyError as exc:
+        raise ValueError(f"unsupported expert: {name}") from exc
     adapter.load_checkpoint()
     if not adapter.is_loaded:
         raise RuntimeError(f"{name} did not load a real checkpoint")
@@ -137,6 +151,7 @@ def build_oracle_expert_labels(
     root: str,
     regime_labels: str,
     output: str,
+    expert_order: Optional[List[str]] = None,
     max_per_regime: int = 3,
     window_frames: int = 4,
     max_frames_per_sequence: int = 32,
@@ -144,6 +159,7 @@ def build_oracle_expert_labels(
     n_patches: int = 196,
     align_scale: bool = False,
 ) -> Dict[str, object]:
+    expert_order = _normalize_expert_order(expert_order)
     regime_data = json.loads(Path(regime_labels).read_text(encoding="utf-8"))
     sequences = _select_sequences(regime_data, max_per_regime=max_per_regime)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -153,22 +169,22 @@ def build_oracle_expert_labels(
             name, root, sequences, window_frames, max_frames_per_sequence,
             image_size, n_patches, align_scale, device,
         )
-        for name in EXPERT_ORDER
+        for name in expert_order
     }
 
     labels = {}
     oracle_expert = {}
     metrics = {}
     for seq in sequences:
-        seq_metrics = {name: metric_by_expert[name][seq] for name in EXPERT_ORDER}
-        best_name = min(EXPERT_ORDER, key=lambda name: seq_metrics[name])
-        labels[seq] = EXPERT_ORDER.index(best_name)
+        seq_metrics = {name: metric_by_expert[name][seq] for name in expert_order}
+        best_name = min(expert_order, key=lambda name: seq_metrics[name])
+        labels[seq] = expert_order.index(best_name)
         oracle_expert[seq] = best_name
         metrics[seq] = seq_metrics
 
     counts = Counter(oracle_expert.values())
     result = {
-        "expert_order": EXPERT_ORDER,
+        "expert_order": expert_order,
         "labels": labels,
         "oracle_expert": oracle_expert,
         "metrics": metrics,
@@ -206,12 +222,19 @@ def main():
     parser.add_argument("--max-frames-per-sequence", type=int, default=32)
     parser.add_argument("--image-size", type=int, default=224)
     parser.add_argument("--align-scale", action="store_true")
+    parser.add_argument(
+        "--experts",
+        nargs="+",
+        default=None,
+        help="Expert order to evaluate, e.g. --experts fast3r mast3r spann3r",
+    )
     args = parser.parse_args()
 
     result = build_oracle_expert_labels(
         root=args.root,
         regime_labels=args.regime_labels,
         output=args.output,
+        expert_order=args.experts,
         max_per_regime=args.max_per_regime,
         window_frames=args.window_frames,
         max_frames_per_sequence=args.max_frames_per_sequence,

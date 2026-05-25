@@ -2,6 +2,7 @@
 
 from dream3r.scripts.build_oracle_expert_labels import (
     _pointmap_abs_rel,
+    _normalize_expert_order,
     _select_sequences,
 )
 
@@ -42,3 +43,11 @@ def test_select_sequences_balances_top_regimes():
     }
 
     assert _select_sequences(regime_data, max_per_regime=1) == ["sparse_a", "dense_a"]
+
+
+def test_normalize_expert_order_accepts_stage5_spann3r():
+    assert _normalize_expert_order(["fast3r", "mast3r", "spann3r"]) == [
+        "fast3r",
+        "mast3r",
+        "spann3r",
+    ]

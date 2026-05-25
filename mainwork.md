@@ -131,31 +131,38 @@ Stage 1 (MVR)        ──→ Stage 2 (Memory)    ──→ Stage 3 (Composer)
 | 1 | ✅ done | 2026-05-23 | 2026-05-23 | DEC-20260523-004 |
 | 2 | ✅ done | 2026-05-23 | 2026-05-23 | DEC-20260523-005 |
 | 3 | ✅ done | 2026-05-23 | 2026-05-23 | DEC-20260523-006 |
-| 4 | � in_progress | 2026-05-25 | — | — |
-| 5 | 🔲 optional | — | — | — |
+| 4 | ✅ done | 2026-05-25 | 2026-05-25 | DEC-20260525-001 |
+| 5 | 🔶 partial (S1 done) | 2026-05-25 | — | DEC-20260525-002 (S1) |
 
-### Stage 4 当前状态（2026-05-25）
+### Stage 4 闭合状态（2026-05-25）
 
-T4.1（Critic 训练）和 T4.2（repair action 接通）已通过 focused tests。
-T4.3（hard sequence ablation）阻塞在 `critic_changed_route_count = 0`：
-critic 的 confidence 信号没让下一 tick routing 发生变化。
+Stage 4 已闭合，见 `cycles/CYCLE-20260525-stage4-closure.md` 和
+`decisions/DEC-20260525-001-stage4-critic-closure.md`。
 
-**根因已定位、本地已修**：`ComposerRouter.confidence_gate` 旧版是
-`nn.Linear(1, d_routing)`，全局共享线性 gate 在 per-regime 翻转的监督下梯度
-精确抵消。已升级为 regime-aware MLP `Linear(1+n_regimes, d_routing) → GELU →
-Linear(d_routing, d_routing)`，并加 `load_state_dict` 兼容旧 checkpoint。
-本地 227 测试通过，per-regime 翻转可复现。详见
-`cycles/CYCLE-20260525-stage4-router-regime-aware-gate.md`。
+最终服务器证据：
 
-**剩余工作（必须服务器跑）**：
+- Critic summary: `conflict_abs_rel_corr = 0.8337993524`, `repair_action_accuracy = 0.9166666865`
+- Router retrain: `final_accuracy = 1.0`, `augmented_with_critic_confidence = true`, `context_n_examples = 12`
+- Pipeline ablation: `critic_changed_route_count = 1`, `repair_changed_output_count = 2`, `t4_3 = true`
+- Metrics: `full_pipeline_repair_on = 0.2108669020`, `critic_on_repair_off = 0.2253848203`, `both_off = 0.2253848203`
 
-1. `scp` 三个文件到 server。
-2. 重训 `router_only_v1`（新 gate 第一次拿到真梯度）。
-3. 重跑 `dream3r.scripts.eval_repair_pipeline_ablation`。
-4. 确认 `critic_changed_route_count > 0` 且 `t4_3 = true`。
-5. 写 `cycles/CYCLE-YYYYMMDD-stage4-closure.md` + `decisions/DEC-YYYYMMDD-NNN-stage4-critic-closure.md`。
+Limit: this is real Stage 4 closure evidence, not a strict critic-only aggregate gain or SOTA claim.
 
-下一个 agent 的提示词在 `HANDOFF_PROMPT_NEXT.md`。
+### Stage 5 S1 闭合状态（2026-05-25）
+
+Stage 5 S1（≥3 real expert Composer ablation）已闭合，见
+`cycles/CYCLE-20260525-stage5-s1-three-expert.md` 和
+`decisions/DEC-20260525-002-stage5-s1-three-expert-closure.md`。
+
+最终服务器证据：
+
+- Spann3R real integration: `2 passed, 8 warnings`
+- Three-expert oracle: `expert_order = [fast3r, mast3r, spann3r]`, `oracle_counts = {mast3r: 8, fast3r: 2, spann3r: 2}`
+- Router ablation: `learned_router = 0.1722621613`, `best_single_expert = mast3r`, `always_mast3r = 0.1906146836`
+- Improvement: `relative_improvement_vs_best_single = 0.0962807369`, `stage5_s1 = true`
+- Regression check: Stage 4 repair pipeline remains `t4_3 = true`
+
+Limit: the final learned router uses three real candidates and beats the best single expert, but its selected routes are `fast3r = 3`, `mast3r = 9`, `spann3r = 0`. Spann3R wins oracle on two real windows, but current 6D regime-probability routing does not exploit those cases.
 
 ---
 
@@ -171,6 +178,6 @@ Linear(d_routing, d_routing)`，并加 `load_state_dict` 兼容旧 checkpoint。
 
 **下一个 agent 看完本文件后**：
 1. 阅读 `CLAUDE.md`
-2. 阅读 `mainwork/STAGE-1-MVR.md`
-3. 按 STAGE-1 的 todo 逐项执行
-4. 卡住就问，不要瞎猜
+2. 阅读 `cycles/CYCLE-20260525-stage5-s1-three-expert.md`
+3. 优先推进 richer-router-feature pass：把 regime-label `stats` 或 evidence-derived features 纳入路由 ablation
+4. 所有新数字继续只从 server artifact 写入 closure 文档

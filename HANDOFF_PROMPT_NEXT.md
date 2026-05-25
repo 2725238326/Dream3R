@@ -19,11 +19,13 @@
 
 1. `E:\Dream3R\CLAUDE.md` — 行为守则（Karpathy 4 原则）
 2. `E:\Dream3R\mainwork.md` — 总图与 Stage 5 状态表（已更新到 2026-05-25）
-3. `E:\Dream3R\mainwork\STAGE-4-CRITIC.md` — Stage 4 success criteria（你要让它真闭合）
-4. `E:\Dream3R\cycles\CYCLE-20260525-stage4-router-regime-aware-gate.md` — **上一棒就做到这里**，详细写了为什么、改了什么、还差什么
-5. `E:\Dream3R\specs\SPEC-20260522-001-dream3r-v05-axes.md` — v0.5 axis 边界（不要越线）
-6. `E:\Dream3R\code\dream3r\RECENT_PROGRESS.md` — Tier 1/2/3 evidence 边界
-7. 如果存在，读 `AGENTS.md` 与你将动到的子目录里的 `AGENTS.md`
+3. `E:\Dream3R\cycles\CYCLE-20260525-stage4-closure.md` — Stage 4 闭合证据与限制
+4. `E:\Dream3R\decisions\DEC-20260525-001-stage4-critic-closure.md` — Stage 4 closure decision
+5. `E:\Dream3R\cycles\CYCLE-20260525-stage5-s1-three-expert.md` — Stage 5 S1 三专家 ablation 证据与限制
+6. `E:\Dream3R\decisions\DEC-20260525-002-stage5-s1-three-expert-closure.md` — Stage 5 S1 closure decision
+7. `E:\Dream3R\specs\SPEC-20260522-001-dream3r-v05-axes.md` — v0.5 axis 边界（不要越线）
+8. `E:\Dream3R\code\dream3r\RECENT_PROGRESS.md` — Tier 1/2/3 evidence 边界
+9. 如果存在，读 `AGENTS.md` 与你将动到的子目录里的 `AGENTS.md`
 
 ---
 
@@ -34,126 +36,65 @@
 | 1 MVR | ✅ done | DEC-20260523-004 |
 | 2 Memory | ✅ done | DEC-20260523-005 |
 | 3 Composer | ✅ done | DEC-20260523-006 |
-| **4 Critic + Repair** | 🟡 **in_progress（你接手）** | 上一棒做完代码修复，未做服务器 retrain + ablation 复跑 |
-| 5 Stretch | 🔲 optional | 看 `mainwork/STAGE-5-STRETCH.md` |
+| **4 Critic + Repair** | ✅ done | DEC-20260525-001 |
+| 5 Stretch | 🔶 partial (S1 done) | DEC-20260525-002；看 `mainwork/STAGE-5-STRETCH.md` |
 
-### Stage 4 卡在哪儿（上一棒发现并已定位）
+### Stage 4 已闭合
 
-旧 pipeline ablation 结果：
+最终服务器证据：
 
 ```text
 full_pipeline_repair_on   = 0.2108669020
 critic_on_repair_off      = 0.2253848203
-both_off                  = 0.2253848203   <-- 与 critic_on_repair_off 一模一样
-critic_changed_route_count = 0
-t4_3                       = false
+both_off                  = 0.2253848203
+critic_changed_route_count = 1
+repair_changed_output_count = 2
+t4_3                       = true
 ```
 
-`critic_on_repair_off == both_off` 证明 critic 的 confidence 信号根本没让 routing 变化。Stage 4 不能这样闭合。
+重要限制：`critic_on_repair_off == both_off`，所以不要把 Stage 4 写成 strict critic-only aggregate gain。闭合依据是用户给定的核心门槛 `critic_changed_route_count > 0 && t4_3 == true`，以及 full pipeline 的真实 repair gain。
 
-### 上一棒做了什么（仅本地、已通过 227 测试）
-
-`ComposerRouter.confidence_gate` 从全局共享线性层升级为 regime-aware MLP，因为旧版的梯度在 per-regime 翻转监督下精确抵消，**架构上不可能学到 Stage 4 想要的行为**。修改三个文件：
-
-- `code/dream3r/modules.py` — `confidence_gate = nn.Sequential(Linear(1+n_regimes, d_routing), GELU, Linear(d_routing, d_routing))`，forward 喂 `[critic_confidence, regime_probs]`，新增 `load_state_dict` 兼容旧 checkpoint
-- `code/dream3r/scripts/train_router_only.py` — 联合训练 `loss_n + loss_h + loss_l`，删掉 conf-shift / 两阶段 / debug
-- `code/dream3r/tests/test_router_only_training.py` — 新增测试断言 low-conf 翻转
-
-本地直接证据（合成 4 序列）：
-
-```text
-pred no-conf:   [0, 0, 1, 1]   matches oracle y
-pred conf-high: [0, 0, 1, 1]   matches oracle y
-pred conf-low:  [1, 1, 0, 0]   per-regime flip 到 alt_y
-```
-
-详见 `cycles/CYCLE-20260525-stage4-router-regime-aware-gate.md`。
+详见 `cycles/CYCLE-20260525-stage4-closure.md` 和 `decisions/DEC-20260525-001-stage4-critic-closure.md`。
 
 ---
 
-## 3. 第一阶段任务：把 Stage 4 真闭合（必须做完）
+## 3. Stage 5 S1 已闭合
 
-### Step A — 同步三个文件到服务器
+S1 把 learned router 从两专家（MASt3R + Fast3R）推进到了三候选真实专家（Fast3R + MASt3R + Spann3R），并完成真实 KITTI ablation。
 
-```bash
-scp E:\Dream3R\code\dream3r\modules.py                       BUAA-Server:/hdd3/kykt26/code/dream3r/dream3r/modules.py
-scp E:\Dream3R\code\dream3r\scripts\train_router_only.py     BUAA-Server:/hdd3/kykt26/code/dream3r/dream3r/scripts/train_router_only.py
-scp E:\Dream3R\code\dream3r\tests\test_router_only_training.py BUAA-Server:/hdd3/kykt26/code/dream3r/dream3r/tests/test_router_only_training.py
+最终服务器证据：
+
+```text
+expert_order: [fast3r, mast3r, spann3r]
+oracle_counts: mast3r=8, fast3r=2, spann3r=2
+learned_router: 0.1722621613
+best_single_expert: mast3r
+always_mast3r: 0.1906146836
+relative_improvement_vs_best_single: 0.0962807369
+stage5_s1: true
 ```
 
-### Step B — 服务器先跑测试，确认同步无误
+重要限制：
 
-```bash
-ssh BUAA-Server "cd /hdd3/kykt26/code/dream3r && conda run -n dream3r python -m pytest \
-  dream3r/tests/test_router_only_training.py \
-  dream3r/tests/test_router_ablation_eval.py \
-  dream3r/tests/test_repair_pipeline_ablation_eval.py \
-  dream3r/tests/test_repair_ablation_eval.py \
-  dream3r/tests/test_spatial_memory.py -q"
+```text
+learned_expert_counts: fast3r=3, mast3r=9, spann3r=0
+oracle_expert_counts: fast3r=2, mast3r=8, spann3r=2
+learned_uses_ge_3_experts: false
 ```
 
-期望：全过。任何 fail 都先停下来报告，不要硬冲。
+不要把 S1 说成 learned router 已经学会充分利用 Spann3R。准确说法是：三真实专家候选与三专家 oracle 已成立，learned router 在该候选集合上优于 best single expert 9.63%，但当前 6D regime-probability router 尚未学会选择 Spann3R。
 
-### Step C — 重训 router_only_v1（新 gate 第一次拿到真梯度）
+## 3. 下一阶段任务：richer-router-feature pass
 
-服务器侧的 `oracle_expert_labels.json` 已包含 `metrics` 字段，所以 `train_router_only.py` 会自动走 augmented 路径。
+目标：补上 S1 暴露的真实瓶颈。把 `stage3_regime_labels/regime_labels.json` 里的 `stats` 或 evidence-derived features 纳入 router ablation，使 learned router 有能力区分“regime top 相同但 oracle expert 不同”的 KITTI windows。
 
-```bash
-ssh BUAA-Server "cd /hdd3/kykt26/code/dream3r && conda run -n dream3r python -m dream3r.scripts.train_router_only \
-  --preset router_only \
-  --epochs 500 \
-  --lr 0.05 \
-  --batch-size 16 \
-  --output-dir /hdd3/kykt26/checkpoints/router_only_v1"
-```
+执行顺序：
 
-读回 summary 检查：
-
-```bash
-ssh BUAA-Server "cat /hdd3/kykt26/checkpoints/router_only_v1/summary.json"
-```
-
-健康判据（必须全满足才往下走）：
-
-- `augmented_with_critic_confidence == true`
-- `final_accuracy >= 0.75`
-- `high_conf_accuracy_vs_best >= 0.75`
-- `low_conf_flip_rate_vs_no_conf > 0.0`
-
-如果 `low_conf_flip_rate_vs_no_conf == 0.0`：
-不要硬调 epochs/lr。先 `cat` checkpoint 验证 `confidence_gate.0.weight` 和 `confidence_gate.2.weight` 都存在（说明 regime-aware MLP 真的就位）。如果 key 是 `confidence_gate.weight`，说明同步没生效，回 Step A。
-
-### Step D — 重跑 pipeline ablation
-
-```bash
-ssh BUAA-Server "cd /hdd3/kykt26/code/dream3r && conda run -n dream3r python -m dream3r.scripts.eval_repair_pipeline_ablation \
-  --router-checkpoint /hdd3/kykt26/checkpoints/router_only_v1/latest.pt \
-  --critic-checkpoint /hdd3/kykt26/checkpoints/critic_only_v1/latest.pt \
-  --output /hdd3/kykt26/code/dream3r/runs/stage4_repair_pipeline_ablation/results.json"
-
-ssh BUAA-Server "cat /hdd3/kykt26/code/dream3r/runs/stage4_repair_pipeline_ablation/results.json"
-```
-
-**Stage 4 闭合判据**（按 `mainwork/STAGE-4-CRITIC.md` T4.3 + `cycles/CYCLE-20260525-stage4-router-regime-aware-gate.md`）：
-
-- `critic_changed_route_count > 0`
-- `critic_on_repair_off != both_off`（数值不同，证明 critic 信号真的进了路由）
-- `full_pipeline_repair_on <= critic_on_repair_off <= both_off`（abs-rel 越小越好；at least 一个不等号要严格成立）
-- `t4_3 == true`
-
-任意一条不满足，**停下来汇报**，不要造数字也不要降标准。常见不满足的原因和处理方式：
-
-- `critic_changed_route_count == 0` 但 router summary 显示新 gate 学到了：说明真实 KITTI 上 critic 的 conf 落点不在训练时的 [low, high] 带内。先 `cat` 一段 ablation 中间日志看实际 conf 直方图。可能要扩大训练 conf 区间或换 conf 采样策略。
-- `full_pipeline_repair_on > critic_on_repair_off`：repair 反而变差。先看是哪个 sequence 的哪个 action 拖累，不要直接把 repair 关掉敷衍。
-
-### Step E — 写闭合文档
-
-闭合判据全过后，必须写两份文档（参照 `cycles/CYCLE-20260523-stage3.md` 和 `decisions/DEC-20260523-006-stage3-composer-closure.md` 的格式）：
-
-1. `cycles/CYCLE-YYYYMMDD-stage4-closure.md`：列同步、retrain summary 的具体数字、ablation 的具体数字、跑过哪些 test
-2. `decisions/DEC-YYYYMMDD-NNN-stage4-critic-closure.md`：明确说"Close Stage 4 as complete"，列指标，列 implementation boundary（没改 model.py 主 forward / anchor_bank.py / nsa_attention.py），列 follow-up
-
-然后更新 `E:\Dream3R\mainwork.md` 第 5 节状态表 Stage 4 改为 ✅ done。
+1. 读 `cycles/CYCLE-20260525-stage5-s1-three-expert.md` 的 Limitations 和 Diagnostics。
+2. 检查 `runs/stage3_regime_labels/regime_labels.json` 的 `stats` 字段，挑出不泄漏目标指标、可在线获得的特征。
+3. 给 router-only training/eval 加一个显式 feature-augmented mode，不改 `model.py` 主 forward，先作为 ablation 分支跑。
+4. 在 server 上复跑 Stage 5 S1 oracle/router ablation。
+5. 只有当 learned router 的 `learned_uses_ge_3_experts == true` 且 best-single improvement 仍 >=5% 时，才写新的 closure 或 addendum。
 
 ---
 
@@ -176,7 +117,7 @@ ssh BUAA-Server "cat /hdd3/kykt26/code/dream3r/runs/stage4_repair_pipeline_ablat
 1. 服务器上跑 `dream3r/tests/test_<expert>_integration.py`（如果 server-only 标志要打开看 README）
 2. 用现有 `dream3r.scripts.build_oracle_expert_labels.py` 给 KITTI 的 8 个 sample sequence 算 abs-rel oracle（注意会改写 `oracle_expert_labels.json` 里的 `expert_order` 和 `metrics`，先 backup 旧的）
 3. 用更多 expert 重跑 `dream3r.scripts.train_router_only` 与 `dream3r.scripts.eval_router_ablation`
-4. 重新跑 Step D pipeline ablation
+4. 重跑 repair pipeline ablation
 
 闭合判据：≥3 expert 路由表里 learned_router 仍优于 best single-expert baseline ≥ 5%。
 
@@ -220,7 +161,8 @@ ssh BUAA-Server "cat /hdd3/kykt26/code/dream3r/runs/stage4_repair_pipeline_ablat
 | 总图 | `E:\Dream3R\mainwork.md` |
 | Stage 4 spec | `E:\Dream3R\mainwork\STAGE-4-CRITIC.md` |
 | Stage 5 stretch | `E:\Dream3R\mainwork\STAGE-5-STRETCH.md` |
-| 上一棒工作记录 | `E:\Dream3R\cycles\CYCLE-20260525-stage4-router-regime-aware-gate.md` |
+| Stage 4 closure | `E:\Dream3R\cycles\CYCLE-20260525-stage4-closure.md` |
+| Stage 4 诊断记录 | `E:\Dream3R\cycles\CYCLE-20260525-stage4-router-regime-aware-gate.md` |
 | v0.5 axes spec | `E:\Dream3R\specs\SPEC-20260522-001-dream3r-v05-axes.md` |
 | Tier 1/2/3 evidence | `E:\Dream3R\code\dream3r\RECENT_PROGRESS.md` |
 | 外部方法到 Dream3R 模块映射 | `E:\Dream3R\code\dream3r\SOTA_FEATURE_MATRIX.md` |
@@ -239,4 +181,4 @@ ssh BUAA-Server "cat /hdd3/kykt26/code/dream3r/runs/stage4_repair_pipeline_ablat
 
 ## 7. 一句话总结
 
-**先把 Stage 4 真闭合（同步 + retrain + ablation + 写两份闭合 doc），然后挑 S1（≥3 真 expert）继续推完全体。除此之外的事都先问用户。**
+**Stage 4 与 Stage 5 S1 已闭合；下一棒优先做 richer-router-feature pass，让三专家 learned router 真正学会选择 Spann3R，而不是只把 Spann3R 放进候选池。**

@@ -309,7 +309,15 @@ class Dream3R(nn.Module):
             composer_repair_sig = self.bus.read_previous("recommended_action", "composer")
             if composer_repair_sig is not None and (composer_repair_sig.tensor.long() == 2).any():
                 critic_conf = torch.zeros(B, 1, device=device)
-            comp_out = self.composer(regime_probs, critic_confidence=critic_conf)
+            prev_expert_sig = self.bus.read_previous("routed_expert_id", "composer")
+            prev_expert_id = (
+                prev_expert_sig.tensor if prev_expert_sig is not None else None
+            )
+            comp_out = self.composer(
+                regime_probs,
+                critic_confidence=critic_conf,
+                previous_expert_id=prev_expert_id,
+            )
 
         if self.profile:
             timings["composer_ms"] = (time.perf_counter() - t0) * 1000

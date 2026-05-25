@@ -1285,6 +1285,7 @@ class ComposerRouter(nn.Module):
         self.registry = expert_registry
 
         n_experts = len(expert_registry.names) if expert_registry is not None else 8
+        self.n_experts = n_experts
         self.register_buffer(
             "capability_cards",
             torch.ones(n_experts, n_regimes) / n_regimes,
@@ -1303,9 +1304,10 @@ class ComposerRouter(nn.Module):
         # cannot express per-regime routing flips (e.g. dense->expert_b AND
         # sparse->expert_a in the same low-conf batch), because the implied
         # gradients on its shared weight cancel. Conditioning the gate on
-        # regime_probs lets it learn a per-regime conf_mod direction.
+        # regime_probs and previous expert id lets it learn "avoid the expert
+        # that just failed" instead of blindly flipping every low-conf route.
         self.confidence_gate = nn.Sequential(
-            nn.Linear(1 + n_regimes, d_routing),
+            nn.Linear(1 + n_regimes + n_experts, d_routing),
             nn.GELU(),
             nn.Linear(d_routing, d_routing),
         )
@@ -1328,6 +1330,17 @@ class ComposerRouter(nn.Module):
             sd.pop("confidence_gate.weight", None)
             sd.pop("confidence_gate.bias", None)
             return super().load_state_dict(sd, strict=False)
+        gate_w = sd.get("confidence_gate.0.weight")
+        expected_gate_in = 1 + self.n_regimes + self.n_experts
+        if (
+            isinstance(gate_w, torch.Tensor)
+            and gate_w.dim() == 2
+            and gate_w.shape[1] != expected_gate_in
+        ):
+            for key in list(sd):
+                if key.startswith("confidence_gate."):
+                    sd.pop(key, None)
+            return super().load_state_dict(sd, strict=False)
         return super().load_state_dict(sd, strict=strict)
 
     def set_capability_cards(self, cards: torch.Tensor):
@@ -1347,12 +1360,14 @@ class ComposerRouter(nn.Module):
 
     def forward(self, regime_probs: torch.Tensor,
                 critic_confidence: Optional[torch.Tensor] = None,
+                previous_expert_id: Optional[torch.Tensor] = None,
                 latency_budget_ms: Optional[float] = None,
                 ) -> Dict[str, torch.Tensor]:
         """
         Args:
             regime_probs:      [B, n_regimes]
             critic_confidence: [B, 1] or None
+            previous_expert_id: [B] or [B, 1] previous routed expert id, or None
             latency_budget_ms: float or None
         Returns:
             capability_match, route_recommendation, route_regret,
@@ -1375,7 +1390,16 @@ class ComposerRouter(nn.Module):
             gate_dtype = self.confidence_gate[0].weight.dtype
             conf_in = critic_confidence.to(gate_dtype)
             regime_in = regime_probs.to(gate_dtype)
-            gate_input = torch.cat([conf_in, regime_in], dim=-1)
+            prev_one_hot = torch.zeros(
+                B, self.n_experts, device=device, dtype=gate_dtype,
+            )
+            if previous_expert_id is not None:
+                prev_idx = previous_expert_id.to(device=device).long().view(B)
+                prev_idx = prev_idx.clamp(min=0, max=self.n_experts - 1)
+                prev_one_hot = F.one_hot(
+                    prev_idx, num_classes=self.n_experts,
+                ).to(gate_dtype)
+            gate_input = torch.cat([conf_in, regime_in, prev_one_hot], dim=-1)
             conf_mod = self.confidence_gate(gate_input)
             regime_embed = regime_embed + conf_mod.to(regime_embed.dtype)
 

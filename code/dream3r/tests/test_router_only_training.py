@@ -93,6 +93,8 @@ def test_train_router_only_with_metrics_makes_router_respond_to_critic_confidenc
             "labels": {
                 "dense_a": [0.02, 0.12, 0.05, 0.05, 0.7, 0.06],
                 "dense_b": [0.02, 0.12, 0.05, 0.05, 0.68, 0.08],
+                "dynamic_a": [0.02, 0.10, 0.70, 0.05, 0.08, 0.05],
+                "dynamic_b": [0.02, 0.10, 0.68, 0.05, 0.10, 0.05],
                 "sparse_a": [0.02, 0.15, 0.05, 0.68, 0.05, 0.05],
                 "sparse_b": [0.02, 0.15, 0.05, 0.66, 0.07, 0.05],
             },
@@ -102,16 +104,23 @@ def test_train_router_only_with_metrics_makes_router_respond_to_critic_confidenc
             "labels": {
                 "dense_a": 0,
                 "dense_b": 0,
+                "dynamic_a": 0,
+                "dynamic_b": 0,
                 "sparse_a": 1,
                 "sparse_b": 1,
             },
             "metrics": {
                 "dense_a": {"fast3r": 0.12, "mast3r": 0.30},
                 "dense_b": {"fast3r": 0.13, "mast3r": 0.28},
+                "dynamic_a": {"fast3r": 0.18, "mast3r": 0.24},
+                "dynamic_b": {"fast3r": 0.19, "mast3r": 0.25},
                 "sparse_a": {"fast3r": 0.32, "mast3r": 0.14},
                 "sparse_b": {"fast3r": 0.30, "mast3r": 0.15},
             },
-            "summary": {"metric": "scale_aligned_abs_rel"},
+            "summary": {
+                "metric": "scale_aligned_abs_rel",
+                "conflict_threshold": 0.20,
+            },
         }), encoding="utf-8")
 
         summary = train_router_only(
@@ -127,10 +136,18 @@ def test_train_router_only_with_metrics_makes_router_respond_to_critic_confidenc
         assert summary["augmented_with_critic_confidence"] is True
         assert summary["conf_high_val"] is not None
         assert summary["conf_low_val"] is not None
+        assert summary["conf_threshold_val"] is not None
         assert summary["conf_low_val"] < summary["conf_high_val"]
         assert summary["high_conf_accuracy_vs_best"] >= 0.75
         # The whole point: low conf must flip routing on at least some sequences.
         assert summary["low_conf_flip_rate_vs_no_conf"] > 0.0
+        assert summary["low_conf_avoid_prev_best_accuracy"] >= 0.75
+        assert summary["low_conf_avoid_prev_alt_accuracy"] >= 0.75
+        assert summary["zero_conf_avoid_prev_best_accuracy"] >= 0.75
+        assert summary["zero_conf_avoid_prev_alt_accuracy"] >= 0.75
+        assert summary["threshold_dynamic_flip_rate_vs_no_conf"] > 0.0
+        assert summary["threshold_dynamic_avoid_prev_best_accuracy"] > 0.0
+        assert summary["threshold_dynamic_avoid_prev_alt_accuracy"] > 0.0
 
         # Reload checkpoint and confirm the no-conf branch still hits oracle.
         registry = ExpertRegistry()
@@ -161,7 +178,33 @@ def test_train_router_only_with_metrics_makes_router_respond_to_critic_confidenc
             no_conf_pred = router(x)["routing_logits"].argmax(dim=-1)
             conf_low = torch.full((x.shape[0], 1), float(summary["conf_low_val"]))
             low_conf_pred = router(x, critic_confidence=conf_low)["routing_logits"].argmax(dim=-1)
+            avoid_best_pred = router(
+                x,
+                critic_confidence=conf_low,
+                previous_expert_id=y,
+            )["routing_logits"].argmax(dim=-1)
+            alt_y = 1 - y
+            avoid_alt_pred = router(
+                x,
+                critic_confidence=conf_low,
+                previous_expert_id=alt_y,
+            )["routing_logits"].argmax(dim=-1)
+            conf_zero = torch.zeros((x.shape[0], 1))
+            zero_avoid_best_pred = router(
+                x,
+                critic_confidence=conf_zero,
+                previous_expert_id=y,
+            )["routing_logits"].argmax(dim=-1)
+            zero_avoid_alt_pred = router(
+                x,
+                critic_confidence=conf_zero,
+                previous_expert_id=alt_y,
+            )["routing_logits"].argmax(dim=-1)
         no_conf_accuracy = float((no_conf_pred == y).float().mean().item())
         flip = (no_conf_pred != low_conf_pred).any().item()
         assert no_conf_accuracy >= 0.75, "Stage 3 no-conf accuracy regressed"
         assert flip, "low-conf input did not change router output on any sequence"
+        assert (avoid_best_pred == alt_y).any(), "router did not avoid previous best expert"
+        assert (avoid_alt_pred == y).any(), "router did not avoid previous alternate expert"
+        assert (zero_avoid_best_pred == alt_y).any(), "zero-conf did not avoid previous best expert"
+        assert (zero_avoid_alt_pred == y).any(), "zero-conf did not avoid previous alternate expert"

@@ -1,6 +1,6 @@
 # Dream3R SOTA Feature Matrix
 
-Last updated: 2026-05-25 (Stage 4 in_progress: ComposerRouter `confidence_gate` upgraded to regime-aware MLP; supersedes 2026-05-23 v0.5 A4/A6/A8 closure pass while preserving its differentiation / evidence-map sections at the end)
+Last updated: 2026-05-25 (Stage 4 closed; Stage 5 S1 three-real-expert Composer ablation closed with Fast3R + MASt3R + Spann3R; supersedes 2026-05-23 v0.5 A4/A6/A8 closure pass while preserving its differentiation / evidence-map sections at the end)
 
 Status: family-grouped second pass. Every method named in `NEXT_PHASE_ROADMAP.md` W20 plus the three monocular priors already wired into the Composer expert registry is covered. Methods named in the roadmap but absent from `registry/source_registry.md` are explicitly flagged as drafting artifacts.
 
@@ -54,7 +54,7 @@ When the three sources above disagree, this matrix records the disagreement unde
 | Method | SRC | Core strength | Limitation | Dream3R module that absorbs it | Implementation status | Evidence / test | Remaining gap |
 |---|---|---|---|---|---|---|---|
 | Fast3R | SRC-2025-001 | many-image single-pass reconstruction; reduced sequential error | needs batched views to expose advantage | C5 Composer expert `fast3r_adapter`; `method_profiles["fast3r"]` | real-wired (no local ckpt); local conda blocked on `omegaconf` per `WORKFLOW_STATUS.md` Track A | `tests/test_fast3r_integration.py` (server-only) | server env fix (`omegaconf`) before any real Fast3R route comparison |
-| Spann3R | SRC-2024-011 | external spatial memory; ordered/unordered dense reconstruction | retrieval-policy-dependent quality | C5 Composer expert `spann3r_adapter`; conceptual analog of `AnchorBank` per `method_profiles["spann3r"]` | real-wired (no local ckpt) | `tests/test_spann3r_integration.py` (server-only); `CASE-20260504-MEMORY-02` cycle 010 used Spann3R regime | no L2 case showing Spann3R-as-expert vs Dream3R AnchorBank head-to-head; W23 plan covers this |
+| Spann3R | SRC-2024-011 | external spatial memory; ordered/unordered dense reconstruction | retrieval-policy-dependent quality | C5 Composer expert `spann3r_adapter`; conceptual analog of `AnchorBank` per `method_profiles["spann3r"]` | real-wired (no local ckpt) | `tests/test_spann3r_integration.py` (server-only); `CYCLE-20260525-stage5-s1-three-expert.md` shows Spann3R wins oracle on 2 KITTI windows | learned router does not yet select Spann3R in the metric-winning S1 checkpoint; richer router features needed |
 | CUT3R | SRC-2025-002 | persistent latent state for continuous perception; streaming-friendly | state drift needs explicit critic/memory control | C5 Composer expert `cut3r_adapter`; analog of `StateTokenRecurrence` per `SPINE_MEMORY.md` | deterministic fallback | `composer_experts/method_profiles.py` declares `implementation_status="stub"`; no real adapter checkpoint resolution | adapter `load_checkpoint(path)` not implemented; CR-3 retrieval boost path was designed against this comparator |
 | VGGT | SRC-2026-015 | feed-forward visual-geometry transformer; Meta open-source | no temporal state; real checkpoint not downloaded in local/server handoff | C5 Composer expert `vggt_adapter`; `method_profiles["vggt"]`; capability_card v2.2 `feed_forward_manyview` regime distinct from Fast3R dense sequential | deterministic fallback | `tests/test_vggt_integration.py`; `DEC-20260523-002` closes contract/adapter surface; backend reports `fallback` until checkpoint authorization | real VGGT checkpoint load + server tick still deferred to future A2-style checkpoint DEC |
 | STream3R | SRC-2026-001 | causal transformer + session-bounded streaming state | session state ≠ unbounded scene memory (see `literature/CRITICAL_NOTES.md`) | comparator for `build_state_recurrence` choice; W26 design study planned | comparator-only | `SPINE_MEMORY.md` Required Reading entry; not wired | W26 `STREAM3R_RELATION.md` needs drafting before any optional `causal_decoder_adapter.py` |
@@ -216,7 +216,8 @@ Preserved from the 2026-05-10 first pass and extended with v0.4/v0.5 entries:
 | **(v0.5 A4)** VGGT adapter + capability_card v2.2 | `test_vggt_integration.py`, `DEC-20260523-002` |
 | **(v0.5 A6)** NSA sliding branch fires on long sequences | `cycles/CYCLE-20260523-001.md`, `DEC-20260523-001` |
 | **(v0.5 A8)** Memory A1 action policy scaffold exists | `test_memory_action_policy.py`, `planning/TTT_PLAN.md`, `DEC-20260523-003` |
-| **(Stage 4 entry)** Regime-aware `confidence_gate` learns per-regime low-conf flip on synthetic supervision | `tests/test_router_only_training.py::test_train_router_only_with_metrics_makes_router_respond_to_critic_confidence`, `cycles/CYCLE-20260525-stage4-router-regime-aware-gate.md` |
+| **(Stage 4)** Critic + Repair closes on real KITTI pipeline ablation | `cycles/CYCLE-20260525-stage4-closure.md`, `decisions/DEC-20260525-001-stage4-critic-closure.md`, `stage4_repair_pipeline_ablation/results.json` (`critic_changed_route_count=1`, `t4_3=true`) |
+| **(Stage 5 S1)** Three-real-expert Composer ablation | `cycles/CYCLE-20260525-stage5-s1-three-expert.md`, `decisions/DEC-20260525-002-stage5-s1-three-expert-closure.md`, `stage5_s1_router_ablation/results.json` (`relative_improvement_vs_best_single=0.0962807369`, `stage5_s1=true`) |
 
 ## Missing Evidence
 
@@ -231,7 +232,7 @@ The following must not be overclaimed yet — preserved from 2026-05-10 first pa
 - Critic threshold calibration on real data (W24).
 - Adapter quality comparisons (5 of 8 are deterministic fallback locally).
 - VGGT-as-a-real-route with a downloaded checkpoint and server tick (`backend == "real"`).
-- **Regime-aware `confidence_gate` actually changes routes on real KITTI under critic-on / repair-off mode**: the synthetic test proves the gate *can* flip routing per-regime, but the server retrain of `router_only_v1` and the rerun of `eval_repair_pipeline_ablation` that produces `critic_changed_route_count > 0` have not yet been done. Stage 4 closure is gated on this.
+- **Richer learned routing for third-expert cases**: Stage 5 S1 has a real three-expert oracle and learned-router gain, but the metric-winning learned router does not select Spann3R (`learned_uses_ge_3_experts=false`). Current 6D regime probabilities are not enough for every oracle conflict; the next pass should add online-available stats or evidence-derived router features.
 
 ## Related Files
 
