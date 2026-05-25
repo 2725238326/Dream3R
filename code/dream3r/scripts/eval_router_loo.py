@@ -164,7 +164,7 @@ def main():
     parser.add_argument("--d-routing", type=int, default=32)
     parser.add_argument(
         "--feature-mode",
-        choices=["regime", "regime_stats"],
+        choices=["regime", "regime_stats", "regime_stats_robust"],
         default="regime_stats",
     )
     parser.add_argument("--keep-fold-artifacts", action="store_true")

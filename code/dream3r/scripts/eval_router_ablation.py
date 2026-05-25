@@ -94,7 +94,7 @@ def evaluate_router_ablation(
     ckpt_peek = torch.load(router_checkpoint, map_location="cpu", weights_only=False)
     ckpt_feature_meta = (ckpt_peek.get("summary") or {}).get("feature_meta") or {}
     frozen_stats: Optional[Dict[str, object]] = None
-    if feature_mode == "regime_stats" and ckpt_feature_meta.get("stat_mean") is not None:
+    if feature_mode in ("regime_stats", "regime_stats_robust") and ckpt_feature_meta.get("stat_mean") is not None:
         frozen_stats = {
             "stat_mean": ckpt_feature_meta["stat_mean"],
             "stat_std": ckpt_feature_meta["stat_std"],
@@ -234,7 +234,7 @@ def main():
     parser.add_argument("--random-seed", type=int, default=7)
     parser.add_argument(
         "--feature-mode",
-        choices=["regime", "regime_stats"],
+        choices=["regime", "regime_stats", "regime_stats_robust"],
         default="regime",
     )
     args = parser.parse_args()

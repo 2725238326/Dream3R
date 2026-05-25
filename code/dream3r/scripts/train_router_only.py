@@ -28,6 +28,21 @@ STAT_FEATURE_KEYS = [
     "speed_std",
 ]
 
+# Robust subset: drops KITTI-specific stats (oxts_available, mean_speed,
+# speed_std) so the router input doesn't bake in domain-specific feature
+# support. See DEC-20260525-006 root cause analysis.
+STAT_FEATURE_KEYS_ROBUST = [
+    "frame_count",
+    "depth_mean",
+    "valid_ratio",
+    "depth_temporal_change",
+]
+
+_FEATURE_KEY_VARIANTS: Dict[str, List[str]] = {
+    "regime_stats": STAT_FEATURE_KEYS,
+    "regime_stats_robust": STAT_FEATURE_KEYS_ROBUST,
+}
+
 EXPERT_CLASSES = {
     "fast3r": Fast3RAdapter,
     "mast3r": MASt3RAdapter,
@@ -149,8 +164,9 @@ def _feature_tensor(
             "regime_width": int(regime_x.shape[1]),
             "stat_keys": [],
         }
-    if feature_mode != "regime_stats":
+    if feature_mode not in _FEATURE_KEY_VARIANTS:
         raise ValueError(f"unsupported feature_mode: {feature_mode}")
+    stat_keys = _FEATURE_KEY_VARIANTS[feature_mode]
 
     stats_source = "stats"
     stats_data = regime_data.get("stats")
@@ -159,22 +175,22 @@ def _feature_tensor(
         stats_data = regime_data.get("features")
     if not isinstance(stats_data, dict):
         raise ValueError(
-            "feature_mode=regime_stats requires regime label stats/features"
+            f"feature_mode={feature_mode} requires regime label stats/features"
         )
     rows = []
     for seq in sequences:
         if seq not in stats_data:
             raise ValueError(f"missing stats for sequence: {seq}")
-        rows.append([float(stats_data[seq].get(key, 0.0)) for key in STAT_FEATURE_KEYS])
+        rows.append([float(stats_data[seq].get(key, 0.0)) for key in stat_keys])
     stats = torch.tensor(rows, dtype=torch.float32)
     if frozen_stats is not None:
         mean_list = frozen_stats.get("stat_mean")
         std_list = frozen_stats.get("stat_std")
         if mean_list is None or std_list is None:
             raise ValueError("frozen_stats requires stat_mean and stat_std")
-        if len(mean_list) != len(STAT_FEATURE_KEYS) or len(std_list) != len(STAT_FEATURE_KEYS):
+        if len(mean_list) != len(stat_keys) or len(std_list) != len(stat_keys):
             raise ValueError(
-                f"frozen_stats shape mismatch: expected {len(STAT_FEATURE_KEYS)} keys"
+                f"frozen_stats shape mismatch: expected {len(stat_keys)} keys"
             )
         mean = torch.tensor(mean_list, dtype=torch.float32).unsqueeze(0)
         std = torch.tensor(std_list, dtype=torch.float32).unsqueeze(0).clamp_min(1e-6)
@@ -189,7 +205,7 @@ def _feature_tensor(
         "feature_mode": feature_mode,
         "regime_width": int(regime_x.shape[1]),
         "stat_source": stats_source,
-        "stat_keys": list(STAT_FEATURE_KEYS),
+        "stat_keys": list(stat_keys),
         "stat_mean": [float(v) for v in mean.squeeze(0).tolist()],
         "stat_std": [float(v) for v in std.squeeze(0).tolist()],
         "stats_frozen": stats_frozen,
@@ -633,7 +649,7 @@ def main():
     parser.add_argument("--disable-critic-augmentation", action="store_true")
     parser.add_argument(
         "--feature-mode",
-        choices=["regime", "regime_stats"],
+        choices=["regime", "regime_stats", "regime_stats_robust"],
         default="regime",
     )
     args = parser.parse_args()

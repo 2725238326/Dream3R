@@ -196,6 +196,12 @@ class ETH3DLongSequenceDataset(Dataset):
         for cam_id in by_cam:
             by_cam[cam_id].sort(key=lambda x: x["name"])
 
+        # Drop cameras with zero triangulated observations across all frames.
+        by_cam = {
+            cid: imgs for cid, imgs in by_cam.items()
+            if any(len(im["observations"]) > 0 for im in imgs)
+        }
+
         self._scene_cache[scene_name] = {
             "cams": cams,
             "points3d": points3d,
@@ -214,6 +220,8 @@ class ETH3DLongSequenceDataset(Dataset):
                         and windows_in_camera >= self.max_windows_per_camera):
                     break
                 window = imgs[start:start + self.sequence_length]
+                if not all(len(im["observations"]) > 0 for im in window):
+                    continue
                 cam_tag = window[0]["name"].split("/")[0]
                 sequence_name = f"{scene_name}__{cam_tag}__{start:04d}"
                 self.samples.append({

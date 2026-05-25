@@ -132,7 +132,7 @@ Stage 1 (MVR)        ──→ Stage 2 (Memory)    ──→ Stage 3 (Composer)
 | 2 | ✅ done | 2026-05-23 | 2026-05-23 | DEC-20260523-005 |
 | 3 | ✅ done | 2026-05-23 | 2026-05-23 | DEC-20260523-006 |
 | 4 | ✅ done | 2026-05-25 | 2026-05-25 | DEC-20260525-001 |
-| 5 | 🔶 S1 KITTI sealed, cross-dataset re-activated | 2026-05-25 | 2026-05-25 (S1 KITTI) | DEC-20260525-003 (S1 headline), DEC-20260525-004 (distill defer), DEC-20260525-005 (cross-dataset defer, trigger #2 fired 2026-05-25 evening) |
+| 5 | 🔶 closed; cross-domain follow-up complete | 2026-05-25 | 2026-05-26 | DEC-20260525-003 (S1 KITTI), DEC-20260525-004 (distill defer), DEC-20260525-005 (cross-dataset defer → trigger #2 fired), DEC-20260525-006 (cross-dataset closure), DEC-20260526-007 (cross-domain follow-up); no active handoff |
 
 ### Stage 4 闭合状态（2026-05-25）
 
@@ -257,23 +257,121 @@ Also deferred at the same point: distilled-adapter architecture
 Both deferrals leave the Router → full real model design as the
 authoritative Stage 5 S1 closure architecture.
 
-### Stage 5 cross-dataset re-activation (2026-05-25 evening)
+### Stage 5 cross-dataset closure (2026-05-26, DEC-20260525-006)
 
-DEC-20260525-005 trigger #2 (user bandwidth) fired on 2026-05-25 evening.
-User downloaded ETH3D Low-res many-view Training set locally and scp'd 4
-archives (~3.9 GB total) to `/hdd3/kykt26/data/eth3d/low_res_many_view/raw/`:
+DEC-005 trigger #2 (user bandwidth) fired 2026-05-25 evening; ETH3D
+Low-res many-view Training archives (4 × .7z, ~3.9 GB) were uploaded to
+`/hdd3/kykt26/data/eth3d/low_res_many_view/raw/` and extracted to
+`/hdd3/kykt26/data/eth3d/low_res_many_view/training/{5 scenes}`.
+
+Four new code paths (no v0.3/v0.5 core edits):
+
+- `code/dream3r/data/eth3d_long.py`
+- `code/dream3r/scripts/generate_eth3d_regime_labels.py`
+- `code/dream3r/scripts/build_oracle_expert_labels_eth3d.py`
+- `code/dream3r/scripts/eval_cross_domain_router.py`
+
+ETH3D 50-window oracle (10 per scene, cam5, sparse SfM points3D as GT,
+align_scale=True):
 
 ```text
-multi_view_training_rig.7z              1.7G
-multi_view_training_rig_undistorted.7z  1.5G
-multi_view_training_rig_occlusion.7z    405M
-multi_view_training_rig_scan_eval.7z    289M
+oracle_counts: spann3r=23 (46%), mast3r=16 (32%), fast3r=11 (22%)
+metric:        scale_aligned_abs_rel
 ```
 
-DEC-005's preserved cross-dataset plan is now active. Stage 5 will close
-fully via a forthcoming `DEC-20260525-006-cross-dataset-closure.md` once
-the ETH3D oracle + transfer eval finishes. Handoff to the next agent:
-`mainwork/HANDOFF-20260525-evening.md`.
+Best-single shifts across domains: MASt3R on KITTI -> Spann3R on ETH3D.
+Fast3R triples its oracle share (7% -> 22%).
+
+Cross-dataset transfer eval (Stage 5 S1 router on ETH3D, zero-shot):
+
+```text
+learned_router: 0.2712   <- collapses to always_fast3r
+oracle_router:  0.2075
+always_fast3r:  0.2712
+always_mast3r:  0.2583
+always_spann3r: 0.2324   (best single on ETH3D)
+relative_improvement_vs_best_single: -16.7%      # router worse than best single
+eth3d_route_accuracy_vs_oracle: 22%              # below 33% chance
+learned_expert_counts: fast3r=50, mast3r=0, spann3r=0
+oracle_expert_counts:  fast3r=11, mast3r=16, spann3r=23
+best_single_shifted_kitti_to_eth3d: true
+```
+
+Reading: the KITTI-trained router does NOT transfer zero-shot to ETH3D.
+Root cause is KITTI-specific stat features (`oxts_available`,
+`mean_speed`, `speed_std`) being out-of-distribution for ETH3D's static
+rig; frozen KITTI normalization pushes ETH3D inputs into a corner of the
+router's input manifold where it deterministically picks Fast3R.
+
+Honest claim: cross-dataset routing is domain-specific. The current
+KITTI router does not transfer. Best single expert and oracle
+distribution both shift by domain — itself a real cross-dataset signal.
+
+### Stage 5 S1 demo packaging (2026-05-26)
+
+Track A from `HANDOFF-20260525-evening.md`: end-to-end runnable demo of
+the Stage 5 S1 expanded router + three real experts on KITTI long
+windows. Live forward, two contrast windows (best MASt3R-winning + best
+Spann3R-winning), three matplotlib PNGs + ASCII PLY pointmap per window,
+top-level + per-window summary JSON.
+
+New files:
+
+- `code/dream3r/scripts/demo.py`
+- `code/dream3r/DEMO.md`
+- `cycles/CYCLE-20260525-demo-package.md`
+
+Server output `/hdd3/kykt26/code/dream3r/runs/demo_stage5_s1/`:
+
+```text
+window_00_2011_09_26_drive_0015_sync_03_oracle_mast3r/
+  router=mast3r (MATCH), per_expert_abs_rel: fast3r=0.2466, mast3r=0.0745, spann3r=0.1808
+  ply: 232 vertices
+window_01_2011_09_28_drive_0165_sync_03_oracle_spann3r/
+  router=spann3r (MATCH), per_expert_abs_rel: fast3r=0.2818, mast3r=0.1448, spann3r=0.0951
+  ply: 264 vertices
+```
+
+Both windows: router's choice matches oracle's choice; chosen expert's
+abs_rel is the lowest among the three on each window.
+
+### Stage 5 follow-up: cross-domain routing experiments (2026-05-26, DEC-20260526-007)
+
+HANDOFF-20260526-evening recipe of three retrains executed on server,
+no v0.3/v0.5 core edits. See
+`cycles/CYCLE-20260526-cross-domain-router-retrain.md` and
+`decisions/DEC-20260526-007-cross-domain-routing.md`.
+
+Held-out LOO route accuracy (vs 33% chance):
+
+```text
+                            KITTI LOO    ETH3D LOO/transfer
+DEC-006 baseline (S5 S1):   78%          22%   (collapse to fast3r)
+(a) Robust KITTI router:    77.97%       32%   (collapse to mast3r)
+(b) ETH3D-only router:      —            54%   ✓
+(c) Joint router:           72.88%  ✓    42%   ✓
+```
+
+Held-out rel_imp vs best-single:
+
+```text
+                            KITTI         ETH3D
+(a) Robust KITTI router:    +4.19%        -11.14%
+(b) ETH3D-only router:      —             +6.39%
+(c) Joint router:           +2.81%        +4.70%
+```
+
+Honest claim (DEC-007): single-domain routing on KITTI and ETH3D in
+isolation is learnable; KITTI's specialized router does NOT transfer
+zero-shot to ETH3D even after dropping the 3 KITTI-specific stats; a
+single 12D-input router (6 regime + 4 robust stats + 2 domain one-hot)
+trained jointly on the 109-window KITTI+ETH3D set simultaneously beats
+each domain's best single expert on held-out LOO. Only (c) places both
+domains above chance simultaneously.
+
+New server artifacts: `router_kitti_robust_v1`, `router_eth3d_v1`,
+`router_joint_v1` checkpoints + 7 results JSONs (see CYCLE doc for
+authoritative paths). No active handoff after this closure.
 
 ---
 
@@ -287,15 +385,23 @@ the ETH3D oracle + transfer eval finishes. Handoff to the next agent:
 
 ## 7. 第一个动作
 
-**下一个 agent 看完本文件后**：
-1. 阅读 `CLAUDE.md`
-2. 阅读 `mainwork/HANDOFF-20260525-evening.md`（本轮接续指南，自包含）
-3. 阅读 Stage 5 S1 闭合链：`cycles/CYCLE-20260525-stage5-s1-three-expert.md` →
-   `cycles/CYCLE-20260525-stage5-s1-kitti-expand.md` → `decisions/DEC-20260525-003-stage5-s1-expand-closure.md`
-4. 阅读 cross-dataset 复活的依据：`decisions/DEC-20260525-005-deferred-cross-dataset-validation.md`
-   （trigger #2 已在 2026-05-25 evening 触发，ETH3D 已上传到
-   `/hdd3/kykt26/data/eth3d/low_res_many_view/raw/`）
-5. 阅读仍在 defer 的决定：`decisions/DEC-20260525-004-deferred-distilled-adapter-architecture.md`，
-   trigger 未满足，不要主动开这条线
-6. 按 HANDOFF 推进：Track A (demo 打包) + Cross-dataset closure 双闭合；
-   Track B (S5 tttLRM) 留到 cross-dataset 闭合后再说
+Stage 5 已闭合（DEC-20260525-006）+ cross-domain follow-up 已闭合
+（DEC-20260526-007）。**当前无 active handoff。**
+
+阅读顺序（下一 agent，了解最新状态）：
+
+1. `CLAUDE.md`
+2. `mainwork.md` §5（Stage 5 闭合 + cross-domain follow-up 闭合）
+3. `decisions/DEC-20260526-007-cross-domain-routing.md`（最新闭合）
+4. `cycles/CYCLE-20260526-cross-domain-router-retrain.md`（3 个实验的
+   数字 + 代码改动 + 服务器 artifact 路径）
+5. `decisions/DEC-20260525-006-cross-dataset-closure.md`（负面发现 +
+   根因，DEC-007 的 motivation 来源）
+
+如需推进下一方向，待选线（trigger 未满足）：
+
+- Track B - S5 tttLRM（独立 handoff，DEC-006/007 已完成，可以排）
+- DEC-20260525-004（distilled adapter，trigger 仍未满足）
+- 第三 domain 测试（DEC-007 follow-up #1 — 不必紧迫）
+- S3 GaussianHead / S2 Permanence（仍 deferred，需要 trigger 满足）
+- 决定方向后再开新 cycle / HANDOFF。
