@@ -527,6 +527,7 @@ def train_router_only(
         "class_balance_alpha": class_balance_alpha,
         "class_weights": [float(v) for v in class_weights.tolist()],
         "critic_augmentation_disabled": bool(disable_critic_augmentation),
+        "seed": int(seed),
     }
     if augment:
         with torch.no_grad():
@@ -652,6 +653,7 @@ def main():
         choices=["regime", "regime_stats", "regime_stats_robust"],
         default="regime",
     )
+    parser.add_argument("--seed", type=int, default=7)
     args = parser.parse_args()
 
     cfg = load_config(path=args.config, preset=args.preset)
@@ -683,6 +685,7 @@ def main():
         class_balance_alpha=args.class_balance_alpha,
         disable_critic_augmentation=args.disable_critic_augmentation,
         feature_mode=args.feature_mode,
+        seed=args.seed,
     )
     print(json.dumps(summary, indent=2))
 

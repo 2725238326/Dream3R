@@ -186,3 +186,119 @@ no ETH3D oracle, and makes no SOTA claim. It converts the DEC-006
 follow-up (HANDOFF-20260526-evening) into three documented retrain
 outcomes and an honest cross-domain claim with explicit success
 gate references.
+
+## Addendum (2026-05-26 evening): Per-Domain Norm Refinement → Joint v2
+
+### Motivation
+
+User raised that KITTI 59w and ETH3D 50w carry markedly different
+information density: KITTI's `depth_mean` distribution is centered
+around 165 ± 180 patches/window (LiDAR projection), ETH3D's is 5 ± 2
+patches/window (SfM triangulation). In Joint v1, the 4 robust stats
+were normalized with mean/std computed *jointly* across all 109
+examples. The joint `depth_mean` std (~155) is dominated by KITTI
+variance, so the ETH3D rows collapse to a narrow band in the
+normalized space — the router only learns to read ETH3D rows through
+the explicit 2D domain-id, not through the stat content. This
+explained Joint v1's ETH3D LOO loss vs the ETH3D specialist
+(54% → 42%, -12pp).
+
+### Change
+
+`train_router_joint_domain._load_joint_examples` and
+`eval_router_joint_loo.evaluate_joint_loo` gained a
+`per_domain_norm: bool` switch. When True:
+
+- The 4 robust stats are normalized using each domain's own
+  mean/std: KITTI rows by KITTI mean/std, ETH3D rows by ETH3D
+  mean/std.
+- `feature_meta` carries a nested `per_domain_stats` dict instead
+  of single `stat_mean`/`stat_std`.
+- LOO eval reads `per_domain_stats` from the fold checkpoint and
+  applies the matching domain's frozen stats to the held-out sample.
+
+12D input shape unchanged. 2D domain-id one-hot unchanged. No core
+v0.3/v0.5 edits.
+
+Backward compatibility: `per_domain_norm=False` (default) preserves
+v1 behavior bit-identical.
+
+### Joint v2 Results (per-domain norm)
+
+Closure (`router_joint_v2/summary.json`):
+
+```text
+n_examples: 109
+final_accuracy: 89.91%  (v1: 87.16%)
+per_domain_accuracy:
+  kitti: 84.75%   (v1: 88.14%, -3.39pp)
+  eth3d: 96.00%   (v1: 86.00%, +10.00pp)
+```
+
+109-fold LOO (`router_joint_v2_loo/results_loo.json`):
+
+```text
+n_folds_run: 109  (full)
+per_domain_loo_route_accuracy:
+  kitti: 71.19%   (v1: 72.88%, -1.69pp; vs (a) 77.97%, -6.78pp)
+  eth3d: 48.00%   (v1: 42.00%, +6.00pp; vs (b) 54.00%, -6.00pp)
+per_domain_rel_improvement_vs_best_single:
+  kitti: +1.35%   (v1: +2.81%, -1.46pp)
+  eth3d: +5.78%   (v1: +4.70%, +1.08pp)
+success.both_domains_above_chance: true
+```
+
+### Reading
+
+The per-domain norm closes about half of the joint-vs-specialist gap
+on ETH3D (Joint v1 was 12pp below (b); Joint v2 is 6pp below) at the
+cost of ~1.5pp on KITTI LOO route accuracy and ~1.5pp on KITTI
+relative improvement. ETH3D rel_imp vs best-single (+5.78%) is now
+within 0.6pp of the ETH3D specialist (+6.39%). Both domains remain
+simultaneously above chance.
+
+The trade is acceptable: information-imbalanced datasets are
+handled more symmetrically. The remaining ETH3D-side gap vs
+specialist suggests joint training still imposes some capacity cost
+beyond normalization alone — likely the shared router head having
+to express both domains' routing policies in the same MLP.
+
+### Revised Headline Claim
+
+> Joint training of a single domain-aware router on the
+> 109-window KITTI+ETH3D set is viable. With per-domain stat
+> normalization (v2), the joint router achieves per-domain LOO
+> route accuracy of 71.19% (KITTI) and 48.00% (ETH3D) and beats
+> each domain's best single expert on held-out windows (+1.35%
+> KITTI, +5.78% ETH3D), simultaneously. The per-domain norm
+> closes roughly half of the ETH3D-side gap vs a domain
+> specialist that Joint v1 incurred, by preventing KITTI's much
+> larger stat variance from dominating the joint normalization.
+
+### Additional Server Artifacts
+
+```text
+/hdd3/kykt26/checkpoints/router_joint_v2/latest.pt
+/hdd3/kykt26/code/dream3r/runs/router_joint_v2_loo/results_loo.json
+```
+
+Joint v1 artifacts remain authoritative for the "joint norm baseline"
+comparison; Joint v2 is the recommended cross-domain router going
+forward.
+
+### Limitations On The Refinement
+
+- `per_domain_norm` requires the domain label at inference. This is
+  the same constraint as the 2D domain-id one-hot, so no new
+  deployment requirement is introduced.
+- ETH3D `frame_count` column has zero std on ETH3D (constant = 4),
+  so normalize-then-clamp produces a constant 0 column for ETH3D
+  rows. Router learns to ignore that column for ETH3D — confirmed
+  by sanity check (ETH3D normalized stat std exactly 0 on
+  frame_count, ~1 on the other three).
+- KITTI side picks up no benefit (slight loss); this is consistent
+  with v1's joint norm already being KITTI-dominated.
+- This refinement does not address the ~6pp ETH3D LOO gap that
+  still remains vs the specialist (b). Closing that would likely
+  need either capacity changes (out of CLAUDE.md scope without a
+  trigger) or more ETH3D data.

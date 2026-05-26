@@ -349,7 +349,8 @@ Held-out LOO route accuracy (vs 33% chance):
 DEC-006 baseline (S5 S1):   78%          22%   (collapse to fast3r)
 (a) Robust KITTI router:    77.97%       32%   (collapse to mast3r)
 (b) ETH3D-only router:      —            54%   ✓
-(c) Joint router:           72.88%  ✓    42%   ✓
+(c) Joint router v1:        72.88%  ✓    42%   ✓
+(c) Joint router v2 (per-domain norm):  71.19% ✓   48%   ✓
 ```
 
 Held-out rel_imp vs best-single:
@@ -358,20 +359,24 @@ Held-out rel_imp vs best-single:
                             KITTI         ETH3D
 (a) Robust KITTI router:    +4.19%        -11.14%
 (b) ETH3D-only router:      —             +6.39%
-(c) Joint router:           +2.81%        +4.70%
+(c) Joint router v1:        +2.81%        +4.70%
+(c) Joint router v2:        +1.35%        +5.78%
 ```
 
-Honest claim (DEC-007): single-domain routing on KITTI and ETH3D in
-isolation is learnable; KITTI's specialized router does NOT transfer
-zero-shot to ETH3D even after dropping the 3 KITTI-specific stats; a
-single 12D-input router (6 regime + 4 robust stats + 2 domain one-hot)
-trained jointly on the 109-window KITTI+ETH3D set simultaneously beats
-each domain's best single expert on held-out LOO. Only (c) places both
-domains above chance simultaneously.
+Honest claim (DEC-007, revised after v2): single-domain routing on
+KITTI and ETH3D is learnable in isolation; KITTI's specialized router
+does NOT transfer zero-shot to ETH3D even after dropping the 3
+KITTI-specific stats; a single 12D-input joint router with explicit
+2D domain-id + **per-domain stat normalization** simultaneously beats
+each domain's best single expert on held-out LOO. Per-domain norm
+(v2) closes ~half the ETH3D-side gap to the specialist that v1's
+joint norm incurred, at ~1.5pp cost on KITTI LOO route accuracy. v2
+is the recommended cross-domain router going forward.
 
 New server artifacts: `router_kitti_robust_v1`, `router_eth3d_v1`,
-`router_joint_v1` checkpoints + 7 results JSONs (see CYCLE doc for
-authoritative paths). No active handoff after this closure.
+`router_joint_v1`, `router_joint_v2` checkpoints + 8 results JSONs
+(see CYCLE doc for authoritative paths). No active handoff after this
+closure.
 
 ---
 
@@ -385,18 +390,18 @@ authoritative paths). No active handoff after this closure.
 
 ## 7. 第一个动作
 
-Stage 5 已闭合（DEC-20260525-006）+ cross-domain follow-up 已闭合
-（DEC-20260526-007）。**当前无 active handoff。**
+Stage 5 已闭合（DEC-20260525-006）+ cross-domain follow-up first-pass
+已闭合（DEC-20260526-007）。**当前 active handoff：
+`mainwork/HANDOFF-20260527-morning.md`**（overnight pipeline 验证：
+dense ETH3D oracle + multi-seed sweep；预期明早收尾）。
 
-阅读顺序（下一 agent，了解最新状态）：
+阅读顺序（下一 agent）：
 
 1. `CLAUDE.md`
-2. `mainwork.md` §5（Stage 5 闭合 + cross-domain follow-up 闭合）
-3. `decisions/DEC-20260526-007-cross-domain-routing.md`（最新闭合）
-4. `cycles/CYCLE-20260526-cross-domain-router-retrain.md`（3 个实验的
-   数字 + 代码改动 + 服务器 artifact 路径）
-5. `decisions/DEC-20260525-006-cross-dataset-closure.md`（负面发现 +
-   根因，DEC-007 的 motivation 来源）
+2. `mainwork.md` §5 + §7
+3. `mainwork/HANDOFF-20260527-morning.md`（本轮接续指南）
+4. `decisions/DEC-20260526-007-cross-domain-routing.md`（待 addendum 3）
+5. `cycles/CYCLE-20260526-cross-domain-router-retrain.md`（待 addendum 3）
 
 如需推进下一方向，待选线（trigger 未满足）：
 

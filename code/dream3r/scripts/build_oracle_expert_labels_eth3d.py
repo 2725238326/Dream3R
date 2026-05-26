@@ -52,7 +52,8 @@ def _load_adapter(name: str):
 
 def _build_dataset(root: str, sequence_length: int, image_size: int,
                    n_patches: int, max_windows_per_scene: int,
-                   scenes: Optional[List[str]]) -> ETH3DLongSequenceDataset:
+                   scenes: Optional[List[str]],
+                   dense_gt: bool = False) -> ETH3DLongSequenceDataset:
     return ETH3DLongSequenceDataset(
         root=root,
         sequence_length=sequence_length,
@@ -60,6 +61,7 @@ def _build_dataset(root: str, sequence_length: int, image_size: int,
         image_size=image_size,
         n_patches=n_patches,
         scenes=scenes or SCENES,
+        dense_gt=dense_gt,
     )
 
 
@@ -100,6 +102,7 @@ def build_oracle_expert_labels_eth3d(
     n_patches: int = 196,
     align_scale: bool = True,
     scenes: Optional[List[str]] = None,
+    dense_gt: bool = False,
 ) -> Dict[str, object]:
     expert_order = _normalize_expert_order(expert_order)
     regime_data = json.loads(Path(regime_labels).read_text(encoding="utf-8"))
@@ -119,6 +122,7 @@ def build_oracle_expert_labels_eth3d(
         n_patches=rl_n_patches,
         max_windows_per_scene=rl_max_per_scene,
         scenes=rl_scenes,
+        dense_gt=dense_gt,
     )
     sample_index = {
         sample["sequence_name"]: idx
@@ -179,6 +183,7 @@ def build_oracle_expert_labels_eth3d(
             "max_windows_per_scene": rl_max_per_scene,
             "scenes": rl_scenes,
             "metric": "scale_aligned_abs_rel" if align_scale else "raw_abs_rel",
+            "gt_source": "dense_scan" if dense_gt else "sfm_sparse",
         },
     }
     output_path = Path(output)
@@ -204,6 +209,9 @@ def main():
     parser.add_argument("--n-patches", type=int, default=196)
     parser.add_argument("--align-scale", action="store_true")
     parser.add_argument("--scenes", nargs="+", default=None)
+    parser.add_argument("--dense-gt", action="store_true",
+                        help="Use rig_scan_eval/*.ply dense laser-scan GT "
+                             "instead of SfM sparse points3D.")
     parser.add_argument(
         "--experts", nargs="+", default=None,
         help="Expert order, e.g. --experts fast3r mast3r spann3r",
@@ -221,6 +229,7 @@ def main():
         n_patches=args.n_patches,
         align_scale=args.align_scale,
         scenes=args.scenes,
+        dense_gt=args.dense_gt,
     )
     print(json.dumps({
         "summary": result["summary"],

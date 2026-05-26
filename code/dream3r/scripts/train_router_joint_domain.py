@@ -266,6 +266,7 @@ def train_router_joint(
         "feature_mode": feature_meta["feature_mode"],
         "feature_meta": feature_meta,
         "per_domain_norm": bool(per_domain_norm),
+        "seed": int(seed),
     }
     torch.save({
         "router_state_dict": router.state_dict(),
@@ -291,6 +292,7 @@ def main():
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--d-routing", type=int, default=32)
     parser.add_argument("--per-domain-norm", action="store_true")
+    parser.add_argument("--seed", type=int, default=7)
     args = parser.parse_args()
 
     out_dir = Path(args.output_dir)
@@ -307,6 +309,7 @@ def main():
         batch_size=args.batch_size,
         d_routing=args.d_routing,
         per_domain_norm=args.per_domain_norm,
+        seed=args.seed,
     )
     print(json.dumps({
         k: v for k, v in summary.items()

@@ -350,3 +350,45 @@ Net: cross-domain routing is no longer a flat negative. The honest
 claim shifts from "KITTI router does not transfer" to "domain-shared
 routing is feasible with a domain-id feature; pure feature pruning is
 not." DEC-007 records the closure.
+
+## Addendum (evening): Joint v2 with Per-Domain Normalization
+
+User flagged that joint v1 normalizes the 4 robust stats with a
+*joint* mean/std across all 109 examples, which is dominated by
+KITTI's much larger `depth_mean` variance (~155 std vs ETH3D's ~2).
+This effectively makes ETH3D stat features near-constant in the
+normalized space, and explains v1's 12pp ETH3D LOO loss vs the
+ETH3D specialist (b).
+
+Fix (surgical, ~50 lines across 2 files): add `per_domain_norm` flag
+to `train_router_joint_domain._load_joint_examples` and pipe it
+through to `eval_router_joint_loo.evaluate_joint_loo`. When True,
+each domain's rows are normalized with that domain's own mean/std;
+`feature_meta` records a `per_domain_stats` dict; LOO eval reads it
+back for the held-out sample's domain.
+
+Results:
+
+| | Joint v1 (joint norm) | **Joint v2 (per-domain norm)** | Δ |
+|---|---|---|---|
+| KITTI closure acc | 88.14% | 84.75% | -3.39pp |
+| ETH3D closure acc | 86.00% | **96.00%** | +10.00pp |
+| KITTI LOO route_acc | 72.88% | 71.19% | -1.69pp |
+| ETH3D LOO route_acc | 42.00% | **48.00%** | +6.00pp |
+| KITTI rel_imp (LOO) | +2.81% | +1.35% | -1.46pp |
+| ETH3D rel_imp (LOO) | +4.70% | **+5.78%** | +1.08pp |
+| Both above chance? | yes | yes | — |
+
+Reading: per-domain norm closes ~half the ETH3D-side gap to the
+specialist (Joint v1: -12pp vs (b); Joint v2: -6pp). KITTI side pays
+~1.5pp — KITTI was already dominating v1's joint norm, so it has
+less to gain and a little to lose. ETH3D rel_imp vs best_single
+(+5.78%) is now within 0.6pp of the ETH3D specialist (+6.39%).
+
+Server artifacts: `/hdd3/kykt26/checkpoints/router_joint_v2/latest.pt`,
+`/hdd3/kykt26/code/dream3r/runs/router_joint_v2_loo/results_loo.json`.
+
+`per_domain_norm=False` (default) keeps v1 behavior bit-identical.
+
+Joint v2 is the recommended cross-domain router going forward; v1
+remains authoritative for the joint-norm baseline comparison.

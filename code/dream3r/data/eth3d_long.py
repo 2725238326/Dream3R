@@ -160,6 +160,8 @@ class ETH3DLongSequenceDataset(Dataset):
         n_regimes: int = 6,
         n_slots: int = 16,
         scenes: Optional[List[str]] = None,
+        dense_gt: bool = False,
+        dense_max_points_per_scene: int = 800000,
     ):
         self.root = Path(root) / "eth3d" / "low_res_many_view" / "training"
         if not self.root.exists():
@@ -174,6 +176,8 @@ class ETH3DLongSequenceDataset(Dataset):
         self.n_slots = int(n_slots)
         self.max_windows_per_scene = int(max_windows_per_scene)
         self.max_windows_per_camera = int(max_windows_per_camera)
+        self.dense_gt = bool(dense_gt)
+        self.dense_max_points_per_scene = int(dense_max_points_per_scene)
         self._scene_cache: Dict[str, Dict[str, object]] = {}
         self.samples: List[Dict[str, object]] = []
 
@@ -207,6 +211,13 @@ class ETH3DLongSequenceDataset(Dataset):
             "points3d": points3d,
             "scene_dir": scene_dir,
         }
+        if self.dense_gt:
+            from dream3r.data.eth3d_dense_oracle import load_dense_world_points
+            self._scene_cache[scene_name]["dense_points_world"] = (
+                load_dense_world_points(
+                    scene_dir, max_total_points=self.dense_max_points_per_scene,
+                )
+            )
 
         windows_in_scene = 0
         for cam_id, imgs in sorted(by_cam.items()):
@@ -280,7 +291,15 @@ class ETH3DLongSequenceDataset(Dataset):
             pose = _world_to_camera(img_info)
             camera_poses[i] = torch.from_numpy(pose.astype(np.float32))
 
-            pm, mk = _build_patch_pointmap(img_info, cam, points3d, self.patch_grid)
+            if self.dense_gt:
+                from dream3r.data.eth3d_dense_oracle import build_dense_patch_pointmap
+                pm, mk = build_dense_patch_pointmap(
+                    scene["dense_points_world"], img_info, cam, self.patch_grid,
+                )
+            else:
+                pm, mk = _build_patch_pointmap(
+                    img_info, cam, points3d, self.patch_grid,
+                )
             pointmap_gt[i] = pm
             pointmap_mask[i] = mk
 
