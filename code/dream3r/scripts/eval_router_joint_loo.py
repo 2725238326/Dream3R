@@ -11,7 +11,7 @@ import json
 import random
 import shutil
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 import torch
 
@@ -36,6 +36,10 @@ def evaluate_joint_loo(
     seed: int = 7,
     keep_fold_artifacts: bool = False,
     per_domain_norm: bool = False,
+    kitti_critic_cache: Optional[str] = None,
+    eth3d_critic_cache: Optional[str] = None,
+    geometric_signal: str = "sampson_distance",
+    reroute_margin: float = 0.10,
 ) -> Dict[str, object]:
     # Build the full joint set once just to get the sequence/domain ordering
     # and the per-window oracle expert; per-fold training uses sequence_filter.
@@ -53,6 +57,17 @@ def evaluate_joint_loo(
     metrics: Dict[str, Dict[str, float]] = {}
     metrics.update(k_ora["metrics"])
     metrics.update(e_ora["metrics"])
+
+    critic_geo: Dict[str, Dict[str, Dict[str, float]]] = {}
+    apply_reroute = kitti_critic_cache is not None and eth3d_critic_cache is not None
+    if apply_reroute:
+        for cache_path in (kitti_critic_cache, eth3d_critic_cache):
+            cache = json.loads(Path(cache_path).read_text(encoding="utf-8"))
+            for seq, per_expert in cache["labels"].items():
+                critic_geo[seq] = {
+                    expert: float(entry["geometric_log"][geometric_signal])
+                    for expert, entry in per_expert.items()
+                }
 
     work_path = Path(work_dir)
     work_path.mkdir(parents=True, exist_ok=True)
@@ -74,6 +89,8 @@ def evaluate_joint_loo(
     total_per_domain: Dict[str, int] = {"kitti": 0, "eth3d": 0}
     learned_metric_sum_per_domain: Dict[str, float] = {"kitti": 0.0, "eth3d": 0.0}
     oracle_metric_sum_per_domain: Dict[str, float] = {"kitti": 0.0, "eth3d": 0.0}
+    reroute_metric_sum_per_domain: Dict[str, float] = {"kitti": 0.0, "eth3d": 0.0}
+    reroute_applied_per_domain: Dict[str, int] = {"kitti": 0, "eth3d": 0}
 
     for fold_pos, idx in enumerate(fold_indices):
         held_out_seq = seqs[idx]
@@ -135,25 +152,45 @@ def evaluate_joint_loo(
         router.load_state_dict(ckpt["router_state_dict"])
         router.eval()
         with torch.no_grad():
-            pred_id = int(router(x_held)["routing_logits"].argmax(dim=-1).item())
+            logits_held = router(x_held)["routing_logits"][0]
+            pred_id = int(logits_held.argmax().item())
+            ranking = logits_held.argsort(descending=True).tolist()
         predicted_expert = expert_order[pred_id]
+        top2_expert = expert_order[ranking[1]] if len(ranking) > 1 else predicted_expert
         oracle_expert = expert_order[int(y_held.item())]
         held_out_metric = float(metrics[held_out_seq][predicted_expert])
         oracle_held_metric = float(metrics[held_out_seq][oracle_expert])
+
+        reroute_expert = predicted_expert
+        applied_reroute = False
+        if apply_reroute and held_out_seq in critic_geo:
+            geo_seq = critic_geo[held_out_seq]
+            if predicted_expert in geo_seq and top2_expert in geo_seq:
+                if geo_seq[predicted_expert] > geo_seq[top2_expert] + reroute_margin:
+                    reroute_expert = top2_expert
+                    applied_reroute = True
+        reroute_metric = float(metrics[held_out_seq][reroute_expert])
 
         correct = int(predicted_expert == oracle_expert)
         correct_per_domain[held_out_domain] += correct
         total_per_domain[held_out_domain] += 1
         learned_metric_sum_per_domain[held_out_domain] += held_out_metric
         oracle_metric_sum_per_domain[held_out_domain] += oracle_held_metric
+        reroute_metric_sum_per_domain[held_out_domain] += reroute_metric
+        if applied_reroute:
+            reroute_applied_per_domain[held_out_domain] += 1
 
         per_fold.append({
             "held_out": held_out_seq,
             "domain": held_out_domain,
             "predicted_expert": predicted_expert,
+            "top2_expert": top2_expert,
             "oracle_expert": oracle_expert,
             "predicted_metric": held_out_metric,
             "oracle_metric": oracle_held_metric,
+            "reroute_expert": reroute_expert,
+            "reroute_metric": reroute_metric,
+            "applied_reroute": applied_reroute,
         })
 
         if not keep_fold_artifacts:
@@ -172,6 +209,10 @@ def evaluate_joint_loo(
     }
     per_domain_oracle_mean = {
         d: _safe_div(oracle_metric_sum_per_domain[d], total_per_domain[d])
+        for d in ("kitti", "eth3d")
+    }
+    per_domain_reroute_mean = {
+        d: _safe_div(reroute_metric_sum_per_domain[d], total_per_domain[d])
         for d in ("kitti", "eth3d")
     }
 
@@ -200,6 +241,18 @@ def evaluate_joint_loo(
             else 0.0
         ),
     }
+    per_domain_reroute_rel_imp = {
+        "kitti": (
+            (k_singles[k_best] - per_domain_reroute_mean["kitti"]) / k_singles[k_best]
+            if k_singles[k_best] > 0 and total_per_domain["kitti"] > 0
+            else 0.0
+        ),
+        "eth3d": (
+            (e_singles[e_best] - per_domain_reroute_mean["eth3d"]) / e_singles[e_best]
+            if e_singles[e_best] > 0 and total_per_domain["eth3d"] > 0
+            else 0.0
+        ),
+    }
 
     result = {
         "n_total_examples": n,
@@ -217,6 +270,14 @@ def evaluate_joint_loo(
             "eth3d": e_singles[e_best],
         },
         "per_domain_rel_improvement_vs_best_single": per_domain_rel_improvement,
+        "per_domain_loo_reroute_mean": per_domain_reroute_mean,
+        "per_domain_reroute_rel_improvement_vs_best_single": per_domain_reroute_rel_imp,
+        "per_domain_reroute_applied_count": reroute_applied_per_domain,
+        "reroute_settings": {
+            "apply_reroute": apply_reroute,
+            "geometric_signal": geometric_signal,
+            "reroute_margin": float(reroute_margin),
+        },
         "per_domain_fold_counts": total_per_domain,
         "per_fold": per_fold,
         "success": {
@@ -250,6 +311,14 @@ def main():
     parser.add_argument("--keep-fold-artifacts", action="store_true")
     parser.add_argument("--per-domain-norm", action="store_true")
     parser.add_argument("--seed", type=int, default=7)
+    parser.add_argument("--kitti-critic-cache", default=None)
+    parser.add_argument("--eth3d-critic-cache", default=None)
+    parser.add_argument(
+        "--geometric-signal",
+        choices=["sampson_distance", "depth_inconsistency", "confidence_disagreement", "covisible_inconsistency"],
+        default="sampson_distance",
+    )
+    parser.add_argument("--reroute-margin", type=float, default=0.10)
     args = parser.parse_args()
 
     torch.manual_seed(args.seed)
@@ -268,6 +337,10 @@ def main():
         keep_fold_artifacts=args.keep_fold_artifacts,
         per_domain_norm=args.per_domain_norm,
         seed=args.seed,
+        kitti_critic_cache=args.kitti_critic_cache,
+        eth3d_critic_cache=args.eth3d_critic_cache,
+        geometric_signal=args.geometric_signal,
+        reroute_margin=args.reroute_margin,
     )
     print(json.dumps({
         k: v for k, v in result.items() if k != "per_fold"

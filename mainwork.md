@@ -132,7 +132,7 @@ Stage 1 (MVR)        ──→ Stage 2 (Memory)    ──→ Stage 3 (Composer)
 | 2 | ✅ done | 2026-05-23 | 2026-05-23 | DEC-20260523-005 |
 | 3 | ✅ done | 2026-05-23 | 2026-05-23 | DEC-20260523-006 |
 | 4 | ✅ done | 2026-05-25 | 2026-05-25 | DEC-20260525-001 |
-| 5 | 🔶 closed; cross-domain follow-up + addenda complete | 2026-05-25 | 2026-05-27 | DEC-20260525-003 (S1 KITTI), DEC-20260525-004 (distill defer), DEC-20260525-005 (cross-dataset defer → trigger #2 fired), DEC-20260525-006 (cross-dataset closure), DEC-20260526-007 (cross-domain follow-up, addenda 1/2/3); no active handoff |
+| 5 | 🔶 closed; cross-domain follow-up + addenda complete; critic↔router loop attempted | 2026-05-25 | 2026-05-27 | DEC-20260525-003 (S1 KITTI), DEC-20260525-004 (distill defer), DEC-20260525-005 (cross-dataset defer → trigger #2 fired), DEC-20260525-006 (cross-dataset closure), DEC-20260526-007 (cross-domain follow-up, addenda 1/2/3), DEC-20260527-008 (critic↔router closed loop, NEGATIVE); no active handoff |
 
 ### Stage 4 闭合状态（2026-05-25）
 
@@ -445,6 +445,50 @@ robust.
 
 No v0.3/v0.5 core touched. No new datasets, no new experts.
 
+### Stage 5 follow-up addendum 4: Critic↔Router closed loop (2026-05-27, DEC-008)
+
+Attempt to wire Stage 4 (Critic + Repair) into Stage 5 (Composer
+Router) as a closed-loop reroute. Approved plan
+`.claude/plans/cheerful-snuggling-puppy.md`.
+
+Two key findings before reroute eval even ran:
+
+1. **Trained Critic does NOT transfer.** On 327 per-(window, expert)
+   entries (KITTI 59w + ETH3D 50w × 3 experts), the trained Critic's
+   `conflict_score_sigmoid` has std=0.017 (failing the >0.1 plan
+   gate) and picks the best expert on only 25.4% of KITTI windows
+   (below 33% chance). Never recommends action=3 (reroute) on any
+   of the 327 entries.
+2. **Critic's deterministic geometric features ARE informative** —
+   sampson_distance picks best expert on 52.5% (KITTI) / 42% (ETH3D),
+   both above chance. Used as inference-time reroute heuristic
+   (margin=0.10) on joint v3 dense router.
+
+Phase C 5-seed LOO sweep result:
+
+```text
+                        router-only          with reroute         delta
+KITTI rel_imp:          +2.16% ± 1.33pp      +1.41% ± 1.01pp      -0.75pp
+ETH3D rel_imp:          +9.11% ± 1.64pp      +6.99% ± 2.15pp      -2.12pp
+```
+
+KITTI: 1/5 seeds gain (+0.12 to +0.29pp), 4/5 lose (-0.77 to -2.55pp).
+ETH3D: 1/5 seeds marginally gain (+0.41pp on seed=19), 4/5 lose
+(-1.50 to -3.90pp). Plan criterion 4 ("at least 1pp improvement on
+at least one domain") FAILS.
+
+Reading: at the current data scale (109 windows, 3 experts), the
+joint v3 dense router on regime+stat features already extracts the
+available routable signal. Geometric features carry partial signal
+but are redundant with regime+stat input. Reroute overrides correct
+router picks more often than it fixes incorrect ones.
+
+This is a **negative outcome** — Stage 4 Critic does not add value
+to Stage 5 routing at this scale. The wiring infrastructure works
+without v0.3/v0.5 core edits; the signal does not transfer. See
+DEC-008 §Out of Scope for trigger conditions to revisit (Critic
+retrain on 109w, geometry as router input).
+
 ---
 
 ## 6. 与现有文档的关系
@@ -458,11 +502,9 @@ No v0.3/v0.5 core touched. No new datasets, no new experts.
 ## 7. 第一个动作
 
 Stage 5 已闭合（DEC-20260525-006）+ cross-domain follow-up first-pass
-已闭合（DEC-20260526-007，含 addendum 1/2/3）。**当前无 active
-handoff**。HANDOFF-20260527-morning 已完成全部验收：dense GT oracle
-显著强化 (b)/(c) 主张；seed sweep（5 seeds × 3 LOO）确认 route
-accuracy 全部 seed-robust，ETH3D rel_imp seed-robust，KITTI joint
-rel_imp 因 seed=19 出现负值而被诚实下调为"essentially zero"。
+已闭合（DEC-20260526-007，含 addendum 1/2/3）+ Critic↔Router closed
+loop 已尝试并闭合为 NEGATIVE（DEC-20260527-008）。**当前无 active
+handoff**。
 
 阅读顺序（下一 agent）：
 
@@ -470,11 +512,17 @@ rel_imp 因 seed=19 出现负值而被诚实下调为"essentially zero"。
 2. `mainwork.md` §5 + §7
 3. `decisions/DEC-20260526-007-cross-domain-routing.md`（含 addendum 1/2/3）
 4. `cycles/CYCLE-20260526-cross-domain-router-retrain.md`（含 addendum 1/2/3）
+5. `decisions/DEC-20260527-008-critic-router-loop.md`（NEGATIVE，含 wiring 教训）
+6. `cycles/CYCLE-20260527-critic-router-loop.md`
 
 如需推进下一方向，待选线（trigger 未满足）：
 
-- Track B - S5 tttLRM（独立 handoff，DEC-006/007 已完成，可以排）
+- DEC-008 follow-up #1：Critic retrain on Stage 5 windows
+  （327 examples × 3 experts，~1.5d，可能改善 conflict head 泛化）
+- DEC-008 follow-up #2：把 geometric features 作为 router 训练
+  INPUT（非 reroute heuristic），架构改动较大
+- Track B - S5 tttLRM（独立 handoff，DEC-006/007/008 已完成，可以排）
 - DEC-20260525-004（distilled adapter，trigger 仍未满足）
-- 第三 domain 测试（DEC-007 follow-up #1 — 不必紧迫）
+- 第三 domain 测试（DEC-007 follow-up #1）
 - S3 GaussianHead / S2 Permanence（仍 deferred，需要 trigger 满足）
 - 决定方向后再开新 cycle / HANDOFF。
