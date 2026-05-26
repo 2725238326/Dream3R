@@ -392,3 +392,191 @@ Server artifacts: `/hdd3/kykt26/checkpoints/router_joint_v2/latest.pt`,
 
 Joint v2 is the recommended cross-domain router going forward; v1
 remains authoritative for the joint-norm baseline comparison.
+
+## Addendum 3 (2026-05-27 morning): Dense GT Oracle + Seed Robustness
+
+Two follow-up validations completed via overnight pipeline
+`scripts/tonight_overnight.sh` (2026-05-26 03:11 → 04:38, 32/32 OK):
+
+- **A. ETH3D dense-GT oracle** — rebuild the 50w ETH3D oracle using
+  `rig_scan_eval/*.ply` laser-scan depth instead of SfM-sparse
+  `points3D.txt` points; re-eval (a) zero-shot, retrain (b) ETH3D-only
+  v2 + LOO, retrain (c) joint v3 (per-domain norm) + 109-fold LOO.
+- **C. Multi-seed sweep** — re-run (a)/(b)/(c) LOO across 5 seeds
+  {7, 11, 13, 17, 19} to measure seed-robustness.
+
+### A. Dense GT oracle
+
+New module `code/dream3r/data/eth3d_dense_oracle.py` adds:
+- MeshLab `.mlp` 4×4 alignment matrix parser
+- binary little-endian PLY xyz reader (no plyfile/open3d dep)
+- vectorized world→camera projection + patch-grid bucketing with
+  median-z per bucket
+
+`eth3d_long.py` and `build_oracle_expert_labels_eth3d.py` gain
+`--dense-gt` flag. Result JSON records `"gt_source": "dense_scan"`.
+
+ETH3D oracle distribution shift (50w):
+
+| | sparse (DEC-007) | dense (today) |
+|---|---|---|
+| fast3r | 11 (22%) | 5 (10%) |
+| mast3r | 16 (32%) | 21 (42%) |
+| spann3r | 23 (46%) | 24 (48%) |
+| best_single | spann3r | spann3r |
+
+(a.dense) KITTI-robust router zero-shot on dense ETH3D
+(`router_kitti_robust_v1_eth3d_dense/results.json`):
+
+```text
+learned_expert_counts: fast3r=0, mast3r=50, spann3r=0   (still collapse to mast3r)
+route_accuracy_vs_oracle: 42% (vs sparse 32%)
+relative_improvement_vs_best_single: -22.59%  (sparse -11.14%)
+```
+
+The headline +10pp route_acc bump is a coincidence: mast3r=21/50=42% in
+the dense oracle, so a deterministic always_mast3r predictor matches
+the new majority. The rel_imp drop to -22.59% is the more meaningful
+signal: dense GT widens the gap between always_mast3r (what the KITTI
+router picks) and always_spann3r (true best-single on ETH3D), making
+the cross-domain failure even more visible. **The dense GT strengthens
+DEC-007's "KITTI router does not transfer" claim.**
+
+(b.dense) ETH3D-only v2 (retrained on dense oracle) LOO
+(`router_eth3d_v2_dense_loo/results_loo.json`):
+
+```text
+learned_loo_mean:  0.15235     (vs oracle 0.14185, best_single 0.16494 spann3r)
+loo_route_accuracy_vs_oracle: 68.0%   (vs sparse 54.0%, +14pp)
+relative_improvement_vs_best_single: 7.63%  (vs sparse 6.39%, +1.24pp)
+learned_loo_expert_counts: fast3r=4, mast3r=21, spann3r=25
+```
+
+(b.dense) ETH3D closure: rel_imp +13.96% (vs sparse +10.74%, +3.22pp).
+
+(c.dense) Joint v3 (per-domain norm, dense ETH3D + sparse KITTI) 109-fold LOO
+(`router_joint_v3_dense_loo/results_loo.json`):
+
+```text
+per_domain_loo_route_accuracy:
+  kitti: 72.88%   (= v2 sparse closure 72.88%; bit-identical reproduction)
+  eth3d: 66.00%   (vs v2 sparse 48.00%, +18pp)
+per_domain_rel_improvement_vs_best_single:
+  kitti: -0.09%   (vs v2 sparse +1.35%, essentially zero / -1.44pp)
+  eth3d: +8.03%   (vs v2 sparse +5.78%, +2.25pp)
+both_domains_above_chance: true
+```
+
+Reading: dense GT reduces ETH3D oracle noise and lifts joint v3
+ETH3D LOO route accuracy by 18pp. KITTI side is unaffected in route
+accuracy (uses sparse KITTI oracle, unchanged) but loses ~1.5pp in
+rel_imp because the new ETH3D-side patterns slightly perturb the
+shared router's KITTI fit. Net: joint v3 (dense oracle) is the new
+recommended cross-domain router.
+
+### C. Multi-seed sweep — bug discovery + fix
+
+Initial overnight C sweep harvested byte-identical results across all
+5 seeds. Root cause: `eval_router_loo.py:173` hardcoded
+`torch.manual_seed(7)` and didn't expose `--seed`; same for
+`eval_router_joint_loo.py`. The overnight script's `--seed` only
+affected the closure-set training (which we didn't harvest); the LOO
+re-trains per-fold ignored seed.
+
+Fix (surgical, ~20 lines across 2 files): both LOO scripts gain
+`--seed` CLI which threads through `evaluate_*_loo` →
+`train_router_*` per-fold and into the script's top-level
+`torch.manual_seed`. Results now record `seed` field.
+
+Re-run (`scripts/rerun_seed_sweep.sh`, 5 seeds × 3 LOO = 15 runs,
+GPU 1):
+
+Re-run (`scripts/rerun_seed_sweep.sh`, 5 seeds × 3 LOO = 15 runs,
+GPU 1, 1h06m, all 15/15 OK):
+
+(a) KITTI-robust LOO route accuracy:
+
+| seed | route_acc | rel_imp |
+|---|---|---|
+| 7 | 77.97% | +4.19% |
+| 11 | 69.49% | +1.40% |
+| 13 | 76.27% | +4.61% |
+| 17 | 71.19% | +2.22% |
+| 19 | 72.88% | +2.68% |
+| **mean ± std** | **73.56% ± 3.51pp** | **+3.02% ± 1.35pp** |
+
+(b) ETH3D-only LOO route accuracy:
+
+| seed | route_acc | rel_imp |
+|---|---|---|
+| 7 | 54.00% | +6.39% |
+| 11 | 50.00% | +6.06% |
+| 13 | 46.00% | +3.97% |
+| 17 | 44.00% | +5.47% |
+| 19 | 50.00% | +6.48% |
+| **mean ± std** | **48.80% ± 3.90pp** | **+5.68% ± 1.03pp** |
+
+(c) Joint v2 LOO route accuracy (per-domain norm):
+
+| seed | KITTI acc | KITTI rel_imp | ETH3D acc | ETH3D rel_imp |
+|---|---|---|---|---|
+| 7 | 71.19% | +1.35% | 48.00% | +5.78% |
+| 11 | 74.58% | +1.33% | 58.00% | +7.00% |
+| 13 | 71.19% | +1.89% | 48.00% | +6.42% |
+| 17 | 72.88% | +1.77% | 52.00% | +6.26% |
+| 19 | 64.41% | -2.00% | 50.00% | +5.28% |
+| **mean ± std** | **70.85% ± 3.87pp** | **+0.87% ± 1.62pp** | **51.20% ± 4.15pp** | **+6.15% ± 0.65pp** |
+
+Reading:
+
+- **Route accuracy is seed-robust across all 3 experiments**
+  (std 3.51 / 3.90 / 3.87 / 4.15 pp, all below 5pp gate). All 15
+  runs across all 3 experiments stay above 33% chance — min is 44%.
+- **ETH3D rel_imp is seed-robust** — (b) mean +5.68% ± 1.03 (4/5
+  seeds above 5%), (c) mean +6.15% ± 0.65 (5/5 seeds above 5%).
+- **KITTI rel_imp on the joint router is NOT seed-robust** —
+  mean +0.87% ± 1.62, range -2.00% → +1.89%, seed=19 actually
+  negative. The previously published "+1.35% KITTI" (DEC-007
+  evening addendum, seed=7 point sample) overstates the typical
+  joint-vs-KITTI-best-single gain.
+- **(a) KITTI-robust rel_imp drops** from previously reported
+  +4.19% (seed=7) to mean +3.02% ± 1.35. None of the 5 seeds reach
+  the +5% rel_imp gate.
+
+DEC-007 honest claim revised (see DEC-007 addendum 3): both-domains-
+above-chance and ETH3D rel_imp claims hold robustly; the KITTI
+joint rel_imp claim is downgraded from "+1.35%" to "essentially
+zero on average, sign-unstable".
+
+### Server artifacts (new this addendum)
+
+```text
+/hdd3/kykt26/code/dream3r/runs/eth3d_dense_oracle/oracle_expert_labels.json
+/hdd3/kykt26/checkpoints/router_eth3d_v2_dense/latest.pt
+/hdd3/kykt26/checkpoints/router_joint_v3_dense/latest.pt
+/hdd3/kykt26/code/dream3r/runs/router_kitti_robust_v1_eth3d_dense/results.json
+/hdd3/kykt26/code/dream3r/runs/router_eth3d_v2_dense_ablation/results.json
+/hdd3/kykt26/code/dream3r/runs/router_eth3d_v2_dense_loo/results_loo.json
+/hdd3/kykt26/code/dream3r/runs/router_joint_v3_dense_loo/results_loo.json
+/hdd3/kykt26/code/dream3r/runs/seed_sweep_v2/<prefix>_s<seed>_loo/results_loo.json  (15 files)
+/hdd3/kykt26/code/dream3r/runs/overnight_20260526/progress.log
+/hdd3/kykt26/code/dream3r/runs/seed_sweep_v2_20260527/progress.log
+```
+
+### Boundary (new this addendum)
+
+Modified:
+
+- `code/dream3r/scripts/eval_router_loo.py` (added `--seed`)
+- `code/dream3r/scripts/eval_router_joint_loo.py` (added `--seed`)
+- `code/dream3r/data/eth3d_long.py` (added `dense_gt` flag)
+- `code/dream3r/scripts/build_oracle_expert_labels_eth3d.py` (added `--dense-gt`)
+- `code/dream3r/scripts/train_router_only.py` (added `--seed`)
+
+New:
+
+- `code/dream3r/data/eth3d_dense_oracle.py`
+- `code/dream3r/scripts/tonight_overnight.sh`
+- `code/dream3r/scripts/rerun_seed_sweep.sh`
+
+No v0.3/v0.5 core touched.

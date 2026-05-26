@@ -32,6 +32,7 @@ def evaluate_router_loo(
     d_routing: int = 32,
     feature_mode: str = "regime_stats",
     keep_fold_artifacts: bool = False,
+    seed: int = 7,
 ) -> Dict[str, object]:
     oracle_data = json.loads(Path(oracle_labels).read_text(encoding="utf-8"))
     regime_data = json.loads(Path(regime_labels).read_text(encoding="utf-8"))
@@ -69,6 +70,7 @@ def evaluate_router_loo(
             feature_mode=feature_mode,
             disable_critic_augmentation=True,
             sequence_filter=train_set,
+            seed=seed,
         )
         fold_result = evaluate_router_ablation(
             regime_labels=regime_labels,
@@ -128,6 +130,7 @@ def evaluate_router_loo(
         "n_folds": n,
         "expert_order": expert_order,
         "feature_mode": feature_mode,
+        "seed": int(seed),
         "learned_loo_mean": learned_loo_mean,
         "oracle_loo_mean": oracle_loo_mean,
         "single_expert_means": single_expert_means,
@@ -168,9 +171,10 @@ def main():
         default="regime_stats",
     )
     parser.add_argument("--keep-fold-artifacts", action="store_true")
+    parser.add_argument("--seed", type=int, default=7)
     args = parser.parse_args()
 
-    torch.manual_seed(7)
+    torch.manual_seed(args.seed)
     result = evaluate_router_loo(
         regime_labels=args.regime_labels,
         oracle_labels=args.oracle_labels,
@@ -182,6 +186,7 @@ def main():
         d_routing=args.d_routing,
         feature_mode=args.feature_mode,
         keep_fold_artifacts=args.keep_fold_artifacts,
+        seed=args.seed,
     )
     print(json.dumps({
         k: v for k, v in result.items()

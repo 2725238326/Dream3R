@@ -1,5 +1,20 @@
 # HANDOFF — 2026-05-27 morning (Overnight Pipeline Verification)
 
+**Status: ✅ CLOSED 2026-05-27.** Full verification report folded into
+`decisions/DEC-20260526-007-cross-domain-routing.md` addendum 3 and
+`cycles/CYCLE-20260526-cross-domain-router-retrain.md` addendum 3.
+Headline: A (dense GT) strengthens DEC-007 claims; C (seed sweep)
+required a bug fix (`--seed` CLI on both LOO scripts) and a re-run;
+final claim revised — route accuracy is seed-robust, ETH3D rel_imp
+seed-robust, KITTI joint rel_imp downgraded from "+1.35%" to
+"essentially zero" because seed=19 was negative. See those documents
+for the authoritative numbers.
+
+The original handoff content is preserved below for reference but
+should not be acted on — no follow-up tasks remain open.
+
+---
+
 **Mission:** Verify the overnight pipeline that ran during the 2026-05-26
 evening session, harvest numbers, and update DEC-007 + CYCLE with the
 new evidence. No new training is expected.

@@ -132,7 +132,7 @@ Stage 1 (MVR)        ──→ Stage 2 (Memory)    ──→ Stage 3 (Composer)
 | 2 | ✅ done | 2026-05-23 | 2026-05-23 | DEC-20260523-005 |
 | 3 | ✅ done | 2026-05-23 | 2026-05-23 | DEC-20260523-006 |
 | 4 | ✅ done | 2026-05-25 | 2026-05-25 | DEC-20260525-001 |
-| 5 | 🔶 closed; cross-domain follow-up complete | 2026-05-25 | 2026-05-26 | DEC-20260525-003 (S1 KITTI), DEC-20260525-004 (distill defer), DEC-20260525-005 (cross-dataset defer → trigger #2 fired), DEC-20260525-006 (cross-dataset closure), DEC-20260526-007 (cross-domain follow-up); no active handoff |
+| 5 | 🔶 closed; cross-domain follow-up + addenda complete | 2026-05-25 | 2026-05-27 | DEC-20260525-003 (S1 KITTI), DEC-20260525-004 (distill defer), DEC-20260525-005 (cross-dataset defer → trigger #2 fired), DEC-20260525-006 (cross-dataset closure), DEC-20260526-007 (cross-domain follow-up, addenda 1/2/3); no active handoff |
 
 ### Stage 4 闭合状态（2026-05-25）
 
@@ -378,6 +378,73 @@ New server artifacts: `router_kitti_robust_v1`, `router_eth3d_v1`,
 (see CYCLE doc for authoritative paths). No active handoff after this
 closure.
 
+### Stage 5 follow-up addendum 3 (2026-05-27, DEC-007 addendum 3)
+
+Two overnight validations executed via
+`scripts/tonight_overnight.sh` (32/32 OK):
+
+(A) **Dense GT oracle** — ETH3D 50w oracle rebuilt with
+`rig_scan_eval/*.ply` laser-scan depth instead of SfM-sparse
+`points3D.txt`. New `data/eth3d_dense_oracle.py` provides MLP/PLY
+parsers + vectorized world→camera projection. Joint v3 (per-domain
+norm, dense ETH3D + sparse KITTI) retrained + 109-fold LOO.
+
+Held-out LOO route accuracy (vs 33% chance):
+
+```text
+                           KITTI LOO    ETH3D LOO/transfer
+v2 (sparse oracle):        71.19%       48.00%
+v3 (dense oracle):         72.88%       66.00%   (+18pp)
+(b) ETH3D-only v2 dense:   —            68.00%
+KITTI router → ETH3D dense (zero-shot): 42% route_acc, rel_imp -22.59%
+```
+
+Held-out rel_imp vs best-single:
+
+```text
+                           KITTI         ETH3D
+v2 (sparse oracle):        +1.35%        +5.78%
+v3 (dense oracle):         -0.09%        +8.03%
+(b) ETH3D-only v2 dense:   —             +7.63%
+```
+
+Reading: dense GT is a stronger oracle signal. Joint v3 ETH3D LOO
+route accuracy jumps 18pp (48% → 66%) without losing KITTI LOO
+route accuracy. KITTI router still does not transfer (dense rel_imp
+-22.59%, worse than sparse -11.14% because dense oracle widens the
+always_mast3r vs always_spann3r gap). Joint v3 (dense) is the new
+canonical cross-domain router; v2 (sparse) preserved as a more
+conservative oracle baseline.
+
+(C) **Seed sweep** — discovered both LOO scripts hardcoded
+`torch.manual_seed(7)` without `--seed` CLI; original overnight
+sweep produced 5× byte-identical results. Fix: `--seed` added to
+`eval_router_loo.py` + `eval_router_joint_loo.py`, threaded through
+to per-fold training. Re-run via `scripts/rerun_seed_sweep.sh`
+(5 seeds × 3 LOO = 15 runs, 1h06m, all OK).
+
+Seed-variance summary (mean ± std across seeds {7, 11, 13, 17, 19}):
+
+```text
+                            route_acc           rel_imp
+(a) KITTI-robust LOO:       73.56% ± 3.51pp     +3.02% ± 1.35pp
+(b) ETH3D-only LOO:         48.80% ± 3.90pp     +5.68% ± 1.03pp
+(c) Joint v2 KITTI LOO:     70.85% ± 3.87pp     +0.87% ± 1.62pp
+(c) Joint v2 ETH3D LOO:     51.20% ± 4.15pp     +6.15% ± 0.65pp
+```
+
+Reading: route accuracy is seed-robust (all std < 5pp gate; all 15
+runs stay above 33% chance). ETH3D rel_imp is seed-robust (5/5
+joint, 4/5 ETH3D-only above 5% gate). **KITTI rel_imp on joint
+router is NOT seed-robust** (mean +0.87%, seed=19 actually
+negative). The DEC-007 evening "+1.35% KITTI joint rel_imp" was a
+single-seed point sample; revised honest claim downgrades it to
+"essentially zero on average, sign-unstable". Both-domains-above-
+chance claim and ETH3D-side beat-best-single claim both remain
+robust.
+
+No v0.3/v0.5 core touched. No new datasets, no new experts.
+
 ---
 
 ## 6. 与现有文档的关系
@@ -391,17 +458,18 @@ closure.
 ## 7. 第一个动作
 
 Stage 5 已闭合（DEC-20260525-006）+ cross-domain follow-up first-pass
-已闭合（DEC-20260526-007）。**当前 active handoff：
-`mainwork/HANDOFF-20260527-morning.md`**（overnight pipeline 验证：
-dense ETH3D oracle + multi-seed sweep；预期明早收尾）。
+已闭合（DEC-20260526-007，含 addendum 1/2/3）。**当前无 active
+handoff**。HANDOFF-20260527-morning 已完成全部验收：dense GT oracle
+显著强化 (b)/(c) 主张；seed sweep（5 seeds × 3 LOO）确认 route
+accuracy 全部 seed-robust，ETH3D rel_imp seed-robust，KITTI joint
+rel_imp 因 seed=19 出现负值而被诚实下调为"essentially zero"。
 
 阅读顺序（下一 agent）：
 
 1. `CLAUDE.md`
 2. `mainwork.md` §5 + §7
-3. `mainwork/HANDOFF-20260527-morning.md`（本轮接续指南）
-4. `decisions/DEC-20260526-007-cross-domain-routing.md`（待 addendum 3）
-5. `cycles/CYCLE-20260526-cross-domain-router-retrain.md`（待 addendum 3）
+3. `decisions/DEC-20260526-007-cross-domain-routing.md`（含 addendum 1/2/3）
+4. `cycles/CYCLE-20260526-cross-domain-router-retrain.md`（含 addendum 1/2/3）
 
 如需推进下一方向，待选线（trigger 未满足）：
 

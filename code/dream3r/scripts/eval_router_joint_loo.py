@@ -96,6 +96,7 @@ def evaluate_joint_loo(
             d_routing=d_routing,
             sequence_filter=train_seqs,
             per_domain_norm=per_domain_norm,
+            seed=seed,
         )
 
         ckpt = torch.load(
@@ -205,6 +206,7 @@ def evaluate_joint_loo(
         "n_folds_run": len(fold_indices),
         "subsampled": len(fold_indices) < n,
         "per_domain_norm": bool(per_domain_norm),
+        "seed": int(seed),
         "expert_order": expert_order,
         "per_domain_loo_route_accuracy": per_domain_route_acc,
         "per_domain_loo_learned_mean": per_domain_learned_mean,
@@ -247,8 +249,10 @@ def main():
     parser.add_argument("--max-folds", type=int, default=0)
     parser.add_argument("--keep-fold-artifacts", action="store_true")
     parser.add_argument("--per-domain-norm", action="store_true")
+    parser.add_argument("--seed", type=int, default=7)
     args = parser.parse_args()
 
+    torch.manual_seed(args.seed)
     result = evaluate_joint_loo(
         kitti_regime=args.kitti_regime,
         kitti_oracle=args.kitti_oracle,
@@ -263,6 +267,7 @@ def main():
         max_folds=args.max_folds,
         keep_fold_artifacts=args.keep_fold_artifacts,
         per_domain_norm=args.per_domain_norm,
+        seed=args.seed,
     )
     print(json.dumps({
         k: v for k, v in result.items() if k != "per_fold"
