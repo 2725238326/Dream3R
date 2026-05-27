@@ -1,5 +1,7 @@
 # Dream Research Workspace
 
+Last updated: 2026-05-27 (state-conditioned reconstruction pivot: hard expert selection is demoted from headline claim to Composer-as-proposal-prior / diagnostic baseline. New architecture addendum: `specs/SPEC-20260527-001-dream3r-state-conditioned-reconstruction.md`; decision: `decisions/DEC-20260527-009-state-conditioned-reconstruction-pivot.md`.)
+
 Last updated: 2026-05-22 (v0.4 architecture closure round: `code/dream3r/contracts.py` + `repair.py` + `orchestrator.py` + 3 new test files + `ARCHITECTURE_V04_STATUS.md` added; 24 new + 130 existing tests pass; v0.3 code byte-identical. See `ARCHITECTURE_V04_STATUS.md` for the per-axis checklist and explicit stub/fallback/proxy list.)
 
 Earlier last updated: 2026-05-08 (cycle 031: C2 Memory v0.3 local P0 scaffold created; ABL-memory-0 passed as fixture/logging validity gate; cycle 024 scaffold remains engineering baseline only)
@@ -64,9 +66,13 @@ Architecture-first 3R research, with demo and KYKT app integration as required o
 Current mechanism focus:
 
 ```text
-C2 Memory v0.3: replace GRU/vector AnchorBank/NSA-label as the research
-center with state-token recurrence + explicit spatial memory + bus-gated
-write policy. The current planning chain is:
+Post-midterm Dream3R: state-conditioned reconstruction. Composer / hard
+expert selection is a proposal prior and diagnostic baseline, not the
+headline architecture. The current load-bearing question is whether
+Memory / AnchorBank / NSA / Permanence / Critic state can directly
+condition the final pointmap through fusion/correction.
+
+The C2 Memory v0.3 planning chain remains the Memory substrate:
 planning/MEMORY_V03_DESIGN_STUDY.md ->
 specs/SPEC-20260508-001-dream3r-c2-memory-v03-addendum.md ->
 planning/MEMORY_V03_P0_PROTOTYPE_PLAN.md ->
@@ -74,6 +80,9 @@ specs/SPEC-20260508-002-dream3r-memory-v03-ablation-addendum.md ->
 planning/MEMORY_V03_ABLATION_REVIEW.md ->
 planning/MEMORY_V03_P0_EXECUTION_DEC_TEMPLATE.md ->
 experiments/prototypes/memory_v03_p0/README.md.
+
+The current route-adjustment addendum is:
+specs/SPEC-20260527-001-dream3r-state-conditioned-reconstruction.md.
 ```
 
 The current strategy is **not** to prematurely choose one method such as Mamba-3R, Event-DUSt3R, or SplatBridge-4D.

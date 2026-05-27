@@ -133,6 +133,7 @@ Stage 1 (MVR)        ──→ Stage 2 (Memory)    ──→ Stage 3 (Composer)
 | 3 | ✅ done | 2026-05-23 | 2026-05-23 | DEC-20260523-006 |
 | 4 | ✅ done | 2026-05-25 | 2026-05-25 | DEC-20260525-001 |
 | 5 | 🔶 closed; cross-domain follow-up + addenda complete; critic↔router loop attempted | 2026-05-25 | 2026-05-27 | DEC-20260525-003 (S1 KITTI), DEC-20260525-004 (distill defer), DEC-20260525-005 (cross-dataset defer → trigger #2 fired), DEC-20260525-006 (cross-dataset closure), DEC-20260526-007 (cross-domain follow-up, addenda 1/2/3), DEC-20260527-008 (critic↔router closed loop, NEGATIVE); no active handoff |
+| 6 | 🔶 architecture pivot active; state-to-depth wire prototype | 2026-05-27 | — | DEC-20260527-009 (state-conditioned reconstruction pivot); SPEC-20260527-001 |
 
 ### Stage 4 闭合状态（2026-05-25）
 
@@ -489,6 +490,58 @@ without v0.3/v0.5 core edits; the signal does not transfer. See
 DEC-008 §Out of Scope for trigger conditions to revisit (Critic
 retrain on 109w, geometry as router input).
 
+### Stage 6 architecture pivot: state-conditioned reconstruction (2026-05-27, DEC-009)
+
+After the Stage 6 baseline pathology was surfaced, the architecture
+direction was adjusted rather than continuing to optimize hard expert
+selection. New anchor files:
+
+- `specs/SPEC-20260527-001-dream3r-state-conditioned-reconstruction.md`
+- `decisions/DEC-20260527-009-state-conditioned-reconstruction-pivot.md`
+- `cycles/CYCLE-20260527-state-conditioned-reconstruction.md`
+
+Updated reading:
+
+```text
+ComposerRouter is no longer the headline Dream3R contribution.
+It is a proposal prior / regime probe / diagnostic baseline.
+The post-midterm architecture claim is state-conditioned reconstruction:
+Memory / AnchorBank / NSA / Permanence / Critic state must directly
+condition the final pointmap.
+```
+
+This partially supersedes SPEC-20260506-004 Delta 6 pillar D only:
+`Heterogeneous best-of-N Composer` is demoted from main claim to
+baseline/proposal-prior role. It does not delete DEC-007 or DEC-008.
+Those closures remain useful evidence that routing signals exist and that
+reroute alone is not enough.
+
+The immediate Stage 6 rerun remains useful, but the purpose changes:
+
+```text
+old question: does a fusion head improve router output?
+new question: does the smallest state-to-depth wire improve a real expert baseline?
+```
+
+Outcome interpretation:
+
+- positive: current Memory/Critic state already carries usable
+  depth-correction signal.
+- null: the wire is valid, but current state is not depth-informative
+  enough.
+- negative: naive residual correction hurts strong experts; move to
+  reliability-weighted multi-expert fusion.
+
+Next architecture ladder:
+
+1. L0 real-backend guardrail: cache builders must load/check real adapters.
+2. L1 single-expert state-to-depth wire: current Stage 6 head.
+3. L2 multi-expert proposal bank: cache all expert pointmaps, not only the
+   selected expert.
+4. L3 reliability-weighted soft fusion + temporal consistency metrics.
+5. L4 retrain Memory/Anchor state with depth/coherence supervision only if
+   L1/L2 show null or weak signal.
+
 ---
 
 ## 6. 与现有文档的关系
@@ -503,8 +556,9 @@ retrain on 109w, geometry as router input).
 
 Stage 5 已闭合（DEC-20260525-006）+ cross-domain follow-up first-pass
 已闭合（DEC-20260526-007，含 addendum 1/2/3）+ Critic↔Router closed
-loop 已尝试并闭合为 NEGATIVE（DEC-20260527-008）。**当前无 active
-handoff**。
+loop 已尝试并闭合为 NEGATIVE（DEC-20260527-008）。Stage 6 当前方向
+已调整为 state-conditioned reconstruction（DEC-20260527-009 /
+SPEC-20260527-001），不再把 hard expert selection 当主线。
 
 阅读顺序（下一 agent）：
 
@@ -514,13 +568,19 @@ handoff**。
 4. `cycles/CYCLE-20260526-cross-domain-router-retrain.md`（含 addendum 1/2/3）
 5. `decisions/DEC-20260527-008-critic-router-loop.md`（NEGATIVE，含 wiring 教训）
 6. `cycles/CYCLE-20260527-critic-router-loop.md`
+7. `specs/SPEC-20260527-001-dream3r-state-conditioned-reconstruction.md`
+8. `decisions/DEC-20260527-009-state-conditioned-reconstruction-pivot.md`
 
 如需推进下一方向，待选线（trigger 未满足）：
 
+- Stage 6 L0/L1：修复 real adapter loading guardrail，重跑真实
+  expert baseline 上的 state-to-depth wire。
+- Stage 6 L2：缓存 all-expert proposal bank，做 soft fusion /
+  reliability-weighted correction，而不是 hard pick one expert。
+- Stage 6 L3：加入 scale drift / temporal consistency / anchor
+  stability 指标，避免只用 per-window abs_rel 评价 Memory 价值。
 - DEC-008 follow-up #1：Critic retrain on Stage 5 windows
-  （327 examples × 3 experts，~1.5d，可能改善 conflict head 泛化）
-- DEC-008 follow-up #2：把 geometric features 作为 router 训练
-  INPUT（非 reroute heuristic），架构改动较大
+  （327 examples × 3 experts，~1.5d，仅作为 reliability signal 改善项）
 - Track B - S5 tttLRM（独立 handoff，DEC-006/007/008 已完成，可以排）
 - DEC-20260525-004（distilled adapter，trigger 仍未满足）
 - 第三 domain 测试（DEC-007 follow-up #1）

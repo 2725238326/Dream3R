@@ -1,8 +1,39 @@
 # Dream Task Snapshot
 
+Last updated: 2026-05-27 (state-conditioned reconstruction pivot: added `specs/SPEC-20260527-001-dream3r-state-conditioned-reconstruction.md`, `decisions/DEC-20260527-009-state-conditioned-reconstruction-pivot.md`, and `cycles/CYCLE-20260527-state-conditioned-reconstruction.md`; hard expert selection demoted from headline claim to proposal prior / diagnostic baseline; no code change.)
+
 Last updated: 2026-05-22 (v0.5 iteration test plan added after user asked how to iterate, test, and start completing the architecture plans: `planning/DREAM3R_V05_ITERATION_TEST_PLAN.md` defines L0-L4 completion standards, S0 local v0.4 edge tests, S1 A6 KITTI 8-10 window memory evidence, S2 A2 staged adapter real-backend closure, S3 A5 Test3R off-path, S4 A3 dynamic-mask promotion design, server runbook outline, evidence schema, gates, risks, and a short agent prompt; `handoff/ARCHITECTURE_V05_AGENT_START_PROMPT.md` added. Planning only; no v0.5 axis closed. Earlier last-updated note follows.) Last updated: 2026-05-22 (cycle 043 architecture-focus round after user re-prioritization "架构是最重要的内容; 开题报告和综述放一边": W20 SOTA Feature Matrix expanded at `code/dream3r/SOTA_FEATURE_MATRIX.md` (family-grouped 2nd pass) + v0.5 axes spec drafted at `specs/SPEC-20260522-001-dream3r-v05-axes.md` (8 axes A1-A8 with explicit `closes_iff`); markdown only; v0.3 + v0.4 code byte-identical; both candidate-not-final per DEC-20260501-004; sync chain applied. Earlier last-updated note follows.) Last updated: 2026-05-22 (v0.4 architecture closure round, parallel to proposal track: added `code/dream3r/contracts.py` + `repair.py` + `orchestrator.py` + 3 new test files + `ARCHITECTURE_V04_STATUS.md`; 24 new tests + 130 pre-existing tests all pass; v0.3 model.py / modules.py / bus.py / anchor_bank.py / nsa_attention.py / composer_experts/* are byte-identical to before this round; driven by `ARCHITECTURE_V04_AGENT_PROMPT.md`. Proposal-track last-updated note follows.) Last updated: 2026-05-17 (post cycle 042: user 指令开题报告扩展为双支柱项目 — 支柱 A Dream3R 新架构模型 (已有 §1-§9) + 支柱 B KYKT 聚合管理平台 (待新增); PROPOSAL_EXPANSION_PLAN.md + AGENT_HANDOFF_PROPOSAL_EXPANSION.md 已创建; 待其他 agent 执行扩展写作)
 
-Status: **idle** (cycle 043 architecture-focus round shipped 2026-05-22 — `code/dream3r/SOTA_FEATURE_MATRIX.md` family-grouped 2nd pass + `specs/SPEC-20260522-001-dream3r-v05-axes.md` 8 axes A1-A8 drafted; both candidate-not-final; no code change; v0.3 + v0.4 layers byte-identical; v0.4 closure shipped earlier this day preserved below; proposal track cycle 042 closeout preserved further below)
+Status: **idle** (cycle 20260527 state-conditioned reconstruction pivot shipped — hard expert selection demoted from headline claim to Composer-as-proposal-prior / diagnostic baseline; `SPEC-20260527-001` adds A9 real-backend guardrail, A10 multi-expert proposal bank, A11 long-sequence state objective; no code change; Stage 6 real-backend rerun remains next concrete evidence task)
+
+## State-conditioned reconstruction pivot (2026-05-27)
+
+```text
+task_id:    state-conditioned-reconstruction-pivot-2026-05-27
+phase:      architecture addendum on top of Stage 5/6 evidence
+status:     done; markdown/design only; no code change; no training claim
+driver:     user judged hard expert selection insufficient and asked to optimize the original architecture
+priority:   midterm route correction + post-midterm technical mainline
+```
+
+Files added / updated:
+
+| File | Role |
+| --- | --- |
+| `specs/SPEC-20260527-001-dream3r-state-conditioned-reconstruction.md` | New architecture addendum: Dream3R shifts from hard expert selection to state-conditioned reconstruction; Composer becomes proposal prior / regime probe / diagnostic baseline; adds A9-A11 axes and L0-L4 roadmap |
+| `decisions/DEC-20260527-009-state-conditioned-reconstruction-pivot.md` | Decision memo accepting the route adjustment |
+| `cycles/CYCLE-20260527-state-conditioned-reconstruction.md` | Cycle log for the architecture pivot |
+| `mainwork.md` | Stage 6 state-to-depth wire / route pivot added to status and next-action sections |
+| `mainwork/midterm/MIDTERM-20260530.md` | Midterm narrative and roadmap updated: routing-side validated, reconstruction-plane missing, post-midterm focus becomes state-conditioned fusion/correction |
+
+Next concrete action:
+
+```text
+Run Stage 6 L0/L1 only after real adapter loading is guarded: real-backend
+cache rebuild + rerun answers whether the smallest state-to-depth wire has
+signal on real expert baselines. Do not interpret fallback-stub numbers as
+architecture evidence.
+```
 
 ## v0.5 iteration test plan (2026-05-22)
 

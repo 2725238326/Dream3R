@@ -1,6 +1,6 @@
 {
-  "last_turn_at": "2026-05-25T05:30:48.610Z",
-  "turn_count": 51,
-  "last_progress_at": "2026-05-25T05:30:48.610Z",
-  "last_agent_output": "把下面这段发给另一个 agent：\n\n```text\n你是 Dream3R 审阅/推进 agent，工作目录 E:\\Dream3R。\n\n先读：\n1. CLAUDE.md\n2. mainwork.md\n"
+  "last_turn_at": "2026-05-27T07:38:46.901Z",
+  "turn_count": 60,
+  "last_progress_at": "2026-05-27T07:38:46.901Z",
+  "last_agent_output": "已推进完第一版架构路线调整，没有碰 v0.3/v0.5 core，也没有跑模型或训练。\n\n核心改动是把 Dream3R 主线正式从 **hard expert selection** 改成 **sta"
 }

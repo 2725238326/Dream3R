@@ -1,5 +1,7 @@
 # Dream Agent Master Prompt
 
+Last updated: 2026-05-27 (state-conditioned reconstruction pivot: post-midterm Dream3R direction demotes hard expert selection from headline claim to proposal-prior / diagnostic-baseline role; new canonical addendum `specs/SPEC-20260527-001-dream3r-state-conditioned-reconstruction.md` and DEC `decisions/DEC-20260527-009-state-conditioned-reconstruction-pivot.md`.)
+
 Last updated: 2026-05-08 (cycle 031: C2 Memory v0.3 local P0 scaffold created; ABL-memory-0 passed as fixture/logging validity gate; no current server code edit/model run/training/checkpoint download authorized)
 
 Status: canonical entry prompt for Dream research agents.
@@ -97,7 +99,12 @@ Cycle 024 server scaffold is a historical engineering baseline, not the current 
 No KYKT app redesign.
 Architecture-first mechanism specification and thesis validation are the current priority.
 Backend/research pipeline contracts are support infrastructure, not the mainline.
-Current method: mechanism-first correction around C2 Memory v0.3, while preserving multi-track no-all-in posture.
+Current method: state-conditioned reconstruction around Dream3R. Hard
+expert selection / Composer routing is a proposal prior and diagnostic
+baseline, not the headline architecture. C2 Memory v0.3 remains the memory
+substrate, but the load-bearing post-midterm question is whether
+Memory / AnchorBank / NSA / Permanence / Critic state can directly
+condition final pointmap fusion/correction.
 ```
 
 Frontend ownership:
@@ -383,21 +390,32 @@ If the user asks for audit/review:
 Unless the user gives a different priority, the next workflow lanes are:
 
 ```text
-A. User decision on planning/MEMORY_V03_P0_EXECUTION_DEC_TEMPLATE.md:
-   approve local static tensor P0, revise template, or return to research design.
-B. P0 execution DEC, only if explicitly authorized: open a new active DEC and implement ABL-memory-0..8 only under Dream/experiments/prototypes/memory_v03_p0/.
-C. Template revision, if the user wants changes before execution.
-D. Paper boundary maintenance: keep PAPER_DRAFT_V1 claims aligned with the latest evidence labels.
-E. Server implementation only after a new DEC + per-step gate; start behind a v0.3 feature flag.
-F. Broader graph/source mining only when C2 v0.3 comparator coverage is insufficient.
+A. Stage 6 L0/L1 real-backend rerun:
+   guard adapter.load_checkpoint() / backend_status first, then test the
+   single-expert state-to-depth wire on real expert baselines.
+B. Stage 6 L2 architecture planning:
+   design the multi-expert proposal-bank cache and soft fusion /
+   reliability-weighted correction head. Composer stays as proposal prior.
+C. Stage 6 L3 metric planning:
+   add scale drift, temporal consistency, anchor stability, and conflict
+   reduction metrics so Memory / Anchor / NSA can be evaluated on its own
+   claimed advantage.
+D. Midterm boundary maintenance:
+   keep MIDTERM-20260530.md aligned with DEC-009: routing-side validated,
+   reconstruction-plane missing, state-conditioned reconstruction next.
+E. C2 Memory v0.3 execution only if needed for state representation
+   improvement, under a new DEC. The old P0 ABL-memory path is no longer
+   the default next lane unless L1/L2 show null state signal.
+F. Server implementation only after a new DEC + per-step gate; do not
+   modify v0.3/v0.5 core without explicit exemption.
 ```
 
-Prefer A by default.
-Prefer B only with explicit active-conversation execution authorization.
-Prefer C when the template needs scope or gate changes.
-Prefer D when paper language starts to overclaim.
-Prefer E only with explicit server execution authorization.
-Prefer F when the memory mechanism needs more comparator pressure.
+Prefer A by default until the Stage 6 baseline pathology is resolved.
+Prefer B after L1 produces a trustworthy positive/null/negative verdict.
+Prefer C before claiming Memory / Anchor / NSA value beyond per-window abs_rel.
+Prefer D whenever midterm language starts to overclaim full 5-stage closure.
+Prefer E only after state representation is shown to be the bottleneck.
+Prefer F only with explicit server/core authorization.
 
 Frontend note:
 

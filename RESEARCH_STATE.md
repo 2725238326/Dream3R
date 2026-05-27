@@ -1,5 +1,7 @@
 # Dream Research State
 
+Last updated: 2026-05-27 (state-conditioned reconstruction pivot: hard expert selection demoted from headline claim; post-midterm Dream3R direction is persistent-state-conditioned fusion/correction of final pointmap. See `SPEC-20260527-001` and `DEC-20260527-009`.)
+
 Last updated: 2026-05-08 (cycle 031 DONE: Memory v0.3 local P0 scaffold created; ABL-memory-0 passed as fixture/logging validity gate; next recommended = ABL-memory-1 vector baseline under a new DEC)
 
 ## User Intent
@@ -88,6 +90,16 @@ Target both:
 ## Current Research Posture
 
 Do not rush into choosing one final project.
+
+Current Dream3R architecture posture after 2026-05-27:
+
+```text
+Hard expert selection is not the headline contribution.
+Composer remains as proposal prior / regime probe / diagnostic baseline.
+The active architecture direction is state-conditioned reconstruction:
+Memory / AnchorBank / NSA / Permanence / Critic state should directly
+condition the final pointmap via fusion/correction.
+```
 
 First construct:
 
