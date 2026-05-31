@@ -1,5 +1,23 @@
 # Dream Workflow Status
 
+Last updated: 2026-05-31 (prior-conditioned ProposalSetDecoder seed7 controls closed NEGATIVE: correct-state does not beat no-state/shuffle and no-state is better on both domains. StatePriorHead remains positive; two-stage prior pretrain/freeze path is now implemented and frozen-prior smoke reproduces 0.1451/0.1480 on KITTI/ETH3D.)
+
+Last updated: 2026-05-31 (StatePrior diagnostic closed: non-core `StatePriorHead` shows Dream state contains usable expert-prior signal. Seed7 correct-state beats best-single on KITTI/ETH3D and beats no-state/shuffle controls; next work should make this prior an explicit ProposalSetDecoder/native-distillation control path.)
+
+Last updated: 2026-05-30 (Dream3R-PD execution started locally: VGGT-Omega deployment inventory / DEC-016 draft and non-core ProposalSetDecoder prototype / trainer / tests landed; 2 local tests passed; server execution gated.)
+
+Last updated: 2026-05-30 (final architecture path selected: Dream3R-PD = Proposal-bank Distilled State-Conditioned 3R. DEC-015 / SPEC-005 / final plan / v09 handoff added; broad route search should stay closed.)
+
+Last updated: 2026-05-30 (v2.2 admission research updated: DEC-014 / SPEC-004 / runbook / v08 handoff switch the first candidate from vanilla VGGT to VGGT-Omega. Vanilla VGGT is baseline/schema ancestor; OVGGT is a separate cache-memory comparator.)
+
+Last updated: 2026-05-30 (model-first milestone reorganization completed: Dream3R is now routed as proposal encoders + Dream state + state-conditioned reconstruction decoder. DEC-013 / SPEC-003 / milestone plan / v07 handoff added; next candidate experts now limited to VGGT-Omega, CUT3R, MonST3R per DEC-014.)
+
+Last updated: 2026-05-30 (ver2.1 4-seed metric refresh completed on BUAA-Server GPU 1: correct state beats no-state and shuffled-state on KITTI/ETH3D abs_rel and patch-oracle gap; temporal/scale proxies remain open training targets. Summary: `runs/stage6_fusion/ver21_metric_refresh/summary.md`.)
+
+Last updated: 2026-05-30 (Dream3R-ver2.0 SCF midterm closure: DEC-20260530-011 accepted bounded state-conditioned multi-expert fusion as the usable model. L0 real-backend guardrail fixed fallback contamination; L1 residual is negative; L2 SCF is positive. New spec: `specs/SPEC-20260530-001-dream3r-ver2-scf-architecture.md`; new cycle: `cycles/CYCLE-20260530-scf-midterm.md`.)
+
+Last updated: 2026-05-29 (historical two-day SCF convergence handoff corrected; superseded by 2026-05-30 DEC-011/DEC-012.)
+
 Last updated: 2026-05-27 (state-conditioned reconstruction pivot: DEC-20260527-009 + SPEC-20260527-001 created after Stage 6 baseline pathology and user route adjustment. Hard expert selection is now a proposal-prior / diagnostic baseline, not the headline architecture claim. No code change.)
 
 Last updated: 2026-05-22 (cycle 043 architecture-focus round after user re-prioritization "架构是最重要的内容; 开题报告和综述放一边": `code/dream3r/SOTA_FEATURE_MATRIX.md` expanded to family-grouped second pass (W20 plan); `specs/SPEC-20260522-001-dream3r-v05-axes.md` drafted (8 axes A1-A8 covering DINOv3-S backbone / adapter ckpt loading / dynamic_mask proxy → D2 / VGGT + capability_card v2.2 / Test3R Critic-triggered off-path / NSA sliding branch utility / GaussianHead conditional entry deferred / tttLRM A1 sub-action). Both candidate-not-final per DEC-20260501-004. No code change; v0.3 + v0.4 layers byte-identical. Parallel to v0.4 closure round below.) (v0.4 architecture closure round, parallel to the proposal track: `code/dream3r/contracts.py` + `repair.py` + `orchestrator.py` + three new test files added; 24/24 new tests + 130/130 pre-existing tests pass; `ARCHITECTURE_V04_STATUS.md` records the per-axis checklist and explicit stub/fallback/proxy list. v0.3 code is byte-identical to before this round. The proposal track (cycle 042 closeout) is preserved below.)
@@ -89,6 +107,15 @@ Use this prompt when preparing KYKT frontend design work for Gemini CLI.
 | Dream3R W20 SOTA Feature Matrix | **active**; cycle 043 family-grouped second pass shipped 2026-05-22: 8 family sections (Direct pairwise / Many-view streaming / Memory primitive comparators / Monocular priors / Test-time + Critic / Attention + state recurrence / Permanence + dynamic / Rendering + 4D); 30+ external methods mapped to Dream3R modules with explicit `real-wired (no local ckpt)` / `deterministic fallback` / `stub` / `mechanism integrated` / `contract-only` / `comparator-only` / `named, not in registry` status; Gap Report identifies OnlineX + AnchorSplat as roadmap drafting artifacts and MoGe-2 SRC row as missing; supersedes the 2026-05-10 first pass while preserving its differentiation list + evidence map | `code/dream3r/SOTA_FEATURE_MATRIX.md`, cross-links `ARCHITECTURE_V04_STATUS.md`, `composer_experts/method_profiles.py`, `registry/source_registry.md` |
 | Dream3R v0.5 axes spec | **draft**; cycle 043 deliverable, candidate-not-final per DEC-20260501-004: 8 axes A1-A8 (A1 DINOv3-S backbone real / A2 per-adapter ckpt loading / A3 Permanence dynamic_mask_proxy → D2 promotion + CR-2 v2.2 / A4 VGGT + capability_card v2.2 / A5 Test3R Critic-triggered off-path + new action code / A6 NSA sliding branch utility on longer KITTI / A7 GaussianHead conditional main-forward entry — explicitly kept deferred / A8 tttLRM long-context A1 sub-action design). Each axis has explicit `closes_iff` + required actions + dependencies + non-promises + evidence label. v0.5 additive to v0.4 by default. Each axis closure requires its own DEC | `specs/SPEC-20260522-001-dream3r-v05-axes.md` |
 | Dream3R state-conditioned reconstruction pivot | **active direction**; DEC-20260527-009 demotes hard expert selection from headline claim to proposal-prior / diagnostic-baseline role. New architecture target: persistent Memory / AnchorBank / NSA / Permanence / Critic state directly conditions the final pointmap via fusion/correction. Adds A9 real-backend guardrail, A10 multi-expert proposal bank, A11 long-sequence state objective. No code change in this pass | `specs/SPEC-20260527-001-dream3r-state-conditioned-reconstruction.md`, `decisions/DEC-20260527-009-state-conditioned-reconstruction-pivot.md`, `cycles/CYCLE-20260527-state-conditioned-reconstruction.md` |
+| Dream3R-ver2.0 SCF midterm closure | **accepted**; bounded state-conditioned multi-expert fusion is the current usable model. L0 real-backend guardrail passes; L1 residual head is negative; L2 SCF beats best single on KITTI and is marginal positive on ETH3D, near oracle. Composer is proposal prior / scheduler, not the headline architecture | `decisions/DEC-20260530-011-scf-midterm.md`, `specs/SPEC-20260530-001-dream3r-ver2-scf-architecture.md`, `cycles/CYCLE-20260530-scf-midterm.md`, `code/dream3r/scf_head.py`, `code/dream3r/scripts/build_scf_cache.py`, `code/dream3r/scripts/train_scf_head.py` |
+| Dream3R-ver2.1 state-training + metrics | **4-seed control executed**; correct state beats no-state and shuffled-state on abs_rel and patch-oracle gap. Temporal/scale proxies are not yet a win, so they become explicit training targets. Core edits remain gated by a future DEC | `specs/SPEC-20260530-002-dream3r-ver21-state-training-metrics.md`, `planning/DREAM3R_VER21_STATE_TRAINING_PLAN.md`, `decisions/DEC-20260530-012-ver21-state-training-metrics.md`, `cycles/CYCLE-20260530-ver21-architecture-refinement.md` |
+| Dream3R model-first milestone reorganization | **accepted**; Dream3R is now defined as proposal encoders + Dream state + reconstruction decoder. Current bank remains MASt3R/Fast3R/Spann3R; next admission candidates are VGGT-Omega/CUT3R/MonST3R only; native Dream3R comes through decoder distillation, not blind expert search | `decisions/DEC-20260530-013-milestone-reorg-proposal-bank-native-roadmap.md`, `specs/SPEC-20260530-003-dream3r-reconstruction-decoder-roadmap.md`, `planning/DREAM3R_MILESTONE_REORG_20260530.md`, `handoff/ARCHITECTURE_V07_MODEL_REORG_AGENT_PROMPT.md`, `cycles/CYCLE-20260530-milestone-reorg-model-roadmap.md` |
+| Dream3R v2.2 VGGT-Omega admission research | **accepted for planning**; first v2.2 admission target is now VGGT-Omega, with vanilla VGGT kept as baseline/schema ancestor and OVGGT kept as a cache-memory comparator. No checkpoint/download/server run authorized by this doc pass | `decisions/DEC-20260530-014-v22-vggt-omega-admission.md`, `specs/SPEC-20260530-004-dream3r-v22-expert-admission.md`, `planning/DREAM3R_V22_ADMISSION_RUNBOOK.md`, `handoff/ARCHITECTURE_V08_V22_ADMISSION_AGENT_PROMPT.md`, `cycles/CYCLE-20260530-v22-admission-research.md` |
+| Dream3R-PD final architecture selection | **accepted final path**; Dream3R-PD = proposal teachers + Dream state + proposal-set decoder + native decoder distillation with proposal dropout. This is the route to execute; fallback final prototype remains SCF if decoder/distillation gates fail | `decisions/DEC-20260530-015-final-architecture-selection.md`, `specs/SPEC-20260530-005-dream3r-pd-final-architecture.md`, `planning/DREAM3R_PD_FINAL_ARCHITECTURE_PLAN.md`, `handoff/ARCHITECTURE_V09_FINAL_SELECTION_AGENT_PROMPT.md`, `cycles/CYCLE-20260530-final-architecture-selection.md` |
+| Dream3R-PD execution start | **local prototype + first server diagnostic closed**; VGGT-Omega inventory and execution DEC draft written; non-core ProposalSetDecoder + cached-proposal trainer + tests added. Server ProposalSetDecoder v0/v1 did not prove state causality. Follow-up StatePriorHead diagnostic proves the Dream state has expert-prior signal, so next execution should inject a learned prior into the decoder/distillation path rather than scaling unstructured state concatenation | `planning/VGGT_OMEGA_DEPLOYMENT_INVENTORY.md`, `decisions/DEC-20260530-016-vggt-omega-execution-draft.md`, `decisions/DEC-20260530-017-proposal-set-decoder-prototype.md`, `decisions/DEC-20260531-019-state-prior-diagnostic.md`, `code/dream3r/proposal_set_decoder.py`, `code/dream3r/state_prior_head.py`, `cycles/CYCLE-20260531-state-prior-diagnostic.md` |
+| Dream3R StatePrior diagnostic | **accepted; seed7 closed**; correct-state beats best-single on KITTI/ETH3D and beats no-state/shuffle controls on existing SCF caches. This is evidence for state-conditioned expert prior, not a final model head | `decisions/DEC-20260531-019-state-prior-diagnostic.md`, `cycles/CYCLE-20260531-state-prior-diagnostic.md`, `code/dream3r/state_prior_head.py`, `code/dream3r/scripts/train_state_prior_head.py`, `code/dream3r/scripts/run_state_prior_sweep.sh`, `code/dream3r/tests/test_state_prior_head.py` |
+| Dream3R prior-conditioned decoder | **closed negative; two-stage path implemented**; explicit StatePrior-style MLP prior branch added to ProposalSetDecoder, but seed7 joint controls show correct-state does not beat no-state/shuffle. Trainer now supports `--state-prior-checkpoint --freeze-state-prior --prior-kl-weight`; frozen-prior smoke reproduces StatePrior's positive result before refinement training | `decisions/DEC-20260531-020-prior-conditioned-decoder.md`, `cycles/CYCLE-20260531-prior-conditioned-decoder.md`, `code/dream3r/proposal_set_decoder.py`, `code/dream3r/scripts/train_proposal_set_decoder.py`, `code/dream3r/scripts/run_prior_conditioned_decoder_sweep.sh`, `code/dream3r/scripts/run_frozen_prior_decoder_sweep.sh`, `code/dream3r/tests/test_proposal_set_decoder.py` |
+| Dream3R two-day SCF convergence handoff | **superseded by DEC-011 result**; keep as historical prompt shape, but next agents should start from the updated prompt and continue ver2.0/L4, not recreate the pre-run plan | `handoff/ARCHITECTURE_V06_SCF_AGENT_START_PROMPT.md`; historical plan `planning/DREAM3R_2DAY_SCF_MIDTERM_PLAN.md` |
 | Dream3R v0.5 iteration test plan | **ready for execution planning**; 2026-05-22 plan converts v0.4 closure + v0.5 axes into concrete testing sprints: S0 local v0.4 edge hardening, S1 A6 KITTI 8-10 window memory evidence, S2 A2 staged real-backend adapter closure, S3 A5 Test3R off-path, S4 A3 dynamic-mask promotion design, with server runbook outline and evidence schema. Planning artifact only; no v0.5 axis closed | `planning/DREAM3R_V05_ITERATION_TEST_PLAN.md`, `handoff/ARCHITECTURE_V05_AGENT_START_PROMPT.md` |
 | 3R-mix Chinese survey (Track B) | **wound down 2026-05-14 (route C: arXiv-only)**; 2026-05-14 quality pass added CroCo + MASt3R mechanism + §10 failure modes + `fig:timeline`; 2026-05-15 prose naturalization pass rewrote 10 paragraphs to drop LLM-style enumerated structures, parallel patterns and workflow vocabulary; 18 A4 pages, 44 references, 6 figures (4 TikZ + 2 paper-Fig.1 composites), 5 booktabs tables, 0 LaTeX errors / 0 warnings; deliberately decoupled from Dream/KYKT internal vocabulary | `Dream/3R-mix/README.md`, `Dream/3R-mix/NEW_CHAT_HANDOFF.md`, `Dream/3R-mix/main.tex`, `Dream/3R-mix/deliverables/3r_survey_stage_final_2026-05-15_natural.pdf` |
 | Experiment planning | active; local v0.3 P0 scaffold now exists and ABL-memory-0 passed, but later ablations still require separate DEC + gate | `experiments/prototypes/memory_v03_p0/outputs/summary_go_no_go.md` |
@@ -188,14 +215,51 @@ proposal + survey parked):
 
 Track A architecture-first remains the mainline per DEC-20260506-001 and is now also confirmed primary by the 2026-05-22 user re-prioritization. The Dream3R 开题报告 (Track C) and 3R-mix survey (Track B) deliverables are both packaged at cycle 042 / cycle 037 closeout state; submission is the user's post-cycle action whenever they choose to re-open those tracks.
 
+2026-05-30 immediate next handoff:
+
+```text
+Use handoff/ARCHITECTURE_V06_SCF_AGENT_START_PROMPT.md to start the next agent.
+It now starts from DEC-20260530-011 / DEC-20260530-012 and
+SPEC-20260530-001 / SPEC-20260530-002. The next task is not "invent an
+architecture"; it is metric refresh and trained-state evaluation for SCF.
+```
+
+2026-05-30 model-first handoff:
+
+```text
+Use handoff/ARCHITECTURE_V07_MODEL_REORG_AGENT_PROMPT.md for any agent that
+will decide expert admission, reconstruction decoder design, or native
+Dream3R roadmap. The target is not more router search; it is proposal-bank
+Dream3R -> trained-state Dream3R -> native decoder distillation.
+```
+
+2026-05-30 v2.2 admission handoff:
+
+```text
+Use handoff/ARCHITECTURE_V08_V22_ADMISSION_AGENT_PROMPT.md for the next
+VGGT-Omega deployment research pass. It starts with repo/dependency/checkpoint
+inventory and an execution DEC draft; it does not authorize checkpoint
+download, install mutation, or server run by itself.
+```
+
+2026-05-30 final architecture handoff:
+
+```text
+Use handoff/ARCHITECTURE_V09_FINAL_SELECTION_AGENT_PROMPT.md for final-path
+execution. The selected route is Dream3R-PD; next agents should run the
+VGGT-Omega inventory, ProposalSetDecoder, trained-state projection, and
+distillation gates instead of reopening architecture selection.
+```
+
 2026-05-27 route update:
 
 ```text
-Hard expert selection is no longer the post-midterm headline. The next
-admissible architecture direction is state-conditioned reconstruction:
-L0 real-backend guardrail -> L1 single-expert state-to-depth wire ->
-L2 multi-expert proposal-bank fusion -> L3 long-sequence coherence
-metrics. Composer remains as proposal prior / diagnostic baseline.
+Hard expert selection is no longer the post-midterm headline. The accepted
+ver2.0 architecture is state-conditioned reconstruction through SCF:
+L0 real-backend guardrail -> L1 single-expert state-to-depth wire (negative)
+-> L2 multi-expert proposal-bank fusion (positive/ver2.0) -> L3 long-sequence
+coherence metrics -> L4 state retraining. Composer remains as proposal prior /
+diagnostic baseline.
 ```
 
 Still blocked on user approval:

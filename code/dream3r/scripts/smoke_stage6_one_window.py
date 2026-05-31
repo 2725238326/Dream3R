@@ -5,6 +5,7 @@ import torch
 from dream3r.data.kitti_long import KITTILongSequenceDataset
 from dream3r.model import build_dream3r
 from dream3r.orchestrator import build_v04_pipeline
+from dream3r.scripts.train_fusion_head import ensure_real_backends
 from dream3r.scripts.v04_pipeline_with_fusion import build_v04_pipeline_with_fusion
 
 
@@ -26,12 +27,27 @@ def main():
     model = build_dream3r("small_real")
     model.eval()
 
+    # L0 real-backend guardrail (SPEC-20260527-001 Axis A9): a small_real
+    # smoke must run on real adapters, not fallback stubs.
+    ensure_real_backends(model)
+    print("real-backend guardrail: fast3r/mast3r/spann3r all loaded", flush=True)
+
     # Probe a vanilla V04Pipeline to discover d_memory at runtime
     pipeline_probe = build_v04_pipeline(model, max_repair_attempts=1).to(device)
     images = sample["images"][0].unsqueeze(0).to(device)
     with torch.no_grad():
         out = pipeline_probe(images=images, timestep=0)
     print(f"expert.pointmap shape: {tuple(out.expert.pointmap.shape)}", flush=True)
+    expert_backend = out.expert.backend_status.get("backend")
+    print(
+        f"expert: {out.expert.expert_name} backend={expert_backend} "
+        f"is_loaded={out.expert.backend_status.get('is_loaded')}",
+        flush=True,
+    )
+    assert out.expert.backend_status.get("is_loaded", False), (
+        f"small_real dispatched a non-real backend: {out.expert.expert_name} "
+        f"({expert_backend}); baseline would be a fallback stub"
+    )
     mc = out.memory.fused_context
     print(
         f"memory.fused_context shape: {tuple(mc.shape) if mc is not None else None}",

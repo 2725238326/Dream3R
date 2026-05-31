@@ -1,5 +1,19 @@
 # Dream Research State
 
+Last updated: 2026-05-30 (Dream3R-PD execution started locally: VGGT-Omega inventory + execution draft and non-core ProposalSetDecoder prototype/trainer/tests added; server/checkpoint execution remains gated.)
+
+Last updated: 2026-05-30 (final architecture path selected: Dream3R-PD = Proposal-bank Distilled State-Conditioned 3R; route search should stop unless a gate fails with evidence.)
+
+Last updated: 2026-05-30 (v2.2 admission research switched first candidate from vanilla VGGT to VGGT-Omega; vanilla VGGT remains baseline/schema ancestor and OVGGT remains a separate cache-memory comparator.)
+
+Last updated: 2026-05-30 (model-first milestone reorganization: Dream3R is now framed as proposal encoders + Dream state + state-conditioned reconstruction decoder; core bank MASt3R/Fast3R/Spann3R; next candidates VGGT-Omega/CUT3R/MonST3R per DEC-014.)
+
+Last updated: 2026-05-30 (ver2.1 4-seed metric refresh completed: correct state beats no-state and shuffled-state on KITTI/ETH3D abs_rel and patch-oracle gap; temporal/scale proxies remain explicit training targets.)
+
+Last updated: 2026-05-30 (Dream3R-ver2.0 SCF midterm closure: DEC-20260530-011 accepted bounded multi-expert state-conditioned fusion; SPEC-20260530-001 defines the ver2.0 architecture; L1 residual rejected; L2 SCF positive.)
+
+Last updated: 2026-05-29 (two-day SCF convergence handoff corrected; next agent should use `handoff/ARCHITECTURE_V06_SCF_AGENT_START_PROMPT.md` and produce `planning/DREAM3R_2DAY_SCF_MIDTERM_PLAN.md`.)
+
 Last updated: 2026-05-27 (state-conditioned reconstruction pivot: hard expert selection demoted from headline claim; post-midterm Dream3R direction is persistent-state-conditioned fusion/correction of final pointmap. See `SPEC-20260527-001` and `DEC-20260527-009`.)
 
 Last updated: 2026-05-08 (cycle 031 DONE: Memory v0.3 local P0 scaffold created; ABL-memory-0 passed as fixture/logging validity gate; next recommended = ABL-memory-1 vector baseline under a new DEC)
@@ -91,14 +105,25 @@ Target both:
 
 Do not rush into choosing one final project.
 
-Current Dream3R architecture posture after 2026-05-27:
+Current Dream3R architecture posture after 2026-05-30:
 
 ```text
 Hard expert selection is not the headline contribution.
 Composer remains as proposal prior / regime probe / diagnostic baseline.
-The active architecture direction is state-conditioned reconstruction:
-Memory / AnchorBank / NSA / Permanence / Critic state should directly
-condition the final pointmap via fusion/correction.
+The accepted ver2.0 architecture is bounded state-conditioned fusion:
+all real Fast3R / MASt3R / Spann3R proposals are fused by SCFHead using
+confidence, memory.fused_context, and conflict/reliability signals.
+```
+
+Immediate 2026-05-30 handoff:
+
+```text
+Use handoff/ARCHITECTURE_V06_SCF_AGENT_START_PROMPT.md.
+Start from DEC-20260530-011 and SPEC-20260530-001.
+Then read DEC-20260530-012, SPEC-20260530-002, and
+planning/DREAM3R_VER21_STATE_TRAINING_PLAN.md.
+Next work: refresh SCF metrics, then test trained-state vs no-state /
+random-state controls. Do not reopen broad architecture exploration.
 ```
 
 First construct:

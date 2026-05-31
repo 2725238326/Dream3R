@@ -133,7 +133,7 @@ Stage 1 (MVR)        ──→ Stage 2 (Memory)    ──→ Stage 3 (Composer)
 | 3 | ✅ done | 2026-05-23 | 2026-05-23 | DEC-20260523-006 |
 | 4 | ✅ done | 2026-05-25 | 2026-05-25 | DEC-20260525-001 |
 | 5 | 🔶 closed; cross-domain follow-up + addenda complete; critic↔router loop attempted | 2026-05-25 | 2026-05-27 | DEC-20260525-003 (S1 KITTI), DEC-20260525-004 (distill defer), DEC-20260525-005 (cross-dataset defer → trigger #2 fired), DEC-20260525-006 (cross-dataset closure), DEC-20260526-007 (cross-domain follow-up, addenda 1/2/3), DEC-20260527-008 (critic↔router closed loop, NEGATIVE); no active handoff |
-| 6 | 🔶 architecture pivot active; state-to-depth wire prototype | 2026-05-27 | — | DEC-20260527-009 (state-conditioned reconstruction pivot); SPEC-20260527-001 |
+| 6 | ✅ ver2.0 SCF midterm closure; L0 guardrail + L1 negative + L2 positive | 2026-05-27 | 2026-05-30 | DEC-20260527-009; DEC-20260530-011; SPEC-20260527-001; SPEC-20260530-001 |
 
 ### Stage 4 闭合状态（2026-05-25）
 
@@ -538,9 +538,105 @@ Next architecture ladder:
 2. L1 single-expert state-to-depth wire: current Stage 6 head.
 3. L2 multi-expert proposal bank: cache all expert pointmaps, not only the
    selected expert.
-4. L3 reliability-weighted soft fusion + temporal consistency metrics.
-5. L4 retrain Memory/Anchor state with depth/coherence supervision only if
-   L1/L2 show null or weak signal.
+
+### Stage 6 / ver2.0 SCF closure (2026-05-30, DEC-011)
+
+The two-day midterm sprint closed the architecture route into an executable
+Dream3R-ver2.0 prototype: **state-conditioned multi-expert fusion**. This is
+now the current model story for the midterm.
+
+Built without v0.3/v0.5 core edits:
+
+- L0 real-backend guardrail in non-core scripts; fallback-stub Stage 6
+  baselines are no longer admissible.
+- `code/dream3r/scf_head.py`: bounded convex fusion over Fast3R / MASt3R /
+  Spann3R proposal pointmaps.
+- `code/dream3r/scripts/build_scf_cache.py`: all-expert proposal-bank cache.
+- `code/dream3r/scripts/train_scf_head.py`: SCF training + B0-B4 evaluation.
+- `specs/SPEC-20260530-001-dream3r-ver2-scf-architecture.md`: accepted
+  ver2.0 architecture contract.
+
+Evidence:
+
+```text
+L1 single-expert residual: NEGATIVE
+  KITTI 0.2319 -> 0.3412 (-47.1pp)
+  ETH3D 0.2387 -> 0.4580 (-91.9pp)
+
+L2 SCF: POSITIVE
+  KITTI best single 0.154 -> Ours 0.139, +9.8% +/- 2.7%, oracle gap +1.6%
+  ETH3D best single 0.166 -> Ours 0.163, +2.4% +/- 3.0%, oracle gap +1.1%
+```
+
+Honest boundary: this validates bounded state-conditioned fusion, not trained
+Memory/Anchor/NSA quality. The next architecture task is L4 state retraining
+and temporal/scale-drift evaluation, gated by a separate DEC.
+
+### Stage 6 / ver2.1 refinement: trained state + metrics (2026-05-30, DEC-012)
+
+The next architecture refinement keeps SCF as the output model and moves the
+load-bearing question to state quality:
+
+```text
+Can trained Memory / Critic state improve SCF over no-state and random-state
+controls, while also improving temporal/scale behavior?
+```
+
+New artifacts:
+
+- `specs/SPEC-20260530-002-dream3r-ver21-state-training-metrics.md`
+- `planning/DREAM3R_VER21_STATE_TRAINING_PLAN.md`
+- `decisions/DEC-20260530-012-ver21-state-training-metrics.md`
+- `cycles/CYCLE-20260530-ver21-architecture-refinement.md`
+
+Non-core eval surface updated in `code/dream3r/scripts/train_scf_head.py`:
+
+```text
+B_patch_oracle
+patch_oracle_gap_pp
+Ours_temporal_delta_abs_rel
+Ours_scale_drift_proxy
+```
+
+This is the right next step because it can falsify the current weak point:
+ver2.0 shows state-conditioned fusion helps, but not yet that trained
+Memory/Anchor/NSA state is responsible. Any server training or frozen-core
+edit remains gated by a separate DEC.
+
+4-seed GPU 1 refresh (2026-05-30) adds the first real control:
+
+```text
+correct state:  KITTI +9.79%, ETH3D +2.44%
+no state:       KITTI +5.04%, ETH3D -6.47%
+shuffled state: KITTI +3.27%, ETH3D -10.09%
+```
+
+Reading: the gain depends on correctly aligned window state. Correct state
+beats no-state and shuffled-state on both domains for abs_rel and patch-oracle
+gap. Temporal and scale proxies do not yet improve consistently, so they
+should be trained explicitly rather than claimed.
+
+### Stage 6 / milestone reorganization: Dream3R as a 3R model (2026-05-30, DEC-013)
+
+After the SCF/ver2.1 evidence, Dream3R should no longer be described as a
+router or loose ensemble. The model identity is:
+
+```text
+proposal encoders + Dream state + state-conditioned reconstruction decoder
+```
+
+Current proposal bank stays MASt3R / Fast3R / Spann3R. The next candidates
+are deliberately limited to:
+
+- VGGT: global feed-forward geometry foundation;
+- CUT3R: persistent-state continuous 3D perception;
+- MonST3R: dynamic-scene pointmap proposal.
+
+The Dream3R-owned contribution is the reconstruction decoder. SCFHead is
+decoder v0. The roadmap is frozen-state projection -> proposal-set
+transformer -> native decoder distillation. Do not add more experts unless
+they raise oracle/patch-oracle ceiling or improve the decoder output under
+state-conditioned fusion.
 
 ---
 
@@ -556,9 +652,10 @@ Next architecture ladder:
 
 Stage 5 已闭合（DEC-20260525-006）+ cross-domain follow-up first-pass
 已闭合（DEC-20260526-007，含 addendum 1/2/3）+ Critic↔Router closed
-loop 已尝试并闭合为 NEGATIVE（DEC-20260527-008）。Stage 6 当前方向
-已调整为 state-conditioned reconstruction（DEC-20260527-009 /
-SPEC-20260527-001），不再把 hard expert selection 当主线。
+loop 已尝试并闭合为 NEGATIVE（DEC-20260527-008）。Stage 6 已收束为
+Dream3R-ver2.0 / state-conditioned fusion（DEC-20260530-011 /
+SPEC-20260530-001）：L0 real-backend guardrail 已修复 fallback pathology，
+L1 residual negative，L2 SCF positive；不再把 hard expert selection 当主线。
 
 阅读顺序（下一 agent）：
 
@@ -570,15 +667,81 @@ SPEC-20260527-001），不再把 hard expert selection 当主线。
 6. `cycles/CYCLE-20260527-critic-router-loop.md`
 7. `specs/SPEC-20260527-001-dream3r-state-conditioned-reconstruction.md`
 8. `decisions/DEC-20260527-009-state-conditioned-reconstruction-pivot.md`
+9. `decisions/DEC-20260530-011-scf-midterm.md`
+10. `specs/SPEC-20260530-001-dream3r-ver2-scf-architecture.md`
+11. `cycles/CYCLE-20260530-scf-midterm.md`
+12. `decisions/DEC-20260530-013-milestone-reorg-proposal-bank-native-roadmap.md`
+13. `specs/SPEC-20260530-003-dream3r-reconstruction-decoder-roadmap.md`
+14. `planning/DREAM3R_MILESTONE_REORG_20260530.md`
+15. `decisions/DEC-20260530-014-v22-vggt-omega-admission.md`
+16. `specs/SPEC-20260530-004-dream3r-v22-expert-admission.md`
+17. `planning/DREAM3R_V22_ADMISSION_RUNBOOK.md`
+18. `handoff/ARCHITECTURE_V08_V22_ADMISSION_AGENT_PROMPT.md`
+19. `decisions/DEC-20260530-015-final-architecture-selection.md`
+20. `specs/SPEC-20260530-005-dream3r-pd-final-architecture.md`
+21. `planning/DREAM3R_PD_FINAL_ARCHITECTURE_PLAN.md`
+22. `handoff/ARCHITECTURE_V09_FINAL_SELECTION_AGENT_PROMPT.md`
+23. `planning/VGGT_OMEGA_DEPLOYMENT_INVENTORY.md`
+24. `decisions/DEC-20260530-016-vggt-omega-execution-draft.md`
+25. `decisions/DEC-20260530-017-proposal-set-decoder-prototype.md`
+26. `cycles/CYCLE-20260530-dream3r-pd-execution-start.md`
+27. `decisions/DEC-20260530-018-proposal-set-decoder-training-run.md`
+28. `cycles/CYCLE-20260530-proposal-set-decoder-training.md`
+29. `decisions/DEC-20260531-019-state-prior-diagnostic.md`
+30. `cycles/CYCLE-20260531-state-prior-diagnostic.md`
+31. `decisions/DEC-20260531-020-prior-conditioned-decoder.md`
+32. `cycles/CYCLE-20260531-prior-conditioned-decoder.md`
 
-如需推进下一方向，待选线（trigger 未满足）：
+如需推进下一方向，优先线：
 
-- Stage 6 L0/L1：修复 real adapter loading guardrail，重跑真实
-  expert baseline 上的 state-to-depth wire。
-- Stage 6 L2：缓存 all-expert proposal bank，做 soft fusion /
-  reliability-weighted correction，而不是 hard pick one expert。
+- Dream3R-PD final path：最终路线已定为 proposal teachers + Dream state +
+  ProposalSetDecoder + native distillation with proposal dropout。后续只执行
+  gate，不再重新做路线搜索；SCF 是 gates 失败时的 honest fallback prototype。
+- Dream3R-PD execution start：本地已新增 non-core
+  `code/dream3r/proposal_set_decoder.py` +
+  `code/dream3r/scripts/train_proposal_set_decoder.py` +
+  `code/dream3r/tests/test_proposal_set_decoder.py`；本地 2 tests pass。
+  已 scp 到服务器并启动 GPU1 training sweep；输出在
+  `/hdd3/kykt26/code/dream3r/runs/stage6_fusion/proposal_set_decoder_sweep/`。
+  `state_seed_7` 已完成：KITTI +3.01pp vs best single，ETH3D -17.18pp
+  vs best single；完整 v0 sweep 结论是 KITTI 小幅稳定正向、ETH3D 负向，
+  且 correct-state 与 shuffle-state 基本打平，不能证明 Dream-state
+  causality。v1 state-bias seed7 只给 KITTI 极小 state-control separation
+  （0.1470 vs shuffle 0.1477），ETH3D 无 state 优势；不要继续扩 v1 sweep，
+  下一步应做 trained state objective / better state representation。
+- 2026-05-31 follow-up：`StatePriorHead` seed7 correct/no-state/shuffle
+  控制已闭合。Correct-state 在 KITTI/ETH3D 同时优于 best-single
+  （0.1451 vs 0.1523；0.1480 vs 0.1585），no-state 在 ETH3D 崩到
+  0.2003，shuffle-state 在 KITTI/ETH3D 崩到 0.1622/0.2111。结论：
+  Dream state 有可用 expert-prior 信号；ProposalSetDecoder v0/v1 的问题
+  是没有把 state 作为稳定 prior/control path 使用。下一步不要继续盲目扩
+  decoder，而应把 learned StatePrior 注入 ProposalSetDecoder / native
+  distillation。
+- 2026-05-31 follow-up #2：已把 StatePrior-style MLP prior 接入非 core
+  `ProposalSetDecoder`，新增 `state_prior_weights` 输出、prior entropy 记录
+  和 `run_prior_conditioned_decoder_sweep.sh`。本地 6/6 相关测试通过；
+  server 1-epoch smoke 跑通；seed7 correct/no-state/shuffle 控制已闭合为
+  NEGATIVE。Correct-state 为 KITTI 0.1523 / ETH3D 0.1828，no-state 反而为
+  0.1201 / 0.1717，shuffle 为 0.1481 / 0.1855。结论：StatePriorHead
+  证明 state 有信号，但 joint ProposalSetDecoder 训练会压塌/覆盖该 prior。
+  下一步应做 two-stage prior pretrain/freeze 或 KL regularization，再训练
+  proposal-token refinement；不要继续加大当前 joint decoder。已把该路径落到
+  `train_proposal_set_decoder.py` 参数：
+  `--state-prior-checkpoint --freeze-state-prior --prior-kl-weight`，并新增
+  `run_frozen_prior_decoder_sweep.sh`。加载 DEC-019 checkpoint 的 frozen-prior
+  1-epoch smoke 复现正结果：KITTI 0.1451、ETH3D 0.1480。
+- v2.2 admission contract：只为 VGGT-Omega / CUT3R / MonST3R 写 adapter/cache/eval
+  contract，不做盲目 checkpoint 下载。
+  Vanilla VGGT 只作 baseline/schema ancestor；OVGGT 只作 cache-memory
+  comparator，不要和 VGGT-Omega 混用。
+- Decoder v1/v2：先在现有 proposal cache 上做 non-core frozen-state
+  projection 或 proposal-set transformer。
+- Stage 6 L4：训练或规划 depth/coherence-aligned Memory/Critic state，
+  重跑 trained-state vs no-state SCF ablation（需要单独 DEC）。
 - Stage 6 L3：加入 scale drift / temporal consistency / anchor
   stability 指标，避免只用 per-window abs_rel 评价 Memory 价值。
+- SCF packaging：整理中期展示图表，保持 KITTI robust / ETH3D noisy /
+  trained-memory-unproven 三条边界。
 - DEC-008 follow-up #1：Critic retrain on Stage 5 windows
   （327 examples × 3 experts，~1.5d，仅作为 reliability signal 改善项）
 - Track B - S5 tttLRM（独立 handoff，DEC-006/007/008 已完成，可以排）

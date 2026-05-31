@@ -1,5 +1,15 @@
 # Dream Agent Master Prompt
 
+Last updated: 2026-05-30 (Dream3R-PD local execution start: use DEC-20260530-017 and train_proposal_set_decoder.py for the first non-core decoder prototype; server/checkpoint execution remains gated.)
+
+Last updated: 2026-05-30 (final architecture path selected: use DEC-20260530-015 / SPEC-20260530-005 and handoff/ARCHITECTURE_V09_FINAL_SELECTION_AGENT_PROMPT.md; broad route search is closed unless a gate fails with evidence.)
+
+Last updated: 2026-05-30 (ver2.1 architecture refinement: next agents should use DEC-20260530-012 / SPEC-20260530-002 for trained-state + metric work on top of SCF.)
+
+Last updated: 2026-05-30 (Dream3R-ver2.0 SCF midterm closure: next agents must start from DEC-20260530-011 and SPEC-20260530-001; broad architecture search remains closed.)
+
+Last updated: 2026-05-29 (two-day SCF convergence handoff corrected: use `handoff/ARCHITECTURE_V06_SCF_AGENT_START_PROMPT.md`; expected artifact `planning/DREAM3R_2DAY_SCF_MIDTERM_PLAN.md`.)
+
 Last updated: 2026-05-27 (state-conditioned reconstruction pivot: post-midterm Dream3R direction demotes hard expert selection from headline claim to proposal-prior / diagnostic-baseline role; new canonical addendum `specs/SPEC-20260527-001-dream3r-state-conditioned-reconstruction.md` and DEC `decisions/DEC-20260527-009-state-conditioned-reconstruction-pivot.md`.)
 
 Last updated: 2026-05-08 (cycle 031: C2 Memory v0.3 local P0 scaffold created; ABL-memory-0 passed as fixture/logging validity gate; no current server code edit/model run/training/checkpoint download authorized)
@@ -99,12 +109,15 @@ Cycle 024 server scaffold is a historical engineering baseline, not the current 
 No KYKT app redesign.
 Architecture-first mechanism specification and thesis validation are the current priority.
 Backend/research pipeline contracts are support infrastructure, not the mainline.
-Current method: state-conditioned reconstruction around Dream3R. Hard
-expert selection / Composer routing is a proposal prior and diagnostic
-baseline, not the headline architecture. C2 Memory v0.3 remains the memory
-substrate, but the load-bearing post-midterm question is whether
-Memory / AnchorBank / NSA / Permanence / Critic state can directly
-condition final pointmap fusion/correction.
+Current method: Dream3R-ver2.0 state-conditioned fusion. Hard expert
+selection / Composer routing is a proposal prior and diagnostic baseline,
+not the headline architecture. The accepted midterm model fuses real
+Fast3R / MASt3R / Spann3R proposals using confidence, memory.fused_context,
+and conflict/reliability signals. C2 Memory v0.3 remains the memory
+substrate, but the next load-bearing question is whether trained
+Memory / AnchorBank / NSA / Critic state can improve SCF beyond the current
+fixed state embedding. Ver2.1 adds patch-oracle, temporal-delta, and
+scale-drift metrics before any stronger Memory/Anchor/NSA claim is allowed.
 ```
 
 Frontend ownership:
@@ -390,32 +403,32 @@ If the user asks for audit/review:
 Unless the user gives a different priority, the next workflow lanes are:
 
 ```text
-A. Stage 6 L0/L1 real-backend rerun:
-   guard adapter.load_checkpoint() / backend_status first, then test the
-   single-expert state-to-depth wire on real expert baselines.
-B. Stage 6 L2 architecture planning:
-   design the multi-expert proposal-bank cache and soft fusion /
-   reliability-weighted correction head. Composer stays as proposal prior.
-C. Stage 6 L3 metric planning:
-   add scale drift, temporal consistency, anchor stability, and conflict
-   reduction metrics so Memory / Anchor / NSA can be evaluated on its own
-   claimed advantage.
+A. Dream3R-ver2.0 SCF consolidation:
+   use DEC-20260530-011 and SPEC-20260530-001 as the authoritative model
+   contract. Do not reopen hard-router-as-mainline or broad architecture
+   exploration.
+B. Stage 6 L3 metric planning:
+   use SPEC-20260530-002 and train_scf_head.py's patch-oracle,
+   temporal-delta, and scale-drift outputs so Memory / Anchor / NSA can be
+   evaluated on its own claimed advantage.
+C. Stage 6 L4 state retraining:
+   retrain Memory/Critic with depth/coherence-aligned objectives, then rerun
+   SCF vs no-state/trained-state ablations. Any core edit needs a DEC.
 D. Midterm boundary maintenance:
-   keep MIDTERM-20260530.md aligned with DEC-009: routing-side validated,
-   reconstruction-plane missing, state-conditioned reconstruction next.
+   keep MIDTERM-20260530.md aligned with DEC-011: L0 guardrail fixed,
+   L1 residual negative, L2 SCF positive, trained-memory claim still open.
 E. C2 Memory v0.3 execution only if needed for state representation
    improvement, under a new DEC. The old P0 ABL-memory path is no longer
-   the default next lane unless L1/L2 show null state signal.
+   the default next lane unless SCF state ablations require it.
 F. Server implementation only after a new DEC + per-step gate; do not
    modify v0.3/v0.5 core without explicit exemption.
 ```
 
-Prefer A by default until the Stage 6 baseline pathology is resolved.
-Prefer B after L1 produces a trustworthy positive/null/negative verdict.
-Prefer C before claiming Memory / Anchor / NSA value beyond per-window abs_rel.
-Prefer D whenever midterm language starts to overclaim full 5-stage closure.
-Prefer E only after state representation is shown to be the bottleneck.
-Prefer F only with explicit server/core authorization.
+Prefer A when handing off to another planning agent.
+Prefer B before claiming Memory / Anchor / NSA value beyond per-window abs_rel.
+Prefer C when an executor is ready to plan or run the next state-training step.
+Prefer D whenever midterm language starts to overclaim trained memory or SOTA.
+Prefer F only after state representation is shown to be the bottleneck.
 
 Frontend note:
 

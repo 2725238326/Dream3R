@@ -46,6 +46,34 @@ from dream3r.scripts.build_oracle_expert_labels import (
 )
 
 
+# Experts with real server checkpoints; dispatch must use a real backend for
+# any baseline cache (SPEC-20260527-001 Axis A9 real-backend guardrail).
+REAL_EXPERTS = ("fast3r", "mast3r", "spann3r")
+
+
+def ensure_real_backends(model, required=REAL_EXPERTS) -> None:
+    """L0 real-backend guardrail (SPEC-20260527-001 Axis A9).
+
+    ``build_dream3r`` registers adapter classes but never calls
+    ``adapter.load_checkpoint()``, so dispatch would silently return
+    fallback-stub pointmaps and contaminate any baseline. Load the required
+    experts through the model's own registry -- the same instances dispatch
+    retrieves and caches via ``ExpertRegistry.get`` -- and assert each is a
+    real loaded backend.
+    """
+    registry = getattr(model.composer, "registry", None)
+    if registry is None:
+        raise RuntimeError("composer has no expert registry; cannot guard real backend")
+    for name in required:
+        adapter = registry.get(name)
+        adapter.load_checkpoint()
+        if not adapter.is_loaded:
+            raise RuntimeError(
+                f"{name} did not load a real checkpoint; "
+                f"refusing to run on a fallback-stub backend"
+            )
+
+
 # ---------------------------------------------------------------------------
 # Cache build
 # ---------------------------------------------------------------------------
@@ -114,6 +142,16 @@ def build_cache(
 
     model = build_dream3r(preset)
     model.eval()
+
+    # --- L0 real-backend guardrail (SPEC-20260527-001 Axis A9) ---
+    real_preset = preset.endswith("_real")
+    if real_preset:
+        ensure_real_backends(model)
+        print(f"  real-backend guardrail: {list(REAL_EXPERTS)} all loaded", flush=True)
+    else:
+        print(f"  WARNING: preset={preset!r} has no real backend; this cache is "
+              f"NOT a valid expert baseline", flush=True)
+
     pipeline = build_v04_pipeline(model, max_repair_attempts=1).to(device)
 
     if dataset_name == "kitti_long":
@@ -142,6 +180,16 @@ def build_cache(
             print(f"  [{idx+1}] {seq}: SKIP (missing contracts)", flush=True)
             continue
 
+        # --- A9: record per-entry backend; refuse fallback-stub baselines ---
+        expert_backend = expert.backend_status.get("backend")
+        if real_preset and not expert.backend_status.get("is_loaded", False):
+            raise RuntimeError(
+                f"{seq}: dispatched expert {expert.expert_name!r} backend="
+                f"{expert_backend!r} is not a real loaded adapter; aborting to "
+                f"avoid contaminating the baseline (load a router checkpoint or "
+                f"restrict dispatch to {list(REAL_EXPERTS)})"
+            )
+
         memory_context = memory.fused_context.detach().cpu().squeeze(0) \
             if memory.fused_context is not None else None
         if memory_context is not None and d_memory is None:
@@ -150,6 +198,7 @@ def build_cache(
         entry = {
             "seq": seq,
             "expert_name": expert.expert_name,
+            "expert_backend": expert_backend,
             "expert_pointmap": expert.pointmap.detach().cpu().squeeze(0),     # [N, P, 3]
             "expert_confidence": expert.confidence.detach().cpu().squeeze(0), # [N, P, 1]
             "memory_context": memory_context,                                   # [D_mem]

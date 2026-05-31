@@ -1,10 +1,356 @@
 # Dream Task Snapshot
 
+Last updated: 2026-05-31 (prior-conditioned ProposalSetDecoder seed7 controls closed NEGATIVE: correct-state 0.1523/0.1828, no-state 0.1201/0.1717, shuffle 0.1481/0.1855 on KITTI/ETH3D. StatePriorHead remains positive evidence, but joint ProposalSetDecoder training collapses/overrides the prior. Two-stage route implemented via `--state-prior-checkpoint --freeze-state-prior --prior-kl-weight`; frozen-prior smoke reproduces positive StatePrior result 0.1451/0.1480. Earlier last-updated note follows.)
+
+Last updated: 2026-05-31 (StatePrior diagnostic closed after ProposalSetDecoder v0/v1 failed state-causality: non-core `StatePriorHead` + trainer/tests added; seed7 correct/no-state/shuffle controls completed on BUAA-Server existing SCF caches. Correct-state beats best-single on KITTI/ETH3D and beats both controls; next work should inject learned state prior into ProposalSetDecoder/native distillation, not scale unstructured state concat. Earlier last-updated note follows.)
+
+Last updated: 2026-05-30 (Dream3R-PD execution started locally: VGGT-Omega deployment inventory + DEC-016 execution draft added; non-core ProposalSetDecoder prototype/trainer/tests added under DEC-017; local unit test passed 2/2. No checkpoint, no server run, no frozen-core edit. Earlier last-updated note follows.)
+
+Last updated: 2026-05-30 (final architecture path selected: Dream3R-PD = Proposal-bank Distilled State-Conditioned 3R. DEC-015 / SPEC-005 / final plan / v09 handoff added. Next work should execute VGGT-Omega inventory, ProposalSetDecoder, trained-state projection, and native distillation gates rather than reopening route search. Earlier last-updated note follows.)
+
+Last updated: 2026-05-30 (v2.2 admission research switched first candidate from vanilla VGGT to VGGT-Omega. DEC-014 / SPEC-004 / runbook / v08 handoff added. Current route: keep MASt3R/Fast3R/Spann3R; admit VGGT-Omega first, then CUT3R and MonST3R by contract. Vanilla VGGT is baseline/schema ancestor; OVGGT is a separate cache-memory comparator. Earlier last-updated note follows.)
+
+Last updated: 2026-05-30 (milestone reorganization completed: Dream3R is now organized as proposal encoders + Dream state + state-conditioned reconstruction decoder, not hard routing or loose ensemble. DEC-013 / SPEC-003 / milestone plan / v07 handoff added. Next route now follows DEC-014: keep MASt3R/Fast3R/Spann3R, admit only VGGT-Omega/CUT3R/MonST3R by contract, then train non-core reconstruction decoder and state projection. Earlier last-updated note follows.)
+
+Last updated: 2026-05-30 (ver2.1 4-seed metric refresh completed on BUAA-Server GPU 1: SCF + correct state beats no-state and shuffled-state on KITTI/ETH3D abs_rel and patch-oracle gap; temporal/scale proxies remain open training targets. Summary: `runs/stage6_fusion/ver21_metric_refresh/summary.md`. No frozen core edits. Earlier last-updated note follows.)
+
+Last updated: 2026-05-30 (Dream3R-ver2.0 SCF midterm closure: `DEC-20260530-011` accepted L0 real-backend guardrail, L1 single-expert residual NEGATIVE, and L2 bounded multi-expert SCF POSITIVE. New architecture spec `specs/SPEC-20260530-001-dream3r-ver2-scf-architecture.md`; cycle log `cycles/CYCLE-20260530-scf-midterm.md`; midterm/mainwork synced. Next agents should continue from SCF/ver2.0 + L4 state retraining/metrics, not reopen broad architecture search. Earlier last-updated note follows.)
+
+Last updated: 2026-05-29 (two-day SCF convergence STARTED: `planning/DREAM3R_2DAY_SCF_MIDTERM_PLAN.md` created — 10-section plan (Dream3R-v0.6 SCF model def, B0-B4 + oracle baselines, ablations, metrics, 2-day schedule, verified patch surface, L0/L1/L2 gates, acceptance). First safe step done: L0 real-backend guardrail (SPEC A9) staged locally in non-core scripts `code/dream3r/scripts/train_fusion_head.py` (new `ensure_real_backends` helper + per-entry `expert_backend`, gated on real presets) and `code/dream3r/scripts/smoke_stage6_one_window.py` (asserts dispatched expert is real). Resolved handoff Open Question #1: `ExpertRegistry.get()` caches, so dispatch reuses pre-loaded adapters. No core edits; no server run yet. Earlier last-updated note follows.)
+
+Last updated: 2026-05-29 (two-day SCF convergence handoff corrected: `handoff/ARCHITECTURE_V06_SCF_AGENT_START_PROMPT.md` now tells the next agent to produce `planning/DREAM3R_2DAY_SCF_MIDTERM_PLAN.md` and immediately begin the first safe planning/execution step for the 2026-05-29 to 2026-05-30 midterm window. Earlier last-updated note follows.)
+
 Last updated: 2026-05-27 (state-conditioned reconstruction pivot: added `specs/SPEC-20260527-001-dream3r-state-conditioned-reconstruction.md`, `decisions/DEC-20260527-009-state-conditioned-reconstruction-pivot.md`, and `cycles/CYCLE-20260527-state-conditioned-reconstruction.md`; hard expert selection demoted from headline claim to proposal prior / diagnostic baseline; no code change.)
 
 Last updated: 2026-05-22 (v0.5 iteration test plan added after user asked how to iterate, test, and start completing the architecture plans: `planning/DREAM3R_V05_ITERATION_TEST_PLAN.md` defines L0-L4 completion standards, S0 local v0.4 edge tests, S1 A6 KITTI 8-10 window memory evidence, S2 A2 staged adapter real-backend closure, S3 A5 Test3R off-path, S4 A3 dynamic-mask promotion design, server runbook outline, evidence schema, gates, risks, and a short agent prompt; `handoff/ARCHITECTURE_V05_AGENT_START_PROMPT.md` added. Planning only; no v0.5 axis closed. Earlier last-updated note follows.) Last updated: 2026-05-22 (cycle 043 architecture-focus round after user re-prioritization "架构是最重要的内容; 开题报告和综述放一边": W20 SOTA Feature Matrix expanded at `code/dream3r/SOTA_FEATURE_MATRIX.md` (family-grouped 2nd pass) + v0.5 axes spec drafted at `specs/SPEC-20260522-001-dream3r-v05-axes.md` (8 axes A1-A8 with explicit `closes_iff`); markdown only; v0.3 + v0.4 code byte-identical; both candidate-not-final per DEC-20260501-004; sync chain applied. Earlier last-updated note follows.) Last updated: 2026-05-22 (v0.4 architecture closure round, parallel to proposal track: added `code/dream3r/contracts.py` + `repair.py` + `orchestrator.py` + 3 new test files + `ARCHITECTURE_V04_STATUS.md`; 24 new tests + 130 pre-existing tests all pass; v0.3 model.py / modules.py / bus.py / anchor_bank.py / nsa_attention.py / composer_experts/* are byte-identical to before this round; driven by `ARCHITECTURE_V04_AGENT_PROMPT.md`. Proposal-track last-updated note follows.) Last updated: 2026-05-17 (post cycle 042: user 指令开题报告扩展为双支柱项目 — 支柱 A Dream3R 新架构模型 (已有 §1-§9) + 支柱 B KYKT 聚合管理平台 (待新增); PROPOSAL_EXPANSION_PLAN.md + AGENT_HANDOFF_PROPOSAL_EXPANSION.md 已创建; 待其他 agent 执行扩展写作)
 
-Status: **idle** (cycle 20260527 state-conditioned reconstruction pivot shipped — hard expert selection demoted from headline claim to Composer-as-proposal-prior / diagnostic baseline; `SPEC-20260527-001` adds A9 real-backend guardrail, A10 multi-expert proposal bank, A11 long-sequence state objective; no code change; Stage 6 real-backend rerun remains next concrete evidence task)
+Status: **ready** (Dream3R-PD local/server diagnostic pass complete through StatePrior + prior-conditioned decoder. StatePrior is positive; joint ProposalSetDecoder is negative. The next implementation step is two-stage StatePrior pretrain/freeze or KL-regularized decoder training, not a larger joint decoder. VGGT-Omega execution DEC remains a separate gated branch.)
+
+## Prior-conditioned ProposalSetDecoder (2026-05-31)
+
+```text
+task_id:    dream3r-prior-conditioned-decoder-2026-05-31
+phase:      decoder repair after StatePrior positive diagnostic
+status:     closed negative; seed7 server controls complete
+driver:     DEC-019 proved state-prior signal exists
+priority:   test whether explicit prior logits repair decoder state causality
+```
+
+Files added / updated:
+
+| File | Role |
+| --- | --- |
+| `code/dream3r/proposal_set_decoder.py` | Adds explicit `state_prior_mlp` branch and `state_prior_weights` output |
+| `code/dream3r/scripts/train_proposal_set_decoder.py` | Records prior config and `mean_prior_entropy` |
+| `code/dream3r/scripts/run_prior_conditioned_decoder_sweep.sh` | GPU1 seed7 state/no-state/shuffle runner |
+| `code/dream3r/tests/test_proposal_set_decoder.py` | Adds prior-branch behavior checks |
+| `decisions/DEC-20260531-020-prior-conditioned-decoder.md` | Decision and boundaries |
+| `cycles/CYCLE-20260531-prior-conditioned-decoder.md` | Active cycle log |
+
+Server smoke:
+
+```text
+runs/stage6_fusion/prior_conditioned_decoder_smoke_seed7
+KITTI 0.1480 vs best_single 0.1523
+ETH3D 0.1875 vs best_single 0.1585
+```
+
+Seed7 result:
+
+```text
+correct-state: KITTI 0.1523, ETH3D 0.1828
+no-state:      KITTI 0.1201, ETH3D 0.1717
+shuffle-state: KITTI 0.1481, ETH3D 0.1855
+```
+
+Conclusion: prior-conditioned joint decoder does not repair state causality.
+No-state beats correct-state on both domains.
+
+Two-stage executable path:
+
+```text
+train_proposal_set_decoder.py \
+  --state-prior-checkpoint runs/stage6_fusion/state_prior_sweep/state_seed_7/latest.pt \
+  --freeze-state-prior \
+  --prior-kl-weight 0.1
+```
+
+Frozen-prior smoke:
+
+```text
+runs/stage6_fusion/prior_frozen_decoder_smoke_seed7
+KITTI 0.1451 vs best_single 0.1523
+ETH3D 0.1480 vs best_single 0.1585
+```
+
+## StatePrior diagnostic closure (2026-05-31)
+
+```text
+task_id:    dream3r-state-prior-diagnostic-2026-05-31
+phase:      Dream-state causality isolation after ProposalSetDecoder v0/v1
+status:     closed; seed7 controls complete
+driver:     user asked to keep pushing after decoder state-causality weakness
+priority:   prove whether Dream state contains usable expert-prior signal
+```
+
+Files added:
+
+| File | Role |
+| --- | --- |
+| `code/dream3r/state_prior_head.py` | Non-core state-only expert-prior diagnostic head |
+| `code/dream3r/scripts/train_state_prior_head.py` | Trainer/eval over existing SCF caches |
+| `code/dream3r/scripts/run_state_prior_sweep.sh` | GPU1 seed7 control runner |
+| `code/dream3r/tests/test_state_prior_head.py` | Shape/gradient/state-control tests |
+| `decisions/DEC-20260531-019-state-prior-diagnostic.md` | Decision + final result |
+| `cycles/CYCLE-20260531-state-prior-diagnostic.md` | Execution log |
+
+Seed7 result:
+
+```text
+correct-state: KITTI 0.1451 (+4.73 pp), ETH3D 0.1480 (+6.64 pp)
+no-state:      KITTI 0.1472 (+3.33 pp), ETH3D 0.2003 (-26.38 pp)
+shuffle-state: KITTI 0.1622 (-6.51 pp), ETH3D 0.2111 (-33.18 pp)
+```
+
+Conclusion: Dream state has usable expert-prior signal. ProposalSetDecoder
+v0/v1 failed because the decoder did not preserve that signal as an explicit
+control path.
+
+## Dream3R-PD execution start (2026-05-30)
+
+```text
+task_id:    dream3r-pd-execution-start-2026-05-30
+phase:      local docs/code start after final architecture selection
+status:     done locally; server/checkpoint execution gated
+driver:     user asked to comprehensively push the selected architecture
+priority:   turn Dream3R-PD from route doc into first non-core executable prototype
+```
+
+Files added:
+
+| File | Role |
+| --- | --- |
+| `planning/VGGT_OMEGA_DEPLOYMENT_INVENTORY.md` | Upstream repo/checkpoint/dependency/output inventory |
+| `decisions/DEC-20260530-016-vggt-omega-execution-draft.md` | Non-active one-window smoke execution DEC draft |
+| `code/dream3r/proposal_set_decoder.py` | Non-core per-patch proposal-token decoder |
+| `code/dream3r/scripts/train_proposal_set_decoder.py` | Training/eval script over existing SCF caches |
+| `code/dream3r/tests/test_proposal_set_decoder.py` | Shape/gradient/no-state tests |
+| `decisions/DEC-20260530-017-proposal-set-decoder-prototype.md` | Boundary + verification DEC |
+| `cycles/CYCLE-20260530-dream3r-pd-execution-start.md` | Cycle log |
+
+Verification:
+
+```text
+python -m py_compile code/dream3r/proposal_set_decoder.py \
+  code/dream3r/scripts/train_proposal_set_decoder.py \
+  code/dream3r/tests/test_proposal_set_decoder.py
+
+python -m pytest code/dream3r/tests/test_proposal_set_decoder.py -q
+# 2 passed
+```
+
+## Dream3R-PD final architecture selection (2026-05-30)
+
+```text
+task_id:    dream3r-pd-final-architecture-2026-05-30
+phase:      final architecture selection
+status:     done for route selection; implementation gated
+driver:     user asked agent to autonomously optimize architecture and produce a final-choice方案
+priority:   stop route churn and define the executable final model path
+```
+
+Files added:
+
+| File | Role |
+| --- | --- |
+| `decisions/DEC-20260530-015-final-architecture-selection.md` | Selects Dream3R-PD as final architecture path |
+| `specs/SPEC-20260530-005-dream3r-pd-final-architecture.md` | Defines proposal teachers, Dream state encoder, ProposalSetDecoder, native distillation |
+| `planning/DREAM3R_PD_FINAL_ARCHITECTURE_PLAN.md` | Execution ladder P0-P5 with RALPLAN summary and ADR |
+| `handoff/ARCHITECTURE_V09_FINAL_SELECTION_AGENT_PROMPT.md` | Next-agent prompt for final-path execution |
+| `cycles/CYCLE-20260530-final-architecture-selection.md` | Cycle log |
+| `.omx/plans/dream3r-pd-final-architecture-20260530.md` | OMX plan mirror |
+
+Selected route:
+
+```text
+Dream3R-PD = proposal teachers + Dream state + proposal-set decoder
+             + native decoder distillation with proposal dropout.
+```
+
+Execution order:
+
+```text
+1. VGGT-Omega deployment inventory and G2 execution DEC draft.
+2. ProposalSetDecoder v0 over existing 3-expert caches.
+3. Trained-state projection / Critic calibration outside frozen core.
+4. VGGT-Omega four-teacher admission after real-backend smoke.
+5. Native decoder distillation only after decoder gates pass.
+```
+
+## Dream3R v2.2 VGGT-Omega admission research (2026-05-30)
+
+```text
+task_id:    dream3r-v22-vggt-omega-admission-2026-05-30
+phase:      v2.2 proposal-bank deployment research
+status:     done for documentation; execution gated
+driver:     user asked to switch from vanilla VGGT to VGGT-Omega and prepare deployment research
+priority:   make the next expert admission surgical and source-grounded
+```
+
+Files added / updated:
+
+| File | Role |
+| --- | --- |
+| `decisions/DEC-20260530-014-v22-vggt-omega-admission.md` | Locks VGGT-Omega as first v2.2 admission candidate |
+| `specs/SPEC-20260530-004-dream3r-v22-expert-admission.md` | Defines ExpertProposal adapter, cache, and admission gates |
+| `planning/DREAM3R_V22_ADMISSION_RUNBOOK.md` | G0-G7 deployment research runbook |
+| `handoff/ARCHITECTURE_V08_V22_ADMISSION_AGENT_PROMPT.md` | Next-agent prompt for VGGT-Omega inventory and execution DEC |
+| `cycles/CYCLE-20260530-v22-admission-research.md` | Cycle log |
+
+Current route:
+
+```text
+Keep: MASt3R / Fast3R / Spann3R.
+Admit next: VGGT-Omega -> CUT3R -> MonST3R.
+Baseline only: vanilla VGGT.
+Cache/memory comparator only: OVGGT.
+```
+
+## Dream3R model-first milestone reorganization (2026-05-30)
+
+```text
+task_id:    dream3r-model-reorg-2026-05-30
+phase:      post-midterm route consolidation
+status:     done; planning/route artifacts written; implementation gated
+driver:     user asked how to choose better 3R experts and still build a real Dream3R model
+priority:   turn SCF from "fusion script" into a staged 3R model roadmap
+```
+
+Files added / updated:
+
+| File | Role |
+| --- | --- |
+| `decisions/DEC-20260530-013-milestone-reorg-proposal-bank-native-roadmap.md` | Locks Dream3R as proposal encoders + Dream state + reconstruction decoder |
+| `specs/SPEC-20260530-003-dream3r-reconstruction-decoder-roadmap.md` | Defines decoder v0/v1/v2/v3 and admission protocol |
+| `planning/DREAM3R_MILESTONE_REORG_20260530.md` | High-speed task ladder and expert-bank priorities |
+| `handoff/ARCHITECTURE_V07_MODEL_REORG_AGENT_PROMPT.md` | Next-agent prompt for model-first continuation |
+| `cycles/CYCLE-20260530-milestone-reorg-model-roadmap.md` | Cycle log |
+
+Current route:
+
+```text
+Dream3R = proposal encoders + Dream state + state-conditioned reconstruction decoder.
+
+Keep: MASt3R / Fast3R / Spann3R.
+Next candidates: VGGT-Omega / CUT3R / MonST3R.
+Do not add every new 3R method; admit only if it raises oracle ceiling or
+decoder output under state-conditioned fusion.
+```
+
+## Dream3R-ver2.1 state-training and metric refinement (2026-05-30)
+
+```text
+task_id:    dream3r-ver21-state-training-metrics-2026-05-30
+phase:      architecture refinement on top of ver2.0 SCF
+status:     done; 4-seed metric refresh completed; core edits gated
+driver:     user asked to improve the architecture using the existing plan plus agent judgment
+priority:   prove or falsify whether trained state, not just proposal fusion, drives the gain
+```
+
+Files added / updated:
+
+| File | Role |
+| --- | --- |
+| `specs/SPEC-20260530-002-dream3r-ver21-state-training-metrics.md` | Ver2.1 architecture delta: trained state + metric extension |
+| `planning/DREAM3R_VER21_STATE_TRAINING_PLAN.md` | Concrete L4 runbook: metric refresh, frozen projection, Critic calibration, core-state DEC gate |
+| `decisions/DEC-20260530-012-ver21-state-training-metrics.md` | Direction decision + 4-seed evidence: correct state > no-state > shuffled-state |
+| `cycles/CYCLE-20260530-ver21-architecture-refinement.md` | Cycle log with completed 4-seed sweep |
+| `code/dream3r/scripts/train_scf_head.py` | Non-core eval now reports patch-oracle, temporal-delta, and scale-drift proxies |
+| `code/dream3r/scripts/run_ver21_metric_refresh.sh` | Server sweep helper for state/no-state/shuffled-state controls |
+| `code/dream3r/scripts/summarize_ver21_metric_refresh.py` | Reproducible summary writer for `summary.{json,md}` |
+
+Next concrete action:
+
+```text
+4-seed evidence shows: correct state KITTI +9.79% / ETH3D +2.44%;
+no-state KITTI +5.04% / ETH3D -6.47%; shuffled-state KITTI +3.27% /
+ETH3D -10.09%. Correct state also has the lowest patch-oracle gap on both
+domains. Temporal/scale proxies are not consistently better, so train them
+explicitly in the next DEC.
+```
+
+## Dream3R-ver2.0 SCF midterm closure (2026-05-30)
+
+```text
+task_id:    dream3r-ver2-scf-midterm-closure-2026-05-30
+phase:      architecture completion + evidence consolidation
+status:     done for midterm docs; L4 state retraining remains future work
+driver:     user requested route consolidation, ver2.0 architecture, and a prompt for other agents
+priority:   ship an honest usable model story under the two-day deadline
+```
+
+Files added / updated:
+
+| File | Role |
+| --- | --- |
+| `decisions/DEC-20260530-011-scf-midterm.md` | Authoritative result: L0 real-backend guardrail pass, L1 residual negative, L2 SCF positive |
+| `specs/SPEC-20260530-001-dream3r-ver2-scf-architecture.md` | Dream3R-ver2.0 model contract and accepted claims |
+| `cycles/CYCLE-20260530-scf-midterm.md` | Cycle closure for the two-day midterm sprint |
+| `mainwork/midterm/MIDTERM-20260530.md` | §4.6 and §5 updated with SCF result + post-midterm roadmap |
+| `mainwork.md` | Stage 6 row closed as ver2.0 SCF |
+| `handoff/ARCHITECTURE_V06_SCF_AGENT_START_PROMPT.md` | Next-agent prompt should now start from DEC-011 / ver2.0, not the pre-run plan |
+
+Current technical claim:
+
+```text
+Dream3R-ver2.0 = bounded state-conditioned multi-expert fusion.
+Hard routing is a proposal prior / diagnostic baseline, not the main model.
+```
+
+Evidence:
+
+```text
+L1 residual: KITTI -47.1pp, ETH3D -91.9pp -> rejected.
+L2 SCF: KITTI +9.8% +/- 2.7% vs best single; ETH3D +2.4% +/- 3.0%;
+near-oracle gaps +1.6% / +1.1%.
+```
+
+Next concrete action:
+
+```text
+Plan L4 only: retrain Memory/Critic with depth/coherence-aligned objectives,
+add temporal/scale-drift metrics, and rerun no-state vs trained-state
+ablations. Any core edit or training campaign needs its own DEC.
+```
+
+## Dream3R two-day SCF convergence handoff (2026-05-29)
+
+```text
+task_id:    two-day-scf-convergence-handoff-2026-05-29
+phase:      next-agent prompt for two-day midterm convergence
+status:     done; prompt only; no implementation
+driver:     user clarified there are two days, not four weeks, and asked for a short prompt to plan and push tasks
+priority:   converge Dream3R into an honest midterm package plus first executable SCF step
+```
+
+New handoff:
+
+| File | Role |
+| --- | --- |
+| `handoff/ARCHITECTURE_V06_SCF_AGENT_START_PROMPT.md` | Startup prompt for the next agent. It locks the next target to Dream3R-SCF, requires a two-day midterm convergence plan, and allows the first safe local/doc or non-core-script step without reopening broad architecture exploration |
+
+Expected next artifact from the next agent:
+
+```text
+planning/DREAM3R_2DAY_SCF_MIDTERM_PLAN.md
+```
+
+Do not restart broad architecture exploration. The next plan must answer:
+
+```text
+How do we build and evaluate a usable state-conditioned multi-expert
+fusion model with real baselines?
+```
 
 ## State-conditioned reconstruction pivot (2026-05-27)
 

@@ -1,6 +1,6 @@
 # Source Registry
 
-Last updated: 2026-05-05 (cycle 013 source mining pass: 7 new SRC entries SRC-2026-009..015 covering MapAnything / Julian Ost AAAI-2026 driving permanence / tttLRM / awesome-dust3r / DUSt3R-MASt3R-VGGT MVS evaluation / NTIRE 2026 / VGGT)
+Last updated: 2026-05-30 (v2.2 admission research added SRC-2026-016 VGGT-Omega; cycle 013 source mining rows preserved.)
 
 Status: seeded from Phase 1 source map. This file is the lightweight index; detailed notes stay in `sources/FRONTIER_SOURCE_MAP.md` and cycle logs.
 
@@ -75,6 +75,7 @@ linked_units:
 | SRC-2026-013 | DUSt3R/MASt3R/VGGT MVS evaluation | https://www.tandfonline.com/doi/full/10.1080/10095020.2025.2597491 | 2025 | benchmark / evaluation | paper | empirical MVS evaluation across DUSt3R + MASt3R + VGGT on high-res + multi-camera videos | Composer capability_card sanity check at L3 | RU-002, RU-014 |
 | SRC-2026-014 | NTIRE 2026 3D Restoration and Reconstruction Challenge | https://www.codabench.org/competitions/13854/ | 2026 | benchmark / challenge | challenge page | CVPR NTIRE 2026 challenge track | venue-positioning anchor for Phase 2 paper writing; no Dream commitment to participate | n/a |
 | SRC-2026-015 | VGGT | https://github.com/facebookresearch/vggt | 2025 | direct_3r | code (Meta open-source) | feed-forward visual-geometry transformer | Composer comparator gap (cycle 009 + 012 cards do NOT include VGGT row); v2.2 capability_card schema candidate for cycle 014+ | RU-002, RU-014 |
+| SRC-2026-016 | VGGT-Omega | https://github.com/facebookresearch/vggt-omega | 2026 | direct_3r | project, code | upgraded VGGT-family visual-geometry reconstruction candidate | P1 v2.2 admission target; vanilla VGGT remains baseline / schema ancestor; not the same as OVGGT | RU-002, RU-014 |
 
 ## Cycle 008.5 SPINE Anchor Map
 

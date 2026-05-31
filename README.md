@@ -1,5 +1,19 @@
 # Dream Research Workspace
 
+Last updated: 2026-05-30 (Dream3R-PD local execution start: VGGT-Omega deployment inventory / DEC-016 draft and non-core ProposalSetDecoder prototype / trainer / tests added. See `decisions/DEC-20260530-017-proposal-set-decoder-prototype.md`.)
+
+Last updated: 2026-05-30 (final architecture path selected: Dream3R-PD = Proposal-bank Distilled State-Conditioned 3R. See `decisions/DEC-20260530-015-final-architecture-selection.md`, `specs/SPEC-20260530-005-dream3r-pd-final-architecture.md`, and `planning/DREAM3R_PD_FINAL_ARCHITECTURE_PLAN.md`.)
+
+Last updated: 2026-05-30 (v2.2 admission research switched first candidate to VGGT-Omega. See `decisions/DEC-20260530-014-v22-vggt-omega-admission.md`, `specs/SPEC-20260530-004-dream3r-v22-expert-admission.md`, and `planning/DREAM3R_V22_ADMISSION_RUNBOOK.md`.)
+
+Last updated: 2026-05-30 (model-first milestone reorganization: Dream3R is now proposal encoders + Dream state + state-conditioned reconstruction decoder; next expert candidates now limited to VGGT-Omega/CUT3R/MonST3R per DEC-014. See `planning/DREAM3R_MILESTONE_REORG_20260530.md`.)
+
+Last updated: 2026-05-30 (ver2.1 4-seed metric refresh completed: correct state beats no-state and shuffled-state on KITTI/ETH3D abs_rel and patch-oracle gap; temporal/scale targets remain open. See `specs/SPEC-20260530-002-dream3r-ver21-state-training-metrics.md`.)
+
+Last updated: 2026-05-30 (Dream3R-ver2.0 SCF midterm closure: accepted bounded state-conditioned multi-expert fusion; see `decisions/DEC-20260530-011-scf-midterm.md` and `specs/SPEC-20260530-001-dream3r-ver2-scf-architecture.md`.)
+
+Last updated: 2026-05-29 (historical two-day SCF convergence handoff corrected; superseded by 2026-05-30 DEC-011/DEC-012.)
+
 Last updated: 2026-05-27 (state-conditioned reconstruction pivot: hard expert selection is demoted from headline claim to Composer-as-proposal-prior / diagnostic baseline. New architecture addendum: `specs/SPEC-20260527-001-dream3r-state-conditioned-reconstruction.md`; decision: `decisions/DEC-20260527-009-state-conditioned-reconstruction-pivot.md`.)
 
 Last updated: 2026-05-22 (v0.4 architecture closure round: `code/dream3r/contracts.py` + `repair.py` + `orchestrator.py` + 3 new test files + `ARCHITECTURE_V04_STATUS.md` added; 24 new + 130 existing tests pass; v0.3 code byte-identical. See `ARCHITECTURE_V04_STATUS.md` for the per-axis checklist and explicit stub/fallback/proxy list.)
@@ -66,11 +80,11 @@ Architecture-first 3R research, with demo and KYKT app integration as required o
 Current mechanism focus:
 
 ```text
-Post-midterm Dream3R: state-conditioned reconstruction. Composer / hard
-expert selection is a proposal prior and diagnostic baseline, not the
-headline architecture. The current load-bearing question is whether
-Memory / AnchorBank / NSA / Permanence / Critic state can directly
-condition the final pointmap through fusion/correction.
+Post-midterm Dream3R-ver2.0: state-conditioned multi-expert fusion (SCF).
+Composer / hard expert selection is a proposal prior and diagnostic baseline,
+not the headline architecture. The current usable model fuses real Fast3R /
+MASt3R / Spann3R proposal pointmaps with confidence, memory.fused_context,
+and conflict/reliability signals.
 
 The C2 Memory v0.3 planning chain remains the Memory substrate:
 planning/MEMORY_V03_DESIGN_STUDY.md ->
@@ -83,6 +97,27 @@ experiments/prototypes/memory_v03_p0/README.md.
 
 The current route-adjustment addendum is:
 specs/SPEC-20260527-001-dream3r-state-conditioned-reconstruction.md.
+
+The accepted ver2.0 closure spec is:
+specs/SPEC-20260530-001-dream3r-ver2-scf-architecture.md.
+
+The current ver2.1 refinement spec is:
+specs/SPEC-20260530-002-dream3r-ver21-state-training-metrics.md.
+
+The current model-first roadmap is:
+specs/SPEC-20260530-003-dream3r-reconstruction-decoder-roadmap.md.
+
+The current v2.2 admission runbook is:
+planning/DREAM3R_V22_ADMISSION_RUNBOOK.md.
+
+The selected final architecture plan is:
+planning/DREAM3R_PD_FINAL_ARCHITECTURE_PLAN.md.
+
+The latest ver2.1 server summary is:
+BUAA-Server:/hdd3/kykt26/code/dream3r/runs/stage6_fusion/ver21_metric_refresh/summary.md.
+
+The current next-agent handoff is:
+handoff/ARCHITECTURE_V09_FINAL_SELECTION_AGENT_PROMPT.md.
 ```
 
 The current strategy is **not** to prematurely choose one method such as Mamba-3R, Event-DUSt3R, or SplatBridge-4D.
@@ -150,6 +185,7 @@ Key files by subdirectory:
 - `units/REPRODUCTION_READINESS_MATRIX.md`: repo-level smoke-test and KYKT integration readiness notes.
 - `handoff/FRONTEND_DESIGN_HANDOFF_PROMPT.md`: canonical prompt and boundary for Gemini CLI / frontend implementation agents.
 - `handoff/COLLABORATION_ROADMAP.md`: human-agent collaboration path and near-term deployment sequence.
+- `handoff/ARCHITECTURE_V06_SCF_AGENT_START_PROMPT.md`: startup prompt for the next agent to start from DEC-011 / ver2.0 SCF and plan L4 trained-state + temporal-metric work without reopening broad architecture exploration.
 - `logs/QUESTION_LOG.md`: interview history and next questions.
 - `archive/PHASE1_RESEARCH_PLAN.md`, `archive/PHASE1_EXECUTION_LOG.md`, `archive/PHASE1_DECISION_MEMO.md`: Phase 1 historical artifacts.
 - `archive/MASTER_RESEARCH_PROMPT_DRAFT.md`: superseded by `AGENT_MASTER_PROMPT.md`.
