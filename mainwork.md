@@ -691,6 +691,10 @@ L1 residual negative，L2 SCF positive；不再把 hard expert selection 当主�
 30. `cycles/CYCLE-20260531-state-prior-diagnostic.md`
 31. `decisions/DEC-20260531-020-prior-conditioned-decoder.md`
 32. `cycles/CYCLE-20260531-prior-conditioned-decoder.md`
+33. `decisions/DEC-20260601-021-frozen-prior-decoder-sweep.md`
+34. `cycles/CYCLE-20260601-frozen-prior-decoder-sweep.md`
+35. `decisions/DEC-20260601-022-bounded-prior-refinement.md`
+36. `cycles/CYCLE-20260601-bounded-prior-refinement.md`
 
 如需推进下一方向，优先线：
 
@@ -729,7 +733,34 @@ L1 residual negative，L2 SCF positive；不再把 hard expert selection 当主�
   `train_proposal_set_decoder.py` 参数：
   `--state-prior-checkpoint --freeze-state-prior --prior-kl-weight`，并新增
   `run_frozen_prior_decoder_sweep.sh`。加载 DEC-019 checkpoint 的 frozen-prior
-  1-epoch smoke 复现正结果：KITTI 0.1451、ETH3D 0.1480。
+  1-epoch smoke 复现正结果：KITTI 0.1451、ETH3D 0.1480。完整
+  frozen-prior sweep 已闭合：correct-state KITTI/ETH3D = 0.1452/0.1480，
+  shuffle-state = 0.1525/0.2468。结论：StatePrior 是 load-bearing，
+  joint decoder 不是；当前可交付模型应表述为 proposal teachers + Dream state
+  -> frozen trained StatePrior -> bounded convex fusion。ProposalSetDecoder 只作为
+  后续 refinement 层，必须先证明超过 frozen-prior baseline 且保持 shuffle/no-state
+  separation。
+- 2026-06-01 follow-up：已启动 frozen-prior decoder seed7 控制 sweep：
+  `runs/stage6_fusion/frozen_prior_decoder_sweep/`。该 run 使用 DEC-019
+  `state_seed_7/latest.pt`，冻结 StatePrior，并以 `prior_kl_weight=0.1`
+  训练 ProposalSetDecoder refinement。结果 scaffold-positive：correct-state
+  KITTI 0.1452 / ETH3D 0.1480，shuffle-state KITTI 0.1525 / ETH3D 0.2468。
+  结论：frozen prior 能保住 state causality，避免 DEC-020 joint decoder
+  collapse，但还没有超过 StatePriorHead；下一步应做 bounded refinement，
+  以 StatePrior 和 shuffle-state 为双 gate。补跑 `prior_kl_weight=0.01`
+  sensitivity 后结论不变：correct-state 0.1451/0.1480，shuffle-state
+  0.1525/0.2468；降低 KL 不能产生 refinement gain。
+- 2026-06-01 follow-up #2：新增 bounded residual refinement over frozen prior：
+  `ProposalSetDecoder` 在 frozen-prior convex fusion 后加零初始化 residual offset，
+  并用 local proposal disagreement 限幅（`residual_refine_scale`）。本地 8/8
+  相关测试通过，server smoke 在 `residual_refine_scale=0.05` 下保持
+  KITTI 0.1451 并把 ETH3D 从 frozen-prior 0.1480 微降到 0.1475。seed7
+  correct/shuffle 控制正在 `runs/stage6_fusion/bounded_refine_sweep/` 跑；
+  已闭合为 small-positive：correct-state KITTI/ETH3D = 0.1448/0.1475，
+  shuffle-state = 0.1521/0.2467。相对 frozen-prior baseline 0.1452/0.1480
+  是小幅提升，并保持 state causality。当前最佳 bounded Dream3R 变体应表述为：
+  proposal teachers + Dream state -> frozen trained StatePrior -> bounded convex
+  fusion -> disagreement-bounded residual refinement。
 - v2.2 admission contract：只为 VGGT-Omega / CUT3R / MonST3R 写 adapter/cache/eval
   contract，不做盲目 checkpoint 下载。
   Vanilla VGGT 只作 baseline/schema ancestor；OVGGT 只作 cache-memory

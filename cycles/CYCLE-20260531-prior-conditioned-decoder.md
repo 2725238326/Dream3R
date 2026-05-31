@@ -113,3 +113,29 @@ ETH3D: Ours_ProposalSetDecoder 0.1480 vs best_single 0.1585
 This is runtime evidence that the two-stage path can preserve DEC-019's
 positive StatePrior signal before training refinement. It is not yet a full
 decoder sweep.
+
+## Frozen-prior Sweep Result
+
+Server path:
+
+```text
+runs/stage6_fusion/frozen_prior_decoder_sweep/
+```
+
+| Control | KITTI abs_rel | KITTI vs best single | ETH3D abs_rel | ETH3D vs best single |
+|---|---:|---:|---:|---:|
+| frozen-prior correct-state | 0.1452 | +4.68 pp | 0.1480 | +6.64 pp |
+| frozen-prior shuffle-state | 0.1525 | -0.11 pp | 0.2468 | -55.75 pp |
+
+Interpretation:
+
+```text
+StatePrior is load-bearing.
+Joint decoder training is not.
+Frozen/KL-anchored prior preserves state causality.
+Current token refinement adds no proven value beyond the prior.
+```
+
+The next architecture cycle should treat the frozen StatePrior fusion as the
+working Dream3R v2.3 model and make any ProposalSetDecoder refinement prove
+incremental improvement over that prior baseline.

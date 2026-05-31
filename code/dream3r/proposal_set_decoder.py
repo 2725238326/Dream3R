@@ -35,6 +35,8 @@ class ProposalSetDecoder(nn.Module):
         use_state: ablation flag; False zeroes the Dream state input.
         use_state_prior: whether to add an explicit StatePrior-style MLP
             branch into expert logits.
+        residual_refine_scale: maximum residual offset as a multiple of local
+            proposal disagreement. Zero disables residual refinement.
     """
 
     def __init__(
@@ -51,6 +53,7 @@ class ProposalSetDecoder(nn.Module):
         use_state_prior: bool = True,
         prior_hidden: int = 128,
         prior_logit_scale: float = 1.0,
+        residual_refine_scale: float = 0.0,
     ):
         super().__init__()
         self.n_experts = int(n_experts)
@@ -61,6 +64,7 @@ class ProposalSetDecoder(nn.Module):
         self.use_state = bool(use_state)
         self.use_state_prior = bool(use_state_prior)
         self.prior_logit_scale = float(prior_logit_scale)
+        self.residual_refine_scale = float(residual_refine_scale)
 
         self.context_proj = nn.Linear(self.d_memory, self.state_dim)
         self.expert_embed = nn.Parameter(torch.randn(self.n_experts, self.id_dim) * 0.02)
@@ -86,6 +90,11 @@ class ProposalSetDecoder(nn.Module):
             nn.GELU(),
             nn.Linear(hidden, 1),
         )
+        self.residual_refine_head = nn.Sequential(
+            nn.Linear(self.token_dim + 2, hidden),
+            nn.GELU(),
+            nn.Linear(hidden, 3),
+        )
 
         # Direct state-to-expert prior. The first sweep showed that simply
         # concatenating the same state vector to every expert token can be
@@ -105,6 +114,8 @@ class ProposalSetDecoder(nn.Module):
         nn.init.zeros_(self.state_bias_head.bias)
         nn.init.zeros_(self.state_prior_mlp[-1].weight)
         nn.init.zeros_(self.state_prior_mlp[-1].bias)
+        nn.init.zeros_(self.residual_refine_head[-1].weight)
+        nn.init.zeros_(self.residual_refine_head[-1].bias)
 
     def forward(
         self,
@@ -183,7 +194,7 @@ class ProposalSetDecoder(nn.Module):
         logits = logits + self.prior_logit_scale * state_prior_logits.view(b, e, 1, 1)
         weights = torch.softmax(logits, dim=1)
 
-        final = (weights.unsqueeze(-1) * pm_norm).sum(dim=1)
+        final_base = (weights.unsqueeze(-1) * pm_norm).sum(dim=1)
         final_conf = (weights.unsqueeze(-1) * conf).sum(dim=1)
 
         mixed_weighted = (
@@ -192,12 +203,22 @@ class ProposalSetDecoder(nn.Module):
         entropy = -(weights.clamp_min(1e-8) * weights.clamp_min(1e-8).log()).sum(dim=1, keepdim=True)
         entropy = entropy.permute(0, 2, 3, 1).reshape(b * n * p, 1)
         set_disp = residual_norm.mean(dim=1).reshape(b * n * p, 1)
+        refine_feat = torch.cat([mixed_weighted, entropy, set_disp], dim=-1)
+        if self.residual_refine_scale > 0:
+            delta = torch.tanh(self.residual_refine_head(refine_feat))
+            delta = delta * set_disp * self.residual_refine_scale
+            delta = delta.view(b, n, p, 3)
+        else:
+            delta = torch.zeros_like(final_base)
+        final = final_base + delta
         uncertainty = torch.sigmoid(
-            self.uncertainty_head(torch.cat([mixed_weighted, entropy, set_disp], dim=-1))
+            self.uncertainty_head(refine_feat)
         ).view(b, n, p, 1)
 
         return {
             "final_pointmap": final,
+            "base_pointmap": final_base,
+            "residual_delta": delta,
             "final_confidence": final_conf,
             "expert_weights": weights,
             "state_prior_weights": torch.softmax(state_prior_logits, dim=1),

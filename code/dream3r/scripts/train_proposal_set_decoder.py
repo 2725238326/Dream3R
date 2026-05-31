@@ -168,6 +168,7 @@ def train(
     use_state_prior: bool = True,
     prior_hidden: int = 128,
     prior_logit_scale: float = 1.0,
+    residual_refine_scale: float = 0.0,
     state_prior_checkpoint: str = "",
     freeze_state_prior: bool = False,
     prior_kl_weight: float = 0.0,
@@ -196,6 +197,7 @@ def train(
         use_state_prior=use_state_prior,
         prior_hidden=prior_hidden,
         prior_logit_scale=prior_logit_scale,
+        residual_refine_scale=residual_refine_scale,
     ).to(device)
     if state_prior_checkpoint:
         _load_state_prior_checkpoint(
@@ -257,6 +259,7 @@ def train(
             "use_state_prior": use_state_prior,
             "prior_hidden": prior_hidden,
             "prior_logit_scale": prior_logit_scale,
+            "residual_refine_scale": residual_refine_scale,
             "state_prior_checkpoint": state_prior_checkpoint,
             "freeze_state_prior": freeze_state_prior,
             "prior_kl_weight": prior_kl_weight,
@@ -277,6 +280,7 @@ def train(
         "use_state_prior": use_state_prior,
         "prior_hidden": prior_hidden,
         "prior_logit_scale": prior_logit_scale,
+        "residual_refine_scale": residual_refine_scale,
         "state_prior_checkpoint": state_prior_checkpoint,
         "freeze_state_prior": freeze_state_prior,
         "prior_kl_weight": prior_kl_weight,
@@ -306,6 +310,7 @@ def main():
     ap.add_argument("--disable-state-prior", action="store_true")
     ap.add_argument("--prior-hidden", type=int, default=128)
     ap.add_argument("--prior-logit-scale", type=float, default=1.0)
+    ap.add_argument("--residual-refine-scale", type=float, default=0.0)
     ap.add_argument("--state-prior-checkpoint", default="")
     ap.add_argument("--freeze-state-prior", action="store_true")
     ap.add_argument("--prior-kl-weight", type=float, default=0.0)
@@ -327,6 +332,7 @@ def main():
         use_state_prior=not a.disable_state_prior,
         prior_hidden=a.prior_hidden,
         prior_logit_scale=a.prior_logit_scale,
+        residual_refine_scale=a.residual_refine_scale,
         state_prior_checkpoint=a.state_prior_checkpoint,
         freeze_state_prior=a.freeze_state_prior,
         prior_kl_weight=a.prior_kl_weight,

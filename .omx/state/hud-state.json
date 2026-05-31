@@ -1,6 +1,6 @@
 {
-  "last_turn_at": "2026-05-31T06:56:03.494Z",
-  "turn_count": 94,
-  "last_progress_at": "2026-05-31T06:56:03.494Z",
-  "last_agent_output": "{\"suggestions\":[{\"title\":\"Run the DEC-020 frozen-prior decoder sweep and close the next gate\",\"descr"
+  "last_turn_at": "2026-05-31T18:30:10.087Z",
+  "turn_count": 97,
+  "last_progress_at": "2026-05-31T18:30:10.087Z",
+  "last_agent_output": "已继续推进并收口一轮：DEC-022 `bounded residual refinement over frozen StatePrior` 已完成文档登记和验证。\n\n核心结果：当前最好、最稳的 D"
 }

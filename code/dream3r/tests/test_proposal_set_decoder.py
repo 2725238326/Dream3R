@@ -27,6 +27,8 @@ def test_proposal_set_decoder_shapes_and_gradients():
     loss.backward()
 
     assert out["final_pointmap"].shape == (2, 2, 5, 3)
+    assert out["base_pointmap"].shape == (2, 2, 5, 3)
+    assert out["residual_delta"].shape == (2, 2, 5, 3)
     assert out["final_confidence"].shape == (2, 2, 5, 1)
     assert out["expert_weights"].shape == (2, 3, 2, 5)
     assert out["state_prior_weights"].shape == (2, 3)
@@ -60,6 +62,7 @@ def test_proposal_set_decoder_supports_no_state_ablation():
 
     assert out["final_pointmap"].shape == (1, 1, 3, 3)
     assert torch.isfinite(out["final_pointmap"]).all()
+    assert torch.allclose(out["final_pointmap"], out["base_pointmap"])
 
 
 def test_proposal_set_decoder_state_can_shift_expert_prior():
@@ -136,3 +139,34 @@ def test_load_state_prior_checkpoint_can_freeze_prior(tmp_path):
     assert torch.allclose(decoder.state_prior_mlp[-1].bias, torch.tensor([-2.0, 2.0]))
     assert not decoder.context_proj.weight.requires_grad
     assert not decoder.state_prior_mlp[-1].bias.requires_grad
+
+
+def test_residual_refinement_is_zero_initialized_and_bounded():
+    decoder = ProposalSetDecoder(
+        n_experts=2,
+        d_memory=3,
+        token_dim=8,
+        state_dim=4,
+        hidden=16,
+        num_layers=1,
+        num_heads=2,
+        residual_refine_scale=0.1,
+    )
+    pointmaps = torch.randn(1, 2, 1, 4, 3)
+    confidences = torch.rand(1, 2, 1, 4, 1)
+    memory = torch.randn(1, 3)
+
+    out = decoder(pointmaps, confidences, memory, torch.zeros(1, 1))
+
+    assert torch.allclose(out["final_pointmap"], out["base_pointmap"])
+    assert torch.allclose(out["residual_delta"], torch.zeros_like(out["residual_delta"]))
+
+    with torch.no_grad():
+        decoder.residual_refine_head[-1].bias.fill_(10.0)
+    out = decoder(pointmaps, confidences, memory, torch.zeros(1, 1))
+    z = pointmaps[..., 2]
+    med = z.abs().reshape(1, 2, -1).median(dim=-1).values.clamp_min(1e-6)
+    pm_norm = pointmaps / med.view(1, 2, 1, 1, 1)
+    set_disp = (pm_norm - pm_norm.mean(dim=1, keepdim=True)).norm(dim=-1).mean(dim=1)
+
+    assert out["residual_delta"].norm(dim=-1).max() <= (set_disp * 0.2).max()

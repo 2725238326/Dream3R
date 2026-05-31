@@ -141,3 +141,33 @@ ETH3D: Ours_ProposalSetDecoder = 0.1480 vs best_single 0.1585
 This smoke intentionally reproduces the StatePrior behavior at epoch 1. It is
 not a final decoder win, but it proves the executable two-stage path preserves
 the positive DEC-019 prior before local proposal-token refinement is trained.
+
+## Frozen-prior Sweep
+
+Completed server path:
+
+```text
+/hdd3/kykt26/code/dream3r/runs/stage6_fusion/frozen_prior_decoder_sweep/
+```
+
+| Control | KITTI abs_rel | KITTI vs best single | ETH3D abs_rel | ETH3D vs best single |
+|---|---:|---:|---:|---:|
+| frozen-prior correct-state | 0.1452 | +4.68 pp | 0.1480 | +6.64 pp |
+| frozen-prior shuffle-state | 0.1525 | -0.11 pp | 0.2468 | -55.75 pp |
+
+The frozen-prior path preserves the DEC-019 positive signal and keeps a strong
+state-control separation. Current proposal-token refinement does not improve
+beyond the StatePrior result, but it no longer destroys the state prior when
+the prior branch is frozen and KL-anchored.
+
+## Current Architecture Boundary
+
+The current usable Dream3R model should be described as:
+
+```text
+proposal teachers + Dream state -> trained frozen StatePrior -> bounded convex fusion
+```
+
+ProposalSetDecoder remains an experimental refinement layer behind the prior,
+not the primary result, until it proves a gain over frozen StatePrior without
+losing shuffle/no-state separation.

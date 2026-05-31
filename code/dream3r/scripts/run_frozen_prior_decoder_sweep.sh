@@ -9,6 +9,7 @@ KITTI_CACHE="${KITTI_CACHE:-runs/stage6_fusion/scf_kitti_cache.pt}"
 ETH3D_CACHE="${ETH3D_CACHE:-runs/stage6_fusion/scf_eth3d_cache.pt}"
 STATE_PRIOR_CKPT="${STATE_PRIOR_CKPT:-runs/stage6_fusion/state_prior_sweep/state_seed_7/latest.pt}"
 PRIOR_KL_WEIGHT="${PRIOR_KL_WEIGHT:-0.1}"
+RESIDUAL_REFINE_SCALE="${RESIDUAL_REFINE_SCALE:-0.0}"
 
 cd "$ROOT"
 mkdir -p "$OUT"
@@ -27,6 +28,7 @@ run_one() {
       --state-prior-checkpoint "$STATE_PRIOR_CKPT" \
       --freeze-state-prior \
       --prior-kl-weight "$PRIOR_KL_WEIGHT" \
+      --residual-refine-scale "$RESIDUAL_REFINE_SCALE" \
       "$@" \
       2>&1 | tee "$OUT/$name.log"
   echo "[$(date '+%F %T')] OK $name" | tee -a "$OUT/sweep.log"

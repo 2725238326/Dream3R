@@ -1,5 +1,9 @@
 # Dream Task Snapshot
 
+Last updated: 2026-06-01 (bounded residual refinement over frozen StatePrior closed small-positive: correct-state KITTI/ETH3D = 0.1448/0.1475 vs frozen-prior 0.1452/0.1480, shuffle-state = 0.1521/0.2467. Current best bounded Dream3R variant is proposal teachers + Dream state -> frozen trained StatePrior -> bounded convex fusion -> disagreement-bounded residual refinement. Earlier last-updated note follows.)
+
+Last updated: 2026-06-01 (frozen-prior decoder sweep closed scaffold-positive: correct-state KITTI/ETH3D = 0.1452/0.1480, shuffle-state = 0.1525/0.2468. KL=0.01 sensitivity gives 0.1451/0.1480 vs shuffle 0.1525/0.2468. Freezing DEC-019 StatePrior preserves state causality and prevents DEC-020 joint decoder collapse, but does not improve beyond StatePriorHead. Next route: bounded refinement over frozen prior with a different refinement mechanism/target, not just KL tuning. Earlier last-updated note follows.)
+
 Last updated: 2026-05-31 (prior-conditioned ProposalSetDecoder seed7 controls closed NEGATIVE: correct-state 0.1523/0.1828, no-state 0.1201/0.1717, shuffle 0.1481/0.1855 on KITTI/ETH3D. StatePriorHead remains positive evidence, but joint ProposalSetDecoder training collapses/overrides the prior. Two-stage route implemented via `--state-prior-checkpoint --freeze-state-prior --prior-kl-weight`; frozen-prior smoke reproduces positive StatePrior result 0.1451/0.1480. Earlier last-updated note follows.)
 
 Last updated: 2026-05-31 (StatePrior diagnostic closed after ProposalSetDecoder v0/v1 failed state-causality: non-core `StatePriorHead` + trainer/tests added; seed7 correct/no-state/shuffle controls completed on BUAA-Server existing SCF caches. Correct-state beats best-single on KITTI/ETH3D and beats both controls; next work should inject learned state prior into ProposalSetDecoder/native distillation, not scale unstructured state concat. Earlier last-updated note follows.)
@@ -24,7 +28,75 @@ Last updated: 2026-05-27 (state-conditioned reconstruction pivot: added `specs/S
 
 Last updated: 2026-05-22 (v0.5 iteration test plan added after user asked how to iterate, test, and start completing the architecture plans: `planning/DREAM3R_V05_ITERATION_TEST_PLAN.md` defines L0-L4 completion standards, S0 local v0.4 edge tests, S1 A6 KITTI 8-10 window memory evidence, S2 A2 staged adapter real-backend closure, S3 A5 Test3R off-path, S4 A3 dynamic-mask promotion design, server runbook outline, evidence schema, gates, risks, and a short agent prompt; `handoff/ARCHITECTURE_V05_AGENT_START_PROMPT.md` added. Planning only; no v0.5 axis closed. Earlier last-updated note follows.) Last updated: 2026-05-22 (cycle 043 architecture-focus round after user re-prioritization "架构是最重要的内容; 开题报告和综述放一边": W20 SOTA Feature Matrix expanded at `code/dream3r/SOTA_FEATURE_MATRIX.md` (family-grouped 2nd pass) + v0.5 axes spec drafted at `specs/SPEC-20260522-001-dream3r-v05-axes.md` (8 axes A1-A8 with explicit `closes_iff`); markdown only; v0.3 + v0.4 code byte-identical; both candidate-not-final per DEC-20260501-004; sync chain applied. Earlier last-updated note follows.) Last updated: 2026-05-22 (v0.4 architecture closure round, parallel to proposal track: added `code/dream3r/contracts.py` + `repair.py` + `orchestrator.py` + 3 new test files + `ARCHITECTURE_V04_STATUS.md`; 24 new tests + 130 pre-existing tests all pass; v0.3 model.py / modules.py / bus.py / anchor_bank.py / nsa_attention.py / composer_experts/* are byte-identical to before this round; driven by `ARCHITECTURE_V04_AGENT_PROMPT.md`. Proposal-track last-updated note follows.) Last updated: 2026-05-17 (post cycle 042: user 指令开题报告扩展为双支柱项目 — 支柱 A Dream3R 新架构模型 (已有 §1-§9) + 支柱 B KYKT 聚合管理平台 (待新增); PROPOSAL_EXPANSION_PLAN.md + AGENT_HANDOFF_PROPOSAL_EXPANSION.md 已创建; 待其他 agent 执行扩展写作)
 
-Status: **ready** (Dream3R-PD local/server diagnostic pass complete through StatePrior + prior-conditioned decoder. StatePrior is positive; joint ProposalSetDecoder is negative. The next implementation step is two-stage StatePrior pretrain/freeze or KL-regularized decoder training, not a larger joint decoder. VGGT-Omega execution DEC remains a separate gated branch.)
+Status: **ready** (Dream3R-PD local/server diagnostic pass complete through StatePrior + prior-conditioned decoder + frozen-prior decoder + bounded residual refinement. StatePrior is positive; joint ProposalSetDecoder is negative; frozen-prior decoder is scaffold-positive; bounded residual refinement is small-positive. The current best bounded model is the frozen-StatePrior fusion with disagreement-bounded residual refinement. VGGT-Omega execution DEC remains a separate gated branch.)
+
+## Bounded residual refinement (2026-06-01)
+
+```text
+task_id:    dream3r-bounded-prior-refinement-2026-06-01
+phase:      bounded refinement over frozen StatePrior
+status:     closed small-positive
+driver:     user asked to continue and make the architecture serious
+priority:   improve frozen-prior scaffold without losing state causality
+```
+
+Files added / updated:
+
+| File | Role |
+| --- | --- |
+| `decisions/DEC-20260601-022-bounded-prior-refinement.md` | Decision and result |
+| `cycles/CYCLE-20260601-bounded-prior-refinement.md` | Execution log |
+| `code/dream3r/proposal_set_decoder.py` | Adds zero-initialized bounded residual head |
+| `code/dream3r/scripts/train_proposal_set_decoder.py` | Adds `--residual-refine-scale` |
+| `code/dream3r/scripts/run_frozen_prior_decoder_sweep.sh` | Adds `RESIDUAL_REFINE_SCALE` |
+
+Result:
+
+```text
+correct-state: KITTI 0.1448, ETH3D 0.1475
+shuffle-state: KITTI 0.1521, ETH3D 0.2467
+```
+
+Conclusion: small-positive over frozen-prior baseline while preserving shuffle
+separation.
+
+## Frozen-prior decoder sweep (2026-06-01)
+
+```text
+task_id:    dream3r-frozen-prior-decoder-2026-06-01
+phase:      two-stage decoder control after joint decoder collapse
+status:     closed scaffold-positive
+driver:     user asked to continue; DEC-020 showed joint decoder collapse
+priority:   preserve DEC-019 state-prior causality inside decoder path
+```
+
+Files added / updated:
+
+| File | Role |
+| --- | --- |
+| `decisions/DEC-20260601-021-frozen-prior-decoder-sweep.md` | Decision and result |
+| `cycles/CYCLE-20260601-frozen-prior-decoder-sweep.md` | Execution log |
+| `code/dream3r/scripts/run_frozen_prior_decoder_sweep.sh` | Reproducible server runner |
+
+Result:
+
+```text
+correct-state: KITTI 0.1452, ETH3D 0.1480
+shuffle-state: KITTI 0.1525, ETH3D 0.2468
+```
+
+Conclusion: frozen prior preserves state causality and prevents collapse, but
+does not improve beyond StatePriorHead.
+
+KL sensitivity:
+
+```text
+runs/stage6_fusion/frozen_prior_decoder_kl001_sweep
+correct-state: KITTI 0.1451, ETH3D 0.1480
+shuffle-state: KITTI 0.1525, ETH3D 0.2468
+```
+
+Lower KL preserves causality but still gives no refinement gain.
 
 ## Prior-conditioned ProposalSetDecoder (2026-05-31)
 
