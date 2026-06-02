@@ -1,5 +1,11 @@
 # Dream Index
 
+Last updated: 2026-06-02 (U1 image-state native gate closed negative and VGGT-Omega preflight added: `decisions/DEC-20260602-025-image-state-native-student-u1.md`, `decisions/DEC-20260602-026-vggt-omega-admission-preflight.md`, `cycles/CYCLE-20260602-image-state-native-student-u1.md`, `cycles/CYCLE-20260602-vggt-omega-admission-preflight.md`, `code/dream3r/scripts/smoke_vggt_omega_adapter.py`.)
+
+Last updated: 2026-06-02 (native student decoder/distillation gate executed: `decisions/DEC-20260602-024-native-student-decoder-gate.md`, `cycles/CYCLE-20260602-native-student-decoder-gate.md`, `code/dream3r/native_student_decoder.py`, `code/dream3r/scripts/train_native_student_decoder.py`, `code/dream3r/scripts/run_native_student_decoder_sweep.sh`, `code/dream3r/tests/test_native_student_decoder.py`.)
+
+Last updated: 2026-06-02 (architecture acceleration prompt added: `handoff/ARCHITECTURE_V10_ACCELERATED_CONVERGENCE_AGENT_PROMPT.md`, `planning/DREAM3R_ARCHITECTURE_ACCELERATION_PLAN_20260602.md`, `decisions/DEC-20260602-023-architecture-acceleration-prompt.md`, `cycles/CYCLE-20260602-architecture-acceleration-prompt.md`.)
+
 Last updated: 2026-05-30 (Dream3R-PD local execution start added: `planning/VGGT_OMEGA_DEPLOYMENT_INVENTORY.md`, `decisions/DEC-20260530-016-vggt-omega-execution-draft.md`, `decisions/DEC-20260530-017-proposal-set-decoder-prototype.md`, `code/dream3r/proposal_set_decoder.py`, `code/dream3r/scripts/train_proposal_set_decoder.py`, `code/dream3r/tests/test_proposal_set_decoder.py`, `cycles/CYCLE-20260530-dream3r-pd-execution-start.md`.)
 
 Last updated: 2026-05-30 (Dream3R-PD final architecture selection added: `decisions/DEC-20260530-015-final-architecture-selection.md`, `specs/SPEC-20260530-005-dream3r-pd-final-architecture.md`, `planning/DREAM3R_PD_FINAL_ARCHITECTURE_PLAN.md`, `handoff/ARCHITECTURE_V09_FINAL_SELECTION_AGENT_PROMPT.md`, `cycles/CYCLE-20260530-final-architecture-selection.md`.)
@@ -87,6 +93,7 @@ Quick navigation for humans and agents. **Read `TASK_SNAPSHOT.md` first** (it is
 | `DREAM3R_MILESTONE_REORG_20260530.md` | 2026-05-30 model-first milestone plan. Defines Dream3R as proposal encoders + Dream state + reconstruction decoder; locks current bank MASt3R/Fast3R/Spann3R; admits only VGGT-Omega/CUT3R/MonST3R as next candidates; defines high-speed task ladder toward proposal-set decoder and native distillation |
 | `DREAM3R_V22_ADMISSION_RUNBOOK.md` | 2026-05-30 v2.2 deployment research runbook. Starts with VGGT-Omega inventory, then one-window smoke DEC, cache, oracle, and decoder admission gates; no checkpoint/server run authorized by the doc itself |
 | `DREAM3R_PD_FINAL_ARCHITECTURE_PLAN.md` | 2026-05-30 final architecture plan. Selects Dream3R-PD: proposal teachers + Dream state + ProposalSetDecoder + native distillation with proposal dropout; defines P0-P5 execution ladder and stop gates |
+| `DREAM3R_ARCHITECTURE_ACCELERATION_PLAN_20260602.md` | 2026-06-02 acceleration plan. Locks the bounded frozen-StatePrior baseline and redirects next work from residual-head micro-sweeps to native student decoder/distillation or tightly gated teacher-bank admission |
 | `VGGT_OMEGA_DEPLOYMENT_INVENTORY.md` | 2026-05-30 upstream deployment inventory for VGGT-Omega: repo, checkpoint policy, dependency surface, native outputs, ExpertProposal normalization, smoke command shape |
 
 ### `planning/proposal_dream3r/` - Dream3R 开题报告 dual-draft (Track C)
@@ -129,6 +136,7 @@ New subdirectory created cycle 036 (per DEC-20260516-001). Hosts the Chinese Dre
 | `ARCHITECTURE_V07_MODEL_REORG_AGENT_PROMPT.md` | Model-first continuation prompt. Starts from DEC-013 / SPEC-003 and directs v2.2 expert admission + reconstruction-decoder work without broad expert search |
 | `ARCHITECTURE_V08_V22_ADMISSION_AGENT_PROMPT.md` | VGGT-Omega admission prompt. Starts from DEC-014 / SPEC-004 / runbook and directs deployment inventory plus execution DEC drafting without checkpoint download or server run |
 | `ARCHITECTURE_V09_FINAL_SELECTION_AGENT_PROMPT.md` | Final architecture execution prompt. Starts from DEC-015 / SPEC-005 and executes Dream3R-PD gates without reopening broad route search |
+| `ARCHITECTURE_V10_ACCELERATED_CONVERGENCE_AGENT_PROMPT.md` | Acceleration prompt. Current result: U1 native gate is negative; VGGT-Omega preflight is ready but checkpoint-blocked |
 
 ### `logs/` - Running Logs
 
@@ -213,6 +221,8 @@ Dream3R v0.1 code. Runs on remote server `/hdd3/kykt26/code/dream3r/` (dream3r c
 | `tests/test_composer_dispatch_contract.py` | v0.4 round: 7 tests asserting composer dispatches a real adapter and reroute hint changes the expert |
 | `SOTA_FEATURE_MATRIX.md` | Cycle 043 W20 second pass: family-grouped mapping of 30+ external 3R-relevant methods (MASt3R / Fast3R / Spann3R / CUT3R / VGGT / STream3R / Point3R / Mem3R / LONG3R / DINOv2-v3 / MoGe-2 / DepthAnything / Test3R / NSA / Mamba / 3DGS family / etc.) → Dream3R modules + implementation status (real-wired vs deterministic fallback vs stub vs comparator-only) + per-method evidence/test + gap report. Supersedes the 2026-05-10 first pass while preserving its differentiation list + evidence map at the end. Cross-links to `ARCHITECTURE_V04_STATUS.md` and `specs/SPEC-20260522-001-dream3r-v05-axes.md` |
 | `proposal_set_decoder.py` | Dream3R-PD non-core decoder prototype: per-patch proposal-token mixer over cached teacher pointmaps; outputs bounded weights, final pointmap, confidence, and uncertainty |
+| `native_student_decoder.py` | Dream3R-PD non-core native student/distillation gate: frozen StatePrior teacher, proposal dropout, bounded native residual, and state-causality controls over existing proposal caches |
+| `image_state_student_decoder.py` | Dream3R-U1 non-core usable-model scaffold: image tokens + Dream state + optional proposal anchors -> native pointmap; supports full-anchor, partial-anchor, and no-proposal inference modes |
 | `NEXT_PHASE_ROADMAP.md` | W19-W29 roadmap (real data / SOTA matrix / ablation / visualization / expert routing quality / critic calibration / TTT / STream3R relation / 3DGS / training hardening / paper pack). Origin of cycle 043 W20 work |
 | `RECENT_PROGRESS.md` | Tier 1/2/3 evidence ledger; KITTI smoke result reference |
 
@@ -333,11 +343,11 @@ Format: `STORY-YYYYMMDD-NNN-<slug>.md`. One file per finalist teacher demo. Crea
 | Question | Where to look |
 |---|---|
 | What phase are we in? | `WORKFLOW_STATUS.md` |
-| What is the next user decision? | `WORKFLOW_STATUS.md` -> Recommended Next User Decision; current default after cycle 040 close is one of: A. launch cycle 041 § 9 风险分析 + 通稿审查 + STYLE_CONTRACT final sync (recommended; last remaining chapter; ~2500 字 total) / B. revise § 5 + § 7 + § 8 based on self-review or advisor feedback / C. launch cycle 035 §Next Direction A-C (calibration / long-seq ablation / v0.4 spec delta) / D. pause + reassess after § 5 + § 7 + § 8 quality review / E. user executes Track B survey submission (SHA256 pre-filled) / F. return to architecture-first mainline non-proposal work |
+| What is the next user decision? | `WORKFLOW_STATUS.md` -> Recommended Next User Decision; current architecture default is objective-level native student follow-up from DEC-20260602-024, or VGGT-Omega one-window admission only if native objective work blocks |
 | How should the next agent continue Dream3R-ver2.0? | `handoff/ARCHITECTURE_V06_SCF_AGENT_START_PROMPT.md` |
 | How should the next agent continue the model-first roadmap? | `handoff/ARCHITECTURE_V07_MODEL_REORG_AGENT_PROMPT.md` |
 | How should the next agent start VGGT-Omega admission? | `handoff/ARCHITECTURE_V08_V22_ADMISSION_AGENT_PROMPT.md` |
-| How should the next agent execute the final architecture? | `handoff/ARCHITECTURE_V09_FINAL_SELECTION_AGENT_PROMPT.md` |
+| How should the next agent execute the accelerated architecture path? | `handoff/ARCHITECTURE_V10_ACCELERATED_CONVERGENCE_AGENT_PROMPT.md` plus `decisions/DEC-20260602-024-native-student-decoder-gate.md` |
 | What is the next ver2.1 state-training plan? | `planning/DREAM3R_VER21_STATE_TRAINING_PLAN.md` |
 | What sources do we know about? | `sources/FRONTIER_SOURCE_MAP.md` and `registry/source_registry.md` |
 | What ideas are on the table? | `units/RESEARCH_UNIT_BANK.md`, `units/IDEA_SCOREBOARD.md` |
@@ -346,7 +356,7 @@ Format: `STORY-YYYYMMDD-NNN-<slug>.md`. One file per finalist teacher demo. Crea
 | What can Dream do without asking the user? | `AGENT_MASTER_PROMPT.md` section 6 |
 | What requires user approval? | `AGENT_MASTER_PROMPT.md` section 6 + `WORKFLOW_STATUS.md` Blocked Until User Decision |
 | How should I behave when synthesizing or editing files? | `paradigm/RESEARCH_CODE_DISCIPLINE.md` |
-| What is the latest research result? | newest file under `cycles/`; current latest is `cycles/CYCLE-20260517-001.md` (cycle 040 done; Dream3R 开题报告 § 5 实验设计与评测协议 + § 7 研究进展与已完成工作 + § 8 研究计划与时间安排 dual-draft 起草 ~2800 内 + ~2000 外 字 (§5) + ~2200 内 + ~1500 外 字 (§7) + ~1500 内 + ~1000 外 字 (§8); § 1 + § 2 + § 3 + § 4 + § 5 + § 6 + § 7 + § 8 累计 ~17800 内 + ~14000 外 字 ≈ 85% target; only § 9 remains for cycle 041; STYLE_CONTRACT §2 vocab table 43→48 rows; §6 sync log appended; G3a + G3b 5 corrective edits on first pass (4 "cycle"-leak + 1 lowercase "dream3r" repo-name leak), G4 0 hits on first pass; preceded by cycle 039 § 3 + § 6 dual-draft + cycle 038 § 4 dual-draft + cycle 037 § 2 dual-draft + cycle 036 advisor packaging + dual-draft kickoff + cycle 035 survey-driven markdown deliverables) |
+| What is the latest research result? | `cycles/CYCLE-20260602-native-student-decoder-gate.md` and `decisions/DEC-20260602-024-native-student-decoder-gate.md`: native student gate is executable and state-causal, but flat versus bounded 0.1448/0.1475 baseline |
 | What did we decide? | `registry/decision_registry.md` and files under `decisions/` |
 | What experiments are planned or locally scaffolded? | files under `experiments/` plus C2 v0.3 prototype sequence in `specs/SPEC-20260508-001-dream3r-c2-memory-v03-addendum.md`, P0 plan in `planning/MEMORY_V03_P0_PROTOTYPE_PLAN.md`, reviewed ablation map in `specs/SPEC-20260508-002-dream3r-memory-v03-ablation-addendum.md`, review in `planning/MEMORY_V03_ABLATION_REVIEW.md`, execution template in `planning/MEMORY_V03_P0_EXECUTION_DEC_TEMPLATE.md`, and local `ABL-memory-0` scaffold under `experiments/prototypes/memory_v03_p0/`; later ablations still require separate DEC + per-step gate |
 | How should the frontend agent work? | `handoff/FRONTEND_DESIGN_HANDOFF_PROMPT.md` |

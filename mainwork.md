@@ -7,6 +7,36 @@
 
 ---
 
+## 2026-06-02 current usability verdict
+
+Dream3R is not yet usable as a native model. The only current usable bounded
+prototype is:
+
+```text
+proposal teachers + Dream state -> frozen StatePrior -> bounded residual
+KITTI/ETH3D: 0.1448/0.1475
+```
+
+The image-state native U1 gate ran on BUAA-Server GPU1 and failed:
+
+```text
+U1 gate20 correct-state: KITTI 0.1649, ETH3D 0.2842
+U1 gate20 no-state:      KITTI 0.1526, ETH3D 0.1702
+```
+
+VGGT-Omega one-window admission is preflight-ready but blocked on the approved
+checkpoint:
+
+```text
+/hdd3/kykt26/checkpoints/vggt_omega/VGGT-Omega-1B-512/model.pt
+```
+
+Do not claim Dream3R is usable beyond the bounded baseline until either
+VGGT-Omega real-backend admission passes or a redesigned native gate beats both
+no-state/shuffle controls and the locked baseline.
+
+---
+
 ## 0. 假设与目标（请用户确认）
 
 **默认目标：工作 demo（option 2）** — 在 KITTI 上跑通端到端，输出真实 pointmap，并对一个核心创新点（NSA memory 或 Composer routing）做有效性对比。**不追求 SOTA，追求每个数字真实**。
@@ -134,6 +164,8 @@ Stage 1 (MVR)        ──→ Stage 2 (Memory)    ──→ Stage 3 (Composer)
 | 4 | ✅ done | 2026-05-25 | 2026-05-25 | DEC-20260525-001 |
 | 5 | 🔶 closed; cross-domain follow-up + addenda complete; critic↔router loop attempted | 2026-05-25 | 2026-05-27 | DEC-20260525-003 (S1 KITTI), DEC-20260525-004 (distill defer), DEC-20260525-005 (cross-dataset defer → trigger #2 fired), DEC-20260525-006 (cross-dataset closure), DEC-20260526-007 (cross-domain follow-up, addenda 1/2/3), DEC-20260527-008 (critic↔router closed loop, NEGATIVE); no active handoff |
 | 6 | ✅ ver2.0 SCF midterm closure; L0 guardrail + L1 negative + L2 positive | 2026-05-27 | 2026-05-30 | DEC-20260527-009; DEC-20260530-011; SPEC-20260527-001; SPEC-20260530-001 |
+| 7 | 🔶 bounded baseline only; native student and U1 gates not promoted | 2026-05-31 | 2026-06-02 | DEC-20260531-019..DEC-20260602-025; current best 0.1448/0.1475 |
+| 8 | ⛔ VGGT-Omega admission blocked on approved checkpoint | 2026-06-02 | — | DEC-20260602-026 |
 
 ### Stage 4 闭合状态（2026-05-25）
 
@@ -695,6 +727,14 @@ L1 residual negative，L2 SCF positive；不再把 hard expert selection 当主�
 34. `cycles/CYCLE-20260601-frozen-prior-decoder-sweep.md`
 35. `decisions/DEC-20260601-022-bounded-prior-refinement.md`
 36. `cycles/CYCLE-20260601-bounded-prior-refinement.md`
+37. `decisions/DEC-20260602-023-architecture-acceleration-prompt.md`
+38. `planning/DREAM3R_ARCHITECTURE_ACCELERATION_PLAN_20260602.md`
+39. `handoff/ARCHITECTURE_V10_ACCELERATED_CONVERGENCE_AGENT_PROMPT.md`
+40. `cycles/CYCLE-20260602-architecture-acceleration-prompt.md`
+41. `decisions/DEC-20260602-024-native-student-decoder-gate.md`
+42. `cycles/CYCLE-20260602-native-student-decoder-gate.md`
+43. `decisions/DEC-20260602-025-image-state-native-student-u1.md`
+44. `cycles/CYCLE-20260602-image-state-native-student-u1.md`
 
 如需推进下一方向，优先线：
 
@@ -761,6 +801,29 @@ L1 residual negative，L2 SCF positive；不再把 hard expert selection 当主�
   是小幅提升，并保持 state causality。当前最佳 bounded Dream3R 变体应表述为：
   proposal teachers + Dream state -> frozen trained StatePrior -> bounded convex
   fusion -> disagreement-bounded residual refinement。
+- 2026-06-02 follow-up：已新增 V10 architecture acceleration prompt，明确下一步
+  不再把 residual-head micro-sweep 当主线。下一 agent 应先锁定 bounded
+  frozen-StatePrior baseline，再推进 native student decoder/distillation；若
+  native 路径被阻塞，才转 VGGT-Omega one-window teacher admission。复制入口：
+  `handoff/ARCHITECTURE_V10_ACCELERATED_CONVERGENCE_AGENT_PROMPT.md`。
+- 2026-06-02 follow-up #2：已执行 native student decoder/distillation gate。
+  新增 non-core `NativeStudentDecoder`、`train_native_student_decoder.py`、
+  `run_native_student_decoder_sweep.sh` 和测试。BUAA-Server GPU1 seed7
+  20-epoch gate 输出在
+  `runs/stage6_fusion/native_student_decoder_gate20_seed7/`。结果：
+  correct-state KITTI/ETH3D = 0.1451/0.1480，no-state = 0.1557/0.1730，
+  shuffle-state = 0.1525/0.2468，fallback contamination = 0。结论：
+  native gate 已可执行且保持 state causality，但未超过 bounded baseline
+  0.1448/0.1475，因此不提升当前 best model；下一步应改 objective
+  （dropout-consistency 或 temporal/scale state-projection），不要重搭 scaffold。
+- 2026-06-02 follow-up #3：针对“当前模型还不能用”的问题，新增 U1
+  image-state native student scaffold。新模型不再只是 proposal cache mixer，
+  而是 `image tokens + Dream state + optional proposal anchors -> native pointmap`。
+  新增 `image_state_student_decoder.py`、`build_image_state_student_cache.py`、
+  `train_image_state_student.py`、`run_image_state_student_sweep.sh` 和测试。
+  本地 6/6 targeted tests pass；服务器 3/3 targeted tests pass。旧 SCF cache
+  不含 image tokens，训练脚本会拒绝旧 cache。下一步 gate 是 GPU1 构建
+  `image_state_student_*_cache.pt`，再跑 state/no-state/shuffle U1 sweep。
 - v2.2 admission contract：只为 VGGT-Omega / CUT3R / MonST3R 写 adapter/cache/eval
   contract，不做盲目 checkpoint 下载。
   Vanilla VGGT 只作 baseline/schema ancestor；OVGGT 只作 cache-memory

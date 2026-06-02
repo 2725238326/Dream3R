@@ -1,5 +1,9 @@
 # Dream Research State
 
+Last updated: 2026-06-02 (usable-model status clarified: proposal-only native gate is flat, image-state U1 gate is negative, and VGGT-Omega admission is checkpoint-blocked. Current usable bounded baseline remains frozen-StatePrior + bounded residual at KITTI/ETH3D 0.1448/0.1475.)
+
+Last updated: 2026-06-02 (architecture acceleration prompt added: next Dream3R architecture work should lock the bounded frozen-StatePrior baseline and push native student decoder/distillation or gated teacher admission, not small residual-head variants.)
+
 Last updated: 2026-05-30 (Dream3R-PD execution started locally: VGGT-Omega inventory + execution draft and non-core ProposalSetDecoder prototype/trainer/tests added; server/checkpoint execution remains gated.)
 
 Last updated: 2026-05-30 (final architecture path selected: Dream3R-PD = Proposal-bank Distilled State-Conditioned 3R; route search should stop unless a gate fails with evidence.)
@@ -113,17 +117,21 @@ Composer remains as proposal prior / regime probe / diagnostic baseline.
 The accepted ver2.0 architecture is bounded state-conditioned fusion:
 all real Fast3R / MASt3R / Spann3R proposals are fused by SCFHead using
 confidence, memory.fused_context, and conflict/reliability signals.
+The current best bounded Dream3R variant is frozen trained StatePrior fusion
+plus disagreement-bounded residual refinement: KITTI/ETH3D 0.1448/0.1475.
+The native student decoder/distillation gate is now executable, but the
+seed-7 20-epoch gate remains flat at 0.1451/0.1480 and does not replace the
+bounded baseline.
 ```
 
-Immediate 2026-05-30 handoff:
+Immediate 2026-06-02 handoff:
 
 ```text
-Use handoff/ARCHITECTURE_V06_SCF_AGENT_START_PROMPT.md.
-Start from DEC-20260530-011 and SPEC-20260530-001.
-Then read DEC-20260530-012, SPEC-20260530-002, and
-planning/DREAM3R_VER21_STATE_TRAINING_PLAN.md.
-Next work: refresh SCF metrics, then test trained-state vs no-state /
-random-state controls. Do not reopen broad architecture exploration.
+Use handoff/ARCHITECTURE_V10_ACCELERATED_CONVERGENCE_AGENT_PROMPT.md.
+Start from DEC-20260602-024 before repeating native student work.
+Next native work should change the objective with dropout-consistency or
+temporal/scale state-projection targets, then rerun state/no-state/shuffle
+controls against the locked 0.1448/0.1475 bounded baseline.
 ```
 
 First construct:

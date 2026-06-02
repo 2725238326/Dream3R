@@ -1,5 +1,9 @@
 # Dream Agent Master Prompt
 
+Last updated: 2026-06-02 (U1 image-state native gate closed negative and VGGT-Omega preflight is checkpoint-blocked. Current usable bounded baseline remains 0.1448/0.1475; use DEC-20260602-025 and DEC-20260602-026 before repeating native or teacher-admission work.)
+
+Last updated: 2026-06-02 (architecture acceleration prompt added: use `handoff/ARCHITECTURE_V10_ACCELERATED_CONVERGENCE_AGENT_PROMPT.md` when the task is to push Dream3R architecture materially rather than continue small residual-head refinements.)
+
 Last updated: 2026-05-30 (Dream3R-PD local execution start: use DEC-20260530-017 and train_proposal_set_decoder.py for the first non-core decoder prototype; server/checkpoint execution remains gated.)
 
 Last updated: 2026-05-30 (final architecture path selected: use DEC-20260530-015 / SPEC-20260530-005 and handoff/ARCHITECTURE_V09_FINAL_SELECTION_AGENT_PROMPT.md; broad route search is closed unless a gate fails with evidence.)
@@ -17,6 +21,29 @@ Last updated: 2026-05-08 (cycle 031: C2 Memory v0.3 local P0 scaffold created; A
 Status: canonical entry prompt for Dream research agents.
 
 Use this prompt whenever starting or resuming Dream / KYKT 3R research with Codex, another agent, or a subagent.
+
+For accelerated Dream3R architecture execution, hand the next agent:
+
+```text
+E:\Dream3R\handoff\ARCHITECTURE_V10_ACCELERATED_CONVERGENCE_AGENT_PROMPT.md
+```
+
+That prompt supersedes residual-head micro-sweep behavior for architecture
+convergence work. It keeps the bounded frozen-StatePrior result as the baseline
+and directs the agent toward native student decoder/distillation or tightly
+gated teacher-bank admission.
+
+Latest architecture gate results:
+
+```text
+E:\Dream3R\decisions\DEC-20260602-024-native-student-decoder-gate.md
+E:\Dream3R\decisions\DEC-20260602-025-image-state-native-student-u1.md
+E:\Dream3R\decisions\DEC-20260602-026-vggt-omega-admission-preflight.md
+```
+
+Native student decoding is executable but not yet better than the bounded
+frozen-StatePrior refinement baseline. U1 is worse than no-state. VGGT-Omega
+cannot be admitted until its approved checkpoint is staged on BUAA-Server.
 
 ---
 
@@ -422,6 +449,10 @@ E. C2 Memory v0.3 execution only if needed for state representation
    the default next lane unless SCF state ablations require it.
 F. Server implementation only after a new DEC + per-step gate; do not
    modify v0.3/v0.5 core without explicit exemption.
+G. Native student follow-up:
+   start from DEC-20260602-024. Do not recreate the scaffold; change the
+   objective via dropout-consistency or temporal/scale state-projection
+   targets, then rerun state/no-state/shuffle controls against 0.1448/0.1475.
 ```
 
 Prefer A when handing off to another planning agent.

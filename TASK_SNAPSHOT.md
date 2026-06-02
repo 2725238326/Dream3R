@@ -1,5 +1,15 @@
 # Dream Task Snapshot
 
+Last updated: 2026-06-02 (U1 image-state native gate closed negative and VGGT-Omega admission preflight installed: Kitti/ETH3D image-token caches built on BUAA-Server GPU1; U1 gate20 correct-state 0.1649/0.2842 loses to no-state 0.1526/0.1702 and locked baseline 0.1448/0.1475. VGGT-Omega smoke script compiles and public code is staged on server, but real admission is blocked on missing approved checkpoint. Earlier last-updated note follows.)
+
+Last updated: 2026-06-02 (image-state native student U1 scaffold added after user flagged current model unusable: non-core image-token + state + optional proposal-anchor decoder, image-state cache builder, trainer, sweep, and tests added; local tests 6 passed, server tests 3 passed. Cache-build/training gate pending. Earlier last-updated note follows.)
+
+Last updated: 2026-06-02 (native student decoder/distillation gate closed flat-but-controlled: non-core NativeStudentDecoder/trainer/sweep/tests added; BUAA-Server GPU1 seed7 gate preserves state causality with zero fallback contamination but does not beat bounded frozen-StatePrior refinement. Current best remains bounded 0.1448/0.1475. Earlier last-updated note follows.)
+
+Last updated: 2026-06-02 (architecture acceleration execution pass in progress: lock bounded frozen-StatePrior baseline, implement non-core native student decoder/distillation over existing proposal caches, run bounded BUAA-Server GPU1 smoke if available, and sync documentation chain before final. Earlier last-updated note follows.)
+
+Last updated: 2026-06-02 (architecture acceleration prompt added: use `handoff/ARCHITECTURE_V10_ACCELERATED_CONVERGENCE_AGENT_PROMPT.md` and `planning/DREAM3R_ARCHITECTURE_ACCELERATION_PLAN_20260602.md` to move from small residual-head tweaks to native student decoder/distillation or tightly gated VGGT-Omega teacher admission. Earlier last-updated note follows.)
+
 Last updated: 2026-06-01 (bounded residual refinement over frozen StatePrior closed small-positive: correct-state KITTI/ETH3D = 0.1448/0.1475 vs frozen-prior 0.1452/0.1480, shuffle-state = 0.1521/0.2467. Current best bounded Dream3R variant is proposal teachers + Dream state -> frozen trained StatePrior -> bounded convex fusion -> disagreement-bounded residual refinement. Earlier last-updated note follows.)
 
 Last updated: 2026-06-01 (frozen-prior decoder sweep closed scaffold-positive: correct-state KITTI/ETH3D = 0.1452/0.1480, shuffle-state = 0.1525/0.2468. KL=0.01 sensitivity gives 0.1451/0.1480 vs shuffle 0.1525/0.2468. Freezing DEC-019 StatePrior preserves state causality and prevents DEC-020 joint decoder collapse, but does not improve beyond StatePriorHead. Next route: bounded refinement over frozen prior with a different refinement mechanism/target, not just KL tuning. Earlier last-updated note follows.)
@@ -28,7 +38,155 @@ Last updated: 2026-05-27 (state-conditioned reconstruction pivot: added `specs/S
 
 Last updated: 2026-05-22 (v0.5 iteration test plan added after user asked how to iterate, test, and start completing the architecture plans: `planning/DREAM3R_V05_ITERATION_TEST_PLAN.md` defines L0-L4 completion standards, S0 local v0.4 edge tests, S1 A6 KITTI 8-10 window memory evidence, S2 A2 staged adapter real-backend closure, S3 A5 Test3R off-path, S4 A3 dynamic-mask promotion design, server runbook outline, evidence schema, gates, risks, and a short agent prompt; `handoff/ARCHITECTURE_V05_AGENT_START_PROMPT.md` added. Planning only; no v0.5 axis closed. Earlier last-updated note follows.) Last updated: 2026-05-22 (cycle 043 architecture-focus round after user re-prioritization "架构是最重要的内容; 开题报告和综述放一边": W20 SOTA Feature Matrix expanded at `code/dream3r/SOTA_FEATURE_MATRIX.md` (family-grouped 2nd pass) + v0.5 axes spec drafted at `specs/SPEC-20260522-001-dream3r-v05-axes.md` (8 axes A1-A8 with explicit `closes_iff`); markdown only; v0.3 + v0.4 code byte-identical; both candidate-not-final per DEC-20260501-004; sync chain applied. Earlier last-updated note follows.) Last updated: 2026-05-22 (v0.4 architecture closure round, parallel to proposal track: added `code/dream3r/contracts.py` + `repair.py` + `orchestrator.py` + 3 new test files + `ARCHITECTURE_V04_STATUS.md`; 24 new tests + 130 pre-existing tests all pass; v0.3 model.py / modules.py / bus.py / anchor_bank.py / nsa_attention.py / composer_experts/* are byte-identical to before this round; driven by `ARCHITECTURE_V04_AGENT_PROMPT.md`. Proposal-track last-updated note follows.) Last updated: 2026-05-17 (post cycle 042: user 指令开题报告扩展为双支柱项目 — 支柱 A Dream3R 新架构模型 (已有 §1-§9) + 支柱 B KYKT 聚合管理平台 (待新增); PROPOSAL_EXPANSION_PLAN.md + AGENT_HANDOFF_PROPOSAL_EXPANSION.md 已创建; 待其他 agent 执行扩展写作)
 
-Status: **ready** (Dream3R-PD local/server diagnostic pass complete through StatePrior + prior-conditioned decoder + frozen-prior decoder + bounded residual refinement. StatePrior is positive; joint ProposalSetDecoder is negative; frozen-prior decoder is scaffold-positive; bounded residual refinement is small-positive. The current best bounded model is the frozen-StatePrior fusion with disagreement-bounded residual refinement. VGGT-Omega execution DEC remains a separate gated branch.)
+Status: **idle** (No active run. Current usable bounded baseline remains frozen-StatePrior + bounded residual at KITTI/ETH3D 0.1448/0.1475. U1 is not usable as-is; VGGT-Omega admission is blocked until the approved checkpoint is staged at `/hdd3/kykt26/checkpoints/vggt_omega/VGGT-Omega-1B-512/model.pt`.)
+
+## Architecture acceleration prompt (2026-06-02)
+
+```text
+task_id:    dream3r-architecture-acceleration-prompt-2026-06-02
+phase:      architecture convergence handoff
+status:     ready
+driver:     user asked for fast, effective architecture progress instead of small tweaks
+priority:   native student decoder/distillation or gated teacher-bank admission
+```
+
+Read next:
+
+| File | Role |
+| --- | --- |
+| `decisions/DEC-20260602-023-architecture-acceleration-prompt.md` | Decision to switch from micro-tweaks to architecture convergence gates |
+| `planning/DREAM3R_ARCHITECTURE_ACCELERATION_PLAN_20260602.md` | High-impact execution lanes and gates |
+| `handoff/ARCHITECTURE_V10_ACCELERATED_CONVERGENCE_AGENT_PROMPT.md` | Copy-paste prompt for the next agent |
+| `cycles/CYCLE-20260602-architecture-acceleration-prompt.md` | Documentation cycle log |
+| `decisions/DEC-20260602-024-native-student-decoder-gate.md` | First native gate result and next objective-level gate |
+| `cycles/CYCLE-20260602-native-student-decoder-gate.md` | Native gate execution log |
+| `decisions/DEC-20260602-026-vggt-omega-admission-preflight.md` | VGGT-Omega smoke script and checkpoint blocker |
+| `cycles/CYCLE-20260602-vggt-omega-admission-preflight.md` | VGGT-Omega preflight cycle log |
+
+Short instruction for the next agent:
+
+```text
+Lock the bounded frozen-StatePrior baseline, then push one high-impact gate:
+native student decoder/distillation over existing proposal caches, or VGGT-Omega
+one-window teacher admission if native work is blocked. Do not reopen broad
+route search and do not spend the session on another residual-head micro-sweep.
+```
+
+## Native student decoder/distillation gate (2026-06-02)
+
+```text
+task_id:    dream3r-native-student-gate-2026-06-02
+phase:      native decoder/distillation execution over existing proposal caches
+status:     closed flat-but-controlled
+driver:     user asked to push a high-impact architecture gate instead of residual-head tweaks
+priority:   prove whether a Dream3R-owned native student can beat the bounded frozen-StatePrior baseline
+```
+
+Files added / updated:
+
+| File | Role |
+| --- | --- |
+| `decisions/DEC-20260602-024-native-student-decoder-gate.md` | Decision and result |
+| `cycles/CYCLE-20260602-native-student-decoder-gate.md` | Execution log |
+| `code/dream3r/native_student_decoder.py` | Non-core frozen-StatePrior teacher + proposal-dropout native residual student |
+| `code/dream3r/scripts/train_native_student_decoder.py` | Cached-proposal trainer with state/no-state/shuffle controls |
+| `code/dream3r/scripts/run_native_student_decoder_sweep.sh` | BUAA-Server GPU1 control runner |
+| `code/dream3r/tests/test_native_student_decoder.py` | Local/server gate tests |
+
+Server result:
+
+```text
+runs/stage6_fusion/native_student_decoder_gate20_seed7
+correct-state: KITTI 0.1451, ETH3D 0.1480
+no-state:      KITTI 0.1557, ETH3D 0.1730
+shuffle-state: KITTI 0.1525, ETH3D 0.2468
+fallback contamination: 0
+```
+
+Conclusion: native student decoding is now executable and state-causal, but it
+does not beat the bounded frozen-StatePrior refinement baseline of
+0.1448/0.1475. Do not promote it as current best model. Next native work should
+change the objective with dropout-consistency or temporal/scale state-projection
+targets before rerunning controls.
+
+## Image-state native student U1 (2026-06-02)
+
+```text
+task_id:    dream3r-image-state-native-u1-2026-06-02
+phase:      usable-model scaffold after proposal-only native gate
+status:     closed negative; scaffold preserved but not promoted
+driver:     user said the current model is not usable and asked to move quickly
+priority:   add an image-conditioned native path instead of another proposal-only mixer
+```
+
+Files added:
+
+| File | Role |
+| --- | --- |
+| `decisions/DEC-20260602-025-image-state-native-student-u1.md` | Decision and next gate |
+| `cycles/CYCLE-20260602-image-state-native-student-u1.md` | Execution log |
+| `code/dream3r/image_state_student_decoder.py` | U1 decoder: image tokens + state + optional proposal anchors -> pointmap |
+| `code/dream3r/scripts/build_image_state_student_cache.py` | Builder for image-token caches with real-backend proposal guardrail |
+| `code/dream3r/scripts/train_image_state_student.py` | U1 trainer; rejects old SCF caches without image tokens |
+| `code/dream3r/scripts/run_image_state_student_sweep.sh` | State/no-state/shuffle sweep wrapper |
+| `code/dream3r/tests/test_image_state_student_decoder.py` | U1 interface and cache rejection tests |
+
+Verification and GPU result:
+
+```text
+local:  python -B -m pytest code/dream3r/tests/test_image_state_student_decoder.py code/dream3r/tests/test_native_student_decoder.py -q
+        6 passed
+server: conda run --no-capture-output -n dream3r python -B -m pytest dream3r/tests/test_image_state_student_decoder.py -q
+        3 passed
+
+cache build:
+        image_state_student_kitti_cache.pt  n_windows=246, d_image=768
+        image_state_student_eth3d_cache.pt  n_windows=50, d_image=768
+
+gate20:
+        correct-state  KITTI 0.1649, ETH3D 0.2842
+        no-state       KITTI 0.1526, ETH3D 0.1702
+        shuffle-state  KITTI 0.1577, ETH3D 0.2754
+        fallback contamination 0
+```
+
+Conclusion: Dream3R now has a non-core U1 scaffold with an actual image-token
+native path, but it is not a usable model. Correct-state loses to no-state and
+to the locked 0.1448/0.1475 baseline. Do not rerun U1 unchanged.
+
+## VGGT-Omega admission preflight (2026-06-02)
+
+```text
+task_id:    dream3r-vggt-omega-admission-preflight-2026-06-02
+phase:      fallback teacher-bank admission after U1 negative gate
+status:     blocked on gated checkpoint
+driver:     V10 prompt fallback path after native work blocked
+priority:   prepare one-window real-backend teacher admission without fallback contamination
+```
+
+Files added:
+
+| File | Role |
+| --- | --- |
+| `decisions/DEC-20260602-026-vggt-omega-admission-preflight.md` | Decision and blocker |
+| `cycles/CYCLE-20260602-vggt-omega-admission-preflight.md` | Execution log |
+| `code/dream3r/scripts/smoke_vggt_omega_adapter.py` | Non-core one-window VGGT-Omega smoke/admission payload script |
+
+Server result:
+
+```text
+upstream code staged: /hdd3/kykt26/externals/vggt-omega
+local upstream commit: 39a0cb8af88554f15ddcb5354cd52bde588fa014
+server py_compile: passed
+preflight output: runs/v22_admission/vggt_omega_smoke/results.json
+backend: error
+failure: checkpoint not found at /hdd3/kykt26/checkpoints/vggt_omega/VGGT-Omega-1B-512/model.pt
+fallback_contamination_count: 1
+```
+
+Conclusion: VGGT-Omega is not admitted. The code path is ready, but official
+checkpoint access is approval-gated. Do not substitute vanilla VGGT or demo
+outputs for this real-backend teacher gate.
 
 ## Bounded residual refinement (2026-06-01)
 
@@ -604,47 +762,31 @@ If this file's "Last updated" timestamp is older than the latest cycle log under
 ## Current task
 
 ```text
-task_id:    none-active
-phase:      idle between cycles
-cycles:     032-042 all closed; proposal track (Track C, cycles 036-042) functionally closed: §1-§9 dual-draft + PDF + advisor packaging complete; Track B 3R-mix survey packaged; STYLE_CONTRACT v1 closed 50 rows 7 sync entries
+task_id:    dream3r-native-student-gate-2026-06-02
+phase:      architecture acceleration execution closed
 status:     idle
+driver:     user asked to lock the bounded frozen-StatePrior baseline and push one high-impact Dream3R architecture gate
+priority:   next native work should change objective; VGGT-Omega one-window admission remains fallback only if native objective work blocks
 ```
 
 One-line description:
 
 ```text
-No active cycle. Two parallel tracks are at a checkpoint:
-  - Track A (Dream3R v0.3 code): server-verified; first KITTI real-data
-    smoke run; canonical onboarding doc REVIEW_PROMPT.md; RECENT_PROGRESS.md
-    is the canonical W19-W22 ledger; NEXT_PHASE_ROADMAP.md lists post-demo
-    candidates (real-data ablation table / Critic calibration / DTU loader
-    / 3DGS renderer / TTT).
-  - Track B (3R-mix Chinese survey, separate workspace at Dream/3R-mix/):
-    18-page LaTeX manuscript with 4 paper Fig.1 crops embedded, 6
-    figures (4 TikZ + 2 paper-Fig.1 composites), 5 booktabs tables, 44
-    references all cited; current recommended deliverable
-    `deliverables/3r_survey_stage_final_2026-05-15_natural.pdf`;
-    remaining work documented in
-    3R-mix/NEW_CHAT_HANDOFF.md "未完成任务".
+Native student decoder/distillation gate completed. It is executable and
+state-causal, but metric-flat versus the bounded frozen-StatePrior refinement
+baseline; current best remains 0.1448/0.1475.
 ```
 
-## Subtask board (none active; last cycle 034 board preserved as the most recent reference)
+## Subtask board (none active; native gate board closed)
 
 | ID | Subtask | Status | Canonical artifact |
 | --- | --- | --- | --- |
-| C034-S1 | Sync discipline via `sync_verify_server.ps1` | done | `code/dream3r/scripts/sync_verify_server.ps1` |
-| C034-S2 | W15 calibration (config-threaded geometric thresholds) | done | `code/dream3r/modules.py`, `code/dream3r/config.py` |
-| C034-S3 | W16 ISA pose stress tests | done | `code/dream3r/tests/test_isa_slots.py` |
-| C034-S4 | W17 Mamba-Transformer hybrid recurrence | done | `code/dream3r/mamba_block.py` |
-| C034-S5 | W18 GaussianHead tensor contract (no renderer) | done | `code/dream3r/gaussian_head.py` |
-| C034-S6 | KITTI real-data loader + `evaluate_real_sequence` | done | `code/dream3r/data/kitti_real.py`, `evaluate_real_sequence.py` |
-| C034-S7 | Synthetic ablation runner + demo export pack | done | `ablate_recurrence.py`, `export_demo_artifacts.py` |
-| C034-S8 | 3R-mix Track B kickoff (LaTeX skeleton + bib + notes) | done | `Dream/3R-mix/main.tex`, `references.bib`, `notes/` |
-| 0513-S1 | 3R-mix structural overhaul (10-section plan + new §9 + new `tab:testtime`) | done | `Dream/3R-mix/main.tex` |
-| 0513-S2 | 3R-mix `fig:paradigm` TikZ + lineage label refresh | done | `Dream/3R-mix/main.tex` |
-| 0513-S3 | 3R-mix paper Fig.1 embedding (DUSt3R / VGGT / MonST3R / CUT3R) | done | `figures/`, `main.tex` |
-| 0513-S4 | 3R-mix source-checked rewrites (MV-DUSt3R+ / Fast3R / VGGT / TTT3R + 7 × 2026 preprints) | done | `Dream/3R-mix/main.tex`, `notes/paper_inventory.md` |
-| 0513-S5 | 3R-mix three refinement passes (caption shortening + language naturalization + final refine) | done | `deliverables/3r_survey_stage_final_2026-05-13_refined.pdf` (16 A4 pages, 0 errors / 0 warnings) |
+| C20260602-S1 | Verify bounded frozen-StatePrior baseline artifacts on BUAA-Server | done | `/hdd3/kykt26/code/dream3r/runs/stage6_fusion/bounded_refine_sweep/` |
+| C20260602-S2 | Inspect non-core decoder/trainer cache path and lock implementation boundary | done | `code/dream3r/proposal_set_decoder.py`, `code/dream3r/scripts/train_proposal_set_decoder.py` |
+| C20260602-S3 | Add native student decoder/distillation scaffold outside frozen core | done | `code/dream3r/native_student_decoder.py`, `code/dream3r/scripts/train_native_student_decoder.py`, tests |
+| C20260602-S4 | Run local py_compile and targeted tests | done | local verification output |
+| C20260602-S5 | Sync to BUAA-Server and run bounded GPU1 smoke if command is valid | done | `runs/stage6_fusion/native_student_decoder_smoke_seed7`, `runs/stage6_fusion/native_student_decoder_gate20_seed7` |
+| C20260602-S6 | Update decision/cycle/guidance chain and close pass | done | `cycles/`, `decisions/`, `TASK_SNAPSHOT.md`, `WORKFLOW_STATUS.md`, `INDEX.md`, `mainwork.md`, registry |
 
 ## Cycle 040 subtask board (closed 2026-05-17)
 
@@ -1400,6 +1542,35 @@ Next expected research object after cycle 030:
 ## Last completed task pass
 
 ```text
+pass_name:        Native student decoder/distillation gate
+date:             2026-06-02
+trigger:          User asked to lock the bounded frozen-StatePrior baseline
+                  and push a high-impact Dream3R architecture gate.
+files_modified:   TASK_SNAPSHOT.md, WORKFLOW_STATUS.md, RESEARCH_STATE.md,
+                  INDEX.md, README.md, AGENT_MASTER_PROMPT.md, mainwork.md,
+                  planning/DREAM3R_ARCHITECTURE_ACCELERATION_PLAN_20260602.md,
+                  handoff/ARCHITECTURE_V10_ACCELERATED_CONVERGENCE_AGENT_PROMPT.md,
+                  registry/decision_registry.md
+new_artifacts:    decisions/DEC-20260602-024-native-student-decoder-gate.md
+                  cycles/CYCLE-20260602-native-student-decoder-gate.md
+                  code/dream3r/native_student_decoder.py
+                  code/dream3r/scripts/train_native_student_decoder.py
+                  code/dream3r/scripts/run_native_student_decoder_sweep.sh
+                  code/dream3r/tests/test_native_student_decoder.py
+result:           Native student gate is executable and state-causal, but
+                  metric-flat versus bounded frozen-StatePrior refinement.
+                  Correct-state 0.1451/0.1480, no-state 0.1557/0.1730,
+                  shuffle-state 0.1525/0.2468, fallback contamination 0.
+baseline:         Current best remains bounded frozen-StatePrior refinement
+                  at KITTI/ETH3D 0.1448/0.1475.
+discipline:       No frozen-core edit. No cache rebuild. No checkpoint
+                  download. No environment mutation. Existing DEC-019
+                  checkpoint and existing SCF caches only.
+verification:     Local py_compile passed; local targeted pytest 11 passed;
+                  server targeted pytest 3 passed; BUAA-Server GPU1 smoke
+                  and 20-epoch gate completed under
+                  runs/stage6_fusion/native_student_decoder_*.
+
 pass_name:        Cycle 031 close pass (Memory v0.3 local P0 scaffold
                   + ABL-memory-0 gate done in single session 2026-05-08)
 date:             2026-05-08
@@ -1482,41 +1653,34 @@ prior_pass_files: TASK_SNAPSHOT.md, WORKFLOW_STATUS.md, RESEARCH_STATE.md,
 If a new agent or new conversation is picking this up cold:
 
 ```text
-CURRENT RESUME OVERRIDE (cycle 032 closed; 2026-05-09):
+CURRENT RESUME OVERRIDE (native student gate closed; 2026-06-02):
 
 1. Read this file (you are here).
 
-2. Read code/dream3r/REVIEW_PROMPT.md — this is the canonical
-   onboarding document for the v0.3 codebase. It contains the
-   file map, architecture diagram, key contracts, known gaps,
-   verification commands, and review checklist.
+2. Read handoff/ARCHITECTURE_V10_ACCELERATED_CONVERGENCE_AGENT_PROMPT.md
+   and planning/DREAM3R_ARCHITECTURE_ACCELERATION_PLAN_20260602.md.
 
-3. The v0.3 codebase is server-verified at
-   /hdd3/kykt26/code/dream3r/dream3r/. All smoke tests (9/9),
-   unit tests (4/4), profiling (8.4ms p95), and synthetic
-   training (10 epochs, loss converging) pass.
+3. Read decisions/DEC-20260602-024-native-student-decoder-gate.md and
+   cycles/CYCLE-20260602-native-student-decoder-gate.md. The native student
+   scaffold already exists and should not be recreated.
 
-4. Default next actions (user decision required):
-   A. Start ablation experiments (ABL-memory-1..8) using the
-      validated training pipeline on synthetic data.
-   B. Connect expert adapters to real KYKT runners on server
-      (MASt3R, Fast3R, etc. already have conda envs).
-   C. Implement DTU dataset loader for real-data training.
-   D. Add standard depth evaluation metrics (AbsRel, RMSE, etc.).
-   E. Pause and return to research design / paper writing.
+4. The locked baseline remains:
+   runs/stage6_fusion/bounded_refine_sweep/frozen_prior_state_seed_7/results.json
+   runs/stage6_fusion/bounded_refine_sweep/frozen_prior_shuffle_state_seed_7/results.json
 
-5. Known architecture gaps (see REVIEW_PROMPT.md "Known gaps"):
-   A4 (points3d in AnchorBank), A5 (DINOv3 backbone),
-   A6 (Test3R lazy invocation), C1 (DTU stub), D1-D4 (metrics),
-   E1 (streaming orchestration), E2 (expert adapter stubs).
+5. Preserve frozen-core boundaries. Do not edit model.py, anchor_bank.py,
+   nsa_attention.py, bus.py, orchestrator.py, repair.py, modules.py,
+   contracts.py, or config.py without a new DEC.
 
-6. Hard rules from prior cycles still apply:
-   - No reproduction / checkpoint download / training on real data
-     without explicit user approval.
-   - DEC-20260501-004 (candidate-not-final) and
-     DEC-20260504-002 (no-all-in) still in force.
-   - F-002: server-side execution only; local = editing + markdown.
+6. Next native work should change the objective with dropout-consistency or
+   temporal/scale state-projection targets, then rerun state/no-state/shuffle
+   controls against the 0.1448/0.1475 baseline. If native objective work
+   blocks, fall back to VGGT-Omega one-window teacher admission rather than
+   another residual-head sweep.
 ```
+
+Historical resume material below is retained for traceability only. It is not
+the active next action after `dream3r-native-student-gate-2026-06-02`.
 3. Read experiments/prototypes/memory_v03_p0/README.md and
    experiments/prototypes/memory_v03_p0/outputs/summary_go_no_go.md.
 

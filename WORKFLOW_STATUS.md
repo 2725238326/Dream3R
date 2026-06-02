@@ -1,5 +1,11 @@
 # Dream Workflow Status
 
+Last updated: 2026-06-02 (U1 image-state native gate closed negative and VGGT-Omega preflight installed. U1 cache build succeeded, but gate20 correct-state 0.1649/0.2842 loses to no-state 0.1526/0.1702 and locked baseline 0.1448/0.1475. VGGT-Omega smoke script compiles and upstream code is staged, but real admission is blocked on missing approved checkpoint.)
+
+Last updated: 2026-06-02 (native student decoder/distillation gate executed on BUAA-Server GPU1: non-core NativeStudentDecoder + trainer + sweep + tests added; seed-7 gate preserves state causality but is metric-flat versus bounded frozen-StatePrior refinement, so bounded refinement remains current best baseline.)
+
+Last updated: 2026-06-02 (architecture acceleration prompt added: next agents should use V10 handoff to lock the bounded frozen-StatePrior baseline and push native student decoder/distillation or gated VGGT-Omega admission, not residual-head micro-sweeps.)
+
 Last updated: 2026-06-01 (bounded residual refinement over frozen StatePrior closed small-positive: correct-state 0.1448/0.1475 on KITTI/ETH3D vs frozen-prior 0.1452/0.1480; shuffle-state 0.1521/0.2467. Current best bounded Dream3R variant is frozen trained StatePrior fusion plus disagreement-bounded residual refinement.)
 
 Last updated: 2026-06-01 (frozen-prior decoder sweep closed scaffold-positive: correct-state 0.1452/0.1480 on KITTI/ETH3D, shuffle-state 0.1525/0.2468; KL=0.01 sensitivity gives the same pattern. Frozen StatePrior preserves causality and prevents joint decoder collapse; next route is bounded refinement over frozen prior with a different refinement mechanism/target, not KL tuning alone.)
@@ -121,6 +127,10 @@ Use this prompt when preparing KYKT frontend design work for Gemini CLI.
 | Dream3R prior-conditioned decoder | **closed negative; two-stage path implemented**; explicit StatePrior-style MLP prior branch added to ProposalSetDecoder, but seed7 joint controls show correct-state does not beat no-state/shuffle. Trainer now supports `--state-prior-checkpoint --freeze-state-prior --prior-kl-weight`; frozen-prior smoke reproduces StatePrior's positive result before refinement training | `decisions/DEC-20260531-020-prior-conditioned-decoder.md`, `cycles/CYCLE-20260531-prior-conditioned-decoder.md`, `code/dream3r/proposal_set_decoder.py`, `code/dream3r/scripts/train_proposal_set_decoder.py`, `code/dream3r/scripts/run_prior_conditioned_decoder_sweep.sh`, `code/dream3r/scripts/run_frozen_prior_decoder_sweep.sh`, `code/dream3r/tests/test_proposal_set_decoder.py` |
 | Dream3R frozen-prior decoder | **closed scaffold-positive**; loading/freezing DEC-019 StatePrior preserves state causality and beats shuffle-state on both domains. KL=0.1 and 0.01 both preserve the prior but do not improve beyond StatePriorHead, so next route is a different bounded refinement mechanism/target over the frozen prior | `decisions/DEC-20260601-021-frozen-prior-decoder-sweep.md`, `cycles/CYCLE-20260601-frozen-prior-decoder-sweep.md`, `code/dream3r/scripts/run_frozen_prior_decoder_sweep.sh` |
 | Dream3R bounded residual refinement | **closed small-positive**; zero-initialized residual offset bounded by local proposal disagreement improves frozen-prior from 0.1452/0.1480 to 0.1448/0.1475 and keeps shuffle-state at 0.1521/0.2467. This is the current best bounded Dream3R model variant | `decisions/DEC-20260601-022-bounded-prior-refinement.md`, `cycles/CYCLE-20260601-bounded-prior-refinement.md`, `code/dream3r/proposal_set_decoder.py`, `code/dream3r/scripts/train_proposal_set_decoder.py`, `code/dream3r/scripts/run_frozen_prior_decoder_sweep.sh` |
+| Dream3R architecture acceleration | **ready prompt**; stop treating small bounded-head gains as the main research lane. Next agent should lock the bounded frozen-StatePrior baseline, then execute native student decoder/distillation over existing proposal caches or tightly gated VGGT-Omega teacher admission | `decisions/DEC-20260602-023-architecture-acceleration-prompt.md`, `planning/DREAM3R_ARCHITECTURE_ACCELERATION_PLAN_20260602.md`, `handoff/ARCHITECTURE_V10_ACCELERATED_CONVERGENCE_AGENT_PROMPT.md`, `cycles/CYCLE-20260602-architecture-acceleration-prompt.md` |
+| Dream3R native student decoder gate | **closed flat but executable**; non-core NativeStudentDecoder uses a frozen DEC-019 StatePrior teacher plus proposal dropout and emits state/no-state/shuffle controls with temporal/scale metrics and fallback contamination count. GPU1 seed-7 gate: correct-state 0.1451/0.1480, no-state 0.1557/0.1730, shuffle 0.1525/0.2468, fallback contamination 0. State causality holds, but it does not beat the bounded 0.1448/0.1475 baseline | `decisions/DEC-20260602-024-native-student-decoder-gate.md`, `cycles/CYCLE-20260602-native-student-decoder-gate.md`, `code/dream3r/native_student_decoder.py`, `code/dream3r/scripts/train_native_student_decoder.py`, `code/dream3r/scripts/run_native_student_decoder_sweep.sh`, `code/dream3r/tests/test_native_student_decoder.py` |
+| Dream3R image-state native student U1 | **closed negative**; adds actual image-token native path with optional proposal anchors, but GPU1 gate20 fails usability controls. Caches built: Kitti 246 windows, ETH3D 50 windows. Result: correct-state 0.1649/0.2842, no-state 0.1526/0.1702, shuffle 0.1577/0.2754, fallback contamination 0. Do not rerun unchanged; current best remains bounded baseline 0.1448/0.1475 | `decisions/DEC-20260602-025-image-state-native-student-u1.md`, `cycles/CYCLE-20260602-image-state-native-student-u1.md`, `code/dream3r/image_state_student_decoder.py`, `code/dream3r/scripts/build_image_state_student_cache.py`, `code/dream3r/scripts/train_image_state_student.py`, `code/dream3r/scripts/run_image_state_student_sweep.sh`, `code/dream3r/tests/test_image_state_student_decoder.py` |
+| Dream3R VGGT-Omega admission preflight | **blocked on checkpoint**; non-core smoke script added and server py_compile passes. Public upstream code staged at `/hdd3/kykt26/externals/vggt-omega`; preflight JSON reports missing `/hdd3/kykt26/checkpoints/vggt_omega/VGGT-Omega-1B-512/model.pt`. No fallback/stub admission allowed | `decisions/DEC-20260602-026-vggt-omega-admission-preflight.md`, `cycles/CYCLE-20260602-vggt-omega-admission-preflight.md`, `code/dream3r/scripts/smoke_vggt_omega_adapter.py` |
 | Dream3R two-day SCF convergence handoff | **superseded by DEC-011 result**; keep as historical prompt shape, but next agents should start from the updated prompt and continue ver2.0/L4, not recreate the pre-run plan | `handoff/ARCHITECTURE_V06_SCF_AGENT_START_PROMPT.md`; historical plan `planning/DREAM3R_2DAY_SCF_MIDTERM_PLAN.md` |
 | Dream3R v0.5 iteration test plan | **ready for execution planning**; 2026-05-22 plan converts v0.4 closure + v0.5 axes into concrete testing sprints: S0 local v0.4 edge hardening, S1 A6 KITTI 8-10 window memory evidence, S2 A2 staged real-backend adapter closure, S3 A5 Test3R off-path, S4 A3 dynamic-mask promotion design, with server runbook outline and evidence schema. Planning artifact only; no v0.5 axis closed | `planning/DREAM3R_V05_ITERATION_TEST_PLAN.md`, `handoff/ARCHITECTURE_V05_AGENT_START_PROMPT.md` |
 | 3R-mix Chinese survey (Track B) | **wound down 2026-05-14 (route C: arXiv-only)**; 2026-05-14 quality pass added CroCo + MASt3R mechanism + §10 failure modes + `fig:timeline`; 2026-05-15 prose naturalization pass rewrote 10 paragraphs to drop LLM-style enumerated structures, parallel patterns and workflow vocabulary; 18 A4 pages, 44 references, 6 figures (4 TikZ + 2 paper-Fig.1 composites), 5 booktabs tables, 0 LaTeX errors / 0 warnings; deliberately decoupled from Dream/KYKT internal vocabulary | `Dream/3R-mix/README.md`, `Dream/3R-mix/NEW_CHAT_HANDOFF.md`, `Dream/3R-mix/main.tex`, `Dream/3R-mix/deliverables/3r_survey_stage_final_2026-05-15_natural.pdf` |
@@ -170,6 +180,24 @@ Use this prompt when preparing KYKT frontend design work for Gemini CLI.
 - reusable Codex skill packaging
 
 ## Recommended Next User Decision
+
+Current architecture recommendation (2026-06-02, after DEC-20260602-026):
+
+```text
+The bounded frozen-StatePrior refinement remains the current best baseline:
+KITTI/ETH3D 0.1448/0.1475.
+
+The proposal-only native gate is executable and state-causal but metric-flat.
+The image-state U1 gate is worse: correct-state 0.1649/0.2842 and loses to
+no-state 0.1526/0.1702. Do not spend the next pass on epoch-only reruns.
+
+Next admissible architecture direction:
+  A. Stage approved VGGT-Omega checkpoint, then rerun the existing one-window
+     real-backend smoke and tiny oracle-cache admission.
+  B. Redesign native objective/architecture so correct-state must beat
+     no-state/shuffle and the 0.1448/0.1475 baseline.
+  C. Keep current bounded baseline as the only usable Dream3R prototype.
+```
 
 Cycle 043 architecture-focus recommendation (cycle 043 closed 2026-05-22; user re-prioritized 2026-05-22 "架构是最重要的内容; 开题报告和综述放一边; 平台更新放到日程"; Track A architecture-first mainline confirmed primary; Track B/C parked):
 

@@ -1,5 +1,11 @@
 # Dream Research Workspace
 
+Last updated: 2026-06-02 (Dream3R usability gate updated: image-state U1 ran and failed quality controls; current usable bounded baseline remains 0.1448/0.1475. VGGT-Omega one-window smoke script is ready, public code is staged on BUAA-Server, but real admission is blocked on the approved checkpoint. See `decisions/DEC-20260602-025-image-state-native-student-u1.md` and `decisions/DEC-20260602-026-vggt-omega-admission-preflight.md`.)
+
+Last updated: 2026-06-02 (native student decoder/distillation gate executed on BUAA-Server GPU1: native gate is executable and state-causal but metric-flat versus bounded frozen-StatePrior refinement; bounded refinement remains current best baseline. See `decisions/DEC-20260602-024-native-student-decoder-gate.md`.)
+
+Last updated: 2026-06-02 (architecture acceleration prompt added: use `handoff/ARCHITECTURE_V10_ACCELERATED_CONVERGENCE_AGENT_PROMPT.md` to push native student decoder/distillation or gated teacher admission instead of small residual-head tweaks.)
+
 Last updated: 2026-05-30 (Dream3R-PD local execution start: VGGT-Omega deployment inventory / DEC-016 draft and non-core ProposalSetDecoder prototype / trainer / tests added. See `decisions/DEC-20260530-017-proposal-set-decoder-prototype.md`.)
 
 Last updated: 2026-05-30 (final architecture path selected: Dream3R-PD = Proposal-bank Distilled State-Conditioned 3R. See `decisions/DEC-20260530-015-final-architecture-selection.md`, `specs/SPEC-20260530-005-dream3r-pd-final-architecture.md`, and `planning/DREAM3R_PD_FINAL_ARCHITECTURE_PLAN.md`.)
@@ -63,6 +69,12 @@ Canonical frontend design handoff prompt:
 E:\kykt\Dream\handoff\FRONTEND_DESIGN_HANDOFF_PROMPT.md
 ```
 
+Current architecture acceleration handoff:
+
+```text
+E:\Dream3R\handoff\ARCHITECTURE_V10_ACCELERATED_CONVERGENCE_AGENT_PROMPT.md
+```
+
 Quick navigation index:
 
 ```text
@@ -116,8 +128,11 @@ planning/DREAM3R_PD_FINAL_ARCHITECTURE_PLAN.md.
 The latest ver2.1 server summary is:
 BUAA-Server:/hdd3/kykt26/code/dream3r/runs/stage6_fusion/ver21_metric_refresh/summary.md.
 
-The current next-agent handoff is:
-handoff/ARCHITECTURE_V09_FINAL_SELECTION_AGENT_PROMPT.md.
+The current architecture acceleration handoff is:
+handoff/ARCHITECTURE_V10_ACCELERATED_CONVERGENCE_AGENT_PROMPT.md.
+
+The latest execution result is:
+decisions/DEC-20260602-024-native-student-decoder-gate.md.
 ```
 
 The current strategy is **not** to prematurely choose one method such as Mamba-3R, Event-DUSt3R, or SplatBridge-4D.
