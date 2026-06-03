@@ -1,5 +1,19 @@
 # Dream Index
 
+Last updated: 2026-06-03 (Dream3R Qwen held-out calibrated controller gate closed diagnostic-negative: `decisions/DEC-20260603-033-qwen-heldout-calibrated-controller.md`, `cycles/CYCLE-20260603-qwen-heldout-calibrated-controller.md`, `code/dream3r/scripts/eval_vlm_calibrated_controller.py`, and `runs/vlm_semantic_controller/qwen3vl2b_real_50win_v2/calibrated_controller_50win_t320_v2.json`; real beats disabled but loses to shuffle.)
+
+Last updated: 2026-06-03 (Dream3R Qwen controller v2 repair closed weak-positive: `decisions/DEC-20260603-032-qwen-controller-v2-feature-policy-repair.md`, `cycles/CYCLE-20260603-qwen-controller-v2-feature-policy-repair.md`, and `runs/vlm_semantic_controller/qwen3vl2b_real_50win_v2/controller_dryrun_50win_t320_v2.json`; real beats disabled and marginally beats shuffle, still not promotable.)
+
+Last updated: 2026-06-03 (Dream3R Qwen3-VL-2B 50-window controller gate closed negative: `decisions/DEC-20260603-031-qwen3vl2b-50win-controller-gate.md`, `cycles/CYCLE-20260603-qwen3vl2b-50win-controller-gate.md`, and `runs/vlm_semantic_controller/qwen3vl2b_real_50win/controller_dryrun_50win_t320.json`; schema passes 50/50 but real/shuffle/disabled controls do not separate.)
+
+Last updated: 2026-06-03 (Dream3R Qwen3-VL-2B weights staged and real schema smoke passed: `decisions/DEC-20260603-030-qwen3vl2b-weight-staging-smoke.md`, `cycles/CYCLE-20260603-qwen3vl2b-weight-staging-smoke.md`, and `runs/vlm_semantic_controller/qwen3vl2b_real_smoke/schema_report_5win_t320.json`.)
+
+Last updated: 2026-06-03 (Dream3R V11 Qwen semantic-controller integration added: `code/dream3r/scripts/build_vlm_window_manifest.py`, `code/dream3r/scripts/eval_vlm_controller_dryrun.py`, `code/dream3r/tests/test_vlm_controller_integration.py`, `decisions/DEC-20260603-029-qwen-semantic-controller-integration.md`, `cycles/CYCLE-20260603-qwen-semantic-controller-integration.md`, and `runs/vlm_semantic_controller/qwen3vl2b_smoke/mock_controller_dryrun.json`.)
+
+Last updated: 2026-06-03 (Dream3R V11 VLM semantic label-cache gate implemented: `code/dream3r/scripts/build_vlm_semantic_labels.py`, `code/dream3r/tests/test_vlm_semantic_labels.py`, `decisions/DEC-20260603-028-vlm-semantic-label-cache-gate.md`, `cycles/CYCLE-20260603-vlm-semantic-label-cache-gate.md`, and `runs/vlm_semantic_controller/qwen3vl2b_smoke/schema_report.json`.)
+
+Last updated: 2026-06-03 (Dream3R V11 VLM semantic-controller research plan added: `planning/DREAM3R_V11_VLM_SEMANTIC_CONTROLLER_RESEARCH_PLAN.md`, `decisions/DEC-20260603-027-vlm-semantic-controller-plan.md`, `cycles/CYCLE-20260603-vlm-semantic-controller-plan.md`, `handoff/ARCHITECTURE_V11_VLM_SEMANTIC_CONTROLLER_AGENT_PROMPT.md`.)
+
 Last updated: 2026-06-02 (U1 image-state native gate closed negative and VGGT-Omega preflight added: `decisions/DEC-20260602-025-image-state-native-student-u1.md`, `decisions/DEC-20260602-026-vggt-omega-admission-preflight.md`, `cycles/CYCLE-20260602-image-state-native-student-u1.md`, `cycles/CYCLE-20260602-vggt-omega-admission-preflight.md`, `code/dream3r/scripts/smoke_vggt_omega_adapter.py`.)
 
 Last updated: 2026-06-02 (native student decoder/distillation gate executed: `decisions/DEC-20260602-024-native-student-decoder-gate.md`, `cycles/CYCLE-20260602-native-student-decoder-gate.md`, `code/dream3r/native_student_decoder.py`, `code/dream3r/scripts/train_native_student_decoder.py`, `code/dream3r/scripts/run_native_student_decoder_sweep.sh`, `code/dream3r/tests/test_native_student_decoder.py`.)
@@ -94,6 +108,7 @@ Quick navigation for humans and agents. **Read `TASK_SNAPSHOT.md` first** (it is
 | `DREAM3R_V22_ADMISSION_RUNBOOK.md` | 2026-05-30 v2.2 deployment research runbook. Starts with VGGT-Omega inventory, then one-window smoke DEC, cache, oracle, and decoder admission gates; no checkpoint/server run authorized by the doc itself |
 | `DREAM3R_PD_FINAL_ARCHITECTURE_PLAN.md` | 2026-05-30 final architecture plan. Selects Dream3R-PD: proposal teachers + Dream state + ProposalSetDecoder + native distillation with proposal dropout; defines P0-P5 execution ladder and stop gates |
 | `DREAM3R_ARCHITECTURE_ACCELERATION_PLAN_20260602.md` | 2026-06-02 acceleration plan. Locks the bounded frozen-StatePrior baseline and redirects next work from residual-head micro-sweeps to native student decoder/distillation or tightly gated teacher-bank admission |
+| `DREAM3R_V11_VLM_SEMANTIC_CONTROLLER_RESEARCH_PLAN.md` | 2026-06-03 V11 research plan, now with DEC-028/DEC-029 gate status. Scopes Qwen3-VL-2B-Instruct as an offline semantic support signal for Router, Critic, state auxiliary supervision, and teacher-admission scheduling, with strict schema plus real/shuffle/disabled dry-run controls |
 | `VGGT_OMEGA_DEPLOYMENT_INVENTORY.md` | 2026-05-30 upstream deployment inventory for VGGT-Omega: repo, checkpoint policy, dependency surface, native outputs, ExpertProposal normalization, smoke command shape |
 
 ### `planning/proposal_dream3r/` - Dream3R 开题报告 dual-draft (Track C)
@@ -356,7 +371,7 @@ Format: `STORY-YYYYMMDD-NNN-<slug>.md`. One file per finalist teacher demo. Crea
 | What can Dream do without asking the user? | `AGENT_MASTER_PROMPT.md` section 6 |
 | What requires user approval? | `AGENT_MASTER_PROMPT.md` section 6 + `WORKFLOW_STATUS.md` Blocked Until User Decision |
 | How should I behave when synthesizing or editing files? | `paradigm/RESEARCH_CODE_DISCIPLINE.md` |
-| What is the latest research result? | `cycles/CYCLE-20260602-native-student-decoder-gate.md` and `decisions/DEC-20260602-024-native-student-decoder-gate.md`: native student gate is executable and state-causal, but flat versus bounded 0.1448/0.1475 baseline |
+| What is the latest research result? | `cycles/CYCLE-20260603-qwen-controller-v2-feature-policy-repair.md` and `decisions/DEC-20260603-032-qwen-controller-v2-feature-policy-repair.md`: Qwen v2 real labels beat disabled and marginally beat shuffle, but the gap is too small for promotion |
 | What did we decide? | `registry/decision_registry.md` and files under `decisions/` |
 | What experiments are planned or locally scaffolded? | files under `experiments/` plus C2 v0.3 prototype sequence in `specs/SPEC-20260508-001-dream3r-c2-memory-v03-addendum.md`, P0 plan in `planning/MEMORY_V03_P0_PROTOTYPE_PLAN.md`, reviewed ablation map in `specs/SPEC-20260508-002-dream3r-memory-v03-ablation-addendum.md`, review in `planning/MEMORY_V03_ABLATION_REVIEW.md`, execution template in `planning/MEMORY_V03_P0_EXECUTION_DEC_TEMPLATE.md`, and local `ABL-memory-0` scaffold under `experiments/prototypes/memory_v03_p0/`; later ablations still require separate DEC + per-step gate |
 | How should the frontend agent work? | `handoff/FRONTEND_DESIGN_HANDOFF_PROMPT.md` |

@@ -1,0 +1,285 @@
+{
+  "schema_version": "dream3r_vlm_semantic_v1",
+  "model_id": "Qwen/Qwen3-VL-2B-Instruct",
+  "prompt_hash": "4e3904ee7050226e",
+  "prompt_template": "You are labeling a 4-frame visual-geometry reconstruction window for Dream3R.\nReturn only valid JSON matching the requested schema.\n\nTask:\nClassify scene type and visual risk factors that may affect 3D reconstruction.\nUse the images only. Do not estimate metric depth or camera pose. Do not invent\nhidden objects. If uncertain, lower confidence and use \"unknown\".\n\nSchema:\n{\n  \"scene_type\": \"road|indoor|forest|tunnel|building|unknown\",\n  \"risk_dynamic\": 0.0,\n  \"risk_low_texture\": 0.0,\n  \"risk_reflection\": 0.0,\n  \"risk_occlusion\": 0.0,\n  \"risk_large_baseline\": 0.0,\n  \"risk_scale_drift\": 0.0,\n  \"risk_repeated_structure\": 0.0,\n  \"important_objects\": [],\n  \"visible_failure_causes\": [],\n  \"suggest_verify_geometry\": true,\n  \"suggest_expensive_teacher\": false,\n  \"confidence\": 0.0\n}\n",
+  "backend": "mock_valid",
+  "window_manifest": "runs/vlm_semantic_controller/qwen3vl2b_smoke/mock_window_manifest.json",
+  "records": [
+    {
+      "schema_version": "dream3r_vlm_semantic_v1",
+      "model_id": "Qwen/Qwen3-VL-2B-Instruct",
+      "prompt_hash": "4e3904ee7050226e",
+      "backend": "mock_valid",
+      "window_id": "kitti/mock_drive/0000000000",
+      "dataset": "kitti",
+      "frames": [
+        "mock_kitti_0000000000.png",
+        "mock_kitti_0000000001.png",
+        "mock_kitti_0000000002.png",
+        "mock_kitti_0000000003_car.png"
+      ],
+      "scene_type": "road",
+      "risk_dynamic": 0.78,
+      "risk_low_texture": 0.18,
+      "risk_reflection": 0.08,
+      "risk_occlusion": 0.2,
+      "risk_large_baseline": 0.52,
+      "risk_scale_drift": 0.24,
+      "risk_repeated_structure": 0.16,
+      "important_objects": [
+        "car"
+      ],
+      "visible_failure_causes": [
+        "dynamic",
+        "large_baseline"
+      ],
+      "suggest_verify_geometry": true,
+      "suggest_expensive_teacher": true,
+      "confidence": 0.86,
+      "failure_flags": []
+    },
+    {
+      "schema_version": "dream3r_vlm_semantic_v1",
+      "model_id": "Qwen/Qwen3-VL-2B-Instruct",
+      "prompt_hash": "4e3904ee7050226e",
+      "backend": "mock_valid",
+      "window_id": "eth3d/mock_courtyard/000000",
+      "dataset": "eth3d",
+      "frames": [
+        "mock_eth3d_000000_building.png",
+        "mock_eth3d_000001_building.png",
+        "mock_eth3d_000002_building.png",
+        "mock_eth3d_000003_building.png"
+      ],
+      "scene_type": "building",
+      "risk_dynamic": 0.32,
+      "risk_low_texture": 0.18,
+      "risk_reflection": 0.08,
+      "risk_occlusion": 0.2,
+      "risk_large_baseline": 0.52,
+      "risk_scale_drift": 0.4,
+      "risk_repeated_structure": 0.55,
+      "important_objects": [],
+      "visible_failure_causes": [
+        "large_baseline",
+        "repeated_structure"
+      ],
+      "suggest_verify_geometry": true,
+      "suggest_expensive_teacher": true,
+      "confidence": 0.86,
+      "failure_flags": []
+    }
+  ],
+  "features": {
+    "kitti/mock_drive/0000000000": [
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.78,
+      0.18,
+      0.08,
+      0.2,
+      0.52,
+      0.24,
+      0.16,
+      1.0,
+      1.0,
+      0.86,
+      0.0
+    ],
+    "eth3d/mock_courtyard/000000": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.32,
+      0.18,
+      0.08,
+      0.2,
+      0.52,
+      0.4,
+      0.55,
+      1.0,
+      1.0,
+      0.86,
+      0.0
+    ]
+  },
+  "controls": {
+    "feature_order": [
+      "scene_road",
+      "scene_indoor",
+      "scene_forest",
+      "scene_tunnel",
+      "scene_building",
+      "scene_unknown",
+      "risk_dynamic",
+      "risk_low_texture",
+      "risk_reflection",
+      "risk_occlusion",
+      "risk_large_baseline",
+      "risk_scale_drift",
+      "risk_repeated_structure",
+      "suggest_verify_geometry",
+      "suggest_expensive_teacher",
+      "confidence",
+      "schema_failure"
+    ],
+    "feature_groups": {
+      "scene_one_hot": [
+        "scene_road",
+        "scene_indoor",
+        "scene_forest",
+        "scene_tunnel",
+        "scene_building",
+        "scene_unknown"
+      ],
+      "risk_vector": [
+        "risk_dynamic",
+        "risk_low_texture",
+        "risk_reflection",
+        "risk_occlusion",
+        "risk_large_baseline",
+        "risk_scale_drift",
+        "risk_repeated_structure"
+      ],
+      "suggestions": [
+        "suggest_verify_geometry",
+        "suggest_expensive_teacher"
+      ],
+      "validity": [
+        "schema_failure"
+      ]
+    },
+    "shuffled_features": {
+      "kitti/mock_drive/0000000000": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.32,
+        0.18,
+        0.08,
+        0.2,
+        0.52,
+        0.4,
+        0.55,
+        1.0,
+        1.0,
+        0.86,
+        0.0
+      ],
+      "eth3d/mock_courtyard/000000": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.78,
+        0.18,
+        0.08,
+        0.2,
+        0.52,
+        0.24,
+        0.16,
+        1.0,
+        1.0,
+        0.86,
+        0.0
+      ]
+    },
+    "disabled_features": {
+      "kitti/mock_drive/0000000000": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "eth3d/mock_courtyard/000000": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "shuffle_seed": 7,
+    "causality_note": "Use features vs shuffled_features vs disabled_features for Router/Critic VLM-label causality controls; no geometry is stored here."
+  },
+  "runtime_seconds_by_window": {
+    "kitti/mock_drive/0000000000": 0.0,
+    "eth3d/mock_courtyard/000000": 0.0
+  },
+  "schema_report": {
+    "schema_version": "dream3r_vlm_semantic_v1",
+    "model_id": "Qwen/Qwen3-VL-2B-Instruct",
+    "prompt_hash": "4e3904ee7050226e",
+    "backend": "mock_valid",
+    "output": "runs/vlm_semantic_controller/qwen3vl2b_smoke/mock_labels.json",
+    "qwen_attempted": false,
+    "n_windows": 2,
+    "valid_records": 2,
+    "failure_records": 0,
+    "schema_pass_rate": 1.0,
+    "invalid_record_schema": {},
+    "failure_flag_counts": {},
+    "feature_order": [
+      "scene_road",
+      "scene_indoor",
+      "scene_forest",
+      "scene_tunnel",
+      "scene_building",
+      "scene_unknown",
+      "risk_dynamic",
+      "risk_low_texture",
+      "risk_reflection",
+      "risk_occlusion",
+      "risk_large_baseline",
+      "risk_scale_drift",
+      "risk_repeated_structure",
+      "suggest_verify_geometry",
+      "suggest_expensive_teacher",
+      "confidence",
+      "schema_failure"
+    ],
+    "control_keys": [
+      "features",
+      "shuffled_features",
+      "disabled_features"
+    ]
+  }
+}

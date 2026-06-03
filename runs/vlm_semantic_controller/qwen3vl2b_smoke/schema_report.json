@@ -1,0 +1,38 @@
+{
+  "schema_version": "dream3r_vlm_semantic_v1",
+  "model_id": "Qwen/Qwen3-VL-2B-Instruct",
+  "prompt_hash": "4e3904ee7050226e",
+  "backend": "mock_valid",
+  "output": "runs/vlm_semantic_controller/qwen3vl2b_smoke/mock_labels.json",
+  "qwen_attempted": false,
+  "n_windows": 2,
+  "valid_records": 2,
+  "failure_records": 0,
+  "schema_pass_rate": 1.0,
+  "invalid_record_schema": {},
+  "failure_flag_counts": {},
+  "feature_order": [
+    "scene_road",
+    "scene_indoor",
+    "scene_forest",
+    "scene_tunnel",
+    "scene_building",
+    "scene_unknown",
+    "risk_dynamic",
+    "risk_low_texture",
+    "risk_reflection",
+    "risk_occlusion",
+    "risk_large_baseline",
+    "risk_scale_drift",
+    "risk_repeated_structure",
+    "suggest_verify_geometry",
+    "suggest_expensive_teacher",
+    "confidence",
+    "schema_failure"
+  ],
+  "control_keys": [
+    "features",
+    "shuffled_features",
+    "disabled_features"
+  ]
+}

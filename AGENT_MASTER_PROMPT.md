@@ -1,5 +1,19 @@
 # Dream Agent Master Prompt
 
+Last updated: 2026-06-03 (Qwen held-out calibrated controller gate closed diagnostic-negative: real 0.1813, shuffle 0.1776, disabled 0.2365, oracle 0.1489. Real beats disabled but loses to shuffle; do not train/promote Router/Critic from the current Qwen cache. Use DEC-20260603-033 before further Qwen work.)
+
+Last updated: 2026-06-03 (Qwen controller v2 repair closed weak-positive: real 0.1750, shuffle 0.1759, disabled 0.2365, oracle 0.1489. Cause-derived risk floors and route priority repair work, but the signal is still not promotable. Use DEC-20260603-032 before further Qwen work.)
+
+Last updated: 2026-06-03 (Qwen3-VL-2B 50-window controller gate closed negative: strict schema passed 50/50, but real/shuffle/disabled all routed to Fast3R and scored 0.2365 versus oracle 0.1489. Do not promote/train Router/Critic from this Qwen policy; use DEC-20260603-031 before further Qwen work.)
+
+Last updated: 2026-06-03 (Qwen3-VL-2B-Instruct weights staged and real smoke passed: BUAA-Server checkpoint + isolated qwen3vl2b smoke venv ready; GPU1 5-window KITTI semantic-label schema pass 5/5. Use DEC-20260603-030 before real Qwen follow-up.)
+
+Last updated: 2026-06-03 (V11 Qwen semantic-controller architecture integration implemented: `build_vlm_window_manifest.py` + `eval_vlm_controller_dryrun.py` + tests + mock dry-run output. Real Qwen was blocked until DEC-20260603-030; mock output remains non-promotable.)
+
+Last updated: 2026-06-03 (V11 VLM semantic label-cache gate implemented: `build_vlm_semantic_labels.py` + tests + mock smoke schema report. Real Qwen inference is blocked until weights and compatible Transformers/Qwen stack are staged on BUAA-Server.)
+
+Last updated: 2026-06-03 (V11 VLM semantic-controller handoff added: use `handoff/ARCHITECTURE_V11_VLM_SEMANTIC_CONTROLLER_AGENT_PROMPT.md` when testing Qwen3-VL-2B-Instruct as an offline semantic support signal for Router/Critic/state/teacher scheduling.)
+
 Last updated: 2026-06-02 (U1 image-state native gate closed negative and VGGT-Omega preflight is checkpoint-blocked. Current usable bounded baseline remains 0.1448/0.1475; use DEC-20260602-025 and DEC-20260602-026 before repeating native or teacher-admission work.)
 
 Last updated: 2026-06-02 (architecture acceleration prompt added: use `handoff/ARCHITECTURE_V10_ACCELERATED_CONVERGENCE_AGENT_PROMPT.md` when the task is to push Dream3R architecture materially rather than continue small residual-head refinements.)
@@ -44,6 +58,41 @@ E:\Dream3R\decisions\DEC-20260602-026-vggt-omega-admission-preflight.md
 Native student decoding is executable but not yet better than the bounded
 frozen-StatePrior refinement baseline. U1 is worse than no-state. VGGT-Omega
 cannot be admitted until its approved checkpoint is staged on BUAA-Server.
+
+For VLM semantic-controller research, hand the next agent:
+
+```text
+E:\Dream3R\handoff\ARCHITECTURE_V11_VLM_SEMANTIC_CONTROLLER_AGENT_PROMPT.md
+```
+
+That prompt treats Qwen3-VL-2B-Instruct as an offline semantic risk labeler and
+controller support signal. It explicitly forbids treating VLM output as depth,
+camera, pointmap, or ground-truth geometry.
+
+Current V11 implementation gates:
+
+```text
+E:\Dream3R\decisions\DEC-20260603-028-vlm-semantic-label-cache-gate.md
+E:\Dream3R\decisions\DEC-20260603-029-qwen-semantic-controller-integration.md
+E:\Dream3R\decisions\DEC-20260603-030-qwen3vl2b-weight-staging-smoke.md
+E:\Dream3R\decisions\DEC-20260603-031-qwen3vl2b-50win-controller-gate.md
+E:\Dream3R\decisions\DEC-20260603-032-qwen-controller-v2-feature-policy-repair.md
+E:\Dream3R\decisions\DEC-20260603-033-qwen-heldout-calibrated-controller.md
+E:\Dream3R\code\dream3r\scripts\build_vlm_semantic_labels.py
+E:\Dream3R\code\dream3r\scripts\build_vlm_window_manifest.py
+E:\Dream3R\code\dream3r\scripts\eval_vlm_controller_dryrun.py
+E:\Dream3R\code\dream3r\scripts\eval_vlm_calibrated_controller.py
+E:\Dream3R\code\dream3r\tests\test_vlm_semantic_labels.py
+E:\Dream3R\code\dream3r\tests\test_vlm_controller_integration.py
+E:\Dream3R\runs\vlm_semantic_controller\qwen3vl2b_smoke\schema_report.json
+E:\Dream3R\runs\vlm_semantic_controller\qwen3vl2b_smoke\mock_controller_dryrun.json
+E:\Dream3R\runs\vlm_semantic_controller\qwen3vl2b_real_smoke\schema_report_5win_t320.json
+E:\Dream3R\runs\vlm_semantic_controller\qwen3vl2b_real_50win_v2\calibrated_controller_50win_t320_v2.json
+```
+
+The Qwen runtime/schema gate is real-positive, but the held-out calibrated gate
+is negative against shuffle. Router/Critic promotion is blocked. No Qwen label
+is geometry evidence.
 
 ---
 

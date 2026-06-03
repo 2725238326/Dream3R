@@ -7,6 +7,88 @@
 
 ---
 
+## 2026-06-03 V11 semantic-controller label-cache and dry-run gate
+
+Qwen3-VL-2B-Instruct is now planned as an offline semantic controller signal,
+not as a geometry model. The new lane labels existing KITTI/ETH3D windows with
+strict JSON semantic risk cards, then tests whether those labels improve:
+
+- Router route regret and cross-domain routing;
+- Critic hard-window triggers;
+- Dream state auxiliary supervision;
+- expensive teacher admission scheduling.
+
+Canonical files:
+
+```text
+planning/DREAM3R_V11_VLM_SEMANTIC_CONTROLLER_RESEARCH_PLAN.md
+decisions/DEC-20260603-027-vlm-semantic-controller-plan.md
+decisions/DEC-20260603-028-vlm-semantic-label-cache-gate.md
+decisions/DEC-20260603-029-qwen-semantic-controller-integration.md
+decisions/DEC-20260603-030-qwen3vl2b-weight-staging-smoke.md
+decisions/DEC-20260603-031-qwen3vl2b-50win-controller-gate.md
+decisions/DEC-20260603-032-qwen-controller-v2-feature-policy-repair.md
+decisions/DEC-20260603-033-qwen-heldout-calibrated-controller.md
+handoff/ARCHITECTURE_V11_VLM_SEMANTIC_CONTROLLER_AGENT_PROMPT.md
+code/dream3r/scripts/build_vlm_semantic_labels.py
+code/dream3r/scripts/build_vlm_window_manifest.py
+code/dream3r/scripts/eval_vlm_controller_dryrun.py
+code/dream3r/scripts/eval_vlm_calibrated_controller.py
+runs/vlm_semantic_controller/qwen3vl2b_smoke/schema_report.json
+runs/vlm_semantic_controller/qwen3vl2b_smoke/mock_controller_dryrun.json
+runs/vlm_semantic_controller/qwen3vl2b_real_smoke/schema_report_5win_t320.json
+runs/vlm_semantic_controller/qwen3vl2b_real_50win/schema_report_50win_t320.json
+runs/vlm_semantic_controller/qwen3vl2b_real_50win/controller_dryrun_50win_t320.json
+runs/vlm_semantic_controller/qwen3vl2b_real_50win_v2/schema_report_50win_t320_v2.json
+runs/vlm_semantic_controller/qwen3vl2b_real_50win_v2/controller_dryrun_50win_t320_v2.json
+runs/vlm_semantic_controller/qwen3vl2b_real_50win_v2/calibrated_controller_50win_t320_v2.json
+```
+
+The first executable gate is implemented and mock-positive: 4 local tests pass
+and the mock smoke report has `schema_pass_rate = 1.0`. The cache emits
+`features`, `shuffled_features`, and `disabled_features` for later Router/Critic
+causality controls.
+
+The second gate wires those controls into architecture evaluation without
+touching frozen core: KITTI/ETH3D manifest generation and a Router/Critic
+dry-run evaluator compare real semantic features against shuffled and disabled
+controls. The mock dry-run reports `vlm_real = 0.2100`, `vlm_shuffle = 0.5250`,
+and `vlm_disabled = 0.3600`, but the output intentionally keeps
+`promotable = false`.
+
+The first real Qwen gate is schema-positive but controller-negative:
+Qwen3-VL-2B-Instruct is staged on BUAA-Server and the 50-window KITTI cache
+passes strict schema 50/50, but the dry-run has no causal routing advantage:
+`vlm_real = vlm_shuffle = vlm_disabled = 0.2365` versus oracle `0.1489`, with
+all three variants routing 50/50 windows to Fast3R. Do not train/promote
+Router/Critic from this policy; redesign the semantic prompt/features/policy
+and re-run real/shuffle/disabled controls first.
+
+The v2 repair adds cause-derived risk floors and routes
+low_texture/reflection/repeated_structure/occlusion before the road fallback.
+Fresh Qwen v2 remains strict-schema valid 50/50 and now creates a weak
+controller signal: `vlm_real = 0.1750`, `vlm_shuffle = 0.1759`, and
+`vlm_disabled = 0.2365` versus oracle `0.1489`. This is not promotable. The
+next useful gate is a held-out calibrated or learned semantic controller, not
+more deterministic same-set rule tuning.
+
+The held-out calibrated gate is now closed and negative against shuffle:
+leave-one-drive/group-out calibration over the same 50 Qwen v2 windows gives
+`vlm_real = 0.1813`, `vlm_shuffle = 0.1776`, and `vlm_disabled = 0.2365`
+versus oracle `0.1489`. Real beats disabled but does not beat shuffle, so this
+Qwen cache remains offline diagnostic evidence only and must not be promoted to
+Router/Critic training.
+
+The weight/runtime gate is now closed positive: Qwen3-VL-2B-Instruct weights
+are staged at `/hdd3/kykt26/checkpoints/qwen/Qwen3-VL-2B-Instruct`, an
+isolated runtime exists at `/hdd3/kykt26/envs/qwen3vl2b_smoke`, and BUAA-Server
+GPU1 5-window KITTI smoke passed strict schema 5/5 with
+`--max-new-tokens 320`. No VLM label may be treated as depth, camera, pointmap,
+or ground-truth geometry. Next gate is held-out Router/Critic real vs shuffled
+vs disabled dry-run, not training.
+
+---
+
 ## 2026-06-02 current usability verdict
 
 Dream3R is not yet usable as a native model. The only current usable bounded

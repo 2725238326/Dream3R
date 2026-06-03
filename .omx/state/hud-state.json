@@ -1,6 +1,6 @@
 {
-  "last_turn_at": "2026-06-02T11:34:17.148Z",
-  "turn_count": 104,
-  "last_progress_at": "2026-06-02T11:34:17.148Z",
-  "last_agent_output": "进度结论：现在 Dream3R 只有 **bounded baseline 可用**，native 模型还不能说可用。\n\n当前可用 baseline 仍是：\n\n```text\nfrozen State"
+  "last_turn_at": "2026-06-03T12:25:10.731Z",
+  "turn_count": 118,
+  "last_progress_at": "2026-06-03T12:25:10.731Z",
+  "last_agent_output": "继续推进完了。新增的是非核心、可逆的 held-out calibrated semantic controller gate：\n\n- 新脚本：[eval_vlm_calibrated_control"
 }

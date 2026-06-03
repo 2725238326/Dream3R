@@ -1,5 +1,19 @@
 # Dream Research Workspace
 
+Last updated: 2026-06-03 (Qwen held-out calibrated controller gate closed diagnostic-negative: leave-one-group-out calibration on 50 Qwen v2 windows gives oracle 0.1489, real 0.1813, shuffle 0.1776, disabled 0.2365. Real beats disabled but loses to shuffle, so no Router/Critic promotion. See `decisions/DEC-20260603-033-qwen-heldout-calibrated-controller.md`.)
+
+Last updated: 2026-06-03 (Qwen controller v2 repair closed weak-positive: cause-derived risk floors and route-priority repair make real Qwen beat disabled and marginally beat shuffle, but `promotable=false` remains. Fresh v2 dry-run: oracle 0.1489, real 0.1750, shuffle 0.1759, disabled 0.2365. See `decisions/DEC-20260603-032-qwen-controller-v2-feature-policy-repair.md`.)
+
+Last updated: 2026-06-03 (Qwen3-VL-2B 50-window controller gate closed negative: strict schema passed 50/50, but real/shuffle/disabled dry-run all scored 0.2365 with Fast3R-only routes versus oracle 0.1489. The current Qwen policy is not promotable to Router/Critic training. See `decisions/DEC-20260603-031-qwen3vl2b-50win-controller-gate.md`.)
+
+Last updated: 2026-06-03 (Qwen3-VL-2B weight staging completed: BUAA-Server weights and isolated smoke runtime are ready, and GPU1 5-window KITTI semantic-label smoke passed strict schema 5/5. See `decisions/DEC-20260603-030-qwen3vl2b-weight-staging-smoke.md`.)
+
+Last updated: 2026-06-03 (Dream3R V11 Qwen semantic-controller integration added locally: KITTI/ETH3D manifest builder and Router/Critic dry-run evaluator compare real/shuffle/disabled VLM semantic controls; mock dry-run is positive but `promotable=false`. See `decisions/DEC-20260603-029-qwen-semantic-controller-integration.md`.)
+
+Last updated: 2026-06-03 (Dream3R V11 semantic label-cache gate implemented locally: strict JSON mock backend tests pass, mock smoke schema report written, Qwen inference blocked because weights are not staged and server Transformers is too old. See `decisions/DEC-20260603-028-vlm-semantic-label-cache-gate.md`.)
+
+Last updated: 2026-06-03 (Dream3R V11 VLM semantic-controller research plan added. Qwen3-VL-2B-Instruct is scoped as an offline semantic risk labeler for Router/Critic/state/teacher scheduling, not as a geometry backend. See `planning/DREAM3R_V11_VLM_SEMANTIC_CONTROLLER_RESEARCH_PLAN.md`.)
+
 Last updated: 2026-06-02 (Dream3R usability gate updated: image-state U1 ran and failed quality controls; current usable bounded baseline remains 0.1448/0.1475. VGGT-Omega one-window smoke script is ready, public code is staged on BUAA-Server, but real admission is blocked on the approved checkpoint. See `decisions/DEC-20260602-025-image-state-native-student-u1.md` and `decisions/DEC-20260602-026-vggt-omega-admission-preflight.md`.)
 
 Last updated: 2026-06-02 (native student decoder/distillation gate executed on BUAA-Server GPU1: native gate is executable and state-causal but metric-flat versus bounded frozen-StatePrior refinement; bounded refinement remains current best baseline. See `decisions/DEC-20260602-024-native-student-decoder-gate.md`.)
@@ -73,6 +87,26 @@ Current architecture acceleration handoff:
 
 ```text
 E:\Dream3R\handoff\ARCHITECTURE_V10_ACCELERATED_CONVERGENCE_AGENT_PROMPT.md
+```
+
+Current VLM semantic-controller handoff:
+
+```text
+E:\Dream3R\handoff\ARCHITECTURE_V11_VLM_SEMANTIC_CONTROLLER_AGENT_PROMPT.md
+```
+
+Current VLM semantic controller gates:
+
+```text
+E:\Dream3R\decisions\DEC-20260603-028-vlm-semantic-label-cache-gate.md
+E:\Dream3R\decisions\DEC-20260603-029-qwen-semantic-controller-integration.md
+E:\Dream3R\decisions\DEC-20260603-030-qwen3vl2b-weight-staging-smoke.md
+E:\Dream3R\code\dream3r\scripts\build_vlm_semantic_labels.py
+E:\Dream3R\code\dream3r\scripts\build_vlm_window_manifest.py
+E:\Dream3R\code\dream3r\scripts\eval_vlm_controller_dryrun.py
+E:\Dream3R\runs\vlm_semantic_controller\qwen3vl2b_smoke\schema_report.json
+E:\Dream3R\runs\vlm_semantic_controller\qwen3vl2b_smoke\mock_controller_dryrun.json
+E:\Dream3R\runs\vlm_semantic_controller\qwen3vl2b_real_smoke\schema_report_5win_t320.json
 ```
 
 Quick navigation index:

@@ -1,0 +1,131 @@
+{
+  "schema_version": "dream3r_vlm_controller_dryrun_v1",
+  "metric": "abs_rel",
+  "vlm_cache": "runs/vlm_semantic_controller/qwen3vl2b_smoke/mock_labels.json",
+  "oracle_labels": "runs/vlm_semantic_controller/qwen3vl2b_smoke/mock_oracle_labels.json",
+  "n_windows": 2,
+  "expert_order": [
+    "fast3r",
+    "mast3r",
+    "spann3r"
+  ],
+  "feature_order": [
+    "scene_road",
+    "scene_indoor",
+    "scene_forest",
+    "scene_tunnel",
+    "scene_building",
+    "scene_unknown",
+    "risk_dynamic",
+    "risk_low_texture",
+    "risk_reflection",
+    "risk_occlusion",
+    "risk_large_baseline",
+    "risk_scale_drift",
+    "risk_repeated_structure",
+    "suggest_verify_geometry",
+    "suggest_expensive_teacher",
+    "confidence",
+    "schema_failure"
+  ],
+  "hard_window_gap": 0.05,
+  "hard_windows": [
+    "kitti/mock_drive/0000000000"
+  ],
+  "oracle_mean": 0.21000000000000002,
+  "variants": {
+    "vlm_real": {
+      "variant": "vlm_real",
+      "routes": {
+        "eth3d/mock_courtyard/000000": "fast3r",
+        "kitti/mock_drive/0000000000": "spann3r"
+      },
+      "mean_metric": 0.21000000000000002,
+      "route_regret_vs_oracle": 0.0,
+      "expert_counts": {
+        "fast3r": 1,
+        "mast3r": 0,
+        "spann3r": 1
+      },
+      "verify_geometry_trigger_rate": 1.0,
+      "expensive_teacher_trigger_rate": 1.0,
+      "verify_geometry_hard_window": {
+        "precision": 0.5,
+        "recall": 1.0,
+        "true_positive": 1,
+        "false_positive": 1,
+        "false_negative": 0
+      },
+      "triggered_verify_geometry": [
+        "eth3d/mock_courtyard/000000",
+        "kitti/mock_drive/0000000000"
+      ],
+      "triggered_expensive_teacher": [
+        "eth3d/mock_courtyard/000000",
+        "kitti/mock_drive/0000000000"
+      ]
+    },
+    "vlm_shuffle": {
+      "variant": "vlm_shuffle",
+      "routes": {
+        "eth3d/mock_courtyard/000000": "spann3r",
+        "kitti/mock_drive/0000000000": "fast3r"
+      },
+      "mean_metric": 0.525,
+      "route_regret_vs_oracle": 0.315,
+      "expert_counts": {
+        "fast3r": 1,
+        "mast3r": 0,
+        "spann3r": 1
+      },
+      "verify_geometry_trigger_rate": 1.0,
+      "expensive_teacher_trigger_rate": 1.0,
+      "verify_geometry_hard_window": {
+        "precision": 0.5,
+        "recall": 1.0,
+        "true_positive": 1,
+        "false_positive": 1,
+        "false_negative": 0
+      },
+      "triggered_verify_geometry": [
+        "eth3d/mock_courtyard/000000",
+        "kitti/mock_drive/0000000000"
+      ],
+      "triggered_expensive_teacher": [
+        "eth3d/mock_courtyard/000000",
+        "kitti/mock_drive/0000000000"
+      ]
+    },
+    "vlm_disabled": {
+      "variant": "vlm_disabled",
+      "routes": {
+        "eth3d/mock_courtyard/000000": "fast3r",
+        "kitti/mock_drive/0000000000": "fast3r"
+      },
+      "mean_metric": 0.36,
+      "route_regret_vs_oracle": 0.14999999999999997,
+      "expert_counts": {
+        "fast3r": 2,
+        "mast3r": 0,
+        "spann3r": 0
+      },
+      "verify_geometry_trigger_rate": 0.0,
+      "expensive_teacher_trigger_rate": 0.0,
+      "verify_geometry_hard_window": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "true_positive": 0,
+        "false_positive": 0,
+        "false_negative": 1
+      },
+      "triggered_verify_geometry": [],
+      "triggered_expensive_teacher": []
+    }
+  },
+  "diagnostic": {
+    "real_beats_disabled": true,
+    "real_beats_shuffle": true,
+    "promotable": false,
+    "promotion_note": "Dry-run only. Promotion requires real Qwen labels and held-out Router/Critic evaluation with shuffled and disabled controls worse."
+  }
+}

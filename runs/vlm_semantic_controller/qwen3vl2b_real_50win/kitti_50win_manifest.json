@@ -1,0 +1,859 @@
+{
+  "schema_version": "dream3r_vlm_window_manifest_v1",
+  "dataset": "kitti",
+  "root": "/hdd3/kykt26/data",
+  "regime_labels": "runs/stage5_s1_expand_oracle/oracle_expert_labels.json",
+  "n_windows": 50,
+  "windows": [
+    {
+      "window_id": "2011_09_26_drive_0005_sync_02",
+      "dataset": "kitti",
+      "sequence": "2011_09_26_drive_0005_sync_02",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0005_sync_02/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0005_sync_02/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0005_sync_02/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0005_sync_02/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_26_drive_0005_sync_03",
+      "dataset": "kitti",
+      "sequence": "2011_09_26_drive_0005_sync_03",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0005_sync_03/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0005_sync_03/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0005_sync_03/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0005_sync_03/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_26_drive_0011_sync_03",
+      "dataset": "kitti",
+      "sequence": "2011_09_26_drive_0011_sync_03",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0011_sync_03/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0011_sync_03/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0011_sync_03/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0011_sync_03/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_26_drive_0015_sync_03",
+      "dataset": "kitti",
+      "sequence": "2011_09_26_drive_0015_sync_03",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0015_sync_03/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0015_sync_03/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0015_sync_03/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0015_sync_03/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_26_drive_0018_sync_02",
+      "dataset": "kitti",
+      "sequence": "2011_09_26_drive_0018_sync_02",
+      "frame_ids": [
+        "0000000003",
+        "0000000007",
+        "0000000011",
+        "0000000015"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0018_sync_02/0000000003.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0018_sync_02/0000000007.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0018_sync_02/0000000011.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0018_sync_02/0000000015.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_26_drive_0018_sync_03",
+      "dataset": "kitti",
+      "sequence": "2011_09_26_drive_0018_sync_03",
+      "frame_ids": [
+        "0000000003",
+        "0000000007",
+        "0000000011",
+        "0000000015"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0018_sync_03/0000000003.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0018_sync_03/0000000007.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0018_sync_03/0000000011.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0018_sync_03/0000000015.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_26_drive_0028_sync_02",
+      "dataset": "kitti",
+      "sequence": "2011_09_26_drive_0028_sync_02",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0028_sync_02/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0028_sync_02/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0028_sync_02/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0028_sync_02/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_26_drive_0028_sync_03",
+      "dataset": "kitti",
+      "sequence": "2011_09_26_drive_0028_sync_03",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0028_sync_03/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0028_sync_03/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0028_sync_03/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0028_sync_03/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_26_drive_0032_sync_02",
+      "dataset": "kitti",
+      "sequence": "2011_09_26_drive_0032_sync_02",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0032_sync_02/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0032_sync_02/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0032_sync_02/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0032_sync_02/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_26_drive_0032_sync_03",
+      "dataset": "kitti",
+      "sequence": "2011_09_26_drive_0032_sync_03",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0032_sync_03/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0032_sync_03/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0032_sync_03/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0032_sync_03/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_26_drive_0035_sync_02",
+      "dataset": "kitti",
+      "sequence": "2011_09_26_drive_0035_sync_02",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0035_sync_02/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0035_sync_02/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0035_sync_02/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0035_sync_02/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_26_drive_0035_sync_03",
+      "dataset": "kitti",
+      "sequence": "2011_09_26_drive_0035_sync_03",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0035_sync_03/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0035_sync_03/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0035_sync_03/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0035_sync_03/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_26_drive_0051_sync_02",
+      "dataset": "kitti",
+      "sequence": "2011_09_26_drive_0051_sync_02",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0051_sync_02/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0051_sync_02/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0051_sync_02/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0051_sync_02/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_26_drive_0070_sync_02",
+      "dataset": "kitti",
+      "sequence": "2011_09_26_drive_0070_sync_02",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0070_sync_02/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0070_sync_02/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0070_sync_02/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0070_sync_02/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_26_drive_0070_sync_03",
+      "dataset": "kitti",
+      "sequence": "2011_09_26_drive_0070_sync_03",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0070_sync_03/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0070_sync_03/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0070_sync_03/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0070_sync_03/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_26_drive_0091_sync_02",
+      "dataset": "kitti",
+      "sequence": "2011_09_26_drive_0091_sync_02",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0091_sync_02/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0091_sync_02/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0091_sync_02/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0091_sync_02/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_26_drive_0091_sync_03",
+      "dataset": "kitti",
+      "sequence": "2011_09_26_drive_0091_sync_03",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0091_sync_03/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0091_sync_03/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0091_sync_03/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0091_sync_03/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_26_drive_0095_sync_02",
+      "dataset": "kitti",
+      "sequence": "2011_09_26_drive_0095_sync_02",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0095_sync_02/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0095_sync_02/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0095_sync_02/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0095_sync_02/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_26_drive_0095_sync_03",
+      "dataset": "kitti",
+      "sequence": "2011_09_26_drive_0095_sync_03",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0095_sync_03/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0095_sync_03/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0095_sync_03/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0095_sync_03/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0038_sync_02",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0038_sync_02",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0038_sync_02/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0038_sync_02/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0038_sync_02/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0038_sync_02/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0038_sync_03",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0038_sync_03",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0038_sync_03/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0038_sync_03/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0038_sync_03/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0038_sync_03/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0039_sync_02",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0039_sync_02",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0039_sync_02/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0039_sync_02/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0039_sync_02/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0039_sync_02/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0039_sync_03",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0039_sync_03",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0039_sync_03/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0039_sync_03/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0039_sync_03/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0039_sync_03/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0053_sync_02",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0053_sync_02",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0053_sync_02/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0053_sync_02/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0053_sync_02/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0053_sync_02/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0053_sync_03",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0053_sync_03",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0053_sync_03/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0053_sync_03/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0053_sync_03/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0053_sync_03/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0057_sync_02",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0057_sync_02",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0057_sync_02/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0057_sync_02/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0057_sync_02/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0057_sync_02/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0057_sync_03",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0057_sync_03",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0057_sync_03/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0057_sync_03/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0057_sync_03/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0057_sync_03/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0068_sync_02",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0068_sync_02",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0068_sync_02/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0068_sync_02/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0068_sync_02/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0068_sync_02/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0068_sync_03",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0068_sync_03",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0068_sync_03/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0068_sync_03/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0068_sync_03/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0068_sync_03/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0075_sync_02",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0075_sync_02",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0075_sync_02/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0075_sync_02/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0075_sync_02/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0075_sync_02/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0075_sync_03",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0075_sync_03",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0075_sync_03/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0075_sync_03/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0075_sync_03/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0075_sync_03/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0078_sync_02",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0078_sync_02",
+      "frame_ids": [
+        "0000000001",
+        "0000000004",
+        "0000000007",
+        "0000000010"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0078_sync_02/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0078_sync_02/0000000004.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0078_sync_02/0000000007.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0078_sync_02/0000000010.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0078_sync_03",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0078_sync_03",
+      "frame_ids": [
+        "0000000001",
+        "0000000004",
+        "0000000007",
+        "0000000010"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0078_sync_03/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0078_sync_03/0000000004.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0078_sync_03/0000000007.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0078_sync_03/0000000010.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0086_sync_02",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0086_sync_02",
+      "frame_ids": [
+        "0000000001",
+        "0000000003",
+        "0000000005",
+        "0000000007"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0086_sync_02/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0086_sync_02/0000000003.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0086_sync_02/0000000005.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0086_sync_02/0000000007.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0086_sync_03",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0086_sync_03",
+      "frame_ids": [
+        "0000000001",
+        "0000000003",
+        "0000000005",
+        "0000000007"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0086_sync_03/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0086_sync_03/0000000003.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0086_sync_03/0000000005.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0086_sync_03/0000000007.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0094_sync_02",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0094_sync_02",
+      "frame_ids": [
+        "0000000005",
+        "0000000010",
+        "0000000014",
+        "0000000017"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0094_sync_02/0000000005.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0094_sync_02/0000000010.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0094_sync_02/0000000014.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0094_sync_02/0000000017.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0094_sync_03",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0094_sync_03",
+      "frame_ids": [
+        "0000000005",
+        "0000000010",
+        "0000000014",
+        "0000000017"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0094_sync_03/0000000005.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0094_sync_03/0000000010.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0094_sync_03/0000000014.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0094_sync_03/0000000017.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0098_sync_02",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0098_sync_02",
+      "frame_ids": [
+        "0000000001",
+        "0000000003",
+        "0000000005",
+        "0000000007"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0098_sync_02/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0098_sync_02/0000000003.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0098_sync_02/0000000005.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0098_sync_02/0000000007.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0098_sync_03",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0098_sync_03",
+      "frame_ids": [
+        "0000000001",
+        "0000000003",
+        "0000000005",
+        "0000000007"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0098_sync_03/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0098_sync_03/0000000003.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0098_sync_03/0000000005.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0098_sync_03/0000000007.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0106_sync_02",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0106_sync_02",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0106_sync_02/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0106_sync_02/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0106_sync_02/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0106_sync_02/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0106_sync_03",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0106_sync_03",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0106_sync_03/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0106_sync_03/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0106_sync_03/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0106_sync_03/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0110_sync_02",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0110_sync_02",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0110_sync_02/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0110_sync_02/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0110_sync_02/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0110_sync_02/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0110_sync_03",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0110_sync_03",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0110_sync_03/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0110_sync_03/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0110_sync_03/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0110_sync_03/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0132_sync_02",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0132_sync_02",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000003",
+        "0000000004"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0132_sync_02/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0132_sync_02/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0132_sync_02/0000000003.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0132_sync_02/0000000004.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0132_sync_03",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0132_sync_03",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000003",
+        "0000000004"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0132_sync_03/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0132_sync_03/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0132_sync_03/0000000003.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0132_sync_03/0000000004.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0141_sync_02",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0141_sync_02",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0141_sync_02/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0141_sync_02/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0141_sync_02/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0141_sync_02/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0165_sync_02",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0165_sync_02",
+      "frame_ids": [
+        "0000000000",
+        "0000000002",
+        "0000000003",
+        "0000000005"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0165_sync_02/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0165_sync_02/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0165_sync_02/0000000003.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0165_sync_02/0000000005.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0165_sync_03",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0165_sync_03",
+      "frame_ids": [
+        "0000000000",
+        "0000000002",
+        "0000000003",
+        "0000000005"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0165_sync_03/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0165_sync_03/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0165_sync_03/0000000003.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0165_sync_03/0000000005.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0177_sync_02",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0177_sync_02",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0177_sync_02/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0177_sync_02/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0177_sync_02/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0177_sync_02/0000000003.jpg"
+      ]
+    },
+    {
+      "window_id": "2011_09_28_drive_0177_sync_03",
+      "dataset": "kitti",
+      "sequence": "2011_09_28_drive_0177_sync_03",
+      "frame_ids": [
+        "0000000000",
+        "0000000001",
+        "0000000002",
+        "0000000003"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0177_sync_03/0000000000.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0177_sync_03/0000000001.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0177_sync_03/0000000002.jpg",
+        "/hdd3/kykt26/data/kitti/rectified/2011_09_28_drive_0177_sync_03/0000000003.jpg"
+      ]
+    }
+  ]
+}

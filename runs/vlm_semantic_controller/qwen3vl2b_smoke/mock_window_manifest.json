@@ -1,0 +1,24 @@
+{
+  "windows": [
+    {
+      "window_id": "kitti/mock_drive/0000000000",
+      "dataset": "kitti",
+      "frames": [
+        "mock_kitti_0000000000.png",
+        "mock_kitti_0000000001.png",
+        "mock_kitti_0000000002.png",
+        "mock_kitti_0000000003_car.png"
+      ]
+    },
+    {
+      "window_id": "eth3d/mock_courtyard/000000",
+      "dataset": "eth3d",
+      "frames": [
+        "mock_eth3d_000000_building.png",
+        "mock_eth3d_000001_building.png",
+        "mock_eth3d_000002_building.png",
+        "mock_eth3d_000003_building.png"
+      ]
+    }
+  ]
+}

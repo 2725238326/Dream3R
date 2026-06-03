@@ -1,5 +1,23 @@
 # Dream Task Snapshot
 
+Last updated: 2026-06-03 (Qwen held-out calibrated controller gate closed diagnostic-negative: leave-one-drive/group-out centroid controller on 50 Qwen v2 windows gives oracle 0.1489, real 0.1813, shuffle 0.1776, disabled 0.2365. Real beats disabled but does not beat shuffle, so Qwen remains offline diagnostic/cache evidence only; no Router/Critic promotion. See `DEC-20260603-033`. Earlier last-updated note follows.)
+
+Last updated: 2026-06-03 (Qwen controller v2 feature/policy repair closed weak-positive: cause-derived risk floors and route priority repair make real Qwen beat disabled clearly and shuffle marginally on the 50-window dry-run, but `promotable=false` remains. Fresh v2: oracle 0.1489, real 0.1750, shuffle 0.1759, disabled 0.2365. No Router/Critic training, no frozen-core edit, no Qwen geometry claim. Earlier last-updated note follows.)
+
+Last updated: 2026-06-03 (Qwen3-VL-2B 50-window controller gate closed negative: GPU1 strict schema passed 50/50, but real/shuffle/disabled dry-run all route to Fast3R and have identical metric 0.2365 vs oracle 0.1489, so Qwen is not promotable to Router/Critic training from this policy. No frozen-core edits or Qwen geometry claim. Earlier last-updated note follows.)
+
+Last updated: 2026-06-03 (Qwen3-VL-2B weight staging closed positive: weights staged on BUAA-Server, isolated qwen3vl2b smoke venv created without mutating `dream3r`, and GPU1 5-window KITTI semantic-label smoke passed strict schema 5/5. Earlier last-updated note follows.)
+
+Last updated: 2026-06-03 (V11 Qwen semantic-controller architecture integration started: add real window-manifest builder and Router/Critic VLM dry-run controls outside frozen core. Earlier last-updated note follows.)
+
+Last updated: 2026-06-03 (V11 semantic label-cache implementation gate closed mock-positive: strict schema script/tests added, local mock smoke report valid, Qwen inference blocked by missing staged weights and server `transformers 4.46.0`. Earlier last-updated note follows.)
+
+Last updated: 2026-06-03 (V11 VLM semantic-controller implementation gate started: build the reversible offline semantic label-cache script with strict schema, mock tests, optional Qwen backend only if already available/approved, and Router/Critic-ready causality controls. Earlier last-updated note follows.)
+
+Last updated: 2026-06-03 (V11 VLM semantic-controller research documentation pass closed: comprehensive plan, DEC, cycle log, handoff prompt, and guidance chain updated. Qwen3-VL-2B-Instruct is scoped as offline semantic support signal for Router/Critic/state/teacher scheduling, not geometry. No model training, checkpoint download, frozen-core edit, or server mutation. Earlier last-updated note follows.)
+
+Last updated: 2026-06-03 (V11 VLM semantic-controller research documentation pass in progress: prepare a comprehensive Qwen3-VL-2B-Instruct support-signal plan, update guidance/documentation chain, and add a paste-ready new-agent research prompt. No model training, checkpoint download, frozen-core edit, or server mutation in this documentation pass. Earlier last-updated note follows.)
+
 Last updated: 2026-06-02 (U1 image-state native gate closed negative and VGGT-Omega admission preflight installed: Kitti/ETH3D image-token caches built on BUAA-Server GPU1; U1 gate20 correct-state 0.1649/0.2842 loses to no-state 0.1526/0.1702 and locked baseline 0.1448/0.1475. VGGT-Omega smoke script compiles and public code is staged on server, but real admission is blocked on missing approved checkpoint. Earlier last-updated note follows.)
 
 Last updated: 2026-06-02 (image-state native student U1 scaffold added after user flagged current model unusable: non-core image-token + state + optional proposal-anchor decoder, image-state cache builder, trainer, sweep, and tests added; local tests 6 passed, server tests 3 passed. Cache-build/training gate pending. Earlier last-updated note follows.)
@@ -38,7 +56,193 @@ Last updated: 2026-05-27 (state-conditioned reconstruction pivot: added `specs/S
 
 Last updated: 2026-05-22 (v0.5 iteration test plan added after user asked how to iterate, test, and start completing the architecture plans: `planning/DREAM3R_V05_ITERATION_TEST_PLAN.md` defines L0-L4 completion standards, S0 local v0.4 edge tests, S1 A6 KITTI 8-10 window memory evidence, S2 A2 staged adapter real-backend closure, S3 A5 Test3R off-path, S4 A3 dynamic-mask promotion design, server runbook outline, evidence schema, gates, risks, and a short agent prompt; `handoff/ARCHITECTURE_V05_AGENT_START_PROMPT.md` added. Planning only; no v0.5 axis closed. Earlier last-updated note follows.) Last updated: 2026-05-22 (cycle 043 architecture-focus round after user re-prioritization "架构是最重要的内容; 开题报告和综述放一边": W20 SOTA Feature Matrix expanded at `code/dream3r/SOTA_FEATURE_MATRIX.md` (family-grouped 2nd pass) + v0.5 axes spec drafted at `specs/SPEC-20260522-001-dream3r-v05-axes.md` (8 axes A1-A8 with explicit `closes_iff`); markdown only; v0.3 + v0.4 code byte-identical; both candidate-not-final per DEC-20260501-004; sync chain applied. Earlier last-updated note follows.) Last updated: 2026-05-22 (v0.4 architecture closure round, parallel to proposal track: added `code/dream3r/contracts.py` + `repair.py` + `orchestrator.py` + 3 new test files + `ARCHITECTURE_V04_STATUS.md`; 24 new tests + 130 pre-existing tests all pass; v0.3 model.py / modules.py / bus.py / anchor_bank.py / nsa_attention.py / composer_experts/* are byte-identical to before this round; driven by `ARCHITECTURE_V04_AGENT_PROMPT.md`. Proposal-track last-updated note follows.) Last updated: 2026-05-17 (post cycle 042: user 指令开题报告扩展为双支柱项目 — 支柱 A Dream3R 新架构模型 (已有 §1-§9) + 支柱 B KYKT 聚合管理平台 (待新增); PROPOSAL_EXPANSION_PLAN.md + AGENT_HANDOFF_PROPOSAL_EXPANSION.md 已创建; 待其他 agent 执行扩展写作)
 
-Status: **idle** (No active run. Current usable bounded baseline remains frozen-StatePrior + bounded residual at KITTI/ETH3D 0.1448/0.1475. U1 is not usable as-is; VGGT-Omega admission is blocked until the approved checkpoint is staged at `/hdd3/kykt26/checkpoints/vggt_omega/VGGT-Omega-1B-512/model.pt`.)
+Status: **idle** (V11 Qwen held-out calibrated controller gate closed diagnostic-negative. Qwen real semantic features beat disabled but do not beat shuffle under leave-one-group-out calibration, so do not train/promote Router/Critic from the current 50-window cache.)
+
+## V11 Qwen held-out calibrated controller (2026-06-03)
+
+```text
+task_id:    dream3r-qwen-heldout-calibrated-controller-2026-06-03
+phase:      held-out semantic controller causality check
+status:     closed diagnostic-negative; not promotable
+driver:     user said "继续吧"
+priority:   test Qwen semantic features as offline controller signal without geometry or core edits
+```
+
+Subtask board:
+
+| ID | Task | Status | Evidence |
+| --- | --- | --- | --- |
+| C20260603-QWHC-S1 | Add held-out calibrated controller evaluator | done | `eval_vlm_calibrated_controller.py`; leave-one-group-out nearest-centroid gate |
+| C20260603-QWHC-S2 | Add causality-control integration test | done | local 10 passed; server 10 passed |
+| C20260603-QWHC-S3 | Run 50-window Qwen v2 held-out gate | done; negative vs shuffle | oracle 0.1489, real 0.1813, shuffle 0.1776, disabled 0.2365 |
+| C20260603-QWHC-S4 | Update DEC/cycle/guidance chain | done | `DEC-20260603-033`, `CYCLE-20260603-qwen-heldout-calibrated-controller` |
+
+Artifacts:
+
+```text
+code/dream3r/scripts/eval_vlm_calibrated_controller.py
+runs/vlm_semantic_controller/qwen3vl2b_real_50win_v2/calibrated_controller_50win_t320_v2.json
+```
+
+If interrupted, resume from:
+
+```text
+Do not promote the current Qwen 50-window cache into Router/Critic. The
+held-out calibrated gate is negative against shuffle. Future Qwen work needs
+broader windows, a pre-registered real > shuffle > disabled threshold, and
+Router/Critic state-causality evaluation before any training claim.
+```
+
+## V11 Qwen controller v2 feature/policy repair (2026-06-03)
+
+```text
+task_id:    dream3r-qwen-controller-v2-feature-policy-repair-2026-06-03
+phase:      repair DEC-031 all-Fast3R controller collapse
+status:     closed weak-positive; not promotable
+driver:     user said "你好好改改吧"
+priority:   use Qwen causes/risks as controller signal without geometry or core edits
+```
+
+Subtask board:
+
+| ID | Task | Status | Evidence |
+| --- | --- | --- | --- |
+| C20260603-QWV2-S1 | Inspect DEC-031 Qwen cache failure | done | `visible_failure_causes` had signal; raw `risk_*` mostly zero |
+| C20260603-QWV2-S2 | Add cause-derived risk feature floors | done | `CAUSE_TO_RISK_KEY`, `CAUSE_RISK_FLOOR=0.65` |
+| C20260603-QWV2-S3 | Repair deterministic route priority | done | dynamic -> Spann3R, low_texture/reflection/repeated/occlusion -> MASt3R before road -> Fast3R |
+| C20260603-QWV2-S4 | Add regression tests | done | local 9 passed; server 9 passed |
+| C20260603-QWV2-S5 | Re-run 50-window Qwen v2 on GPU1 | done | schema 50/50, oracle 0.1489, real 0.1750, shuffle 0.1759, disabled 0.2365 |
+| C20260603-QWV2-S6 | Update DEC/cycle/guidance chain | done | `DEC-20260603-032`, `CYCLE-20260603-qwen-controller-v2-feature-policy-repair` |
+
+Artifacts:
+
+```text
+runs/vlm_semantic_controller/qwen3vl2b_real_50win_v2/kitti_50win_manifest.json
+runs/vlm_semantic_controller/qwen3vl2b_real_50win_v2/qwen_labels_50win_t320_v2.json
+runs/vlm_semantic_controller/qwen3vl2b_real_50win_v2/schema_report_50win_t320_v2.json
+runs/vlm_semantic_controller/qwen3vl2b_real_50win_v2/controller_dryrun_50win_t320_v2.json
+```
+
+If interrupted, resume from:
+
+```text
+Do not train Router/Critic from v2 yet. The next meaningful Qwen gate is a
+held-out calibrated or learned semantic controller over these features, with
+real/shuffle/disabled controls and a promotion threshold set before training.
+Do not hand-tune deterministic rules further on the same 50-window set.
+```
+
+## V11 Qwen3-VL-2B 50-window controller gate (2026-06-03)
+
+```text
+task_id:    dream3r-qwen3vl2b-50win-controller-gate-2026-06-03
+phase:      held-out real semantic-label cache plus real/shuffle/disabled dry-run
+status:     closed negative
+driver:     user said "开始推进吧！"
+priority:   integrate Qwen as offline semantic controller evidence, not as geometry
+```
+
+Subtask board:
+
+| ID | Task | Status | Evidence |
+| --- | --- | --- | --- |
+| C20260603-QW50-S1 | Inspect oracle/window-id compatibility | done | oracle ids are raw KITTI sequence / ETH3D sequence ids |
+| C20260603-QW50-S2 | Add reversible oracle-compatible manifest id mode | done | `build_vlm_window_manifest.py --window-id-mode sequence`; default remains prefixed |
+| C20260603-QW50-S3 | Build 50-window manifest aligned with existing oracle labels | done | `kitti_50win_manifest.json`; 50 windows, 50/50 oracle overlap, 0 missing frames |
+| C20260603-QW50-S4 | Run Qwen3-VL-2B strict JSON label cache on GPU1 | done | `schema_report_50win_t320.json`; 50/50 valid, 0 failure records, schema pass 1.0 |
+| C20260603-QW50-S5 | Run controller dry-run with real/shuffle/disabled controls | done; negative | oracle 0.1489; real/shuffle/disabled all 0.2365; all route to Fast3R; `promotable=false` |
+| C20260603-QW50-S6 | Update DEC/cycle/guidance chain and close snapshot | done | `decisions/DEC-20260603-031-qwen3vl2b-50win-controller-gate.md`, `cycles/CYCLE-20260603-qwen3vl2b-50win-controller-gate.md` |
+
+Artifacts:
+
+```text
+runs/vlm_semantic_controller/qwen3vl2b_real_50win/kitti_50win_manifest.json
+runs/vlm_semantic_controller/qwen3vl2b_real_50win/qwen_labels_50win_t320.json
+runs/vlm_semantic_controller/qwen3vl2b_real_50win/schema_report_50win_t320.json
+runs/vlm_semantic_controller/qwen3vl2b_real_50win/controller_dryrun_50win_t320.json
+```
+
+## V11 Qwen3-VL-2B weight staging (2026-06-03)
+
+```text
+task_id:    dream3r-qwen3vl2b-weight-staging-2026-06-03
+phase:      Qwen3-VL-2B weight staging and smoke readiness
+status:     closed positive
+driver:     user said "我们权重开始搞吧"
+priority:   stage weights first, then run only a small semantic-label smoke on GPU1
+```
+
+Subtask board:
+
+| ID | Task | Status | Evidence |
+| --- | --- | --- | --- |
+| C20260603-QW-S1 | Mark snapshot in progress and inspect current server checkpoint/env state | done | server had no Qwen weights; `dream3r` env had Transformers 4.46.0 |
+| C20260603-QW-S2 | Create/verify Qwen checkpoint staging directory without touching frozen core | done | `/hdd3/kykt26/checkpoints/qwen/Qwen3-VL-2B-Instruct` |
+| C20260603-QW-S3 | Download or stage Qwen3-VL-2B-Instruct weights if accessible | done | `model.safetensors` sha256 `7de1838c87a5349b016c26a1c3f7d2bc400a3d485f95ef39a7059ffd734977a0` |
+| C20260603-QW-S4 | Check compatible Qwen/Transformers inference path without mutating existing env unnecessarily | done | isolated `/hdd3/kykt26/envs/qwen3vl2b_smoke`; `Qwen3VLProcessor` + `Qwen3VLConfig` load |
+| C20260603-QW-S5 | Run tiny GPU1 semantic-label smoke only if weights + runtime are ready | done | `runs/vlm_semantic_controller/qwen3vl2b_real_smoke/schema_report_5win_t320.json`; 5/5 schema pass |
+| C20260603-QW-S6 | Update DEC/cycle/guidance chain and close snapshot | done | `decisions/DEC-20260603-030-qwen3vl2b-weight-staging-smoke.md`, `cycles/CYCLE-20260603-qwen3vl2b-weight-staging-smoke.md` |
+
+If interrupted, resume from:
+
+```text
+Weights and runtime are staged, and the first 50-window real Qwen gate has now
+closed negative. Do not train Router/Critic, edit frozen core, or make a
+geometry-quality claim from this cache. Next Qwen work must redesign
+prompt/features/policy and re-run real/shuffle/disabled controls.
+```
+
+## V11 Qwen semantic-controller integration (2026-06-03)
+
+```text
+task_id:    dream3r-qwen-semantic-controller-architecture-integration-2026-06-03
+phase:      V11 architecture integration dry-run
+status:     closed local mock-positive; real Qwen blocked
+driver:     user asked to start the new Qwen-based optimization and integrate it into the architecture
+priority:   use Qwen/VLM labels only as offline semantic controller signals for Router/Critic evaluation
+```
+
+Files added / updated:
+
+| File | Role |
+| --- | --- |
+| `decisions/DEC-20260603-029-qwen-semantic-controller-integration.md` | Decision for controller-integration dry-run gate |
+| `cycles/CYCLE-20260603-qwen-semantic-controller-integration.md` | Cycle log |
+| `code/dream3r/scripts/build_vlm_window_manifest.py` | Non-core KITTI/ETH3D image-window manifest builder |
+| `code/dream3r/scripts/eval_vlm_controller_dryrun.py` | Non-core Router/Critic dry-run evaluator with real/shuffle/disabled controls |
+| `code/dream3r/tests/test_vlm_controller_integration.py` | Manifest and dry-run causality tests |
+| `runs/vlm_semantic_controller/qwen3vl2b_smoke/mock_oracle_labels.json` | Mock-only oracle labels/metrics for dry-run plumbing |
+| `runs/vlm_semantic_controller/qwen3vl2b_smoke/mock_controller_dryrun.json` | Mock dry-run output; `promotable=false` |
+
+Verification:
+
+```text
+python -B -m py_compile code/dream3r/scripts/build_vlm_window_manifest.py code/dream3r/scripts/eval_vlm_controller_dryrun.py code/dream3r/tests/test_vlm_controller_integration.py
+python -B -m pytest code/dream3r/tests/test_vlm_semantic_labels.py code/dream3r/tests/test_vlm_controller_integration.py -q
+# 6 passed
+```
+
+Mock dry-run result:
+
+```text
+schema_version: dream3r_vlm_controller_dryrun_v1
+n_windows: 2
+vlm_real: 0.2100
+vlm_shuffle: 0.5250
+vlm_disabled: 0.3600
+promotable: false
+```
+
+If interrupted, resume from:
+
+```text
+Do not recreate the V11 scripts. Next executable gate is real Qwen label smoke
+only after Qwen3-VL-2B-Instruct weights and compatible Qwen/Transformers stack
+are staged or approved on BUAA-Server. Build a 10-50 window KITTI/ETH3D
+manifest, run Qwen on GPU1, then evaluate real labels versus shuffled/disabled
+controls with `eval_vlm_controller_dryrun.py`. Do not train Router/Critic and
+do not edit frozen core until real labels pass this held-out control gate.
+```
 
 ## Architecture acceleration prompt (2026-06-02)
 
@@ -762,25 +966,44 @@ If this file's "Last updated" timestamp is older than the latest cycle log under
 ## Current task
 
 ```text
-task_id:    dream3r-native-student-gate-2026-06-02
-phase:      architecture acceleration execution closed
-status:     idle
-driver:     user asked to lock the bounded frozen-StatePrior baseline and push one high-impact Dream3R architecture gate
-priority:   next native work should change objective; VGGT-Omega one-window admission remains fallback only if native objective work blocks
+task_id:    dream3r-qwen-semantic-controller-architecture-integration-2026-06-03
+phase:      V11 architecture integration dry-run
+status:     in_progress
+driver:     user asked to begin the new Qwen-based optimization and integrate it into the Dream3R architecture
+priority:   integrate cached semantic VLM features into Router/Critic control evaluation without treating Qwen as geometry or editing frozen core files
 ```
 
 One-line description:
 
 ```text
-Native student decoder/distillation gate completed. It is executable and
-state-causal, but metric-flat versus the bounded frozen-StatePrior refinement
-baseline; current best remains 0.1448/0.1475.
+V11 Qwen semantic-controller architecture integration is active. Add a real
+window-manifest builder and a VLM controller dry-run evaluator that consumes
+semantic cache features, shuffled controls, and disabled controls. Use mock
+labels for local tests while real Qwen remains blocked.
 ```
 
-## Subtask board (none active; native gate board closed)
+## Subtask board (active V11 Qwen semantic-controller integration)
 
 | ID | Subtask | Status | Canonical artifact |
 | --- | --- | --- | --- |
+| C20260603-V11I-S1 | Mark snapshot in progress and lock Qwen-as-controller boundary | done | `TASK_SNAPSHOT.md`, DEC-028 |
+| C20260603-V11I-S2 | Implement real KITTI/ETH3D window manifest builder outside frozen core | done | `code/dream3r/scripts/build_vlm_window_manifest.py` |
+| C20260603-V11I-S3 | Implement Router/Critic VLM dry-run evaluator with real/shuffle/disabled controls | done | `code/dream3r/scripts/eval_vlm_controller_dryrun.py` |
+| C20260603-V11I-S4 | Add tests for manifest generation and VLM controller dry-run causality schema | done | `code/dream3r/tests/test_vlm_controller_integration.py` |
+| C20260603-V11I-S5 | Run py_compile, targeted pytest, and local mock dry-run artifact | done | `runs/vlm_semantic_controller/qwen3vl2b_smoke/mock_controller_dryrun.json`; 6 tests passed |
+| C20260603-V11I-S6 | Update DEC/cycle/guidance chain and close snapshot | done | `decisions/DEC-20260603-029-qwen-semantic-controller-integration.md`, `cycles/CYCLE-20260603-qwen-semantic-controller-integration.md`, guidance files |
+| C20260603-V11G-S1 | Mark snapshot in progress and verify V11 boundaries / frozen-core list | done | `TASK_SNAPSHOT.md`, V11 handoff |
+| C20260603-V11G-S2 | Inspect code/test patterns for non-core scripts and cache/test conventions | done | `code/dream3r/scripts/`, `code/dream3r/tests/` |
+| C20260603-V11G-S3 | Implement offline VLM semantic label-cache builder with strict schema and mock/Qwen backend interface | done | `code/dream3r/scripts/build_vlm_semantic_labels.py` |
+| C20260603-V11G-S4 | Add mock backend tests for schema validation, explicit failures, feature conversion, shuffled/disabled controls | done | `code/dream3r/tests/test_vlm_semantic_labels.py` |
+| C20260603-V11G-S5 | Run local py_compile, targeted pytest, and mock smoke cache build | done | `runs/vlm_semantic_controller/qwen3vl2b_smoke/schema_report.json` |
+| C20260603-V11G-S6 | Check whether Qwen weights/dependencies are already available without download/environment mutation | done | Qwen weights missing on checked BUAA-Server paths; `dream3r` env has `transformers 4.46.0`; no Qwen inference run |
+| C20260603-V11G-S7 | Update DEC/cycle/guidance chain and close snapshot | done | `decisions/DEC-20260603-028-vlm-semantic-label-cache-gate.md`, `cycles/CYCLE-20260603-vlm-semantic-label-cache-gate.md`, guidance files |
+| C20260603-S1 | Mark snapshot in progress and locate current documentation chain | done | `TASK_SNAPSHOT.md` |
+| C20260603-S2 | Check official Qwen3-VL capability boundaries and existing Dream3R VLM mechanism slot | done | official Qwen3-VL sources; `planning/ARCHITECTURE_MECHANISM_INTAKE.md` |
+| C20260603-S3 | Write comprehensive V11 semantic-controller research plan | done | `planning/DREAM3R_V11_VLM_SEMANTIC_CONTROLLER_RESEARCH_PLAN.md` |
+| C20260603-S4 | Add DEC, cycle log, and new-agent prompt | done | `decisions/DEC-20260603-027-vlm-semantic-controller-plan.md`, `cycles/CYCLE-20260603-vlm-semantic-controller-plan.md`, `handoff/ARCHITECTURE_V11_VLM_SEMANTIC_CONTROLLER_AGENT_PROMPT.md` |
+| C20260603-S5 | Sync project document group and close snapshot | done | `WORKFLOW_STATUS.md`, `INDEX.md`, `mainwork.md`, registry, guidance files |
 | C20260602-S1 | Verify bounded frozen-StatePrior baseline artifacts on BUAA-Server | done | `/hdd3/kykt26/code/dream3r/runs/stage6_fusion/bounded_refine_sweep/` |
 | C20260602-S2 | Inspect non-core decoder/trainer cache path and lock implementation boundary | done | `code/dream3r/proposal_set_decoder.py`, `code/dream3r/scripts/train_proposal_set_decoder.py` |
 | C20260602-S3 | Add native student decoder/distillation scaffold outside frozen core | done | `code/dream3r/native_student_decoder.py`, `code/dream3r/scripts/train_native_student_decoder.py`, tests |
@@ -1542,6 +1765,58 @@ Next expected research object after cycle 030:
 ## Last completed task pass
 
 ```text
+pass_name:        V11 VLM semantic label-cache gate
+date:             2026-06-03
+trigger:          User asked to test Qwen3-VL-2B-Instruct as an offline
+                  semantic controller signal, not a geometry model.
+files_modified:   TASK_SNAPSHOT.md, WORKFLOW_STATUS.md, INDEX.md, mainwork.md,
+                  registry/decision_registry.md, README.md,
+                  RESEARCH_STATE.md, AGENT_MASTER_PROMPT.md,
+                  planning/DREAM3R_V11_VLM_SEMANTIC_CONTROLLER_RESEARCH_PLAN.md,
+                  handoff/ARCHITECTURE_V11_VLM_SEMANTIC_CONTROLLER_AGENT_PROMPT.md
+new_artifacts:    code/dream3r/scripts/build_vlm_semantic_labels.py
+                  code/dream3r/tests/test_vlm_semantic_labels.py
+                  decisions/DEC-20260603-028-vlm-semantic-label-cache-gate.md
+                  cycles/CYCLE-20260603-vlm-semantic-label-cache-gate.md
+                  runs/vlm_semantic_controller/qwen3vl2b_smoke/mock_window_manifest.json
+                  runs/vlm_semantic_controller/qwen3vl2b_smoke/mock_labels.json
+                  runs/vlm_semantic_controller/qwen3vl2b_smoke/schema_report.json
+result:           Strict local label-cache gate is mock-positive. Records have
+                  explicit failure flags, prompt hash, model id, frame list,
+                  semantic risks, and Router/Critic-ready features,
+                  shuffled_features, and disabled_features.
+qwen_status:      Not run. Checked BUAA-Server paths have no Qwen3-VL-2B
+                  weights; existing dream3r env reports transformers 4.46.0.
+discipline:       No frozen-core edit. No model training. No checkpoint
+                  download. No server environment mutation. No geometry claim.
+verification:     py_compile passed; pytest 4 passed; mock smoke schema report
+                  has schema_pass_rate 1.0; git diff --check clean except
+                  line-ending warnings.
+
+pass_name:        V11 VLM semantic-controller research plan
+date:             2026-06-03
+trigger:          User asked for a comprehensive research plan, project
+                  document updates, and a prompt for a new agent to start
+                  better Dream3R research and practical execution planning.
+files_modified:   TASK_SNAPSHOT.md, WORKFLOW_STATUS.md, INDEX.md, mainwork.md,
+                  registry/decision_registry.md, README.md,
+                  RESEARCH_STATE.md, AGENT_MASTER_PROMPT.md
+new_artifacts:    planning/DREAM3R_V11_VLM_SEMANTIC_CONTROLLER_RESEARCH_PLAN.md
+                  decisions/DEC-20260603-027-vlm-semantic-controller-plan.md
+                  cycles/CYCLE-20260603-vlm-semantic-controller-plan.md
+                  handoff/ARCHITECTURE_V11_VLM_SEMANTIC_CONTROLLER_AGENT_PROMPT.md
+result:           Qwen3-VL-2B-Instruct is scoped as an offline semantic
+                  support signal for Router, Critic, state auxiliary
+                  supervision, and teacher scheduling. It is explicitly not a
+                  geometry backend or pointmap/depth/camera teacher.
+baseline:         Current best remains bounded frozen-StatePrior refinement
+                  at KITTI/ETH3D 0.1448/0.1475.
+discipline:       Documentation-only pass. No frozen-core edit. No model
+                  training. No checkpoint download. No server mutation.
+verification:     Official Qwen3-VL sources checked; guidance chain references
+                  verified by rg; tracked docs passed git diff --check
+                  except line-ending warnings; frozen-core diff audit empty.
+
 pass_name:        Native student decoder/distillation gate
 date:             2026-06-02
 trigger:          User asked to lock the bounded frozen-StatePrior baseline
@@ -1653,6 +1928,34 @@ prior_pass_files: TASK_SNAPSHOT.md, WORKFLOW_STATUS.md, RESEARCH_STATE.md,
 If a new agent or new conversation is picking this up cold:
 
 ```text
+CURRENT RESUME OVERRIDE (V11 semantic label-cache gate closed; 2026-06-03):
+
+1. Read this file (you are here).
+
+2. For VLM semantic-controller research, read:
+   planning/DREAM3R_V11_VLM_SEMANTIC_CONTROLLER_RESEARCH_PLAN.md
+   handoff/ARCHITECTURE_V11_VLM_SEMANTIC_CONTROLLER_AGENT_PROMPT.md
+   decisions/DEC-20260603-027-vlm-semantic-controller-plan.md
+   decisions/DEC-20260603-028-vlm-semantic-label-cache-gate.md
+   cycles/CYCLE-20260603-vlm-semantic-label-cache-gate.md
+
+3. The label-cache builder already exists:
+   code/dream3r/scripts/build_vlm_semantic_labels.py
+   code/dream3r/tests/test_vlm_semantic_labels.py
+   runs/vlm_semantic_controller/qwen3vl2b_smoke/schema_report.json
+
+4. The next executable gate is to build a real KITTI/ETH3D window manifest from
+   existing cache windows, then run a 10-window Qwen smoke on BUAA-Server GPU1
+   only after weights and compatible dependencies are staged or approved.
+
+5. Do not treat Qwen3-VL-2B-Instruct as geometry. It may support Router,
+   Critic, Dream state auxiliary supervision, and teacher scheduling only.
+
+6. The locked geometry baseline remains 0.1448/0.1475. U1 remains negative.
+   VGGT-Omega remains blocked on approved checkpoint access.
+
+Historical override follows.
+
 CURRENT RESUME OVERRIDE (native student gate closed; 2026-06-02):
 
 1. Read this file (you are here).

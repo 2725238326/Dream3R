@@ -1,5 +1,19 @@
 # Dream Research State
 
+Last updated: 2026-06-03 (Qwen held-out calibrated controller gate closed diagnostic-negative: leave-one-group-out semantic calibration gives real 0.1813, shuffle 0.1776, disabled 0.2365, oracle 0.1489. Because real does not beat shuffle, the current Qwen cache is offline diagnostic evidence only and must not feed Router/Critic training.)
+
+Last updated: 2026-06-03 (Qwen controller v2 repair closed weak-positive but not promotable: cause-derived risk floors and route-priority repair produce real 0.1750 vs shuffle 0.1759 vs disabled 0.2365 on the 50-window dry-run; oracle is 0.1489. Next Qwen work should be held-out calibrated/learned controller evaluation, not same-set rule tuning.)
+
+Last updated: 2026-06-03 (Qwen3-VL-2B 50-window semantic-controller gate closed negative: labels are strict-schema valid 50/50, but real/shuffle/disabled controls all route to Fast3R and score 0.2365 versus oracle 0.1489. Treat Qwen as operational label-cache infrastructure only until prompt/features/policy are redesigned and controls separate.)
+
+Last updated: 2026-06-03 (Qwen3-VL-2B-Instruct is now staged on BUAA-Server and runnable through an isolated smoke venv. GPU1 5-window KITTI semantic-label smoke passed strict schema 5/5. This is runtime/schema evidence only; Router/Critic promotion still requires held-out real/shuffle/disabled controls.)
+
+Last updated: 2026-06-03 (V11 Qwen semantic-controller integration added locally: KITTI/ETH3D manifest builder plus Router/Critic dry-run evaluator now compare real/shuffle/disabled VLM semantic controls. Mock dry-run is positive but non-promotable; real Qwen remained blocked until DEC-030.)
+
+Last updated: 2026-06-03 (V11 semantic label-cache gate implemented locally: strict schema/control script and tests pass, mock smoke report is valid, and real Qwen inference is blocked on missing staged weights plus server `transformers 4.46.0`.)
+
+Last updated: 2026-06-03 (V11 VLM semantic-controller lane added: Qwen3-VL-2B-Instruct is a candidate offline semantic risk labeler for Router, Critic, state auxiliary supervision, and teacher scheduling, not a geometry backend.)
+
 Last updated: 2026-06-02 (usable-model status clarified: proposal-only native gate is flat, image-state U1 gate is negative, and VGGT-Omega admission is checkpoint-blocked. Current usable bounded baseline remains frozen-StatePrior + bounded residual at KITTI/ETH3D 0.1448/0.1475.)
 
 Last updated: 2026-06-02 (architecture acceleration prompt added: next Dream3R architecture work should lock the bounded frozen-StatePrior baseline and push native student decoder/distillation or gated teacher admission, not small residual-head variants.)
@@ -58,6 +72,11 @@ The user is open to a combined exploration of:
 - Reasoning / Test-time Compute direction: geometry self-checking, iterative correction, hard-case reasoning.
 - Continual / Lifelong direction: online adaptation, long-sequence memory, no catastrophic forgetting.
 - Cross-modal direction remains allowed, but architecture-first remains the priority.
+- VLM semantic-controller direction is allowed only as a support signal for routing, verification, state supervision, and compute scheduling. It must not replace geometry.
+- V11 now has a local mock-positive label-cache gate, real Qwen runtime/schema
+  evidence, deterministic 50-window dry-runs, and a held-out calibrated
+  controller diagnostic. The held-out gate is negative against shuffle, so the
+  current Qwen cache is not promotable to Router/Critic.
 
 ### GitHub / Paper Mining Scope
 

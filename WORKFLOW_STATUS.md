@@ -1,5 +1,19 @@
 # Dream Workflow Status
 
+Last updated: 2026-06-03 (Qwen held-out calibrated controller gate closed diagnostic-negative: leave-one-group-out calibration gives oracle 0.1489, real 0.1813, shuffle 0.1776, disabled 0.2365. Real beats disabled but loses to shuffle, so Qwen remains offline semantic cache/diagnostic evidence only; no Router/Critic training claim.)
+
+Last updated: 2026-06-03 (Qwen controller v2 feature/policy repair closed weak-positive: cause-derived risk floors and route-priority repair make real Qwen beat disabled and marginally beat shuffle on the 50-window dry-run. Fresh v2: oracle 0.1489, real 0.1750, shuffle 0.1759, disabled 0.2365, `promotable=false`; no Router/Critic training claim.)
+
+Last updated: 2026-06-03 (Qwen3-VL-2B 50-window controller gate closed negative: KITTI manifest overlaps oracle 50/50 and strict schema passes 50/50, but real/shuffle/disabled dry-run all produce metric 0.2365 with Fast3R-only routes versus oracle 0.1489. Qwen remains offline label-cache evidence only; no Router/Critic promotion or training claim.)
+
+Last updated: 2026-06-03 (Qwen3-VL-2B weight staging completed on BUAA-Server: checkpoint staged at `/hdd3/kykt26/checkpoints/qwen/Qwen3-VL-2B-Instruct`, isolated smoke venv at `/hdd3/kykt26/envs/qwen3vl2b_smoke`, and GPU1 5-window KITTI semantic-label smoke passed strict schema 5/5. Next gate is held-out real/shuffle/disabled Router/Critic dry-run, not training.)
+
+Last updated: 2026-06-03 (V11 Qwen semantic-controller architecture integration added: KITTI/ETH3D VLM window manifests and Router/Critic dry-run evaluator now compare real/shuffle/disabled semantic controls; mock dry-run is positive but forced `promotable=false`. Real Qwen remains blocked on missing staged weights and incompatible server stack.)
+
+Last updated: 2026-06-03 (V11 VLM semantic label-cache gate implemented locally: strict schema script/tests added, mock smoke schema report passes, shuffled/disabled controls emitted. Real Qwen inference blocked on missing staged weights and `transformers 4.46.0` in the server env.)
+
+Last updated: 2026-06-03 (V11 VLM semantic-controller research plan added. Qwen3-VL-2B-Instruct is scoped as an offline semantic support signal for Router, Critic, Dream state auxiliary supervision, and teacher scheduling, not as a geometry backend. See `planning/DREAM3R_V11_VLM_SEMANTIC_CONTROLLER_RESEARCH_PLAN.md` and `handoff/ARCHITECTURE_V11_VLM_SEMANTIC_CONTROLLER_AGENT_PROMPT.md`.)
+
 Last updated: 2026-06-02 (U1 image-state native gate closed negative and VGGT-Omega preflight installed. U1 cache build succeeded, but gate20 correct-state 0.1649/0.2842 loses to no-state 0.1526/0.1702 and locked baseline 0.1448/0.1475. VGGT-Omega smoke script compiles and upstream code is staged, but real admission is blocked on missing approved checkpoint.)
 
 Last updated: 2026-06-02 (native student decoder/distillation gate executed on BUAA-Server GPU1: non-core NativeStudentDecoder + trainer + sweep + tests added; seed-7 gate preserves state causality but is metric-flat versus bounded frozen-StatePrior refinement, so bounded refinement remains current best baseline.)
@@ -105,6 +119,7 @@ Use this prompt when preparing KYKT frontend design work for Gemini CLI.
 
 | Workstream | Status | Next artifact |
 |---|---|---|
+| Dream3R V11 VLM semantic-controller lane | **held-out calibrated gate negative against shuffle; Router/Critic promotion blocked**. Label-cache builder, KITTI/ETH3D window-manifest builder, deterministic dry-run evaluator, and held-out calibrated evaluator now exist outside frozen core. Qwen3-VL-2B-Instruct is staged and schema-valid, but the 50-window held-out gate gives real 0.1813 vs shuffle 0.1776 vs disabled 0.2365; real does not beat shuffle | `decisions/DEC-20260603-033-qwen-heldout-calibrated-controller.md`, `runs/vlm_semantic_controller/qwen3vl2b_real_50win_v2/calibrated_controller_50win_t320_v2.json`, `code/dream3r/scripts/eval_vlm_calibrated_controller.py` |
 | Research workflow | active | `paradigm/RESEARCH_WORKFLOW.md` |
 | Collaboration roadmap | active | `handoff/COLLABORATION_ROADMAP.md` |
 | Data model | active | `paradigm/RESEARCH_DATA_MODEL.md` |
@@ -171,6 +186,8 @@ Use this prompt when preparing KYKT frontend design work for Gemini CLI.
 
 - any new reproduction, server run, model run, or heavy install
 - any new checkpoint download
+- real Qwen3-VL smoke until weights and compatible Transformers/Qwen stack are
+  staged or explicitly approved
 - C2 v0.3 server integration, model import, or any ablation beyond ABL-memory-0 without a separate DEC
 - KYKT Dream page or navigation change
 - Codex direct frontend implementation
@@ -181,7 +198,26 @@ Use this prompt when preparing KYKT frontend design work for Gemini CLI.
 
 ## Recommended Next User Decision
 
-Current architecture recommendation (2026-06-02, after DEC-20260602-026):
+Current V11 recommendation (2026-06-03, after DEC-20260603-033):
+
+```text
+The V11 label-cache scaffold is operational, but the held-out calibrated gate
+blocks promotion:
+  - strict semantic schema
+  - explicit failure records
+  - mock backend tests
+  - features / shuffled_features / disabled_features controls
+  - Qwen3-VL-2B 50-window KITTI schema pass 50/50
+  - deterministic dry-run v2: real 0.1750, shuffle 0.1759, disabled 0.2365
+  - held-out calibrated gate: real 0.1813, shuffle 0.1776, disabled 0.2365,
+    oracle 0.1489
+
+Do not train/promote Router/Critic from the current Qwen cache. Future Qwen work
+needs broader windows, a pre-registered real > shuffle > disabled threshold, and
+state-causality controls before any architecture claim.
+```
+
+Architecture baseline recommendation (2026-06-02, after DEC-20260602-026):
 
 ```text
 The bounded frozen-StatePrior refinement remains the current best baseline:
