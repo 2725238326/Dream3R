@@ -122,6 +122,8 @@ def test_train_foundation3r_vggt_feature_mode_uses_no_proposals(tmp_path: Path):
         hidden=24,
         num_layers=1,
         num_heads=4,
+        state_contrast_weight=0.25,
+        state_contrast_margin=0.05,
     )
 
     result = json.loads((tmp_path / "out_vggt" / "results.json").read_text(encoding="utf-8"))
@@ -134,6 +136,9 @@ def test_train_foundation3r_vggt_feature_mode_uses_no_proposals(tmp_path: Path):
     assert result["teacher_weight"] == 1.0
     assert result["gt_weight"] == 0.0
     assert result["depth_weight"] == 0.0
+    assert result["state_modulation"] == "film_scale_shift_plus_additive_state"
+    assert result["state_contrast_weight"] == 0.25
+    assert result["state_contrast_margin"] == 0.05
 
 
 def test_vggt_loss_profile_allows_explicit_weight_override():

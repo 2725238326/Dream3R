@@ -207,6 +207,43 @@ def _masked_log_depth_l1(
     return F.l1_loss(torch.log(pred_norm), torch.log(target_norm))
 
 
+def _foundation3r_supervision_loss(
+    pred: torch.Tensor,
+    teacher: torch.Tensor,
+    teacher_conf: torch.Tensor,
+    teacher_mask: torch.Tensor,
+    gt: Optional[torch.Tensor],
+    gt_mask: Optional[torch.Tensor],
+    teacher_weight: float,
+    gt_weight: float,
+    depth_weight: float,
+) -> torch.Tensor:
+    teacher_target = _scale_normalize_pointmap(teacher, teacher_mask)
+    loss = float(teacher_weight) * _masked_weighted_smooth_l1(
+        pred,
+        teacher_target,
+        teacher_mask,
+        teacher_conf,
+    )
+    if gt is not None and gt_mask is not None and gt_weight > 0:
+        gt_target = _scale_normalize_pointmap(gt, gt_mask)
+        loss = loss + float(gt_weight) * _abs_rel_loss(
+            pred,
+            gt_target,
+            gt_mask,
+            align_scale=True,
+        )
+    if depth_weight > 0:
+        depth_target = gt if gt is not None else teacher
+        depth_mask = gt_mask if gt_mask is not None else teacher_mask
+        loss = loss + float(depth_weight) * _masked_log_depth_l1(
+            pred,
+            depth_target,
+            depth_mask,
+        )
+    return loss
+
+
 def _resolve_loss_weights(
     input_mode: str,
     loss_profile: str,
@@ -307,6 +344,8 @@ def train(
     num_heads: int = 4,
     d_memory_override: int = 0,
     input_mode: str = "images",
+    state_contrast_weight: float = 0.0,
+    state_contrast_margin: float = 0.02,
 ) -> Dict:
     torch.manual_seed(seed)
     random.seed(seed)
@@ -325,6 +364,7 @@ def train(
     if input_mode == "vggt_features" and d_vggt_feature <= 0:
         raise ValueError("input_mode=vggt_features requested but cache has no vggt_patch_features")
     state_entries = _build_state_source(entries, seed, shuffle_state)
+    contrast_state_entries = _build_state_source(entries, seed + 1701, True)
     train_idx, test_idx = _stratified_split(entries, seed, holdout_frac)
     if input_mode == "vggt_features":
         model = Foundation3RVGGTFeatureDecoder(
@@ -357,6 +397,8 @@ def train(
         f"image_size={image_size}, patch_size={patch_size}, "
         f"loss_profile={resolved_loss_profile}, "
         f"teacher_weight={teacher_weight}, gt_weight={gt_weight}, depth_weight={depth_weight}, "
+        f"state_contrast_weight={state_contrast_weight}, "
+        f"state_contrast_margin={state_contrast_margin}, "
         f"proposal_inputs_used=false teacher_used_at_inference=false",
         flush=True,
     )
@@ -371,29 +413,36 @@ def train(
                 entries[i], device, state_entries[i], image_size, input_mode
             )
             out = _forward_model(model, images, vggt_features, mc, cs, input_mode)
-            teacher_target = _scale_normalize_pointmap(teacher, teacher_mask)
-            loss = float(teacher_weight) * _masked_weighted_smooth_l1(
+            pos_loss = _foundation3r_supervision_loss(
                 out["final_pointmap"],
-                teacher_target,
-                teacher_mask,
+                teacher,
                 teacher_conf,
+                teacher_mask,
+                gt,
+                gt_mask,
+                teacher_weight,
+                gt_weight,
+                depth_weight,
             )
-            if gt is not None and gt_mask is not None and gt_weight > 0:
-                gt_target = _scale_normalize_pointmap(gt, gt_mask)
-                loss = loss + float(gt_weight) * _abs_rel_loss(
-                    out["final_pointmap"],
-                    gt_target,
+            loss = pos_loss
+            if use_state and state_contrast_weight > 0:
+                _, _, neg_mc, neg_cs, _, _, _, _, _ = _stack(
+                    entries[i], device, contrast_state_entries[i], image_size, input_mode
+                )
+                neg_out = _forward_model(model, images, vggt_features, neg_mc, neg_cs, input_mode)
+                neg_loss = _foundation3r_supervision_loss(
+                    neg_out["final_pointmap"],
+                    teacher,
+                    teacher_conf,
+                    teacher_mask,
+                    gt,
                     gt_mask,
-                    align_scale=True,
+                    teacher_weight,
+                    gt_weight,
+                    depth_weight,
                 )
-            if depth_weight > 0:
-                depth_target = gt if gt is not None else teacher
-                depth_mask = gt_mask if gt_mask is not None else teacher_mask
-                loss = loss + float(depth_weight) * _masked_log_depth_l1(
-                    out["final_pointmap"],
-                    depth_target,
-                    depth_mask,
-                )
+                contrast = F.relu(pos_loss - neg_loss + float(state_contrast_margin))
+                loss = loss + float(state_contrast_weight) * contrast
             opt.zero_grad()
             loss.backward()
             opt.step()
@@ -425,6 +474,9 @@ def train(
         "hidden": hidden,
         "num_layers": num_layers,
         "num_heads": num_heads,
+        "state_modulation": "film_scale_shift_plus_additive_state",
+        "state_contrast_weight": float(state_contrast_weight),
+        "state_contrast_margin": float(state_contrast_margin),
         "proposal_inputs_used": False,
         "teacher_used_at_inference": False,
         "vggt_backbone_features_used": input_mode == "vggt_features",
@@ -474,6 +526,8 @@ def main() -> None:
     parser.add_argument("--num-heads", type=int, default=4)
     parser.add_argument("--d-memory", type=int, default=0)
     parser.add_argument("--input-mode", choices=["images", "vggt_features"], default="images")
+    parser.add_argument("--state-contrast-weight", type=float, default=0.0)
+    parser.add_argument("--state-contrast-margin", type=float, default=0.02)
     parser.add_argument("--no-state", action="store_true")
     parser.add_argument("--shuffle-state", action="store_true")
     args = parser.parse_args()
@@ -499,6 +553,8 @@ def main() -> None:
         num_heads=args.num_heads,
         d_memory_override=args.d_memory,
         input_mode=args.input_mode,
+        state_contrast_weight=args.state_contrast_weight,
+        state_contrast_margin=args.state_contrast_margin,
     )
 
 

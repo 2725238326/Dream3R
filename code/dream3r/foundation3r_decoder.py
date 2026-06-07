@@ -53,6 +53,15 @@ class Foundation3RDecoder(nn.Module):
             nn.Linear(self.model_dim, self.model_dim),
             nn.Sigmoid(),
         )
+        self.state_scale = nn.Sequential(
+            nn.LayerNorm(self.model_dim),
+            nn.Linear(self.model_dim, self.model_dim),
+            nn.Tanh(),
+        )
+        self.state_shift = nn.Sequential(
+            nn.LayerNorm(self.model_dim),
+            nn.Linear(self.model_dim, self.model_dim),
+        )
         enc_layer = nn.TransformerEncoderLayer(
             d_model=self.model_dim,
             nhead=num_heads,
@@ -143,7 +152,9 @@ class Foundation3RDecoder(nn.Module):
         gated_state = self.state_gate(state).view(b, 1, 1, self.model_dim) * state.view(
             b, 1, 1, self.model_dim
         )
-        fused = tokens + gated_state
+        state_scale = 0.25 * self.state_scale(state).view(b, 1, 1, self.model_dim)
+        state_shift = 0.25 * self.state_shift(state).view(b, 1, 1, self.model_dim)
+        fused = tokens * (1.0 + state_scale) + state_shift + gated_state
 
         mixed = self.multi_view_mixer(
             fused.permute(0, 2, 1, 3).reshape(b * p, n, self.model_dim)
@@ -167,6 +178,7 @@ class Foundation3RDecoder(nn.Module):
             "final_confidence": confidence,
             "proposal_inputs_used": torch.tensor(False, device=device),
             "teacher_used_at_inference": torch.tensor(False, device=device),
+            "state_modulation_used": torch.tensor(self.use_state, device=device),
         }
 
 
@@ -207,6 +219,15 @@ class Foundation3RVGGTFeatureDecoder(nn.Module):
             nn.LayerNorm(self.model_dim),
             nn.Linear(self.model_dim, self.model_dim),
             nn.Sigmoid(),
+        )
+        self.state_scale = nn.Sequential(
+            nn.LayerNorm(self.model_dim),
+            nn.Linear(self.model_dim, self.model_dim),
+            nn.Tanh(),
+        )
+        self.state_shift = nn.Sequential(
+            nn.LayerNorm(self.model_dim),
+            nn.Linear(self.model_dim, self.model_dim),
         )
         enc_layer = nn.TransformerEncoderLayer(
             d_model=self.model_dim,
@@ -279,7 +300,9 @@ class Foundation3RVGGTFeatureDecoder(nn.Module):
         gated_state = self.state_gate(state).view(b, 1, 1, self.model_dim) * state.view(
             b, 1, 1, self.model_dim
         )
-        fused = tokens + gated_state
+        state_scale = 0.25 * self.state_scale(state).view(b, 1, 1, self.model_dim)
+        state_shift = 0.25 * self.state_shift(state).view(b, 1, 1, self.model_dim)
+        fused = tokens * (1.0 + state_scale) + state_shift + gated_state
         mixed = self.multi_view_mixer(
             fused.permute(0, 2, 1, 3).reshape(b * p, n, self.model_dim)
         )
@@ -300,4 +323,5 @@ class Foundation3RVGGTFeatureDecoder(nn.Module):
             "proposal_inputs_used": torch.tensor(False, device=device),
             "teacher_used_at_inference": torch.tensor(False, device=device),
             "vggt_backbone_features_used": torch.tensor(True, device=device),
+            "state_modulation_used": torch.tensor(self.use_state, device=device),
         }

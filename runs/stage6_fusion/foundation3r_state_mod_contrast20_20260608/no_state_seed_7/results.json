@@ -1,0 +1,62 @@
+{
+  "seed": 7,
+  "epochs": 20,
+  "n_train": 80,
+  "n_test": 20,
+  "d_memory": 128,
+  "image_size": 224,
+  "patch_size": 16,
+  "input_mode": "vggt_features",
+  "d_vggt_feature": 128,
+  "use_state": false,
+  "shuffle_state": false,
+  "teacher_weight": 1.0,
+  "gt_weight": 0.0,
+  "depth_weight": 0.0,
+  "loss_profile": "teacher_only",
+  "model_dim": 128,
+  "state_dim": 64,
+  "hidden": 256,
+  "num_layers": 2,
+  "num_heads": 4,
+  "state_modulation": "film_scale_shift_plus_additive_state",
+  "state_contrast_weight": 0.5,
+  "state_contrast_margin": 0.02,
+  "proposal_inputs_used": false,
+  "teacher_used_at_inference": false,
+  "vggt_backbone_features_used": true,
+  "scale_normalized_targets": true,
+  "final_train_loss": 0.016546373614255573,
+  "final_train_eval": {
+    "kitti": {
+      "n": 40,
+      "Ours_Foundation3R": 0.307,
+      "Teacher_Dense": 0.2952,
+      "temporal_delta_abs_rel": 0.0645,
+      "scale_drift_proxy": 0.0457
+    },
+    "eth3d": {
+      "n": 40,
+      "Ours_Foundation3R": 0.1791,
+      "Teacher_Dense": 0.15,
+      "temporal_delta_abs_rel": 0.0443,
+      "scale_drift_proxy": 0.0158
+    }
+  },
+  "final_eval": {
+    "kitti": {
+      "n": 10,
+      "Ours_Foundation3R": 0.3392,
+      "Teacher_Dense": 0.3554,
+      "temporal_delta_abs_rel": 0.0556,
+      "scale_drift_proxy": 0.042
+    },
+    "eth3d": {
+      "n": 10,
+      "Ours_Foundation3R": 0.1484,
+      "Teacher_Dense": 0.0913,
+      "temporal_delta_abs_rel": 0.0356,
+      "scale_drift_proxy": 0.0106
+    }
+  }
+}

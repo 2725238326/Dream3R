@@ -35,6 +35,7 @@ def test_foundation3r_forward_is_proposal_free():
     assert bool((out["final_pointmap"][..., 2] > 0).all()) is True
     assert bool(out["proposal_inputs_used"].item()) is False
     assert bool(out["teacher_used_at_inference"].item()) is False
+    assert bool(out["state_modulation_used"].item()) is True
     assert images.grad is not None
     assert memory.grad is not None
 
@@ -78,8 +79,30 @@ def test_foundation3r_vggt_feature_decoder_is_proposal_free():
     assert bool(out["proposal_inputs_used"].item()) is False
     assert bool(out["teacher_used_at_inference"].item()) is False
     assert bool(out["vggt_backbone_features_used"].item()) is True
+    assert bool(out["state_modulation_used"].item()) is True
     assert features.grad is not None
     assert memory.grad is not None
+
+
+def test_foundation3r_vggt_feature_decoder_state_changes_geometry():
+    torch.manual_seed(3)
+    model = Foundation3RVGGTFeatureDecoder(
+        d_vggt_feature=8,
+        d_memory=4,
+        model_dim=16,
+        state_dim=8,
+        hidden=24,
+        num_layers=1,
+        num_heads=4,
+    )
+    features = torch.randn(1, 2, 9, 8)
+    state_a = torch.tensor([[1.0, 0.0, 0.0, 0.0]])
+    state_b = torch.tensor([[0.0, 1.0, 0.0, 0.0]])
+
+    out_a = model(features, state_a, torch.zeros(1, 1))["final_pointmap"]
+    out_b = model(features, state_b, torch.zeros(1, 1))["final_pointmap"]
+
+    assert not torch.allclose(out_a, out_b)
 
 
 def test_foundation3r_forward_rejects_proposal_kwargs():

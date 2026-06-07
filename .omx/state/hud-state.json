@@ -1,6 +1,6 @@
 {
-  "last_turn_at": "2026-06-07T15:18:42.840Z",
-  "turn_count": 161,
-  "last_progress_at": "2026-06-07T15:18:42.840Z",
-  "last_agent_output": "已经做成今晚可用的 3R 模型包：`Dream3R v1.1-rc1`。\n\n入口是 [release_v11.py](E:/Dream3R/code/dream3r/release_v11.py)：\n"
+  "last_turn_at": "2026-06-07T17:14:01.125Z",
+  "turn_count": 163,
+  "last_progress_at": "2026-06-07T17:14:01.125Z",
+  "last_agent_output": "现在能诚实写的 Dream3R 是：\n\n**一个 state-conditioned proposal-fusion 3R 模型。**\n\n更具体地说：\n\n```text\n多路 3R proposal "
 }
