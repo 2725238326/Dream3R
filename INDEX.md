@@ -1,5 +1,51 @@
 # Dream Index
 
+Last updated: 2026-06-08 (Context compaction handoff added: `handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md`. It is now the shortest complete resume anchor for v1.1 usable release state, v1.0 fallback, VGGT/Qwen/Foundation3R boundaries, verification evidence, and next work.)
+
+Last updated: 2026-06-07 (Dream3R v1.1 usable model package added: `code/dream3r/release_v11.py`, `code/dream3r/scripts/verify_v11_release.py`, `code/dream3r/tests/test_release_v11_architecture.py`, `code/dream3r/tests/test_release_v11_verifier.py`, `release/USABLE_MODEL_V1_1.md`, `decisions/DEC-20260607-049-v11-usable-model-package.md`, `cycles/CYCLE-20260607-v11-usable-model-package.md`.)
+
+Last updated: 2026-06-07 (Foundation3R VGGT feature student added: `decisions/DEC-20260607-048-foundation3r-vggt-feature-student.md`, `cycles/CYCLE-20260607-foundation3r-vggt-feature-student.md`, `Foundation3RVGGTFeatureDecoder`, VGGT feature cache support, auto teacher-only loss profile, and GPU1 outputs under `runs/stage6_fusion/foundation3r_vggt_feature_*20260607/`.)
+
+Last updated: 2026-06-07 (Foundation3R scratch-student diagnostic added: `decisions/DEC-20260607-047-foundation3r-scratch-student-diagnostic.md`, `cycles/CYCLE-20260607-foundation3r-scratch-student-diagnostic.md`, updated `foundation3r_decoder.py`, updated `train_foundation3r.py`, and diagnostics under `runs/stage6_fusion/foundation3r_train_*20260607/`.)
+
+Last updated: 2026-06-07 (Foundation3R training smoke added: `code/dream3r/scripts/train_foundation3r.py`, `code/dream3r/tests/test_foundation3r_training.py`, `decisions/DEC-20260607-046-foundation3r-train-smoke.md`, `cycles/CYCLE-20260607-foundation3r-train-smoke.md`, and smoke output under `runs/stage6_fusion/foundation3r_train_smoke_20260607/`.)
+
+Last updated: 2026-06-07 (Foundation3R 50+50 dense teacher cache gate added: `decisions/DEC-20260607-045-foundation3r-50x2-dense-teacher-cache.md`, `cycles/CYCLE-20260607-foundation3r-50x2-dense-teacher-cache.md`, and reports under `runs/stage6_fusion/foundation3r_dense_teacher_50x2_20260607/`.)
+
+Last updated: 2026-06-06 (Foundation3R Sprint 0/1 scaffold added: `code/dream3r/foundation3r_decoder.py`, `code/dream3r/scripts/build_foundation3r_dense_teacher_cache.py`, `code/dream3r/tests/test_foundation3r_contract.py`, `decisions/DEC-20260606-044-foundation3r-contract-dense-teacher-smoke.md`, and real smoke reports under `runs/stage6_fusion/foundation3r_dense_teacher_real_smoke_20260606/`.)
+
+Last updated: 2026-06-06 (Foundation3R proposal-free execution plan added at `planning/DREAM3R_FOUNDATION3R_PROPOSAL_FREE_PLAN_20260606.md`; it defines contract lock, dense teacher cache, Foundation3R v0 architecture, gate ladder, and stop conditions.)
+
+Last updated: 2026-06-06 (Proposal-free AbsRel/capacity gate added: `train_proposal_free_3r.py` now supports `teacher_absrel_weight` and decoder-capacity args; `decisions/DEC-20260606-043-proposal-free-absrel-capacity-gate.md` and `cycles/CYCLE-20260606-proposal-free-absrel-capacity-gate.md` record the negative GPU1 gate.)
+
+Last updated: 2026-06-06 (Proposal-free teacher distillation gate added: `code/dream3r/scripts/build_proposal_free_teacher_cache.py`, updated `train_proposal_free_3r.py`, `decisions/DEC-20260606-042-proposal-free-teacher-distillation-gate.md`, and `cycles/CYCLE-20260606-proposal-free-teacher-distillation-gate.md`; gate20 result is negative.)
+
+Last updated: 2026-06-06 (Proposal-free 3R route added: `code/dream3r/proposal_free_3r_decoder.py`, `code/dream3r/scripts/train_proposal_free_3r.py`, `code/dream3r/tests/test_proposal_free_3r_decoder.py`, `decisions/DEC-20260606-041-proposal-free-3r-decoder-gate.md`, and `cycles/CYCLE-20260606-proposal-free-3r-decoder-gate.md`; gate20 is negative and preserved as scaffold evidence.)
+
+Last updated: 2026-06-06 (Unified domain-conditional gate passed: `decisions/DEC-20260606-040-unified-domain-conditional-gate.md`, `cycles/CYCLE-20260606-unified-domain-conditional-gate.md`, `code/dream3r/scripts/eval_unified_domain_conditional_gate.py`, `code/dream3r/tests/test_unified_domain_conditional_gate.py`, and `runs/v22_admission/domain_conditional_teacher/unified_gate_candidate_with_kitti_no_state_server.json`; this is the v1.1 promotion candidate, not yet the official package.)
+
+Last updated: 2026-06-06 (Canonical architecture map added: `ARCHITECTURE.md`; machine-readable status map added: `release/ARCHITECTURE_STATUS.json`.)
+
+Last updated: 2026-06-06 (Domain-conditional VGGT teacher candidate added: `decisions/DEC-20260606-039-domain-conditional-vggt-teacher.md`, `cycles/CYCLE-20260606-domain-conditional-vggt-teacher.md`, `code/dream3r/scripts/eval_domain_conditional_teacher.py`, and `runs/v22_admission/domain_conditional_teacher/`.)
+
+Last updated: 2026-06-06 (Training verification sweep recorded: `cycles/CYCLE-20260606-training-verification.md`; local full suite `273 passed, 2 skipped`; BUAA-Server GPU1 subset `37 passed`; 1-epoch training smokes under `runs/stage6_fusion/*train_smoke_20260606/`.)
+
+Last updated: 2026-06-06 (Dream3R formal `v1.0-rc1` package added: `release/OFFICIAL_VERSION.md`, `release/ARCHITECTURE_V1_0_RC.md`, `code/dream3r/scripts/verify_release_candidate.py`, and `code/dream3r/tests/test_release_candidate_verifier.py`; `release/ARTIFACTS.json` now records versioned entrypoints.)
+
+Last updated: 2026-06-06 (Dream3R native-student objective gates closed: `decisions/DEC-20260606-038-native-student-objective-gates.md`, `cycles/CYCLE-20260606-native-student-objective-gates.md`, `runs/stage6_fusion/native_student_dropout_consistency_gate20_seed7/`, and `runs/stage6_fusion/native_student_temporal_scale_gate20_seed7/`; both gates are causal but flat at `0.1451/0.1480`, so RC remains `0.1448/0.1475`.)
+
+Last updated: 2026-06-06 (Dream3R fast module-completion and optimization plan added: `planning/DREAM3R_FAST_MODULE_COMPLETION_OPTIMIZATION_PLAN_20260606.md`; it selects NativeStudentDecoder dropout-consistency as the first bounded optimization sprint.)
+
+Last updated: 2026-06-06 (Dream3R implementation module map added: `planning/DREAM3R_IMPLEMENTATION_MODULE_MAP_20260606.md`; it explains each module, claim boundary, and fastest next engineering route.)
+
+Last updated: 2026-06-06 (Dream3R RC external packaging added: `release/METHOD_ONEPAGER.md`, `release/METHOD_FIGURE.md`, `release/RESULT_TABLE.md`, `release/PRESENTATION_OUTLINE.md`, and `release/PUBLISH_CHECKLIST.md`; RC remains frozen-StatePrior + bounded residual `0.1448/0.1475`.)
+
+Last updated: 2026-06-05 (Dream3R release candidate package completed: `release/DREAM3R_RC_CARD.md`, `release/RUNBOOK.md`, `release/ARTIFACTS.json`, `release/REPRODUCE.md`, `release/VERIFY_REPORT.md`, `release/LIMITATIONS.md`, `release/NON_CLAIMS.md`; VGGT gate result in `decisions/DEC-20260605-037-vggt-omega-cache-control-gate.md`.)
+
+Last updated: 2026-06-04 (Dream3R VGGT-Omega one-window real-backend smoke admitted: `decisions/DEC-20260604-035-vggt-omega-admission-runner.md`, `cycles/CYCLE-20260604-vggt-omega-admission-runner.md`, `code/dream3r/scripts/stage_vggt_omega_admission.py`, `code/dream3r/scripts/smoke_vggt_omega_adapter.py`, and `runs/v22_admission/vggt_omega_smoke/results_after_upload_fix_20260604.json`.)
+
+Last updated: 2026-06-04 (Dream3R Qwen semantic Critic-prior gate closed diagnostic-negative: `decisions/DEC-20260604-034-qwen-semantic-critic-prior-gate.md`, `cycles/CYCLE-20260604-qwen-semantic-critic-prior-gate.md`, `code/dream3r/scripts/eval_vlm_semantic_critic_gate.py`, and `runs/vlm_semantic_controller/qwen3vl2b_real_50win_v2/semantic_critic_gate_50win_t320_v2.json`; real+geometry does not beat geometry-only.)
+
 Last updated: 2026-06-03 (Dream3R Qwen held-out calibrated controller gate closed diagnostic-negative: `decisions/DEC-20260603-033-qwen-heldout-calibrated-controller.md`, `cycles/CYCLE-20260603-qwen-heldout-calibrated-controller.md`, `code/dream3r/scripts/eval_vlm_calibrated_controller.py`, and `runs/vlm_semantic_controller/qwen3vl2b_real_50win_v2/calibrated_controller_50win_t320_v2.json`; real beats disabled but loses to shuffle.)
 
 Last updated: 2026-06-03 (Dream3R Qwen controller v2 repair closed weak-positive: `decisions/DEC-20260603-032-qwen-controller-v2-feature-policy-repair.md`, `cycles/CYCLE-20260603-qwen-controller-v2-feature-policy-repair.md`, and `runs/vlm_semantic_controller/qwen3vl2b_real_50win_v2/controller_dryrun_50win_t320_v2.json`; real beats disabled and marginally beats shuffle, still not promotable.)
@@ -43,16 +89,19 @@ Quick navigation for humans and agents. **Read `TASK_SNAPSHOT.md` first** (it is
 ## How To Read This Workspace
 
 1. Start with `TASK_SNAPSHOT.md` (highest-authority resume pointer; tells you whether a task is in flight, what subtask is next, and whether forward motion is gated).
-2. Then `AGENT_MASTER_PROMPT.md` (entry prompt with mandatory load protocol; `TASK_SNAPSHOT.md` is item 1 of that protocol, the rest follows).
-3. Check `WORKFLOW_STATUS.md` for current phase, blocked decisions, and recommended next user decision.
-4. Check `RESEARCH_STATE.md` for living state and cycle history.
-5. Use this `INDEX.md` to find any specific file by topic.
+2. Then `handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md` (short complete state anchor for current v1.1/v1.0/Qwen/VGGT/Foundation3R boundaries).
+3. Then `AGENT_MASTER_PROMPT.md` (entry prompt with mandatory load protocol; `TASK_SNAPSHOT.md` is item 1 of that protocol, the rest follows).
+4. Check `WORKFLOW_STATUS.md` for current phase, blocked decisions, and recommended next user decision.
+5. Check `RESEARCH_STATE.md` for living state and cycle history.
+6. Use this `INDEX.md` to find any specific file by topic.
 
 ## Root-Level Files (Always-On Entry Points)
 
 | File | Role |
 |---|---|
 | `TASK_SNAPSHOT.md` | **Read first.** Highest-authority resume pointer: current task id, subtask board, status (`idle` / `in_progress` / `blocked`), `If interrupted, resume from` block, recent failure modes |
+| `handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md` | Compressed 2026-06-08 handoff: current usable model, official fallback, VGGT/Qwen/Foundation3R boundaries, validation evidence, server paths, non-claims, and next priorities |
+| `ARCHITECTURE.md` | Canonical Dream3R architecture map: official path, experimental path, rejected side lanes, frozen core, and next gate |
 | `README.md` | Workspace overview, purpose, non-negotiables |
 | `INDEX.md` | This file; topic-based navigation |
 | `AGENT_MASTER_PROMPT.md` | Canonical agent operating prompt + mandatory load protocol (lists `TASK_SNAPSHOT.md` as item 1) |
@@ -60,6 +109,20 @@ Quick navigation for humans and agents. **Read `TASK_SNAPSHOT.md` first** (it is
 | `RESEARCH_STATE.md` | Living state log; cycle history; current recommendations |
 | `ARCHITECTURE_V04_AGENT_PROMPT.md` | v0.4 architecture closure agent prompt — drives the orchestrator + contract + repair round |
 | `ARCHITECTURE_V04_STATUS.md` | v0.4 closure verification: per-axis checklist (Perception / Memory / Permanence / Critic / Repair / Composer / Final), test results, and explicit stub/fallback/proxy list |
+
+## Current Official Dream3R Version
+
+| File | Role |
+|---|---|
+| `release/OFFICIAL_VERSION.md` | Formal `v1.0-rc1` entrypoint: version identity, official claim, non-official lanes, verification commands |
+| `release/ARCHITECTURE_V1_0_RC.md` | Frozen v1.0-rc1 architecture surface and component boundaries |
+| `release/ARTIFACTS.json` | Versioned artifact manifest for selected metrics, local mirrors, server paths, docs, and verifier entrypoints |
+| `release/ARCHITECTURE_STATUS.json` | Machine-readable architecture status: official, experimental, not-official, frozen core, next gate |
+| `handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md` | Shortest complete resume anchor for the current v1.1 usable release and research boundaries |
+| `code/dream3r/scripts/verify_release_candidate.py` | Read-only package verifier for docs, artifacts, metrics, state-causality, and frozen-core policy |
+| `code/dream3r/scripts/eval_unified_domain_conditional_gate.py` | Read-only v1.1 promotion-candidate gate combining KITTI and ETH3D state/no-state/shuffle controls |
+| `code/dream3r/release_candidate.py` | Official importable v1.0-rc1 architecture wrapper |
+| `code/dream3r/tests/test_release_candidate_verifier.py` | Unit test for the release verifier without git dependency |
 
 ## Subdirectories By Purpose
 
@@ -176,6 +239,7 @@ Recent (most relevant for resume):
 
 | File | Cycle | Role |
 |---|---|---|
+| `CYCLE-20260608-context-compaction.md` | context | 2026-06-08 context compaction pass. Adds `handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md` and syncs current v1.1/v1.0/Qwen/VGGT/Foundation3R boundaries across guidance entrypoints; no new model run, architecture decision, checkpoint change, or frozen-core edit |
 | `CYCLE-20260522-001.md` | 043 | Architecture-focus round after user re-prioritization "架构是最重要的内容; 开题报告和综述放一边". W20 SOTA Feature Matrix expansion to family-grouped second pass (`code/dream3r/SOTA_FEATURE_MATRIX.md`; 8 family sections; 30+ external methods mapped) + v0.5 axes spec drafting (`specs/SPEC-20260522-001-dream3r-v05-axes.md`; 8 axes A1-A8 with explicit `closes_iff`; v0.5 additive to v0.4 by default). Markdown only; v0.3 + v0.4 code byte-identical; both candidate-not-final per DEC-20260501-004; no DEC proposed; sync chain applied (INDEX.md + WORKFLOW_STATUS.md + TASK_SNAPSHOT.md). Auto-memory updated: track-priorities feedback recorded |
 | `CYCLE-20260517-003.md` | 042 | Dream3R 开题报告最终修订 + PDF 编译 + advisor 提交 packaging (DEC-20260517-003 authorized; content frozen; bottom metadata cleanup + §8.1 past-tense; references.bib 44 entries; PDF 263 KB pandoc+xelatex; cover note + submission record G3a/G3b clean; STYLE_CONTRACT v1 closed 50 rows 7 entries; proposal track functionally closed; no spec / code / server action) |
 | `CYCLE-20260517-002.md` | 041 | Dream3R 开题报告 § 9 风险分析与应对 dual-draft + 通稿审查 + STYLE_CONTRACT final sync (DEC-20260517-002; §1-§9 全部章节完整 ~19300 内 + ~15000 外 字) |

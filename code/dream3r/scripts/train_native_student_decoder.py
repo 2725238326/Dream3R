@@ -21,6 +21,7 @@ from dream3r.native_student_decoder import NativeStudentDecoder
 from dream3r.scripts.build_oracle_expert_labels import _pointmap_abs_rel
 from dream3r.scripts.train_fusion_head import _abs_rel_loss, _stratified_split
 from dream3r.scripts.train_scf_head import (
+    _aligned_depth,
     _build_state_source,
     _load_caches,
     _per_patch_oracle_abs_rel,
@@ -50,6 +51,69 @@ def _masked_smooth_l1(pred: torch.Tensor, target: torch.Tensor, mask: torch.Tens
     if not bool(finite.any()):
         return pred.new_tensor(0.0)
     return F.smooth_l1_loss(pred[finite], target.detach()[finite])
+
+
+def _dropout_consistency_loss(
+    dropped_pointmap: torch.Tensor,
+    full_pointmap: torch.Tensor,
+    mask: torch.Tensor,
+) -> torch.Tensor:
+    """Match proposal-dropout output to the no-dropout student output."""
+
+    return _masked_smooth_l1(dropped_pointmap, full_pointmap.detach(), mask)
+
+
+def _temporal_proxy_loss(
+    pred: torch.Tensor,
+    target: torch.Tensor,
+    mask: torch.Tensor,
+) -> torch.Tensor:
+    """Differentiable adjacent-frame depth-change loss."""
+
+    pred_depth, target_depth, valid = _aligned_depth(pred, target, mask)
+    if pred_depth.shape[1] < 2:
+        return pred.new_tensor(0.0)
+    pair_valid = valid[:, 1:] & valid[:, :-1]
+    if not bool(pair_valid.any()):
+        return pred.new_tensor(0.0)
+    pred_delta = pred_depth[:, 1:] - pred_depth[:, :-1]
+    target_delta = target_depth[:, 1:] - target_depth[:, :-1]
+    denom = target_depth[:, 1:].abs().clamp_min(1e-6)
+    err = (pred_delta - target_delta) / denom
+    return F.smooth_l1_loss(err[pair_valid], torch.zeros_like(err[pair_valid]))
+
+
+def _scale_drift_loss(
+    pred: torch.Tensor,
+    target: torch.Tensor,
+    mask: torch.Tensor,
+) -> torch.Tensor:
+    """Differentiable frame-to-frame median-scale drift penalty."""
+
+    pred_depth = pred[..., 2].float()
+    target_depth = target[..., 2].float()
+    valid = (
+        mask.bool()
+        & torch.isfinite(pred_depth)
+        & torch.isfinite(target_depth)
+        & (pred_depth.abs() > 1e-6)
+        & (target_depth.abs() > 1e-6)
+    )
+    values: List[torch.Tensor] = []
+    for b in range(pred_depth.shape[0]):
+        frame_logs: List[torch.Tensor] = []
+        for n in range(pred_depth.shape[1]):
+            v = valid[b, n]
+            if bool(v.any()):
+                denom = pred_depth[b, n][v].median()
+                denom = torch.where(denom.abs() > 1e-6, denom, denom.new_tensor(1e-6))
+                scale = target_depth[b, n][v].median() / denom
+                frame_logs.append(torch.log(scale.abs().clamp_min(1e-6)))
+        if len(frame_logs) >= 2:
+            values.append(torch.stack(frame_logs).std(unbiased=False))
+    if not values:
+        return pred.new_tensor(0.0)
+    return torch.stack(values).mean()
 
 
 def _fallback_contamination_count(entries: List[Dict], expert_order: List[str]) -> int:
@@ -177,6 +241,9 @@ def train(
     proposal_dropout: float = 0.35,
     distill_weight: float = 0.5,
     residual_l2_weight: float = 0.01,
+    dropout_consistency_weight: float = 0.0,
+    temporal_loss_weight: float = 0.0,
+    scale_drift_loss_weight: float = 0.0,
     holdout_frac: float = 0.2,
     use_state: bool = True,
     shuffle_state: bool = False,
@@ -212,7 +279,10 @@ def train(
     load_state_prior_checkpoint(student, state_prior_checkpoint, device, freeze=True)
     print(
         f"loaded frozen StatePrior checkpoint={state_prior_checkpoint} "
-        f"proposal_dropout={proposal_dropout} distill_weight={distill_weight}",
+        f"proposal_dropout={proposal_dropout} distill_weight={distill_weight} "
+        f"dropout_consistency_weight={dropout_consistency_weight} "
+        f"temporal_loss_weight={temporal_loss_weight} "
+        f"scale_drift_loss_weight={scale_drift_loss_weight}",
         flush=True,
     )
 
@@ -236,6 +306,21 @@ def train(
             distill = _masked_smooth_l1(out["final_pointmap"], out["teacher_pointmap"], mask)
             residual_l2 = out["residual_delta"].pow(2).mean()
             loss = supervised + distill_weight * distill + residual_l2_weight * residual_l2
+            if dropout_consistency_weight > 0 and proposal_dropout > 0:
+                with torch.no_grad():
+                    full_out = student(pms, cfs, mc, cs, proposal_dropout=0.0)
+                consistency = _dropout_consistency_loss(
+                    out["final_pointmap"],
+                    full_out["final_pointmap"],
+                    mask,
+                )
+                loss = loss + dropout_consistency_weight * consistency
+            if temporal_loss_weight > 0:
+                temporal_loss = _temporal_proxy_loss(out["final_pointmap"], gt, mask)
+                loss = loss + temporal_loss_weight * temporal_loss
+            if scale_drift_loss_weight > 0:
+                scale_loss = _scale_drift_loss(out["final_pointmap"], gt, mask)
+                loss = loss + scale_drift_loss_weight * scale_loss
             opt.zero_grad()
             loss.backward()
             opt.step()
@@ -266,6 +351,9 @@ def train(
             "proposal_dropout": proposal_dropout,
             "distill_weight": distill_weight,
             "residual_l2_weight": residual_l2_weight,
+            "dropout_consistency_weight": dropout_consistency_weight,
+            "temporal_loss_weight": temporal_loss_weight,
+            "scale_drift_loss_weight": scale_drift_loss_weight,
             "state_prior_checkpoint": state_prior_checkpoint,
         },
         "seed": seed,
@@ -286,6 +374,9 @@ def train(
         "proposal_dropout": proposal_dropout,
         "distill_weight": distill_weight,
         "residual_l2_weight": residual_l2_weight,
+        "dropout_consistency_weight": dropout_consistency_weight,
+        "temporal_loss_weight": temporal_loss_weight,
+        "scale_drift_loss_weight": scale_drift_loss_weight,
         "residual_scale": residual_scale,
         "fallback_contamination_count": contamination,
         "final_train_loss": losses[-1] if losses else None,
@@ -317,6 +408,9 @@ def main():
     ap.add_argument("--proposal-dropout", type=float, default=0.35)
     ap.add_argument("--distill-weight", type=float, default=0.5)
     ap.add_argument("--residual-l2-weight", type=float, default=0.01)
+    ap.add_argument("--dropout-consistency-weight", type=float, default=0.0)
+    ap.add_argument("--temporal-loss-weight", type=float, default=0.0)
+    ap.add_argument("--scale-drift-loss-weight", type=float, default=0.0)
     ap.add_argument("--holdout-frac", type=float, default=0.2)
     ap.add_argument("--no-state", action="store_true")
     ap.add_argument("--shuffle-state", action="store_true")
@@ -338,6 +432,9 @@ def main():
         proposal_dropout=a.proposal_dropout,
         distill_weight=a.distill_weight,
         residual_l2_weight=a.residual_l2_weight,
+        dropout_consistency_weight=a.dropout_consistency_weight,
+        temporal_loss_weight=a.temporal_loss_weight,
+        scale_drift_loss_weight=a.scale_drift_loss_weight,
         holdout_frac=a.holdout_frac,
         use_state=not a.no_state,
         shuffle_state=a.shuffle_state,

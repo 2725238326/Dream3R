@@ -1,0 +1,24 @@
+{
+  "seed": 7,
+  "epochs": 20,
+  "n_train": 237,
+  "n_test": 59,
+  "use_state": true,
+  "shuffle_state": true,
+  "proposal_inputs_used": false,
+  "final_train_loss": 0.3333871677077772,
+  "final_eval": {
+    "kitti": {
+      "n": 49,
+      "Ours_ProposalFree3R": 0.3221,
+      "temporal_delta_abs_rel": 0.0274,
+      "scale_drift_proxy": 0.0157
+    },
+    "eth3d": {
+      "n": 10,
+      "Ours_ProposalFree3R": 0.4041,
+      "temporal_delta_abs_rel": 0.0317,
+      "scale_drift_proxy": 0.013
+    }
+  }
+}

@@ -1,5 +1,10 @@
 # Dream3R V11 VLM semantic-controller agent prompt
 
+Release-readiness note, 2026-06-05: Qwen is not the release path. Direct
+controller and Critic-prior gates are negative. DEC-20260605-037 selected the
+bounded StatePrior/residual baseline as RC after VGGT-Omega failed the
+state-control release gate.
+
 Use this prompt for a fresh agent when the goal is to explore whether
 Qwen3-VL-2B-Instruct or another compact open VLM can produce better Dream3R
 research ideas and an executable controller-improvement plan.
@@ -102,6 +107,30 @@ Do not promote the current Qwen 50-window cache into Router/Critic. Future Qwen
 work needs broader window coverage and a pre-registered real > shuffle >
 disabled promotion threshold.
 
+Post-Critic-prior note, 2026-06-04: read
+`decisions/DEC-20260604-034-qwen-semantic-critic-prior-gate.md` and
+`cycles/CYCLE-20260604-qwen-semantic-critic-prior-gate.md`. The narrower
+semantic-assisted Critic gate also failed on BUAA-Server:
+
+```text
+geometry_only F1:          0.9210526315789473
+vlm_real_plus_geometry F1: 0.8947368421052632
+vlm_disabled_plus_geometry F1: 0.9210526315789473
+promotable: false
+```
+
+Do not promote the current Qwen cache for routing or Critic triggers. Treat it
+as offline annotation/diagnostic evidence only.
+
+Post-VGGT return note, 2026-06-04: after the negative Qwen gates, normal
+Dream3R architecture work returned to the proposal-bank path. Read
+`decisions/DEC-20260604-035-vggt-omega-admission-runner.md` and
+`cycles/CYCLE-20260604-vggt-omega-admission-runner.md` before starting new
+architecture work. After user checkpoint upload, VGGT-Omega one-window smoke is
+admitted on BUAA-Server GPU1. Qwen should not be the next default lane unless a
+broader window set and real Critic/proposal-disagreement cache are prepared
+first.
+
 ```text
 You are taking over Dream3R V11 on 2026-06-03.
 
@@ -127,12 +156,16 @@ Mandatory read order:
 14. E:\Dream3R\cycles\CYCLE-20260603-qwen-controller-v2-feature-policy-repair.md
 15. E:\Dream3R\decisions\DEC-20260603-033-qwen-heldout-calibrated-controller.md
 16. E:\Dream3R\cycles\CYCLE-20260603-qwen-heldout-calibrated-controller.md
-17. E:\Dream3R\handoff\ARCHITECTURE_V10_ACCELERATED_CONVERGENCE_AGENT_PROMPT.md
-18. E:\Dream3R\decisions\DEC-20260602-024-native-student-decoder-gate.md
-19. E:\Dream3R\decisions\DEC-20260602-025-image-state-native-student-u1.md
-20. E:\Dream3R\decisions\DEC-20260602-026-vggt-omega-admission-preflight.md
-21. E:\Dream3R\planning\ARCHITECTURE_MECHANISM_INTAKE.md
-22. E:\Dream3R\WORKFLOW_STATUS.md
+17. E:\Dream3R\decisions\DEC-20260604-034-qwen-semantic-critic-prior-gate.md
+18. E:\Dream3R\cycles\CYCLE-20260604-qwen-semantic-critic-prior-gate.md
+19. E:\Dream3R\decisions\DEC-20260604-035-vggt-omega-admission-runner.md
+20. E:\Dream3R\cycles\CYCLE-20260604-vggt-omega-admission-runner.md
+21. E:\Dream3R\handoff\ARCHITECTURE_V10_ACCELERATED_CONVERGENCE_AGENT_PROMPT.md
+22. E:\Dream3R\decisions\DEC-20260602-024-native-student-decoder-gate.md
+23. E:\Dream3R\decisions\DEC-20260602-025-image-state-native-student-u1.md
+24. E:\Dream3R\decisions\DEC-20260602-026-vggt-omega-admission-preflight.md
+25. E:\Dream3R\planning\ARCHITECTURE_MECHANISM_INTAKE.md
+26. E:\Dream3R\WORKFLOW_STATUS.md
 
 Current truth:
 - Dream3R is not yet usable as a native model.
@@ -149,6 +182,10 @@ Current truth:
   the DEC-028 through DEC-033 gate results.
 - The held-out calibrated Qwen gate is negative against shuffle. Do not train
   Router/Critic from the current 50-window cache.
+- The semantic Critic-prior gate is also negative against geometry-only. Do not
+  promote the current Qwen cache for Critic triggers.
+- VGGT-Omega admission now has a resumable runner and a real-backend one-window
+  smoke result. Next VGGT work is tiny cache/oracle admission.
 
 Your job:
 Design and execute the smallest reversible gate that tests whether VLM semantic
@@ -164,9 +201,11 @@ Already implemented:
 
 Next implementation:
 1. Do not repeat DEC-031 or DEC-032 unchanged.
-2. Do not repeat DEC-033 unchanged; it already shows real does not beat shuffle.
-3. If continuing Qwen, broaden the window set first and pre-register a real >
-   shuffle > disabled promotion threshold before any Router/Critic training.
+2. Do not repeat DEC-033 or DEC-034 unchanged; both current Qwen promotion
+   gates are negative.
+3. If continuing Qwen, first build a real Critic/proposal-disagreement cache or
+   broaden the window set, then pre-register a real > shuffle > disabled
+   threshold before any Router/Critic training.
 4. Keep `max_new_tokens >= 320` unless a stronger schema-constrained decoding
    route is implemented.
 

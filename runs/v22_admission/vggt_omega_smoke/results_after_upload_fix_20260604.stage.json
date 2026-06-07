@@ -1,0 +1,115 @@
+{
+  "adapter": "vggt_omega",
+  "backend": "real",
+  "checkpoint": "/hdd3/kykt26/checkpoints/vggt_omega/VGGT-Omega-1B-512/model.pt",
+  "checkpoint_sha256": "c02da418b18bb01d0392598d3f6147366bcde1bb70fd08a5e3bf7925b0667934",
+  "checkpoint_size": 4576706117,
+  "download_requested": false,
+  "failure_flags": [],
+  "hf_filename": "vggt_omega_1b_512.pt",
+  "hf_repo": "facebook/VGGT-Omega",
+  "hf_token_present": false,
+  "image_list": "/hdd3/kykt26/code/dream3r/runs/v22_admission/vggt_omega_smoke/images.txt",
+  "output": "/hdd3/kykt26/code/dream3r/runs/v22_admission/vggt_omega_smoke/results_after_upload_fix_20260604.json",
+  "repo": "/hdd3/kykt26/externals/vggt-omega",
+  "run_smoke_requested": true,
+  "schema_version": "dream3r_vggt_omega_admission_stage_v1",
+  "smoke_command": [
+    "/home/kykt26/.conda/envs/dream3r/bin/python",
+    "-m",
+    "dream3r.scripts.smoke_vggt_omega_adapter",
+    "--repo",
+    "/hdd3/kykt26/externals/vggt-omega",
+    "--checkpoint",
+    "/hdd3/kykt26/checkpoints/vggt_omega/VGGT-Omega-1B-512/model.pt",
+    "--image-list",
+    "/hdd3/kykt26/code/dream3r/runs/v22_admission/vggt_omega_smoke/images.txt",
+    "--image-resolution",
+    "512",
+    "--resize-mode",
+    "balanced",
+    "--output",
+    "/hdd3/kykt26/code/dream3r/runs/v22_admission/vggt_omega_smoke/results_after_upload_fix_20260604.json",
+    "--device",
+    "auto"
+  ],
+  "smoke_output_tail": "/hdd3/kykt26/code/dream3r/dream3r/scripts/smoke_vggt_omega_adapter.py:184: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.\n  state = torch.load(checkpoint, map_location=\"cpu\")\n{\n  \"adapter\": \"vggt_omega\",\n  \"backend\": \"real\",\n  \"camera_and_register_tokens_shape\": [\n    1,\n    2,\n    17,\n    2048\n  ],\n  \"checkpoint\": \"/hdd3/kykt26/checkpoints/vggt_omega/VGGT-Omega-1B-512/model.pt\",\n  \"confidence_shape\": [\n    2,\n    265216,\n    1\n  ],\n  \"depth_conf_shape\": [\n    1,\n    2,\n    448,\n    592\n  ],\n  \"depth_shape\": [\n    2,\n    448,\n    592\n  ],\n  \"device\": \"cuda\",\n  \"extrinsics_shape\": [\n    1,\n    2,\n    3,\n    4\n  ],\n  \"failure_flags\": [],\n  \"fallback_contamination_count\": 0,\n  \"image_names\": [\n    \"/hdd3/kykt26/jobs/20260425-113002/input/input_01.jpg\",\n    \"/hdd3/kykt26/jobs/20260425-113002/input/input_02.jpg\"\n  ],\n  \"image_resolution\": 512,\n  \"images_shape\": [\n    1,\n    2,\n    3,\n    448,\n    592\n  ],\n  \"intrinsics_shape\": [\n    1,\n    2,\n    3,\n    3\n  ],\n  \"pointmap_shape\": [\n    2,\n    265216,\n    3\n  ],\n  \"pose_enc_shape\": [\n    1,\n    2,\n    9\n  ],\n  \"prediction_keys\": [\n    \"camera_and_register_tokens\",\n    \"depth\",\n    \"depth_conf\",\n    \"images\",\n    \"pose_enc\"\n  ],\n  \"pt_output\": \"/hdd3/kykt26/code/dream3r/runs/v22_admission/vggt_omega_smoke/results_after_upload_fix_20260604.pt\",\n  \"repo\": \"/hdd3/kykt26/externals/vggt-omega\",\n  \"resize_mode\": \"balanced\",\n  \"runtime_ms\": 17962.720496580005,\n  \"vram_mb\": 7143.912109375\n}\n",
+  "smoke_result": {
+    "adapter": "vggt_omega",
+    "backend": "real",
+    "camera_and_register_tokens_shape": [
+      1,
+      2,
+      17,
+      2048
+    ],
+    "checkpoint": "/hdd3/kykt26/checkpoints/vggt_omega/VGGT-Omega-1B-512/model.pt",
+    "confidence_shape": [
+      2,
+      265216,
+      1
+    ],
+    "depth_conf_shape": [
+      1,
+      2,
+      448,
+      592
+    ],
+    "depth_shape": [
+      2,
+      448,
+      592
+    ],
+    "device": "cuda",
+    "extrinsics_shape": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "failure_flags": [],
+    "fallback_contamination_count": 0,
+    "image_names": [
+      "/hdd3/kykt26/jobs/20260425-113002/input/input_01.jpg",
+      "/hdd3/kykt26/jobs/20260425-113002/input/input_02.jpg"
+    ],
+    "image_resolution": 512,
+    "images_shape": [
+      1,
+      2,
+      3,
+      448,
+      592
+    ],
+    "intrinsics_shape": [
+      1,
+      2,
+      3,
+      3
+    ],
+    "pointmap_shape": [
+      2,
+      265216,
+      3
+    ],
+    "pose_enc_shape": [
+      1,
+      2,
+      9
+    ],
+    "prediction_keys": [
+      "camera_and_register_tokens",
+      "depth",
+      "depth_conf",
+      "images",
+      "pose_enc"
+    ],
+    "pt_output": "/hdd3/kykt26/code/dream3r/runs/v22_admission/vggt_omega_smoke/results_after_upload_fix_20260604.pt",
+    "repo": "/hdd3/kykt26/externals/vggt-omega",
+    "resize_mode": "balanced",
+    "runtime_ms": 17962.720496580005,
+    "vram_mb": 7143.912109375
+  },
+  "smoke_returncode": 0,
+  "status": "admitted"
+}

@@ -1,5 +1,17 @@
 # Dream Research State
 
+Last updated: 2026-06-08 (Context compaction completed at `handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md`. Current usable model is Dream3R `v1.1-rc1` with KITTI/ETH3D `0.1448/0.0570`; official stable fallback remains `v1.0-rc1` with `0.1448/0.1475`; Qwen is diagnostic-only; Foundation3R is proposal-free experimental and needs explicit state-modulation/representation gates.)
+
+Last updated: 2026-06-06 (Dream3R is now packaged as formal `v1.0-rc1`: frozen-StatePrior + bounded residual, 0.1448/0.1475, with official version doc, frozen architecture doc, artifact manifest, and release verifier.)
+
+Last updated: 2026-06-06 (NativeStudent objective optimization closed: dropout-consistency and temporal/scale proxy losses were added, tested locally/server-side, and run on GPU1. Correct-state remains causal at 0.1451/0.1480 with fallback 0, but it does not beat the selected RC 0.1448/0.1475. Do not repeat same-loss native sweeps.)
+
+Last updated: 2026-06-05 (Release candidate selected: frozen StatePrior + bounded residual. VGGT-Omega is oracle-positive, especially ETH3D, but release-control negative because KITTI correct-state loses to no-state and the locked baseline.)
+
+Last updated: 2026-06-04 (After negative Qwen promotion gates, VGGT-Omega admission returned to the main proposal-bank lane. The user-provided checkpoint is uploaded and a BUAA-Server GPU1 one-window smoke is real-backend admitted with zero fallback contamination; tiny cache/oracle admission is next.)
+
+Last updated: 2026-06-04 (Qwen semantic Critic-prior gate closed diagnostic-negative on BUAA-Server: geometry-only F1 0.9211, Qwen real+geometry F1 0.8947, disabled+geometry F1 0.9211. Current Qwen semantics should stay offline annotation/diagnostic evidence, not Router/Critic training input.)
+
 Last updated: 2026-06-03 (Qwen held-out calibrated controller gate closed diagnostic-negative: leave-one-group-out semantic calibration gives real 0.1813, shuffle 0.1776, disabled 0.2365, oracle 0.1489. Because real does not beat shuffle, the current Qwen cache is offline diagnostic evidence only and must not feed Router/Critic training.)
 
 Last updated: 2026-06-03 (Qwen controller v2 repair closed weak-positive but not promotable: cause-derived risk floors and route-priority repair produce real 0.1750 vs shuffle 0.1759 vs disabled 0.2365 on the 50-window dry-run; oracle is 0.1489. Next Qwen work should be held-out calibrated/learned controller evaluation, not same-set rule tuning.)
@@ -75,8 +87,9 @@ The user is open to a combined exploration of:
 - VLM semantic-controller direction is allowed only as a support signal for routing, verification, state supervision, and compute scheduling. It must not replace geometry.
 - V11 now has a local mock-positive label-cache gate, real Qwen runtime/schema
   evidence, deterministic 50-window dry-runs, and a held-out calibrated
-  controller diagnostic. The held-out gate is negative against shuffle, so the
-  current Qwen cache is not promotable to Router/Critic.
+  controller diagnostic plus a semantic Critic-prior diagnostic. Both Qwen
+  promotion gates are negative, so the current Qwen cache is not promotable to
+  Router/Critic.
 
 ### GitHub / Paper Mining Scope
 

@@ -1,5 +1,13 @@
 # Dream Agent Master Prompt
 
+Last updated: 2026-06-08 (Context compaction anchor added: after `TASK_SNAPSHOT.md`, read `handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md` before expanding older guidance. It records v1.1 usable model state, v1.0 fallback, Qwen/VGGT/Foundation3R boundaries, frozen-core policy, validation evidence, and next priorities.)
+
+Last updated: 2026-06-05 (Release candidate selected. Next agents should package/verify frozen-StatePrior + bounded residual as RC and treat VGGT-Omega as optional teacher, not release model. Use DEC-20260605-037 and `release/DREAM3R_RC_CARD.md`.)
+
+Last updated: 2026-06-04 (VGGT-Omega one-window real-backend smoke is admitted after user-provided checkpoint upload. Use DEC-20260604-035 before VGGT-Omega follow-up; next step is tiny cache/oracle admission, not another smoke.)
+
+Last updated: 2026-06-04 (Qwen semantic Critic-prior gate closed diagnostic-negative on BUAA-Server: geometry-only F1 0.9211, real+geometry F1 0.8947, disabled+geometry F1 0.9211. Do not promote current Qwen cache for routing or Critic triggers; use DEC-20260604-034 before further Qwen work.)
+
 Last updated: 2026-06-03 (Qwen held-out calibrated controller gate closed diagnostic-negative: real 0.1813, shuffle 0.1776, disabled 0.2365, oracle 0.1489. Real beats disabled but loses to shuffle; do not train/promote Router/Critic from the current Qwen cache. Use DEC-20260603-033 before further Qwen work.)
 
 Last updated: 2026-06-03 (Qwen controller v2 repair closed weak-positive: real 0.1750, shuffle 0.1759, disabled 0.2365, oracle 0.1489. Cause-derived risk floors and route priority repair work, but the signal is still not promotable. Use DEC-20260603-032 before further Qwen work.)
@@ -39,6 +47,7 @@ Use this prompt whenever starting or resuming Dream / KYKT 3R research with Code
 For accelerated Dream3R architecture execution, hand the next agent:
 
 ```text
+E:\Dream3R\handoff\CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md
 E:\Dream3R\handoff\ARCHITECTURE_V10_ACCELERATED_CONVERGENCE_AGENT_PROMPT.md
 ```
 
@@ -78,21 +87,24 @@ E:\Dream3R\decisions\DEC-20260603-030-qwen3vl2b-weight-staging-smoke.md
 E:\Dream3R\decisions\DEC-20260603-031-qwen3vl2b-50win-controller-gate.md
 E:\Dream3R\decisions\DEC-20260603-032-qwen-controller-v2-feature-policy-repair.md
 E:\Dream3R\decisions\DEC-20260603-033-qwen-heldout-calibrated-controller.md
+E:\Dream3R\decisions\DEC-20260604-034-qwen-semantic-critic-prior-gate.md
 E:\Dream3R\code\dream3r\scripts\build_vlm_semantic_labels.py
 E:\Dream3R\code\dream3r\scripts\build_vlm_window_manifest.py
 E:\Dream3R\code\dream3r\scripts\eval_vlm_controller_dryrun.py
 E:\Dream3R\code\dream3r\scripts\eval_vlm_calibrated_controller.py
+E:\Dream3R\code\dream3r\scripts\eval_vlm_semantic_critic_gate.py
 E:\Dream3R\code\dream3r\tests\test_vlm_semantic_labels.py
 E:\Dream3R\code\dream3r\tests\test_vlm_controller_integration.py
 E:\Dream3R\runs\vlm_semantic_controller\qwen3vl2b_smoke\schema_report.json
 E:\Dream3R\runs\vlm_semantic_controller\qwen3vl2b_smoke\mock_controller_dryrun.json
 E:\Dream3R\runs\vlm_semantic_controller\qwen3vl2b_real_smoke\schema_report_5win_t320.json
 E:\Dream3R\runs\vlm_semantic_controller\qwen3vl2b_real_50win_v2\calibrated_controller_50win_t320_v2.json
+E:\Dream3R\runs\vlm_semantic_controller\qwen3vl2b_real_50win_v2\semantic_critic_gate_50win_t320_v2.json
 ```
 
 The Qwen runtime/schema gate is real-positive, but the held-out calibrated gate
-is negative against shuffle. Router/Critic promotion is blocked. No Qwen label
-is geometry evidence.
+and semantic Critic-prior gate are negative. Router/Critic promotion is blocked.
+No Qwen label is geometry evidence.
 
 ---
 
@@ -104,39 +116,40 @@ Your job is to advance an architecture-first 3R / spatial intelligence research 
 
 ### 0. Mandatory Load Protocol
 
-Read in this order. Position 1 (`TASK_SNAPSHOT.md`) is the highest-authority entry point and must be read FIRST on every session start, before any other file in this list. If `TASK_SNAPSHOT.md` shows status `in_progress` or `blocked`, do not start new work, resume from its `If interrupted, resume from` block.
+Read in this order. Position 1 (`TASK_SNAPSHOT.md`) is the highest-authority entry point and must be read FIRST on every session start, before any other file in this list. If `TASK_SNAPSHOT.md` shows status `in_progress` or `blocked`, do not start new work, resume from its `If interrupted, resume from` block. For Dream3R model work, read the 2026-06-08 context compaction immediately after `TASK_SNAPSHOT.md`.
 
 1. `E:\kykt\Dream\TASK_SNAPSHOT.md`
-2. `E:\kykt\Dream\README.md`
-3. `E:\kykt\Dream\INDEX.md`
-4. `E:\kykt\Dream\WORKFLOW_STATUS.md`
-5. `E:\kykt\Dream\RESEARCH_STATE.md`
-6. `E:\kykt\Dream\paradigm\RESEARCH_WORKFLOW.md`
-7. `E:\kykt\Dream\paradigm\RESEARCH_DATA_MODEL.md`
-8. `E:\kykt\Dream\paradigm\RESEARCH_PARADIGM.md`
-9. `E:\kykt\Dream\paradigm\RESEARCH_SKILL_RULES_DRAFT.md`
-10. `E:\kykt\Dream\paradigm\RESEARCH_CODE_DISCIPLINE.md`
-11. `E:\kykt\Dream\paradigm\RESEARCH_CONTENT_ROADMAP.md`
-12. `E:\kykt\Dream\planning\MULTI_TRACK_RESEARCH_CANVAS.md`
-13. `E:\kykt\Dream\planning\RESEARCH_GRAPH_AND_PAPER_START.md`
-14. `E:\kykt\Dream\planning\BRANCH_COMPARISON_MATRIX.md`
-15. `E:\kykt\Dream\planning\ARCHITECTURE_MECHANISM_INTAKE.md`
-16. `E:\kykt\Dream\planning\ACTION_TAXONOMY_AND_PROXY_METRICS.md`
-17. `E:\kykt\Dream\planning\BRANCH_SHORTLIST_DECISION_SURFACE.md`
-18. `E:\kykt\Dream\registry\decision_registry.md`
-19. `E:\kykt\Dream\registry\research_unit_registry.md`
-20. `E:\kykt\Dream\registry\source_registry.md`
-21. `E:\kykt\Dream\handoff\FRONTEND_DESIGN_HANDOFF_PROMPT.md`
-22. `E:\kykt\Dream\paradigm\CROSS_SPEC_SIGNAL_CONTRACT.md`
-23. `E:\kykt\Dream\paradigm\TEACHER_AUDIENCE_PROFILE.md`
-24. `E:\kykt\Dream\literature\INDEX.md`
-25. `E:\kykt\Dream\planning\MEMORY_V03_DESIGN_STUDY.md`
-26. `E:\kykt\Dream\specs\SPEC-20260508-001-dream3r-c2-memory-v03-addendum.md`
-27. `E:\kykt\Dream\planning\MEMORY_V03_P0_PROTOTYPE_PLAN.md`
-28. `E:\kykt\Dream\specs\SPEC-20260508-002-dream3r-memory-v03-ablation-addendum.md`
-29. `E:\kykt\Dream\planning\MEMORY_V03_ABLATION_REVIEW.md`
-30. `E:\kykt\Dream\planning\MEMORY_V03_P0_EXECUTION_DEC_TEMPLATE.md`
-31. `E:\kykt\Dream\experiments\prototypes\memory_v03_p0\README.md`
+2. `E:\Dream3R\handoff\CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md`
+3. `E:\kykt\Dream\README.md`
+4. `E:\kykt\Dream\INDEX.md`
+5. `E:\kykt\Dream\WORKFLOW_STATUS.md`
+6. `E:\kykt\Dream\RESEARCH_STATE.md`
+7. `E:\kykt\Dream\paradigm\RESEARCH_WORKFLOW.md`
+8. `E:\kykt\Dream\paradigm\RESEARCH_DATA_MODEL.md`
+9. `E:\kykt\Dream\paradigm\RESEARCH_PARADIGM.md`
+10. `E:\kykt\Dream\paradigm\RESEARCH_SKILL_RULES_DRAFT.md`
+11. `E:\kykt\Dream\paradigm\RESEARCH_CODE_DISCIPLINE.md`
+12. `E:\kykt\Dream\paradigm\RESEARCH_CONTENT_ROADMAP.md`
+13. `E:\kykt\Dream\planning\MULTI_TRACK_RESEARCH_CANVAS.md`
+14. `E:\kykt\Dream\planning\RESEARCH_GRAPH_AND_PAPER_START.md`
+15. `E:\kykt\Dream\planning\BRANCH_COMPARISON_MATRIX.md`
+16. `E:\kykt\Dream\planning\ARCHITECTURE_MECHANISM_INTAKE.md`
+17. `E:\kykt\Dream\planning\ACTION_TAXONOMY_AND_PROXY_METRICS.md`
+18. `E:\kykt\Dream\planning\BRANCH_SHORTLIST_DECISION_SURFACE.md`
+19. `E:\kykt\Dream\registry\decision_registry.md`
+20. `E:\kykt\Dream\registry\research_unit_registry.md`
+21. `E:\kykt\Dream\registry\source_registry.md`
+22. `E:\kykt\Dream\handoff\FRONTEND_DESIGN_HANDOFF_PROMPT.md`
+23. `E:\kykt\Dream\paradigm\CROSS_SPEC_SIGNAL_CONTRACT.md`
+24. `E:\kykt\Dream\paradigm\TEACHER_AUDIENCE_PROFILE.md`
+25. `E:\kykt\Dream\literature\INDEX.md`
+26. `E:\kykt\Dream\planning\MEMORY_V03_DESIGN_STUDY.md`
+27. `E:\kykt\Dream\specs\SPEC-20260508-001-dream3r-c2-memory-v03-addendum.md`
+28. `E:\kykt\Dream\planning\MEMORY_V03_P0_PROTOTYPE_PLAN.md`
+29. `E:\kykt\Dream\specs\SPEC-20260508-002-dream3r-memory-v03-ablation-addendum.md`
+30. `E:\kykt\Dream\planning\MEMORY_V03_ABLATION_REVIEW.md`
+31. `E:\kykt\Dream\planning\MEMORY_V03_P0_EXECUTION_DEC_TEMPLATE.md`
+32. `E:\kykt\Dream\experiments\prototypes\memory_v03_p0\README.md`
 
 Then inspect the most relevant active file for the requested task:
 

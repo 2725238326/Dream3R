@@ -1,0 +1,35 @@
+{
+  "candidate": "domain_conditional_vggt_teacher",
+  "status": "experimental_not_official_release",
+  "policy": {
+    "kitti": "Dream3R v1.0-rc1 bounded StatePrior + residual",
+    "eth3d": "VGGT-Omega-expanded SCF correct-state"
+  },
+  "metrics": {
+    "kitti_abs_rel": 0.1448,
+    "eth3d_abs_rel": 0.057,
+    "rc_kitti_abs_rel": 0.1448,
+    "rc_eth3d_abs_rel": 0.1475,
+    "eth3d_abs_rel_gain_vs_rc": 0.0905,
+    "eth3d_relative_gain_vs_rc_pct": 61.36
+  },
+  "controls": {
+    "kitti_bounded_state_beats_shuffle": true,
+    "kitti_bounded_shuffle_abs_rel": 0.1521,
+    "eth3d_vggt_state_beats_no_state": true,
+    "eth3d_vggt_state_beats_shuffle": true,
+    "eth3d_vggt_no_state_abs_rel": 0.0583,
+    "eth3d_vggt_shuffle_abs_rel": 0.0598
+  },
+  "artifact_boundary": {
+    "kitti_source": "runs/stage6_fusion/bounded_refine_sweep/frozen_prior_state_seed_7/results.json",
+    "kitti_shuffle_source": "runs/stage6_fusion/bounded_refine_sweep/frozen_prior_shuffle_state_seed_7/results.json",
+    "eth3d_source": "runs/v22_admission/vggt_omega_cache_gate/scf_state_seed7/results.json",
+    "eth3d_no_state_source": "runs/v22_admission/vggt_omega_cache_gate/scf_no_state_seed7/results.json",
+    "eth3d_shuffle_source": "runs/v22_admission/vggt_omega_cache_gate/scf_shuffle_state_seed7/results.json",
+    "warning": "KITTI and ETH3D metrics are domain-wise artifacts, not a single pooled benchmark. This candidate must not replace v1.0-rc1 without a unified cache/control rerun."
+  },
+  "passes_domainwise_controls": true,
+  "promotable_to_official": false,
+  "promotion_blocker": "domain-wise artifacts are not a unified benchmark/control rerun; rerun a single declared domain-conditional gate before replacing v1.0-rc1"
+}

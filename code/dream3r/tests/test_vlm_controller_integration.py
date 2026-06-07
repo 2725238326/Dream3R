@@ -10,6 +10,7 @@ from dream3r.scripts.build_vlm_semantic_labels import build_vlm_semantic_labels
 from dream3r.scripts.build_vlm_window_manifest import build_vlm_window_manifest
 from dream3r.scripts.eval_vlm_calibrated_controller import evaluate_vlm_calibrated_controller
 from dream3r.scripts.eval_vlm_controller_dryrun import evaluate_vlm_controller_dryrun
+from dream3r.scripts.eval_vlm_semantic_critic_gate import evaluate_vlm_semantic_critic_gate
 
 
 def _write_kitti_sequence(root: Path, sequence: str, n_frames: int = 6) -> None:
@@ -249,3 +250,71 @@ def test_vlm_calibrated_controller_uses_heldout_groups_and_controls(tmp_path):
         fold["n_test"] == 1
         for fold in result["variants"]["vlm_real"]["folds"]
     )
+
+
+def test_vlm_semantic_critic_gate_requires_real_semantic_plus_geometry(tmp_path):
+    cache_path = tmp_path / "vlm_labels.json"
+    oracle_path = tmp_path / "oracle.json"
+    output = tmp_path / "critic_gate.json"
+    feature_order = ["risk_dynamic", "suggest_verify_geometry"]
+    windows = ["hard_a", "hard_b", "easy_high_disp", "easy_low_disp"]
+    cache_path.write_text(json.dumps({
+        "controls": {
+            "feature_order": feature_order,
+            "shuffled_features": {
+                "hard_a": [0.0, 0.0],
+                "hard_b": [0.0, 0.0],
+                "easy_high_disp": [1.0, 1.0],
+                "easy_low_disp": [1.0, 1.0],
+            },
+            "disabled_features": {
+                window_id: [0.0, 0.0] for window_id in windows
+            },
+        },
+        "features": {
+            "hard_a": [1.0, 1.0],
+            "hard_b": [1.0, 1.0],
+            "easy_high_disp": [0.0, 0.0],
+            "easy_low_disp": [0.0, 0.0],
+        },
+    }), encoding="utf-8")
+    oracle_path.write_text(json.dumps({
+        "expert_order": ["fast3r", "mast3r", "spann3r"],
+        "labels": {
+            "hard_a": 1,
+            "hard_b": 1,
+            "easy_high_disp": 0,
+            "easy_low_disp": 0,
+        },
+        "metrics": {
+            "hard_a": {"fast3r": 0.50, "mast3r": 0.10, "spann3r": 0.55},
+            "hard_b": {"fast3r": 0.40, "mast3r": 0.20, "spann3r": 0.45},
+            "easy_high_disp": {"fast3r": 0.20, "mast3r": 0.50, "spann3r": 0.55},
+            "easy_low_disp": {"fast3r": 0.20, "mast3r": 0.25, "spann3r": 0.30},
+        },
+        "summary": {"metric": "abs_rel"},
+    }), encoding="utf-8")
+
+    result = evaluate_vlm_semantic_critic_gate(
+        vlm_cache=str(cache_path),
+        oracle_labels=str(oracle_path),
+        output=str(output),
+        hard_window_gap=0.05,
+        semantic_weight=0.5,
+    )
+
+    assert output.exists()
+    assert result["schema_version"] == "dream3r_vlm_semantic_critic_gate_v1"
+    assert result["state_causality_controls"]["vlm_geometry_access"] is False
+    assert result["variants"]["geometry_only"]["hard_window"]["f1"] < 1.0
+    assert result["variants"]["vlm_real_qwen_only"]["hard_window"]["f1"] == 1.0
+    assert result["variants"]["vlm_real_plus_geometry"]["hard_window"]["f1"] == 1.0
+    assert (
+        result["variants"]["vlm_real_plus_geometry"]["hard_window"]["f1"]
+        > result["variants"]["vlm_shuffle_plus_geometry"]["hard_window"]["f1"]
+    )
+    assert (
+        result["variants"]["vlm_real_plus_geometry"]["hard_window"]["f1"]
+        > result["variants"]["vlm_disabled_plus_geometry"]["hard_window"]["f1"]
+    )
+    assert result["diagnostic"]["promotable"] is False

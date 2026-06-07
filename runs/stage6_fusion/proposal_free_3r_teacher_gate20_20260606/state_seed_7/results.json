@@ -1,0 +1,27 @@
+{
+  "seed": 7,
+  "epochs": 20,
+  "n_train": 237,
+  "n_test": 59,
+  "use_state": true,
+  "shuffle_state": false,
+  "teacher_weight": 1.0,
+  "proposal_inputs_used": false,
+  "final_train_loss": 1.0944573457985487,
+  "final_eval": {
+    "kitti": {
+      "n": 49,
+      "Ours_ProposalFree3R": 0.3319,
+      "Teacher_OfflineTarget": 0.136,
+      "temporal_delta_abs_rel": 0.027,
+      "scale_drift_proxy": 0.0158
+    },
+    "eth3d": {
+      "n": 10,
+      "Ours_ProposalFree3R": 0.4056,
+      "Teacher_OfflineTarget": 0.147,
+      "temporal_delta_abs_rel": 0.0315,
+      "scale_drift_proxy": 0.0129
+    }
+  }
+}

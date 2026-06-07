@@ -1,0 +1,19 @@
+{
+  "adapter": "vggt_omega",
+  "backend": "not_run",
+  "checkpoint": "/hdd3/kykt26/checkpoints/vggt_omega/VGGT-Omega-1B-512/model.pt",
+  "download_requested": true,
+  "failure_flags": [
+    "hf_token_missing",
+    "checkpoint_missing:/hdd3/kykt26/checkpoints/vggt_omega/VGGT-Omega-1B-512/model.pt"
+  ],
+  "hf_filename": "vggt_omega_1b_512.pt",
+  "hf_repo": "facebook/VGGT-Omega",
+  "hf_token_present": false,
+  "image_list": "/hdd3/kykt26/code/dream3r/runs/v22_admission/vggt_omega_smoke/images.txt",
+  "output": "/hdd3/kykt26/code/dream3r/runs/v22_admission/vggt_omega_smoke/stage_status_20260604.json",
+  "repo": "/hdd3/kykt26/externals/vggt-omega",
+  "run_smoke_requested": true,
+  "schema_version": "dream3r_vggt_omega_admission_stage_v1",
+  "status": "blocked"
+}

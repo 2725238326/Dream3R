@@ -7,6 +7,10 @@ Handoff: `handoff/ARCHITECTURE_V11_VLM_SEMANTIC_CONTROLLER_AGENT_PROMPT.md`
 
 Post-gate status, 2026-06-03:
 
+- DEC-20260605-036/037 define and execute the release-readiness path. Qwen is
+  not on the release path unless a broader future semantic gate is designed.
+  VGGT-Omega is oracle-positive but release-control negative, so the bounded
+  StatePrior/residual baseline is the selected RC.
 - DEC-20260603-028 implemented the strict semantic label-cache gate.
 - DEC-20260603-029 implemented KITTI/ETH3D window-manifest generation and a
   Router/Critic dry-run evaluator with real/shuffle/disabled controls.
@@ -26,8 +30,16 @@ Post-gate status, 2026-06-03:
   group-out calibration over the same 50 Qwen v2 windows gives real `0.1813`,
   shuffle `0.1776`, disabled `0.2365`, oracle `0.1489`. Real does not beat
   shuffle, so the current Qwen cache is not promotable.
+- DEC-20260604-034 added a narrower semantic Critic-prior gate on BUAA-Server.
+  Qwen real+geometry hard-window F1 is `0.8947` versus geometry-only `0.9211`
+  and disabled+geometry `0.9211`. Semantics do not improve the current
+  geometry-disagreement trigger.
+- DEC-20260604-035 returned normal architecture work to VGGT-Omega/proposal-bank
+  admission by adding a resumable staging runner. After user checkpoint upload,
+  the BUAA-Server GPU1 one-window smoke is real-backend admitted with zero
+  fallback contamination. This is not a Qwen result.
 - Further Qwen work needs broader windows, a pre-registered real > shuffle >
-  disabled threshold, and Router/Critic state-causality controls. Do not keep
+  disabled threshold, and a real Critic/proposal-disagreement cache. Do not keep
   tuning deterministic rules on the same 50-window set.
 
 ## Executive summary

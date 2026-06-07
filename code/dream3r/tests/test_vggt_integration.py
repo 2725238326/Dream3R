@@ -3,6 +3,14 @@
 import pytest
 import torch
 
+from dream3r.scripts.stage_vggt_omega_admission import stage_vggt_omega_admission
+from dream3r.scripts.smoke_vggt_omega_adapter import _flatten_confidence
+from dream3r.scripts.eval_vggt_omega_oracle_admission import (
+    _dense_conf_to_patch_confidence,
+    _dense_depth_to_patch_pointmap,
+    _expanded_entry,
+    _summarize_rows,
+)
 from dream3r.composer_experts import ExpertRegistry, get_all_adapters
 from dream3r.composer_experts.base_adapter import ExpertAdapter
 from dream3r.composer_experts.vggt_adapter import VGGTAdapter
@@ -120,3 +128,137 @@ class TestRegistryWith8Experts:
         status = self.registry.adapter_status()
         assert "vggt" in status
         assert status["vggt"]["backend"] == "fallback"
+
+
+def test_stage_vggt_omega_admission_blocks_without_checkpoint_or_token(tmp_path, monkeypatch):
+    monkeypatch.delenv("HF_TOKEN", raising=False)
+    monkeypatch.delenv("HUGGINGFACE_HUB_TOKEN", raising=False)
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    image_list = tmp_path / "images.txt"
+    image = tmp_path / "frame.jpg"
+    image.write_bytes(b"fake")
+    image_list.write_text(str(image), encoding="utf-8")
+    output = tmp_path / "stage.json"
+
+    result = stage_vggt_omega_admission(
+        repo=str(repo),
+        checkpoint=str(tmp_path / "missing" / "model.pt"),
+        image_list=str(image_list),
+        output=str(output),
+        download=False,
+        run_smoke=False,
+    )
+
+    assert output.exists()
+    assert result["status"] == "blocked"
+    assert result["backend"] == "not_run"
+    assert any(flag.startswith("checkpoint_missing:") for flag in result["failure_flags"])
+
+
+def test_stage_vggt_omega_admission_ready_with_existing_checkpoint(tmp_path, monkeypatch):
+    monkeypatch.delenv("HF_TOKEN", raising=False)
+    monkeypatch.delenv("HUGGINGFACE_HUB_TOKEN", raising=False)
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    image_list = tmp_path / "images.txt"
+    image = tmp_path / "frame.jpg"
+    image.write_bytes(b"fake")
+    image_list.write_text(str(image), encoding="utf-8")
+    checkpoint = tmp_path / "checkpoint" / "model.pt"
+    checkpoint.parent.mkdir()
+    checkpoint.write_bytes(b"not-a-real-checkpoint-for-stage-only")
+    output = tmp_path / "stage.json"
+
+    result = stage_vggt_omega_admission(
+        repo=str(repo),
+        checkpoint=str(checkpoint),
+        image_list=str(image_list),
+        output=str(output),
+        download=False,
+        run_smoke=False,
+    )
+
+    assert result["status"] == "ready"
+    assert result["backend"] == "checkpoint_staged"
+    assert result["checkpoint_size"] == checkpoint.stat().st_size
+    assert "checkpoint_sha256" in result
+
+
+def test_vggt_omega_confidence_accepts_batched_frame_tensor():
+    conf = torch.ones(1, 2, 4, 5)
+
+    flattened = _flatten_confidence(conf, n_frames=2)
+
+    assert flattened.shape == (2, 20, 1)
+
+
+def test_vggt_omega_dense_depth_downsamples_to_patch_pointmap():
+    depth = torch.arange(2 * 8 * 8, dtype=torch.float32).reshape(2, 8, 8)
+
+    pointmap = _dense_depth_to_patch_pointmap(depth, n_patches=16)
+
+    assert pointmap.shape == (2, 16, 3)
+    assert torch.all(pointmap[..., :2] == 0)
+    assert torch.isfinite(pointmap[..., 2]).all()
+
+
+def test_vggt_omega_dense_conf_downsamples_to_patch_confidence():
+    conf = torch.ones(1, 2, 8, 8)
+
+    patch_conf = _dense_conf_to_patch_confidence(conf, n_patches=16)
+
+    assert patch_conf.shape == (2, 16, 1)
+    assert torch.allclose(patch_conf, torch.ones_like(patch_conf))
+
+
+def test_vggt_omega_expanded_entry_adds_real_backend():
+    base = {
+        "seq": "seq0",
+        "domain": "kitti",
+        "proposals": {
+            "fast3r": {"pointmap": torch.zeros(2, 3, 3), "confidence": torch.ones(2, 3, 1)},
+        },
+        "expert_backends": {"fast3r": True},
+        "memory_context": torch.zeros(4),
+        "conflict_score": 0.25,
+        "composer_prior": torch.zeros(1),
+        "gt_pointmap": torch.zeros(2, 3, 3),
+        "gt_mask": torch.ones(2, 3),
+    }
+
+    entry = _expanded_entry(
+        base,
+        ["fast3r"],
+        vggt_pointmap=torch.ones(1, 2, 3, 3),
+        vggt_confidence=torch.ones(1, 2, 3, 1),
+    )
+
+    assert entry["expert_order"] == ["fast3r", "vggt_omega"]
+    assert entry["expert_backends"]["vggt_omega"] is True
+    assert entry["proposals"]["vggt_omega"]["pointmap"].shape == (2, 3, 3)
+
+
+def test_vggt_omega_admission_summary_counts_oracle_gain():
+    rows = [
+        {
+            "old_oracle": 0.20,
+            "new_oracle": 0.15,
+            "old_best_expert": "mast3r",
+            "new_best_expert": "vggt_omega",
+            "metrics": {"vggt_omega": 0.15},
+        },
+        {
+            "old_oracle": 0.10,
+            "new_oracle": 0.10,
+            "old_best_expert": "fast3r",
+            "new_best_expert": "fast3r",
+            "metrics": {"vggt_omega": 0.30},
+        },
+    ]
+
+    summary = _summarize_rows(rows, ["fast3r", "mast3r", "spann3r"])
+
+    assert summary["n"] == 2
+    assert summary["vggt_omega_wins"] == 1
+    assert summary["oracle_gain_abs_rel"] > 0

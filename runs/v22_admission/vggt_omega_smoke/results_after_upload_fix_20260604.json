@@ -1,0 +1,76 @@
+{
+  "adapter": "vggt_omega",
+  "backend": "real",
+  "camera_and_register_tokens_shape": [
+    1,
+    2,
+    17,
+    2048
+  ],
+  "checkpoint": "/hdd3/kykt26/checkpoints/vggt_omega/VGGT-Omega-1B-512/model.pt",
+  "confidence_shape": [
+    2,
+    265216,
+    1
+  ],
+  "depth_conf_shape": [
+    1,
+    2,
+    448,
+    592
+  ],
+  "depth_shape": [
+    2,
+    448,
+    592
+  ],
+  "device": "cuda",
+  "extrinsics_shape": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "failure_flags": [],
+  "fallback_contamination_count": 0,
+  "image_names": [
+    "/hdd3/kykt26/jobs/20260425-113002/input/input_01.jpg",
+    "/hdd3/kykt26/jobs/20260425-113002/input/input_02.jpg"
+  ],
+  "image_resolution": 512,
+  "images_shape": [
+    1,
+    2,
+    3,
+    448,
+    592
+  ],
+  "intrinsics_shape": [
+    1,
+    2,
+    3,
+    3
+  ],
+  "pointmap_shape": [
+    2,
+    265216,
+    3
+  ],
+  "pose_enc_shape": [
+    1,
+    2,
+    9
+  ],
+  "prediction_keys": [
+    "camera_and_register_tokens",
+    "depth",
+    "depth_conf",
+    "images",
+    "pose_enc"
+  ],
+  "pt_output": "/hdd3/kykt26/code/dream3r/runs/v22_admission/vggt_omega_smoke/results_after_upload_fix_20260604.pt",
+  "repo": "/hdd3/kykt26/externals/vggt-omega",
+  "resize_mode": "balanced",
+  "runtime_ms": 17962.720496580005,
+  "vram_mb": 7143.912109375
+}

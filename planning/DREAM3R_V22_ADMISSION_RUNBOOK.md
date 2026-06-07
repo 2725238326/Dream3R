@@ -5,6 +5,33 @@ status: active deployment research plan
 decision: `decisions/DEC-20260530-014-v22-vggt-omega-admission.md`
 spec: `specs/SPEC-20260530-004-dream3r-v22-expert-admission.md`
 
+Post-runner status, 2026-06-04:
+
+- DEC-20260604-035 adds a resumable staging runner:
+  `code/dream3r/scripts/stage_vggt_omega_admission.py`.
+- Local and BUAA-Server integration tests pass: 22/22.
+- BUAA-Server staging initially wrote a blocked status because no HF token was
+  present and the checkpoint was missing.
+- After the user provided `E:\Download\vggt_omega_1b_512.pt`, the checkpoint was
+  uploaded to `/hdd3/kykt26/checkpoints/vggt_omega/VGGT-Omega-1B-512/model.pt`.
+- The one-window GPU1 smoke now records `backend == "real"` with zero fallback
+  contamination at
+  `runs/v22_admission/vggt_omega_smoke/results_after_upload_fix_20260604.json`.
+- Continue to Stage G4 tiny cache build.
+
+Release-readiness update, 2026-06-05:
+
+- A dedicated oracle-admission evaluator now exists locally at
+  `code/dream3r/scripts/eval_vggt_omega_oracle_admission.py`.
+- Local VGGT tests pass 25/25.
+- VGGT 50+50 oracle admission passed as a teacher gate:
+  KITTI +1.18%, ETH3D +18.35%.
+- VGGT-expanded SCF state controls failed the release gate:
+  KITTI correct-state 0.2296 loses to no-state 0.1966 and locked baseline
+  0.1448.
+- Keep VGGT-Omega as a real optional teacher/proposal source, especially for
+  ETH3D/indoor-like windows. Do not use it as the release model path yet.
+
 ## Goal
 
 Start from the current real proposal bank:

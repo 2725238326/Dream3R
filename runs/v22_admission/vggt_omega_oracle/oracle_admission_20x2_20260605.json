@@ -1,0 +1,1079 @@
+{
+  "adapter": "vggt_omega",
+  "backend": "real",
+  "checkpoint": "/hdd3/kykt26/checkpoints/vggt_omega/VGGT-Omega-1B-512/model.pt",
+  "device": "cuda",
+  "expert_order": [
+    "fast3r",
+    "mast3r",
+    "spann3r",
+    "vggt_omega"
+  ],
+  "failure_flags": [],
+  "fallback_contamination_count": 0,
+  "image_resolution": 512,
+  "promotable_to_tiny_cache": true,
+  "repo": "/hdd3/kykt26/externals/vggt-omega",
+  "resize_mode": "balanced",
+  "root": "/hdd3/kykt26/data",
+  "rows": {
+    "eth3d": [
+      {
+        "domain": "eth3d",
+        "image_paths": [
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843917481127523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843917554855523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843917628583523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843917702311523.png"
+        ],
+        "metrics": {
+          "fast3r": 0.12436864525079727,
+          "mast3r": 0.12881781160831451,
+          "spann3r": 0.12606705725193024,
+          "vggt_omega": 0.050170496106147766
+        },
+        "new_best_expert": "vggt_omega",
+        "new_oracle": 0.050170496106147766,
+        "old_best_expert": "fast3r",
+        "old_oracle": 0.12436864525079727,
+        "seq": "delivery_area__images_rig_cam5_undistorted__0000",
+        "vggt_depth_shape": [
+          4,
+          384,
+          672
+        ]
+      },
+      {
+        "domain": "eth3d",
+        "image_paths": [
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843917776039523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843917849767523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843917923495523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843917997223523.png"
+        ],
+        "metrics": {
+          "fast3r": 0.12365905195474625,
+          "mast3r": 0.12824325263500214,
+          "spann3r": 0.13622543215751648,
+          "vggt_omega": 0.05282411724328995
+        },
+        "new_best_expert": "vggt_omega",
+        "new_oracle": 0.05282411724328995,
+        "old_best_expert": "fast3r",
+        "old_oracle": 0.12365905195474625,
+        "seq": "delivery_area__images_rig_cam5_undistorted__0004",
+        "vggt_depth_shape": [
+          4,
+          384,
+          672
+        ]
+      },
+      {
+        "domain": "eth3d",
+        "image_paths": [
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918070951523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918144679523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918218407523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918292135523.png"
+        ],
+        "metrics": {
+          "fast3r": 0.09559431672096252,
+          "mast3r": 0.21219228208065033,
+          "spann3r": 0.12276837974786758,
+          "vggt_omega": 0.04375075921416283
+        },
+        "new_best_expert": "vggt_omega",
+        "new_oracle": 0.04375075921416283,
+        "old_best_expert": "fast3r",
+        "old_oracle": 0.09559431672096252,
+        "seq": "delivery_area__images_rig_cam5_undistorted__0008",
+        "vggt_depth_shape": [
+          4,
+          384,
+          672
+        ]
+      },
+      {
+        "domain": "eth3d",
+        "image_paths": [
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918365863523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918439591523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918513319523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918587047523.png"
+        ],
+        "metrics": {
+          "fast3r": 0.1297753006219864,
+          "mast3r": 0.18186166882514954,
+          "spann3r": 0.136041522026062,
+          "vggt_omega": 0.04810016602277756
+        },
+        "new_best_expert": "vggt_omega",
+        "new_oracle": 0.04810016602277756,
+        "old_best_expert": "fast3r",
+        "old_oracle": 0.1297753006219864,
+        "seq": "delivery_area__images_rig_cam5_undistorted__0012",
+        "vggt_depth_shape": [
+          4,
+          384,
+          672
+        ]
+      },
+      {
+        "domain": "eth3d",
+        "image_paths": [
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918660775523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918734503523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918808231523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918881959523.png"
+        ],
+        "metrics": {
+          "fast3r": 0.3693455457687378,
+          "mast3r": 0.3720608353614807,
+          "spann3r": 0.1248590499162674,
+          "vggt_omega": 0.04914487153291702
+        },
+        "new_best_expert": "vggt_omega",
+        "new_oracle": 0.04914487153291702,
+        "old_best_expert": "spann3r",
+        "old_oracle": 0.1248590499162674,
+        "seq": "delivery_area__images_rig_cam5_undistorted__0016",
+        "vggt_depth_shape": [
+          4,
+          384,
+          672
+        ]
+      },
+      {
+        "domain": "eth3d",
+        "image_paths": [
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918955687523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843919029415523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843919103143523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843919176871523.png"
+        ],
+        "metrics": {
+          "fast3r": 0.35351991653442383,
+          "mast3r": 0.26389598846435547,
+          "spann3r": 0.13173343241214752,
+          "vggt_omega": 0.056173134595155716
+        },
+        "new_best_expert": "vggt_omega",
+        "new_oracle": 0.056173134595155716,
+        "old_best_expert": "spann3r",
+        "old_oracle": 0.13173343241214752,
+        "seq": "delivery_area__images_rig_cam5_undistorted__0020",
+        "vggt_depth_shape": [
+          4,
+          384,
+          672
+        ]
+      },
+      {
+        "domain": "eth3d",
+        "image_paths": [
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843919250599523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843919324327523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843919398055523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843919471783523.png"
+        ],
+        "metrics": {
+          "fast3r": 0.26081225275993347,
+          "mast3r": 0.3251856863498688,
+          "spann3r": 0.1252499222755432,
+          "vggt_omega": 0.0465492308139801
+        },
+        "new_best_expert": "vggt_omega",
+        "new_oracle": 0.0465492308139801,
+        "old_best_expert": "spann3r",
+        "old_oracle": 0.1252499222755432,
+        "seq": "delivery_area__images_rig_cam5_undistorted__0024",
+        "vggt_depth_shape": [
+          4,
+          384,
+          672
+        ]
+      },
+      {
+        "domain": "eth3d",
+        "image_paths": [
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843919545511523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843919619239523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843919692967523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843919766695523.png"
+        ],
+        "metrics": {
+          "fast3r": 0.18924321234226227,
+          "mast3r": 0.18640664219856262,
+          "spann3r": 0.12314417958259583,
+          "vggt_omega": 0.05213311314582825
+        },
+        "new_best_expert": "vggt_omega",
+        "new_oracle": 0.05213311314582825,
+        "old_best_expert": "spann3r",
+        "old_oracle": 0.12314417958259583,
+        "seq": "delivery_area__images_rig_cam5_undistorted__0028",
+        "vggt_depth_shape": [
+          4,
+          384,
+          672
+        ]
+      },
+      {
+        "domain": "eth3d",
+        "image_paths": [
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843919840423523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843919914151523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843919987879523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843920061607523.png"
+        ],
+        "metrics": {
+          "fast3r": 0.12621061503887177,
+          "mast3r": 0.11361118406057358,
+          "spann3r": 0.11335073411464691,
+          "vggt_omega": 0.034146711230278015
+        },
+        "new_best_expert": "vggt_omega",
+        "new_oracle": 0.034146711230278015,
+        "old_best_expert": "spann3r",
+        "old_oracle": 0.11335073411464691,
+        "seq": "delivery_area__images_rig_cam5_undistorted__0032",
+        "vggt_depth_shape": [
+          4,
+          384,
+          672
+        ]
+      },
+      {
+        "domain": "eth3d",
+        "image_paths": [
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843920135335523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843920209063523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843920282791523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843920356519523.png"
+        ],
+        "metrics": {
+          "fast3r": 0.12045767903327942,
+          "mast3r": 0.1314002424478531,
+          "spann3r": 0.1317603439092636,
+          "vggt_omega": 0.04486393928527832
+        },
+        "new_best_expert": "vggt_omega",
+        "new_oracle": 0.04486393928527832,
+        "old_best_expert": "fast3r",
+        "old_oracle": 0.12045767903327942,
+        "seq": "delivery_area__images_rig_cam5_undistorted__0036",
+        "vggt_depth_shape": [
+          4,
+          384,
+          672
+        ]
+      },
+      {
+        "domain": "eth3d",
+        "image_paths": [
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975187520882738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975187594610738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975187668338738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975187742066738.png"
+        ],
+        "metrics": {
+          "fast3r": 0.08249733597040176,
+          "mast3r": 0.0331932008266449,
+          "spann3r": 0.046291790902614594,
+          "vggt_omega": 0.01710471510887146
+        },
+        "new_best_expert": "vggt_omega",
+        "new_oracle": 0.01710471510887146,
+        "old_best_expert": "mast3r",
+        "old_oracle": 0.0331932008266449,
+        "seq": "electro__images_rig_cam5_undistorted__0000",
+        "vggt_depth_shape": [
+          4,
+          384,
+          688
+        ]
+      },
+      {
+        "domain": "eth3d",
+        "image_paths": [
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975187815794738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975187889522738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975187963250738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975188036978738.png"
+        ],
+        "metrics": {
+          "fast3r": 0.06378171592950821,
+          "mast3r": 0.036680206656455994,
+          "spann3r": 0.05891263857483864,
+          "vggt_omega": 0.014309965074062347
+        },
+        "new_best_expert": "vggt_omega",
+        "new_oracle": 0.014309965074062347,
+        "old_best_expert": "mast3r",
+        "old_oracle": 0.036680206656455994,
+        "seq": "electro__images_rig_cam5_undistorted__0004",
+        "vggt_depth_shape": [
+          4,
+          384,
+          688
+        ]
+      },
+      {
+        "domain": "eth3d",
+        "image_paths": [
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975188110706738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975188184434738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975188258162738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975188331890738.png"
+        ],
+        "metrics": {
+          "fast3r": 0.05644149333238602,
+          "mast3r": 0.02807173691689968,
+          "spann3r": 0.05639084056019783,
+          "vggt_omega": 0.014297440648078918
+        },
+        "new_best_expert": "vggt_omega",
+        "new_oracle": 0.014297440648078918,
+        "old_best_expert": "mast3r",
+        "old_oracle": 0.02807173691689968,
+        "seq": "electro__images_rig_cam5_undistorted__0008",
+        "vggt_depth_shape": [
+          4,
+          384,
+          688
+        ]
+      },
+      {
+        "domain": "eth3d",
+        "image_paths": [
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975188405618738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975188479346738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975188553074738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975188626802738.png"
+        ],
+        "metrics": {
+          "fast3r": 0.062317345291376114,
+          "mast3r": 0.047097280621528625,
+          "spann3r": 0.04604088515043259,
+          "vggt_omega": 0.01790730282664299
+        },
+        "new_best_expert": "vggt_omega",
+        "new_oracle": 0.01790730282664299,
+        "old_best_expert": "spann3r",
+        "old_oracle": 0.04604088515043259,
+        "seq": "electro__images_rig_cam5_undistorted__0012",
+        "vggt_depth_shape": [
+          4,
+          384,
+          688
+        ]
+      },
+      {
+        "domain": "eth3d",
+        "image_paths": [
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975188700530738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975188774258738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975188847986738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975188921714738.png"
+        ],
+        "metrics": {
+          "fast3r": 0.050989337265491486,
+          "mast3r": 0.03985869139432907,
+          "spann3r": 0.05143957585096359,
+          "vggt_omega": 0.016113445162773132
+        },
+        "new_best_expert": "vggt_omega",
+        "new_oracle": 0.016113445162773132,
+        "old_best_expert": "mast3r",
+        "old_oracle": 0.03985869139432907,
+        "seq": "electro__images_rig_cam5_undistorted__0016",
+        "vggt_depth_shape": [
+          4,
+          384,
+          688
+        ]
+      },
+      {
+        "domain": "eth3d",
+        "image_paths": [
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975188995442738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975189069170738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975189142898738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975189216626738.png"
+        ],
+        "metrics": {
+          "fast3r": 0.04931525141000748,
+          "mast3r": 0.04669871926307678,
+          "spann3r": 0.05620816349983215,
+          "vggt_omega": 0.02937444858253002
+        },
+        "new_best_expert": "vggt_omega",
+        "new_oracle": 0.02937444858253002,
+        "old_best_expert": "mast3r",
+        "old_oracle": 0.04669871926307678,
+        "seq": "electro__images_rig_cam5_undistorted__0020",
+        "vggt_depth_shape": [
+          4,
+          384,
+          688
+        ]
+      },
+      {
+        "domain": "eth3d",
+        "image_paths": [
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975189290354738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975189364082738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975189437810738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975189511538738.png"
+        ],
+        "metrics": {
+          "fast3r": 0.06324129551649094,
+          "mast3r": 0.05000368878245354,
+          "spann3r": 0.05771927535533905,
+          "vggt_omega": 0.01995149627327919
+        },
+        "new_best_expert": "vggt_omega",
+        "new_oracle": 0.01995149627327919,
+        "old_best_expert": "mast3r",
+        "old_oracle": 0.05000368878245354,
+        "seq": "electro__images_rig_cam5_undistorted__0024",
+        "vggt_depth_shape": [
+          4,
+          384,
+          688
+        ]
+      },
+      {
+        "domain": "eth3d",
+        "image_paths": [
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975189585266738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975189658994738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975189732722738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975189806450738.png"
+        ],
+        "metrics": {
+          "fast3r": 0.059634432196617126,
+          "mast3r": 0.043969959020614624,
+          "spann3r": 0.05698030814528465,
+          "vggt_omega": 0.019918309524655342
+        },
+        "new_best_expert": "vggt_omega",
+        "new_oracle": 0.019918309524655342,
+        "old_best_expert": "mast3r",
+        "old_oracle": 0.043969959020614624,
+        "seq": "electro__images_rig_cam5_undistorted__0028",
+        "vggt_depth_shape": [
+          4,
+          384,
+          688
+        ]
+      },
+      {
+        "domain": "eth3d",
+        "image_paths": [
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975189880178738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975189953906738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975190027634738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975190101362738.png"
+        ],
+        "metrics": {
+          "fast3r": 0.06375310570001602,
+          "mast3r": 0.04159260913729668,
+          "spann3r": 0.05418195575475693,
+          "vggt_omega": 0.028038496151566505
+        },
+        "new_best_expert": "vggt_omega",
+        "new_oracle": 0.028038496151566505,
+        "old_best_expert": "mast3r",
+        "old_oracle": 0.04159260913729668,
+        "seq": "electro__images_rig_cam5_undistorted__0032",
+        "vggt_depth_shape": [
+          4,
+          384,
+          688
+        ]
+      },
+      {
+        "domain": "eth3d",
+        "image_paths": [
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975190175090738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975190248818738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975190322546738.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975190396274738.png"
+        ],
+        "metrics": {
+          "fast3r": 0.06849677115678787,
+          "mast3r": 0.053856052458286285,
+          "spann3r": 0.06009070575237274,
+          "vggt_omega": 0.01636178232729435
+        },
+        "new_best_expert": "vggt_omega",
+        "new_oracle": 0.01636178232729435,
+        "old_best_expert": "mast3r",
+        "old_oracle": 0.053856052458286285,
+        "seq": "electro__images_rig_cam5_undistorted__0036",
+        "vggt_depth_shape": [
+          4,
+          384,
+          688
+        ]
+      }
+    ],
+    "kitti": [
+      {
+        "domain": "kitti",
+        "image_paths": [
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0001_sync_02/0000000000.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0001_sync_02/0000000001.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0001_sync_02/0000000002.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0001_sync_02/0000000003.jpg"
+        ],
+        "metrics": {
+          "fast3r": 0.17622625827789307,
+          "mast3r": 0.11129435896873474,
+          "spann3r": 0.18085354566574097,
+          "vggt_omega": 0.14723730087280273
+        },
+        "new_best_expert": "mast3r",
+        "new_oracle": 0.11129435896873474,
+        "old_best_expert": "mast3r",
+        "old_oracle": 0.11129435896873474,
+        "seq": "2011_09_26_drive_0001_sync_02",
+        "vggt_depth_shape": [
+          4,
+          368,
+          720
+        ]
+      },
+      {
+        "domain": "kitti",
+        "image_paths": [
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0001_sync_03/0000000000.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0001_sync_03/0000000001.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0001_sync_03/0000000002.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0001_sync_03/0000000003.jpg"
+        ],
+        "metrics": {
+          "fast3r": 0.20248842239379883,
+          "mast3r": 0.14072823524475098,
+          "spann3r": 0.19143053889274597,
+          "vggt_omega": 0.20669414103031158
+        },
+        "new_best_expert": "mast3r",
+        "new_oracle": 0.14072823524475098,
+        "old_best_expert": "mast3r",
+        "old_oracle": 0.14072823524475098,
+        "seq": "2011_09_26_drive_0001_sync_03",
+        "vggt_depth_shape": [
+          4,
+          368,
+          720
+        ]
+      },
+      {
+        "domain": "kitti",
+        "image_paths": [
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0005_sync_02/0000000000.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0005_sync_02/0000000001.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0005_sync_02/0000000002.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0005_sync_02/0000000003.jpg"
+        ],
+        "metrics": {
+          "fast3r": 0.22472843527793884,
+          "mast3r": 0.17074471712112427,
+          "spann3r": 0.1655903160572052,
+          "vggt_omega": 0.3523190915584564
+        },
+        "new_best_expert": "spann3r",
+        "new_oracle": 0.1655903160572052,
+        "old_best_expert": "spann3r",
+        "old_oracle": 0.1655903160572052,
+        "seq": "2011_09_26_drive_0005_sync_02",
+        "vggt_depth_shape": [
+          4,
+          368,
+          720
+        ]
+      },
+      {
+        "domain": "kitti",
+        "image_paths": [
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0005_sync_03/0000000000.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0005_sync_03/0000000001.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0005_sync_03/0000000002.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0005_sync_03/0000000003.jpg"
+        ],
+        "metrics": {
+          "fast3r": 0.2745746374130249,
+          "mast3r": 0.2618156969547272,
+          "spann3r": 0.2298855185508728,
+          "vggt_omega": 0.2988826334476471
+        },
+        "new_best_expert": "spann3r",
+        "new_oracle": 0.2298855185508728,
+        "old_best_expert": "spann3r",
+        "old_oracle": 0.2298855185508728,
+        "seq": "2011_09_26_drive_0005_sync_03",
+        "vggt_depth_shape": [
+          4,
+          368,
+          720
+        ]
+      },
+      {
+        "domain": "kitti",
+        "image_paths": [
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0011_sync_02/0000000000.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0011_sync_02/0000000001.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0011_sync_02/0000000002.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0011_sync_02/0000000003.jpg"
+        ],
+        "metrics": {
+          "fast3r": 0.2363055944442749,
+          "mast3r": 0.16676224768161774,
+          "spann3r": 0.19954431056976318,
+          "vggt_omega": 0.2437419891357422
+        },
+        "new_best_expert": "mast3r",
+        "new_oracle": 0.16676224768161774,
+        "old_best_expert": "mast3r",
+        "old_oracle": 0.16676224768161774,
+        "seq": "2011_09_26_drive_0011_sync_02",
+        "vggt_depth_shape": [
+          4,
+          368,
+          720
+        ]
+      },
+      {
+        "domain": "kitti",
+        "image_paths": [
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0011_sync_03/0000000000.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0011_sync_03/0000000001.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0011_sync_03/0000000002.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0011_sync_03/0000000003.jpg"
+        ],
+        "metrics": {
+          "fast3r": 0.19399628043174744,
+          "mast3r": 0.12555573880672455,
+          "spann3r": 0.17852263152599335,
+          "vggt_omega": 0.2506292760372162
+        },
+        "new_best_expert": "mast3r",
+        "new_oracle": 0.12555573880672455,
+        "old_best_expert": "mast3r",
+        "old_oracle": 0.12555573880672455,
+        "seq": "2011_09_26_drive_0011_sync_03",
+        "vggt_depth_shape": [
+          4,
+          368,
+          720
+        ]
+      },
+      {
+        "domain": "kitti",
+        "image_paths": [
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0014_sync_02/0000000000.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0014_sync_02/0000000001.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0014_sync_02/0000000002.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0014_sync_02/0000000003.jpg"
+        ],
+        "metrics": {
+          "fast3r": 0.15873244404792786,
+          "mast3r": 0.16308513283729553,
+          "spann3r": 0.17136044800281525,
+          "vggt_omega": 0.12349589914083481
+        },
+        "new_best_expert": "vggt_omega",
+        "new_oracle": 0.12349589914083481,
+        "old_best_expert": "fast3r",
+        "old_oracle": 0.15873244404792786,
+        "seq": "2011_09_26_drive_0014_sync_02",
+        "vggt_depth_shape": [
+          4,
+          368,
+          720
+        ]
+      },
+      {
+        "domain": "kitti",
+        "image_paths": [
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0014_sync_03/0000000000.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0014_sync_03/0000000001.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0014_sync_03/0000000002.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0014_sync_03/0000000003.jpg"
+        ],
+        "metrics": {
+          "fast3r": 0.21903955936431885,
+          "mast3r": 0.2199355959892273,
+          "spann3r": 0.19434687495231628,
+          "vggt_omega": 0.1256711781024933
+        },
+        "new_best_expert": "vggt_omega",
+        "new_oracle": 0.1256711781024933,
+        "old_best_expert": "spann3r",
+        "old_oracle": 0.19434687495231628,
+        "seq": "2011_09_26_drive_0014_sync_03",
+        "vggt_depth_shape": [
+          4,
+          368,
+          720
+        ]
+      },
+      {
+        "domain": "kitti",
+        "image_paths": [
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0015_sync_02/0000000000.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0015_sync_02/0000000001.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0015_sync_02/0000000002.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0015_sync_02/0000000003.jpg"
+        ],
+        "metrics": {
+          "fast3r": 0.23107126355171204,
+          "mast3r": 0.08330613374710083,
+          "spann3r": 0.18010316789150238,
+          "vggt_omega": 0.17526517808437347
+        },
+        "new_best_expert": "mast3r",
+        "new_oracle": 0.08330613374710083,
+        "old_best_expert": "mast3r",
+        "old_oracle": 0.08330613374710083,
+        "seq": "2011_09_26_drive_0015_sync_02",
+        "vggt_depth_shape": [
+          4,
+          368,
+          720
+        ]
+      },
+      {
+        "domain": "kitti",
+        "image_paths": [
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0015_sync_03/0000000000.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0015_sync_03/0000000001.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0015_sync_03/0000000002.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0015_sync_03/0000000003.jpg"
+        ],
+        "metrics": {
+          "fast3r": 0.24436932802200317,
+          "mast3r": 0.07452522963285446,
+          "spann3r": 0.18075262010097504,
+          "vggt_omega": 0.15688598155975342
+        },
+        "new_best_expert": "mast3r",
+        "new_oracle": 0.07452522963285446,
+        "old_best_expert": "mast3r",
+        "old_oracle": 0.07452522963285446,
+        "seq": "2011_09_26_drive_0015_sync_03",
+        "vggt_depth_shape": [
+          4,
+          368,
+          720
+        ]
+      },
+      {
+        "domain": "kitti",
+        "image_paths": [
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0017_sync_02/0000000001.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0017_sync_02/0000000003.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0017_sync_02/0000000005.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0017_sync_02/0000000007.jpg"
+        ],
+        "metrics": {
+          "fast3r": 0.11839091032743454,
+          "mast3r": 0.1792171150445938,
+          "spann3r": 0.11534066498279572,
+          "vggt_omega": 0.18880599737167358
+        },
+        "new_best_expert": "spann3r",
+        "new_oracle": 0.11534066498279572,
+        "old_best_expert": "spann3r",
+        "old_oracle": 0.11534066498279572,
+        "seq": "2011_09_26_drive_0017_sync_02",
+        "vggt_depth_shape": [
+          4,
+          368,
+          720
+        ]
+      },
+      {
+        "domain": "kitti",
+        "image_paths": [
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0017_sync_03/0000000001.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0017_sync_03/0000000003.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0017_sync_03/0000000005.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0017_sync_03/0000000007.jpg"
+        ],
+        "metrics": {
+          "fast3r": 0.33916178345680237,
+          "mast3r": 0.40244466066360474,
+          "spann3r": 0.38408198952674866,
+          "vggt_omega": 0.5293549299240112
+        },
+        "new_best_expert": "fast3r",
+        "new_oracle": 0.33916178345680237,
+        "old_best_expert": "fast3r",
+        "old_oracle": 0.33916178345680237,
+        "seq": "2011_09_26_drive_0017_sync_03",
+        "vggt_depth_shape": [
+          4,
+          368,
+          720
+        ]
+      },
+      {
+        "domain": "kitti",
+        "image_paths": [
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0018_sync_02/0000000003.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0018_sync_02/0000000007.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0018_sync_02/0000000011.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0018_sync_02/0000000015.jpg"
+        ],
+        "metrics": {
+          "fast3r": 0.123542420566082,
+          "mast3r": 0.12660792469978333,
+          "spann3r": 0.09907898306846619,
+          "vggt_omega": 0.15107715129852295
+        },
+        "new_best_expert": "spann3r",
+        "new_oracle": 0.09907898306846619,
+        "old_best_expert": "spann3r",
+        "old_oracle": 0.09907898306846619,
+        "seq": "2011_09_26_drive_0018_sync_02",
+        "vggt_depth_shape": [
+          4,
+          368,
+          720
+        ]
+      },
+      {
+        "domain": "kitti",
+        "image_paths": [
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0018_sync_03/0000000003.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0018_sync_03/0000000007.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0018_sync_03/0000000011.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0018_sync_03/0000000015.jpg"
+        ],
+        "metrics": {
+          "fast3r": 0.4130500257015228,
+          "mast3r": 0.4166218340396881,
+          "spann3r": 0.48136264085769653,
+          "vggt_omega": 0.6176356077194214
+        },
+        "new_best_expert": "fast3r",
+        "new_oracle": 0.4130500257015228,
+        "old_best_expert": "fast3r",
+        "old_oracle": 0.4130500257015228,
+        "seq": "2011_09_26_drive_0018_sync_03",
+        "vggt_depth_shape": [
+          4,
+          368,
+          720
+        ]
+      },
+      {
+        "domain": "kitti",
+        "image_paths": [
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0019_sync_02/0000000000.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0019_sync_02/0000000001.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0019_sync_02/0000000002.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0019_sync_02/0000000003.jpg"
+        ],
+        "metrics": {
+          "fast3r": 0.2252303957939148,
+          "mast3r": 0.08147098869085312,
+          "spann3r": 0.18264606595039368,
+          "vggt_omega": 0.3422776460647583
+        },
+        "new_best_expert": "mast3r",
+        "new_oracle": 0.08147098869085312,
+        "old_best_expert": "mast3r",
+        "old_oracle": 0.08147098869085312,
+        "seq": "2011_09_26_drive_0019_sync_02",
+        "vggt_depth_shape": [
+          4,
+          368,
+          720
+        ]
+      },
+      {
+        "domain": "kitti",
+        "image_paths": [
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0019_sync_03/0000000000.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0019_sync_03/0000000001.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0019_sync_03/0000000002.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0019_sync_03/0000000003.jpg"
+        ],
+        "metrics": {
+          "fast3r": 0.273346483707428,
+          "mast3r": 0.11373123526573181,
+          "spann3r": 0.19494415819644928,
+          "vggt_omega": 0.37987789511680603
+        },
+        "new_best_expert": "mast3r",
+        "new_oracle": 0.11373123526573181,
+        "old_best_expert": "mast3r",
+        "old_oracle": 0.11373123526573181,
+        "seq": "2011_09_26_drive_0019_sync_03",
+        "vggt_depth_shape": [
+          4,
+          368,
+          720
+        ]
+      },
+      {
+        "domain": "kitti",
+        "image_paths": [
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0022_sync_02/0000000000.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0022_sync_02/0000000001.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0022_sync_02/0000000002.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0022_sync_02/0000000003.jpg"
+        ],
+        "metrics": {
+          "fast3r": 0.3929521441459656,
+          "mast3r": 0.10389870405197144,
+          "spann3r": 0.15719479322433472,
+          "vggt_omega": 0.3815465271472931
+        },
+        "new_best_expert": "mast3r",
+        "new_oracle": 0.10389870405197144,
+        "old_best_expert": "mast3r",
+        "old_oracle": 0.10389870405197144,
+        "seq": "2011_09_26_drive_0022_sync_02",
+        "vggt_depth_shape": [
+          4,
+          368,
+          720
+        ]
+      },
+      {
+        "domain": "kitti",
+        "image_paths": [
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0022_sync_03/0000000000.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0022_sync_03/0000000001.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0022_sync_03/0000000002.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0022_sync_03/0000000003.jpg"
+        ],
+        "metrics": {
+          "fast3r": 0.3565758764743805,
+          "mast3r": 0.14753831923007965,
+          "spann3r": 0.176752507686615,
+          "vggt_omega": 0.3779527246952057
+        },
+        "new_best_expert": "mast3r",
+        "new_oracle": 0.14753831923007965,
+        "old_best_expert": "mast3r",
+        "old_oracle": 0.14753831923007965,
+        "seq": "2011_09_26_drive_0022_sync_03",
+        "vggt_depth_shape": [
+          4,
+          368,
+          720
+        ]
+      },
+      {
+        "domain": "kitti",
+        "image_paths": [
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0028_sync_02/0000000000.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0028_sync_02/0000000001.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0028_sync_02/0000000002.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0028_sync_02/0000000003.jpg"
+        ],
+        "metrics": {
+          "fast3r": 0.2475936859846115,
+          "mast3r": 0.11136751621961594,
+          "spann3r": 0.20905925333499908,
+          "vggt_omega": 0.20801694691181183
+        },
+        "new_best_expert": "mast3r",
+        "new_oracle": 0.11136751621961594,
+        "old_best_expert": "mast3r",
+        "old_oracle": 0.11136751621961594,
+        "seq": "2011_09_26_drive_0028_sync_02",
+        "vggt_depth_shape": [
+          4,
+          368,
+          720
+        ]
+      },
+      {
+        "domain": "kitti",
+        "image_paths": [
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0028_sync_03/0000000000.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0028_sync_03/0000000001.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0028_sync_03/0000000002.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0028_sync_03/0000000003.jpg"
+        ],
+        "metrics": {
+          "fast3r": 0.30422452092170715,
+          "mast3r": 0.11551877856254578,
+          "spann3r": 0.2445220947265625,
+          "vggt_omega": 0.19623742997646332
+        },
+        "new_best_expert": "mast3r",
+        "new_oracle": 0.11551877856254578,
+        "old_best_expert": "mast3r",
+        "old_oracle": 0.11551877856254578,
+        "seq": "2011_09_26_drive_0028_sync_03",
+        "vggt_depth_shape": [
+          4,
+          368,
+          720
+        ]
+      }
+    ]
+  },
+  "runtime_ms": 79458.31246394664,
+  "schema_version": "dream3r_vggt_omega_oracle_admission_v1",
+  "summary": {
+    "eth3d": {
+      "expert_order": [
+        "fast3r",
+        "mast3r",
+        "spann3r",
+        "vggt_omega"
+      ],
+      "n": 20,
+      "new_best_counts": {
+        "vggt_omega": 20
+      },
+      "new_oracle_mean": 0.033561697043478486,
+      "old_best_counts": {
+        "fast3r": 5,
+        "mast3r": 9,
+        "spann3r": 6
+      },
+      "old_oracle_mean": 0.08160790307447315,
+      "oracle_gain_abs_rel": 0.04804620603099466,
+      "oracle_gain_pct": 58.87445237644325,
+      "vggt_omega_mean": 0.033561697043478486,
+      "vggt_omega_wins": 20
+    },
+    "kitti": {
+      "expert_order": [
+        "fast3r",
+        "mast3r",
+        "spann3r",
+        "vggt_omega"
+      ],
+      "n": 20,
+      "new_best_counts": {
+        "fast3r": 2,
+        "mast3r": 12,
+        "spann3r": 4,
+        "vggt_omega": 2
+      },
+      "new_oracle_mean": 0.14934859275817872,
+      "old_best_counts": {
+        "fast3r": 3,
+        "mast3r": 12,
+        "spann3r": 5
+      },
+      "old_oracle_mean": 0.15454420484602452,
+      "oracle_gain_abs_rel": 0.005195612087845802,
+      "oracle_gain_pct": 3.361893830326601,
+      "vggt_omega_mean": 0.2726802762597799,
+      "vggt_omega_wins": 2
+    }
+  },
+  "vram_mb": 9958.1630859375
+}

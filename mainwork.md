@@ -1,9 +1,237 @@
 # Dream3R Mainwork — Architecture Implementation Roadmap
 
 **Version:** 1.0  
-**Date:** 2026-05-23  
+**Date:** 2026-06-08
 **Author:** Cascade (handoff to next agent)  
 **Status:** Active
+
+---
+
+## 2026-06-08 context compaction
+
+Use this compressed handoff before expanding older historical plans:
+
+```text
+handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md
+```
+
+It records the current usable v1.1 model, official v1.0 fallback, Qwen/VGGT/
+Foundation3R status, frozen-core policy, server paths, validation evidence,
+non-claims, and next work priorities.
+
+## Canonical architecture entrypoint
+
+Start here before reading older plans:
+
+```text
+ARCHITECTURE.md
+release/ARCHITECTURE_STATUS.json
+```
+
+Current architecture state:
+
+```text
+official:      Dream3R v1.0-rc1, 0.1448/0.1475
+usable:        Dream3R v1.1-rc1, KITTI 0.1448 / ETH3D 0.0570
+proposal-free: Foundation3R VGGT feature-student lane exists; experimental-positive but state-causality weak
+next gate:     explicit state modulation for proposal-free Foundation3R,
+               or external packaging review for v1.1 stable promotion
+```
+
+Foundation3R proposal-free plan:
+
+```text
+plan:      planning/DREAM3R_FOUNDATION3R_PROPOSAL_FREE_PLAN_20260606.md
+contract:  RGB/images + optional Dream state -> pointmap/confidence
+forbid:    proposal pointmaps, expert confidences, teacher model calls at inference
+status:    Sprint 0/1 scaffold-positive; 50+50 real KITTI/ETH3D dense cache gate pass
+training:  scratch student diagnostics negative; best test about KITTI 0.4734 / ETH3D 0.3271
+vggt:      feature-student teacher-only 20e state 0.3237/0.1424; no-state 0.3260/0.1489; shuffle 0.3246/0.1330
+next:      state modulation or larger representation gate; keep VGGT-Omega teacher/feature backbone, not proposal geometry
+```
+
+## 2026-06-05 release-readiness gate
+
+The project now needs a publishable candidate, not another open-ended research
+loop. Current decision after VGGT cache/control execution:
+
+```text
+selected release candidate: frozen StatePrior + bounded residual, 0.1448/0.1475
+VGGT-Omega status: real optional teacher, not release model path
+```
+
+Formal version package:
+
+```text
+version:  v1.0-rc1
+entry:    release/OFFICIAL_VERSION.md
+arch:     release/ARCHITECTURE_V1_0_RC.md
+verify:   code/dream3r/scripts/verify_release_candidate.py
+api:      code/dream3r/release_candidate.py
+```
+
+Training verification sweep:
+
+```text
+local tests: 273 passed, 2 skipped
+server GPU1 training/architecture pytest subset: 37 passed
+server GPU1 1-epoch smokes:
+  runs/stage6_fusion/state_prior_train_smoke_20260606/
+  runs/stage6_fusion/proposal_set_decoder_train_smoke_20260606/frozen_prior_state_seed_7/
+  runs/stage6_fusion/native_student_train_smoke_20260606/
+  runs/stage6_fusion/image_state_student_train_smoke_20260606/
+```
+
+Domain-conditional VGGT teacher candidate:
+
+```text
+decision: decisions/DEC-20260606-039-domain-conditional-vggt-teacher.md
+policy:   KITTI -> v1.0-rc1, ETH3D -> VGGT-expanded SCF state
+metrics:  KITTI 0.1448, ETH3D 0.0570
+status:   packaged as usable v1.1-rc1; official stable still v1.0-rc1
+gate:     runs/v22_admission/domain_conditional_teacher/unified_gate_candidate_with_kitti_no_state_server.json
+controls: KITTI 0.1448/0.1553/0.1521; ETH3D 0.0570/0.0583/0.0598
+api:      dream3r.release_v11.build_dream3r_v11_release
+```
+
+Proposal-free Dream3R route:
+
+```text
+decision: decisions/DEC-20260606-041-proposal-free-3r-decoder-gate.md
+code:     code/dream3r/proposal_free_3r_decoder.py
+trainer:  code/dream3r/scripts/train_proposal_free_3r.py
+contract: image tokens + Dream state -> pointmap
+input:    no proposal pointmaps, no expert confidences
+gate20:   state 0.3273/0.4029; no-state 0.3318/0.4050; shuffle 0.3221/0.4041
+teacher:  best-single stripped target 0.1360/0.1470; student with teacher loss 0.3319/0.4056
+absrel:   larger decoder + teacher AbsRel -> state 0.3326/0.4058; controls 0.3327/0.4080 and 0.3328/0.4064
+verdict:  scaffold-positive but model-negative; needs stronger backbone/dense pretraining
+```
+
+For a module-by-module implementation map, use:
+
+```text
+planning/DREAM3R_IMPLEMENTATION_MODULE_MAP_20260606.md
+```
+
+For the fast module-completion and optimization route, use:
+
+```text
+planning/DREAM3R_FAST_MODULE_COMPLETION_OPTIMIZATION_PLAN_20260606.md
+```
+
+NativeStudentDecoder objective optimization is now closed:
+
+```text
+decision: decisions/DEC-20260606-038-native-student-objective-gates.md
+cycle:    cycles/CYCLE-20260606-native-student-objective-gates.md
+P1:       dropout-consistency gate20 -> 0.1451/0.1480
+P2:       dropout + temporal/scale gate20 -> 0.1451/0.1480
+controls: no-state 0.1557/0.1730, shuffle 0.1525/0.2468, fallback 0
+verdict:  causal but not promotable over RC 0.1448/0.1475
+```
+
+New local evaluator:
+
+```text
+code/dream3r/scripts/eval_vggt_omega_oracle_admission.py
+```
+
+Local verification:
+
+```text
+27 passed
+```
+
+The earlier server sync issue was transient:
+
+```text
+kex_exchange_identification: read: Connection reset
+```
+
+VGGT-Omega oracle admission:
+
+```text
+KITTI 50: old 0.1763 -> new 0.1742, gain 1.18%, VGGT wins 2/50
+ETH3D 50: old 0.1419 -> new 0.1158, gain 18.35%, VGGT wins 35/50
+```
+
+VGGT-expanded SCF controls:
+
+```text
+KITTI correct-state 0.2296, no-state 0.1966, shuffle-state 0.2180
+ETH3D correct-state 0.0570, no-state 0.0583, shuffle-state 0.0598
+```
+
+Release package now starts at:
+
+```text
+release/DREAM3R_RC_CARD.md
+release/RUNBOOK.md
+release/ARTIFACTS.json
+release/METHOD_ONEPAGER.md
+release/METHOD_FIGURE.md
+release/RESULT_TABLE.md
+release/PRESENTATION_OUTLINE.md
+release/PUBLISH_CHECKLIST.md
+release/REPRODUCE.md
+release/VERIFY_REPORT.md
+release/LIMITATIONS.md
+release/NON_CLAIMS.md
+```
+
+---
+
+## 2026-06-04 VGGT-Omega admission runner and smoke admission
+
+After Qwen Router/Critic promotion gates closed negative, the architecture
+mainline returns to proposal-bank admission. VGGT-Omega now has a resumable
+staging runner:
+
+```text
+code/dream3r/scripts/stage_vggt_omega_admission.py
+decisions/DEC-20260604-035-vggt-omega-admission-runner.md
+cycles/CYCLE-20260604-vggt-omega-admission-runner.md
+runs/v22_admission/vggt_omega_smoke/stage_status_20260604.json
+```
+
+Verification:
+
+```text
+local:       22 passed
+BUAA-Server: 22 passed
+```
+
+Initial blocker before user checkpoint upload:
+
+```text
+status: blocked
+backend: not_run
+hf_token_present: false
+missing checkpoint:
+/hdd3/kykt26/checkpoints/vggt_omega/VGGT-Omega-1B-512/model.pt
+```
+
+After the user provided `E:\Download\vggt_omega_1b_512.pt`, the checkpoint was
+uploaded to:
+
+```text
+/hdd3/kykt26/checkpoints/vggt_omega/VGGT-Omega-1B-512/model.pt
+sha256: c02da418b18bb01d0392598d3f6147366bcde1bb70fd08a5e3bf7925b0667934
+```
+
+The GPU1 one-window smoke is admitted:
+
+```text
+backend: real
+fallback_contamination_count: 0
+pointmap_shape: [2, 265216, 3]
+runtime_ms: 17962.720496580005
+vram_mb: 7143.912109375
+artifact: runs/v22_admission/vggt_omega_smoke/results_after_upload_fix_20260604.json
+```
+
+Next gate is tiny cache/oracle admission, not another smoke.
 
 ---
 
@@ -29,11 +257,13 @@ decisions/DEC-20260603-030-qwen3vl2b-weight-staging-smoke.md
 decisions/DEC-20260603-031-qwen3vl2b-50win-controller-gate.md
 decisions/DEC-20260603-032-qwen-controller-v2-feature-policy-repair.md
 decisions/DEC-20260603-033-qwen-heldout-calibrated-controller.md
+decisions/DEC-20260604-034-qwen-semantic-critic-prior-gate.md
 handoff/ARCHITECTURE_V11_VLM_SEMANTIC_CONTROLLER_AGENT_PROMPT.md
 code/dream3r/scripts/build_vlm_semantic_labels.py
 code/dream3r/scripts/build_vlm_window_manifest.py
 code/dream3r/scripts/eval_vlm_controller_dryrun.py
 code/dream3r/scripts/eval_vlm_calibrated_controller.py
+code/dream3r/scripts/eval_vlm_semantic_critic_gate.py
 runs/vlm_semantic_controller/qwen3vl2b_smoke/schema_report.json
 runs/vlm_semantic_controller/qwen3vl2b_smoke/mock_controller_dryrun.json
 runs/vlm_semantic_controller/qwen3vl2b_real_smoke/schema_report_5win_t320.json
@@ -42,6 +272,7 @@ runs/vlm_semantic_controller/qwen3vl2b_real_50win/controller_dryrun_50win_t320.j
 runs/vlm_semantic_controller/qwen3vl2b_real_50win_v2/schema_report_50win_t320_v2.json
 runs/vlm_semantic_controller/qwen3vl2b_real_50win_v2/controller_dryrun_50win_t320_v2.json
 runs/vlm_semantic_controller/qwen3vl2b_real_50win_v2/calibrated_controller_50win_t320_v2.json
+runs/vlm_semantic_controller/qwen3vl2b_real_50win_v2/semantic_critic_gate_50win_t320_v2.json
 ```
 
 The first executable gate is implemented and mock-positive: 4 local tests pass
@@ -78,6 +309,13 @@ leave-one-drive/group-out calibration over the same 50 Qwen v2 windows gives
 versus oracle `0.1489`. Real beats disabled but does not beat shuffle, so this
 Qwen cache remains offline diagnostic evidence only and must not be promoted to
 Router/Critic training.
+
+The semantic Critic-prior gate is also closed and negative on BUAA-Server:
+geometry-only hard-window F1 is `0.9211`, while Qwen real+geometry is `0.8947`
+and disabled+geometry is `0.9211`. This means the current Qwen semantics do not
+improve the available geometry-disagreement trigger. Keep Qwen for offline
+annotation/diagnostics unless a future real Critic/proposal-disagreement cache
+passes real > shuffle > disabled controls.
 
 The weight/runtime gate is now closed positive: Qwen3-VL-2B-Instruct weights
 are staged at `/hdd3/kykt26/checkpoints/qwen/Qwen3-VL-2B-Instruct`, an

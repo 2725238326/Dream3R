@@ -22,5 +22,17 @@ from dream3r.anchor_bank import AnchorBank
 from dream3r.nsa_attention import NSAAttention
 from dream3r.losses import Dream3RLoss
 from dream3r.gaussian_head import GaussianHead
+from dream3r.release_candidate import (
+    Dream3RReleaseCandidate,
+    Dream3RReleaseConfig,
+    build_dream3r_release_candidate,
+)
+from dream3r.release_v11 import (
+    Dream3RDomainConditionalConfig,
+    Dream3RDomainConditionalRelease,
+    build_dream3r_v11_release,
+)
+from dream3r.proposal_free_3r_decoder import ProposalFree3RDecoder
+from dream3r.foundation3r_decoder import Foundation3RDecoder, Foundation3RVGGTFeatureDecoder
 
 __version__ = "0.3.0"

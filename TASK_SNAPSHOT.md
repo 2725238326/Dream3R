@@ -1,5 +1,59 @@
 # Dream Task Snapshot
 
+Last updated: 2026-06-08 (Context compaction completed at `handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md`. It consolidates the current usable model, official fallback, Qwen/VGGT/Foundation3R status, frozen-core policy, server paths, validation evidence, non-claims, dirty-worktree warning, and next work priorities. Status remains idle: use `v1.1-rc1` for the usable package, preserve `v1.0-rc1` as official stable fallback, and continue proposal-free research only through explicit Foundation3R state-modulation/representation gates. Earlier last-updated note follows.)
+
+Last updated: 2026-06-07 (Tonight usable 3R model package added: `Dream3R v1.1-rc1` via `code/dream3r/release_v11.py`. Policy is KITTI -> v1.0-rc1 bounded StatePrior/residual, ETH3D -> VGGT-Omega-expanded SCF. Metrics/control gate: KITTI `0.1448/0.1553/0.1521`, ETH3D `0.0570/0.0583/0.0598`. Added `release/USABLE_MODEL_V1_1.md`, `verify_v11_release.py`, tests, ARTIFACTS entries, DEC-049/cycle. Local and BUAA-Server v1.1 tests/verifier pass; v1.0 verifier still pass. Earlier last-updated note follows.)
+
+Last updated: 2026-06-07 (Foundation3R VGGT feature student gate closed experimental-positive but not promotable: real VGGT-Omega aggregator features were cached for KITTI/ETH3D 50+50 on BUAA-Server GPU1 with failures 0/fallback 0. Hybrid loss collapses to `0.4734/0.3271`, so `train_foundation3r.py` now defaults `input_mode=vggt_features` to teacher-only. Teacher-only 20e gives state `0.3237/0.1424`, no-state `0.3260/0.1489`, shuffle `0.3246/0.1330` vs dense teacher `0.3554/0.0913`. VGGT features help versus scratch, but Dream state is not causally useful yet; next is explicit state modulation or v1.1 packaging, not another unchanged sweep. Earlier last-updated note follows.)
+
+Last updated: 2026-06-07 (Foundation3R scratch-student diagnostic closed negative: 20e/50e BUAA-Server GPU1 runs show current scratch CNN/Transformer mostly outputs a fixed geometry prior. Best diagnostic stays around KITTI/ETH3D train `0.4620/0.3798`, test `0.4734/0.3271`, far behind dense teacher holdout `0.3554/0.0913`. Code now has patch coordinates, positive-depth ray output, scale-normalized targets, train-split diagnostics, and log-depth loss; tests pass. Stop unchanged scratch sweeps; next Foundation3R lane must use pretrained visual representation while preserving proposal-free inference. Earlier last-updated note follows.)
+
+Last updated: 2026-06-07 (Foundation3R training entrypoint smoke closed positive: `train_foundation3r.py` and tests added; local targeted tests `13 passed`; BUAA-Server tests `5 passed`; GPU1 1-epoch smoke on 50+50 dense cache passes with `proposal_inputs_used=false` and `teacher_used_at_inference=false`. Smoke metrics: KITTI `0.4718` vs teacher `0.3554`, ETH3D `0.3269` vs teacher `0.0913`. Next: 20-epoch state/no-state/shuffle gate. Earlier last-updated note follows.)
+
+Last updated: 2026-06-07 (Foundation3R 50+50 real dense teacher cache gate closed positive on BUAA-Server GPU1: KITTI 50/50 and ETH3D 50/50 windows, failures 0, fallback 0, GT/state present, proposal fields stripped, forbidden leak count 0. Local mirrored reports are under `runs/stage6_fusion/foundation3r_dense_teacher_50x2_20260607/`. Next: implement `train_foundation3r.py` and run 1-epoch then 20-epoch state/no-state/shuffle gates. Earlier last-updated note follows.)
+
+Last updated: 2026-06-06 (Foundation3R Sprint 0/1 started and scaffold-positive: `Foundation3RDecoder`, dense teacher cache builder, and contract tests added; local targeted tests `11 passed`; BUAA-Server tests `3 passed`; mock cache smoke passed; real VGGT-Omega KITTI/ETH3D 1-window dense teacher cache smokes passed with fallback 0, GT/state present, and leak audit clean. Next: 50+50 real dense teacher cache. Earlier last-updated note follows.)
+
+Last updated: 2026-06-06 (Foundation3R proposal-free execution plan added at `planning/DREAM3R_FOUNDATION3R_PROPOSAL_FREE_PLAN_20260606.md`. It separates the release line from a real proposal-free foundation line and defines Sprint 0 contract lock plus Sprint 1 VGGT-Omega dense-teacher cache as the immediate next task. Earlier last-updated note follows.)
+
+Last updated: 2026-06-06 (Proposal-free AbsRel/capacity gate implemented and closed negative: trainer supports `teacher_absrel_weight` and decoder-capacity args, local/server tests pass, BUAA-Server GPU1 gate20 with larger decoder gives state `0.3326/0.4058`, no-state `0.3327/0.4080`, shuffle `0.3328/0.4064` vs teacher target `0.1360/0.1470`. Stop shallow proposal-free head sweeps; next proposal-free work must change representation/pretraining. Earlier last-updated note follows.)
+
+Last updated: 2026-06-06 (Proposal-free teacher distillation gate implemented and closed negative: stripped teacher cache builder added, trainer supports `teacher_weight`, local/server tests pass, BUAA-Server GPU1 gate20 with `teacher_weight=1.0` gives state `0.3319/0.4056`, no-state `0.3292/0.4049`, shuffle `0.3288/0.4116` vs teacher target `0.1360/0.1470`. Stop shallow teacher-weight sweeps; next proposal-free work needs stronger backbone/dense pretraining. Earlier last-updated note follows.)
+
+Last updated: 2026-06-06 (Proposal-free Dream3R route started: `ProposalFree3RDecoder` + trainer + tests added. Forward contract is `image tokens + Dream state -> pointmap` with no proposal inputs. BUAA-Server GPU1 gate20 is metric/control-negative: state `0.3273/0.4029`, no-state `0.3318/0.4050`, shuffle `0.3221/0.4041`; next proposal-free step must be dense teacher distillation/pretraining, not another shallow decoder run. Earlier last-updated note follows.)
+
+Last updated: 2026-06-06 (Unified domain-conditional gate passed locally and on BUAA-Server: KITTI state/no-state/shuffle `0.1448/0.1553/0.1521`, ETH3D state/no-state/shuffle `0.0570/0.0583/0.0598`, `promotable_to_official=true`. It is now a v1.1 promotion candidate; official package remains `v1.0-rc1` until deliberate v1.1 packaging. Earlier last-updated note follows.)
+
+Last updated: 2026-06-06 (Architecture cleanup pass closed: `ARCHITECTURE.md` is now the canonical architecture map and `release/ARCHITECTURE_STATUS.json` is the machine-readable status map separating official v1.0-rc1, experimental domain-conditional VGGT, side lanes, frozen core, and next unified gate. Earlier last-updated note follows.)
+
+Last updated: 2026-06-06 (Domain-conditional VGGT teacher optimization evaluated: domain-wise candidate gives KITTI `0.1448`, ETH3D `0.0570`, ETH3D gain vs RC `61.36%`; controls pass domain-wise, but `promotable_to_official=false` until a unified domain-conditional rerun. Earlier last-updated note follows.)
+
+Last updated: 2026-06-06 (Training verification sweep closed: full local tests `273 passed, 2 skipped`; BUAA-Server GPU1 training/architecture subset `37 passed`; GPU1 1-epoch smokes passed for StatePrior, ProposalSetDecoder frozen-prior, NativeStudent, and ImageStateStudent. Earlier last-updated note follows.)
+
+Last updated: 2026-06-06 (Official v1.0-rc1 architecture wrapper added: `code/dream3r/release_candidate.py` plus `code/dream3r/tests/test_release_candidate_architecture.py`. The release verifier now checks official API metadata in addition to artifacts/metrics/frozen-core policy. Earlier last-updated note follows.)
+
+Last updated: 2026-06-06 (Formal Dream3R `v1.0-rc1` package added: official entrypoint `release/OFFICIAL_VERSION.md`, frozen architecture `release/ARCHITECTURE_V1_0_RC.md`, artifact manifest version field, and read-only verifier `code/dream3r/scripts/verify_release_candidate.py`. Earlier last-updated note follows.)
+
+Last updated: 2026-06-06 (NativeStudentDecoder objective gates closed: dropout-consistency and temporal/scale proxy losses were implemented, tested locally/server-side, and run on BUAA-Server GPU1. Both P1/P2 gate20 runs stay at correct-state `0.1451/0.1480`, no-state `0.1557/0.1730`, shuffle `0.1525/0.2468`, fallback 0. They are causal but not promotable over RC `0.1448/0.1475`. Earlier last-updated note follows.)
+
+Last updated: 2026-06-06 (fast module-completion and optimization plan added at `planning/DREAM3R_FAST_MODULE_COMPLETION_OPTIMIZATION_PLAN_20260606.md`; first sprint is NativeStudentDecoder dropout-consistency loss with unchanged correct/no-state/shuffle controls. Earlier last-updated note follows.)
+
+Last updated: 2026-06-06 (implementation module map added at `planning/DREAM3R_IMPLEMENTATION_MODULE_MAP_20260606.md`; use it to understand each module and the fast next route. Earlier last-updated note follows.)
+
+Last updated: 2026-06-06 (method figure, result tables, and presentation outline added under `release/`; artifact manifest and top-level navigation updated. Next work is manuscript/demo formatting, not more broad model exploration. Earlier last-updated note follows.)
+
+Last updated: 2026-06-06 (external-facing RC packaging added: `release/METHOD_ONEPAGER.md` and `release/PUBLISH_CHECKLIST.md`; artifact manifest updated. Next work is presentation/manuscript packaging, not more broad model exploration. Earlier last-updated note follows.)
+
+Last updated: 2026-06-05 (release package completed with candidate card, runbook, artifact manifest, reproduction notes, verify report, limitations, and non-claims under `release/`. Fresh local verification: VGGT integration tests 27 passed, artifact JSON parses, frozen-core diff empty; historical tracked `.pyc` files were left untouched. Earlier last-updated note follows.)
+
+Last updated: 2026-06-05 (VGGT-Omega 50+50 oracle admission is positive but release-control negative. Oracle: KITTI +1.18%, ETH3D +18.35%; controls: KITTI correct-state 0.2296 loses to no-state 0.1966 and baseline 0.1448, ETH3D correct-state 0.0570 only slightly beats controls. Release candidate selected: frozen StatePrior + bounded residual 0.1448/0.1475. Earlier last-updated note follows.)
+
+Last updated: 2026-06-05 (release-readiness path defined after user asked to push toward publishable model; this planning note is now superseded by DEC-20260605-037. Earlier last-updated note follows.)
+
+Last updated: 2026-06-04 (VGGT-Omega checkpoint uploaded to BUAA-Server and one-window real-backend smoke admitted on GPU1: `backend=real`, fallback contamination 0, pointmap `[2,265216,3]`, runtime 17.96s, VRAM 7143.9MB. Output: `runs/v22_admission/vggt_omega_smoke/results_after_upload_fix_20260604.json`. Earlier last-updated note follows.)
+
+Last updated: 2026-06-04 (Qwen semantic Critic-prior gate closed diagnostic-negative on BUAA-Server: geometry-only hard-window F1 0.9211, Qwen-real+geometry F1 0.8947, shuffle+geometry F1 0.8421, disabled+geometry F1 0.9211. Qwen semantics do not improve the current geometry-disagreement trigger; keep Qwen as offline annotation/diagnostic only. Earlier last-updated note follows.)
+
 Last updated: 2026-06-03 (Qwen held-out calibrated controller gate closed diagnostic-negative: leave-one-drive/group-out centroid controller on 50 Qwen v2 windows gives oracle 0.1489, real 0.1813, shuffle 0.1776, disabled 0.2365. Real beats disabled but does not beat shuffle, so Qwen remains offline diagnostic/cache evidence only; no Router/Critic promotion. See `DEC-20260603-033`. Earlier last-updated note follows.)
 
 Last updated: 2026-06-03 (Qwen controller v2 feature/policy repair closed weak-positive: cause-derived risk floors and route priority repair make real Qwen beat disabled clearly and shuffle marginally on the 50-window dry-run, but `promotable=false` remains. Fresh v2: oracle 0.1489, real 0.1750, shuffle 0.1759, disabled 0.2365. No Router/Critic training, no frozen-core edit, no Qwen geometry claim. Earlier last-updated note follows.)
@@ -56,7 +110,108 @@ Last updated: 2026-05-27 (state-conditioned reconstruction pivot: added `specs/S
 
 Last updated: 2026-05-22 (v0.5 iteration test plan added after user asked how to iterate, test, and start completing the architecture plans: `planning/DREAM3R_V05_ITERATION_TEST_PLAN.md` defines L0-L4 completion standards, S0 local v0.4 edge tests, S1 A6 KITTI 8-10 window memory evidence, S2 A2 staged adapter real-backend closure, S3 A5 Test3R off-path, S4 A3 dynamic-mask promotion design, server runbook outline, evidence schema, gates, risks, and a short agent prompt; `handoff/ARCHITECTURE_V05_AGENT_START_PROMPT.md` added. Planning only; no v0.5 axis closed. Earlier last-updated note follows.) Last updated: 2026-05-22 (cycle 043 architecture-focus round after user re-prioritization "架构是最重要的内容; 开题报告和综述放一边": W20 SOTA Feature Matrix expanded at `code/dream3r/SOTA_FEATURE_MATRIX.md` (family-grouped 2nd pass) + v0.5 axes spec drafted at `specs/SPEC-20260522-001-dream3r-v05-axes.md` (8 axes A1-A8 with explicit `closes_iff`); markdown only; v0.3 + v0.4 code byte-identical; both candidate-not-final per DEC-20260501-004; sync chain applied. Earlier last-updated note follows.) Last updated: 2026-05-22 (v0.4 architecture closure round, parallel to proposal track: added `code/dream3r/contracts.py` + `repair.py` + `orchestrator.py` + 3 new test files + `ARCHITECTURE_V04_STATUS.md`; 24 new tests + 130 pre-existing tests all pass; v0.3 model.py / modules.py / bus.py / anchor_bank.py / nsa_attention.py / composer_experts/* are byte-identical to before this round; driven by `ARCHITECTURE_V04_AGENT_PROMPT.md`. Proposal-track last-updated note follows.) Last updated: 2026-05-17 (post cycle 042: user 指令开题报告扩展为双支柱项目 — 支柱 A Dream3R 新架构模型 (已有 §1-§9) + 支柱 B KYKT 聚合管理平台 (待新增); PROPOSAL_EXPANSION_PLAN.md + AGENT_HANDOFF_PROPOSAL_EXPANSION.md 已创建; 待其他 agent 执行扩展写作)
 
-Status: **idle** (V11 Qwen held-out calibrated controller gate closed diagnostic-negative. Qwen real semantic features beat disabled but do not beat shuffle under leave-one-group-out calibration, so do not train/promote Router/Critic from the current 50-window cache.)
+Status: **idle** (context compressed in `handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md`; usable model is `v1.1-rc1` via `dream3r.release_v11.build_dream3r_v11_release`; official stable package `v1.0-rc1` is preserved. Foundation3R remains experimental.)
+
+## Release-readiness gate (2026-06-05)
+
+```text
+task_id:    dream3r-release-readiness-2026-06-05
+phase:      publishable-candidate selection
+status:     release package complete; selected RC documented and locally verified
+driver:     user said "赶紧推进到这个模型能发布"
+priority:   stop broad exploration; choose VGGT-expanded model or bounded baseline release candidate
+```
+
+Subtask board:
+
+| ID | Task | Status | Evidence |
+| --- | --- | --- | --- |
+| C20260605-RC-S1 | Define release gates and stop branches | done | `DEC-20260605-036`; `DREAM3R_RELEASE_READINESS_PLAN_20260605.md` |
+| C20260605-RC-S2 | Add VGGT-Omega oracle-admission evaluator | done | `code/dream3r/scripts/eval_vggt_omega_oracle_admission.py`; local/server 27 passed |
+| C20260605-RC-S3 | Sync evaluator/test to BUAA-Server | done | transient `scp` reset recovered |
+| C20260605-RC-S4 | Run 5+5 / 20+20 / 50+50 oracle admission | done; oracle-positive | 50+50: KITTI +1.18%, ETH3D +18.35% |
+| C20260605-RC-S5 | Run VGGT-expanded state/no-state/shuffle controls | done; release-negative | KITTI correct-state 0.2296 loses to no-state 0.1966 and baseline 0.1448 |
+| C20260605-RC-S6 | Decide release branch | done | selected bounded StatePrior + residual baseline; release package under `release/` |
+| C20260605-RC-S7 | Finalize release reproducibility docs | done | `release/REPRODUCE.md`; `release/VERIFY_REPORT.md`; local 27 passed; frozen-core diff empty |
+| C20260606-RC-S8 | Add external-facing release packaging | done | `release/METHOD_ONEPAGER.md`; `release/PUBLISH_CHECKLIST.md`; artifact manifest updated |
+| C20260606-RC-S9 | Add method figure and result tables | done | `release/METHOD_FIGURE.md`; `release/RESULT_TABLE.md`; `release/PRESENTATION_OUTLINE.md` |
+| C20260606-RC-S10 | Add module implementation map | done | `planning/DREAM3R_IMPLEMENTATION_MODULE_MAP_20260606.md` |
+| C20260606-RC-S11 | Add fast module-completion optimization plan | done | `planning/DREAM3R_FAST_MODULE_COMPLETION_OPTIMIZATION_PLAN_20260606.md` |
+| C20260606-RC-S12 | Implement native-student objective gates | done; release-negative | `DEC-20260606-038`; P1/P2 correct-state `0.1451/0.1480`, fallback 0 |
+| C20260606-RC-S13 | Create formal v1.0-rc1 package | done | `release/OFFICIAL_VERSION.md`; `release/ARCHITECTURE_V1_0_RC.md`; `verify_release_candidate.py` |
+| C20260606-RC-S14 | Add official v1.0-rc1 architecture API | done | `code/dream3r/release_candidate.py`; `test_release_candidate_architecture.py` |
+| C20260606-RC-S15 | Run broad training verification | done | local `273 passed, 2 skipped`; server GPU1 `37 passed`; four 1-epoch smoke groups |
+| C20260606-RC-S16 | Evaluate domain-conditional VGGT teacher | done; experimental-positive | KITTI `0.1448`, ETH3D `0.0570`; not official without unified rerun |
+| C20260606-RC-S17 | Clean architecture entrypoints | done | `ARCHITECTURE.md`; `release/ARCHITECTURE_STATUS.json` |
+| C20260606-RC-S18 | Run unified domain-conditional gate | done; v1.1 candidate-positive | server JSON: `unified_gate_candidate_with_kitti_no_state_server.json`; controls all pass |
+| C20260606-RC-S19 | Package v1.1 or freeze as experimental | done; usable package | `release_v11.py`; `USABLE_MODEL_V1_1.md`; `verify_v11_release.py`; local/server pass |
+| C20260606-PF-S1 | Add proposal-free decoder/trainer/tests | done | `ProposalFree3RDecoder`; no proposal inputs accepted by forward contract |
+| C20260606-PF-S2 | Run proposal-free GPU1 gate20 | done; negative | state `0.3273/0.4029`, no-state `0.3318/0.4050`, shuffle `0.3221/0.4041` |
+| C20260606-PF-S3 | Build stripped teacher distillation target cache | done; mechanism-positive | `build_proposal_free_teacher_cache.py`; proposal fields stripped |
+| C20260606-PF-S4 | Run proposal-free teacher gate20 | done; negative | state `0.3319/0.4056`, no-state `0.3292/0.4049`, shuffle `0.3288/0.4116` |
+| C20260606-PF-S5 | Run proposal-free AbsRel/capacity gate | done; negative | state `0.3326/0.4058`, no-state `0.3327/0.4080`, shuffle `0.3328/0.4064` |
+| C20260606-PF-S6 | Plan Foundation3R proposal-free route | done | `planning/DREAM3R_FOUNDATION3R_PROPOSAL_FREE_PLAN_20260606.md` |
+| C20260606-PF-S7 | Implement Sprint 0/1 contract lock + dense teacher cache | done; scaffold-positive | local `11 passed`; server `3 passed`; real KITTI/ETH3D 1-window VGGT dense teacher smokes pass |
+| C20260606-PF-S8 | Build 50+50 real Foundation3R dense teacher cache | done; data-positive | KITTI 50/50, ETH3D 50/50, failures 0, fallback 0, leak audit pass |
+| C20260607-PF-S9 | Implement `train_foundation3r.py` | done; smoke-positive | local `13 passed`; server `5 passed`; GPU1 1-epoch smoke pass |
+| C20260607-PF-S10 | Run Foundation3R scratch 20-epoch state/no-state/shuffle gate | done; negative | state/no-state/shuffle collapse near `0.4734/0.3271`; see DEC-047 |
+| C20260607-PF-S11 | Add VGGT-Omega feature student and 50+50 feature cache | done; mechanism-positive | real feature caches pass failures 0/fallback 0; `vggt_patch_features [4,196,128]` |
+| C20260607-PF-S12 | Run VGGT feature teacher-only controls | done; experimental-positive, not promotable | state `0.3237/0.1424`, no-state `0.3260/0.1489`, shuffle `0.3246/0.1330`; state causality not established |
+
+## VGGT-Omega admission runner (2026-06-04)
+
+```text
+task_id:    dream3r-vggt-omega-admission-runner-2026-06-04
+phase:      v2.2 teacher/proposal-bank admission staging
+status:     one-window real-backend admitted; tiny cache/oracle gate pending
+driver:     user said Qwen does not seem useful and asked to continue normal research
+priority:   resume VGGT-Omega admission without fallback/stub contamination
+```
+
+Subtask board:
+
+| ID | Task | Status | Evidence |
+| --- | --- | --- | --- |
+| C20260604-VGO-S1 | Add resumable admission staging runner | done | `code/dream3r/scripts/stage_vggt_omega_admission.py` |
+| C20260604-VGO-S2 | Add mock blocked/ready integration tests | done | local 22 passed; server 22 passed |
+| C20260604-VGO-S3 | Run BUAA-Server staging status check | initially blocked as expected | `hf_token_missing`; checkpoint missing before upload |
+| C20260604-VGO-S4 | Upload checkpoint and rerun GPU1 smoke | done; admitted | `backend=real`; `fallback_contamination_count=0`; pointmap `[2,265216,3]` |
+| C20260604-VGO-S5 | Update DEC/cycle/guidance chain | done | `DEC-20260604-035`, `CYCLE-20260604-vggt-omega-admission-runner` |
+
+## V11 Qwen semantic Critic-prior gate (2026-06-04)
+
+```text
+task_id:    dream3r-qwen-semantic-critic-prior-gate-2026-06-04
+phase:      semantic-assisted Critic trigger diagnostic
+status:     closed diagnostic-negative; not promotable
+driver:     user said "语义不能辅助吗？" then "全面推进1"
+priority:   test Qwen as Critic prior only, not as geometry or expert router
+```
+
+Subtask board:
+
+| ID | Task | Status | Evidence |
+| --- | --- | --- | --- |
+| C20260604-QWCR-S1 | Add semantic Critic-prior evaluator | done | `eval_vlm_semantic_critic_gate.py` |
+| C20260604-QWCR-S2 | Add regression test for real semantic + geometry | done | local 11 passed; server 11 passed |
+| C20260604-QWCR-S3 | Run server 50-window gate on Qwen v2 cache | done; negative | geometry-only F1 0.9211; real+geometry F1 0.8947; disabled+geometry F1 0.9211 |
+| C20260604-QWCR-S4 | Update DEC/cycle/guidance chain | done | `DEC-20260604-034`, `CYCLE-20260604-qwen-semantic-critic-prior-gate` |
+
+Artifacts:
+
+```text
+code/dream3r/scripts/eval_vlm_semantic_critic_gate.py
+runs/vlm_semantic_controller/qwen3vl2b_real_50win_v2/semantic_critic_gate_50win_t320_v2.json
+```
+
+If interrupted, resume from:
+
+```text
+Do not promote the current Qwen 50-window cache for routing or Critic triggers.
+Both direct controller and semantic Critic-prior gates are negative. Next useful
+architecture work should move to VGGT-Omega teacher/proposal-bank admission or
+build a real Critic/proposal-disagreement cache before re-testing semantics.
+```
 
 ## V11 Qwen held-out calibrated controller (2026-06-03)
 

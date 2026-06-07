@@ -1,0 +1,325 @@
+{
+  "adapter": "vggt_omega",
+  "backend": "real",
+  "checkpoint": "/hdd3/kykt26/checkpoints/vggt_omega/VGGT-Omega-1B-512/model.pt",
+  "device": "cuda",
+  "expert_order": [
+    "fast3r",
+    "mast3r",
+    "spann3r",
+    "vggt_omega"
+  ],
+  "failure_flags": [],
+  "fallback_contamination_count": 0,
+  "image_resolution": 512,
+  "promotable_to_tiny_cache": true,
+  "repo": "/hdd3/kykt26/externals/vggt-omega",
+  "resize_mode": "balanced",
+  "root": "/hdd3/kykt26/data",
+  "rows": {
+    "eth3d": [
+      {
+        "domain": "eth3d",
+        "image_paths": [
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843917481127523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843917554855523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843917628583523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843917702311523.png"
+        ],
+        "metrics": {
+          "fast3r": 0.12436864525079727,
+          "mast3r": 0.12881781160831451,
+          "spann3r": 0.12606705725193024,
+          "vggt_omega": 0.050170496106147766
+        },
+        "new_best_expert": "vggt_omega",
+        "new_oracle": 0.050170496106147766,
+        "old_best_expert": "fast3r",
+        "old_oracle": 0.12436864525079727,
+        "seq": "delivery_area__images_rig_cam5_undistorted__0000",
+        "vggt_depth_shape": [
+          4,
+          384,
+          672
+        ]
+      },
+      {
+        "domain": "eth3d",
+        "image_paths": [
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843917776039523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843917849767523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843917923495523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843917997223523.png"
+        ],
+        "metrics": {
+          "fast3r": 0.12365905195474625,
+          "mast3r": 0.12824325263500214,
+          "spann3r": 0.13622543215751648,
+          "vggt_omega": 0.05282411724328995
+        },
+        "new_best_expert": "vggt_omega",
+        "new_oracle": 0.05282411724328995,
+        "old_best_expert": "fast3r",
+        "old_oracle": 0.12365905195474625,
+        "seq": "delivery_area__images_rig_cam5_undistorted__0004",
+        "vggt_depth_shape": [
+          4,
+          384,
+          672
+        ]
+      },
+      {
+        "domain": "eth3d",
+        "image_paths": [
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918070951523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918144679523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918218407523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918292135523.png"
+        ],
+        "metrics": {
+          "fast3r": 0.09559431672096252,
+          "mast3r": 0.21219228208065033,
+          "spann3r": 0.12276837974786758,
+          "vggt_omega": 0.04375075921416283
+        },
+        "new_best_expert": "vggt_omega",
+        "new_oracle": 0.04375075921416283,
+        "old_best_expert": "fast3r",
+        "old_oracle": 0.09559431672096252,
+        "seq": "delivery_area__images_rig_cam5_undistorted__0008",
+        "vggt_depth_shape": [
+          4,
+          384,
+          672
+        ]
+      },
+      {
+        "domain": "eth3d",
+        "image_paths": [
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918365863523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918439591523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918513319523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918587047523.png"
+        ],
+        "metrics": {
+          "fast3r": 0.1297753006219864,
+          "mast3r": 0.18186166882514954,
+          "spann3r": 0.136041522026062,
+          "vggt_omega": 0.04810016602277756
+        },
+        "new_best_expert": "vggt_omega",
+        "new_oracle": 0.04810016602277756,
+        "old_best_expert": "fast3r",
+        "old_oracle": 0.1297753006219864,
+        "seq": "delivery_area__images_rig_cam5_undistorted__0012",
+        "vggt_depth_shape": [
+          4,
+          384,
+          672
+        ]
+      },
+      {
+        "domain": "eth3d",
+        "image_paths": [
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918660775523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918734503523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918808231523.png",
+          "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918881959523.png"
+        ],
+        "metrics": {
+          "fast3r": 0.3693455457687378,
+          "mast3r": 0.3720608353614807,
+          "spann3r": 0.1248590499162674,
+          "vggt_omega": 0.04914487153291702
+        },
+        "new_best_expert": "vggt_omega",
+        "new_oracle": 0.04914487153291702,
+        "old_best_expert": "spann3r",
+        "old_oracle": 0.1248590499162674,
+        "seq": "delivery_area__images_rig_cam5_undistorted__0016",
+        "vggt_depth_shape": [
+          4,
+          384,
+          672
+        ]
+      }
+    ],
+    "kitti": [
+      {
+        "domain": "kitti",
+        "image_paths": [
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0001_sync_02/0000000000.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0001_sync_02/0000000001.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0001_sync_02/0000000002.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0001_sync_02/0000000003.jpg"
+        ],
+        "metrics": {
+          "fast3r": 0.17622625827789307,
+          "mast3r": 0.11129435896873474,
+          "spann3r": 0.18085354566574097,
+          "vggt_omega": 0.14723730087280273
+        },
+        "new_best_expert": "mast3r",
+        "new_oracle": 0.11129435896873474,
+        "old_best_expert": "mast3r",
+        "old_oracle": 0.11129435896873474,
+        "seq": "2011_09_26_drive_0001_sync_02",
+        "vggt_depth_shape": [
+          4,
+          368,
+          720
+        ]
+      },
+      {
+        "domain": "kitti",
+        "image_paths": [
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0001_sync_03/0000000000.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0001_sync_03/0000000001.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0001_sync_03/0000000002.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0001_sync_03/0000000003.jpg"
+        ],
+        "metrics": {
+          "fast3r": 0.20248842239379883,
+          "mast3r": 0.14072823524475098,
+          "spann3r": 0.19143053889274597,
+          "vggt_omega": 0.20669414103031158
+        },
+        "new_best_expert": "mast3r",
+        "new_oracle": 0.14072823524475098,
+        "old_best_expert": "mast3r",
+        "old_oracle": 0.14072823524475098,
+        "seq": "2011_09_26_drive_0001_sync_03",
+        "vggt_depth_shape": [
+          4,
+          368,
+          720
+        ]
+      },
+      {
+        "domain": "kitti",
+        "image_paths": [
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0005_sync_02/0000000000.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0005_sync_02/0000000001.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0005_sync_02/0000000002.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0005_sync_02/0000000003.jpg"
+        ],
+        "metrics": {
+          "fast3r": 0.22472843527793884,
+          "mast3r": 0.17074471712112427,
+          "spann3r": 0.1655903160572052,
+          "vggt_omega": 0.3523190915584564
+        },
+        "new_best_expert": "spann3r",
+        "new_oracle": 0.1655903160572052,
+        "old_best_expert": "spann3r",
+        "old_oracle": 0.1655903160572052,
+        "seq": "2011_09_26_drive_0005_sync_02",
+        "vggt_depth_shape": [
+          4,
+          368,
+          720
+        ]
+      },
+      {
+        "domain": "kitti",
+        "image_paths": [
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0005_sync_03/0000000000.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0005_sync_03/0000000001.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0005_sync_03/0000000002.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0005_sync_03/0000000003.jpg"
+        ],
+        "metrics": {
+          "fast3r": 0.2745746374130249,
+          "mast3r": 0.2618156969547272,
+          "spann3r": 0.2298855185508728,
+          "vggt_omega": 0.2988826334476471
+        },
+        "new_best_expert": "spann3r",
+        "new_oracle": 0.2298855185508728,
+        "old_best_expert": "spann3r",
+        "old_oracle": 0.2298855185508728,
+        "seq": "2011_09_26_drive_0005_sync_03",
+        "vggt_depth_shape": [
+          4,
+          368,
+          720
+        ]
+      },
+      {
+        "domain": "kitti",
+        "image_paths": [
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0011_sync_02/0000000000.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0011_sync_02/0000000001.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0011_sync_02/0000000002.jpg",
+          "/hdd3/kykt26/data/kitti/rectified/2011_09_26_drive_0011_sync_02/0000000003.jpg"
+        ],
+        "metrics": {
+          "fast3r": 0.2363055944442749,
+          "mast3r": 0.16676224768161774,
+          "spann3r": 0.19954431056976318,
+          "vggt_omega": 0.2437419891357422
+        },
+        "new_best_expert": "mast3r",
+        "new_oracle": 0.16676224768161774,
+        "old_best_expert": "mast3r",
+        "old_oracle": 0.16676224768161774,
+        "seq": "2011_09_26_drive_0011_sync_02",
+        "vggt_depth_shape": [
+          4,
+          368,
+          720
+        ]
+      }
+    ]
+  },
+  "runtime_ms": 19611.190569587052,
+  "schema_version": "dream3r_vggt_omega_oracle_admission_v1",
+  "summary": {
+    "eth3d": {
+      "expert_order": [
+        "fast3r",
+        "mast3r",
+        "spann3r",
+        "vggt_omega"
+      ],
+      "n": 5,
+      "new_best_counts": {
+        "vggt_omega": 5
+      },
+      "new_oracle_mean": 0.048798082023859025,
+      "old_best_counts": {
+        "fast3r": 4,
+        "spann3r": 1
+      },
+      "old_oracle_mean": 0.11965127289295197,
+      "oracle_gain_abs_rel": 0.07085319086909295,
+      "oracle_gain_pct": 59.21641212499507,
+      "vggt_omega_mean": 0.048798082023859025,
+      "vggt_omega_wins": 5
+    },
+    "kitti": {
+      "expert_order": [
+        "fast3r",
+        "mast3r",
+        "spann3r",
+        "vggt_omega"
+      ],
+      "n": 5,
+      "new_best_counts": {
+        "mast3r": 3,
+        "spann3r": 2
+      },
+      "new_oracle_mean": 0.1628521353006363,
+      "old_best_counts": {
+        "mast3r": 3,
+        "spann3r": 2
+      },
+      "old_oracle_mean": 0.1628521353006363,
+      "oracle_gain_abs_rel": 0.0,
+      "oracle_gain_pct": 0.0,
+      "vggt_omega_mean": 0.249775031208992,
+      "vggt_omega_wins": 0
+    }
+  },
+  "vram_mb": 9958.1630859375
+}

@@ -112,6 +112,8 @@ def depth_to_camera_pointmap(depth: torch.Tensor, intrinsics: torch.Tensor) -> t
 
 def _flatten_confidence(depth_conf: torch.Tensor, n_frames: int) -> torch.Tensor:
     conf = depth_conf.detach().float()
+    if conf.ndim == 4 and conf.shape[0] == 1:
+        conf = conf.squeeze(0)
     if conf.ndim == 5 and conf.shape[0] == 1:
         conf = conf.squeeze(0)
     if conf.ndim == 4 and conf.shape[-1] == 1:

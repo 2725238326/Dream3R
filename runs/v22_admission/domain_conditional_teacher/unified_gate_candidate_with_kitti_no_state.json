@@ -1,0 +1,32 @@
+{
+  "candidate": "unified_domain_conditional_vggt_teacher",
+  "status": "pass",
+  "policy": {
+    "kitti": "Dream3R v1.0-rc1 bounded StatePrior + residual",
+    "eth3d": "VGGT-Omega-expanded SCF correct-state"
+  },
+  "metrics": {
+    "kitti_state_abs_rel": 0.1448,
+    "kitti_no_state_abs_rel": 0.1553,
+    "kitti_shuffle_abs_rel": 0.1521,
+    "eth3d_state_abs_rel": 0.057,
+    "eth3d_no_state_abs_rel": 0.0583,
+    "eth3d_shuffle_abs_rel": 0.0598
+  },
+  "controls": {
+    "kitti_state_beats_no_state": true,
+    "kitti_state_beats_shuffle": true,
+    "eth3d_state_beats_no_state": true,
+    "eth3d_state_beats_shuffle": true
+  },
+  "promotion_blockers": [],
+  "promotable_to_official": true,
+  "artifact_paths": {
+    "kitti_state": "runs/stage6_fusion/bounded_refine_sweep/frozen_prior_state_seed_7/results.json",
+    "kitti_no_state": "runs/stage6_fusion/bounded_refine_sweep/frozen_prior_no_state_seed_7/results.json",
+    "kitti_shuffle": "runs/stage6_fusion/bounded_refine_sweep/frozen_prior_shuffle_state_seed_7/results.json",
+    "eth3d_state": "runs/v22_admission/vggt_omega_cache_gate/scf_state_seed7/results.json",
+    "eth3d_no_state": "runs/v22_admission/vggt_omega_cache_gate/scf_no_state_seed7/results.json",
+    "eth3d_shuffle": "runs/v22_admission/vggt_omega_cache_gate/scf_shuffle_state_seed7/results.json"
+  }
+}

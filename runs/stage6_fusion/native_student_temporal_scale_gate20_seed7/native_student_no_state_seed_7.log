@@ -1,0 +1,81 @@
+loaded 296 entries, d_memory=128, experts=['fast3r', 'mast3r', 'spann3r'], fallback_contamination_count=0
+/home/kykt26/.conda/envs/dream3r/lib/python3.10/site-packages/torch/nn/modules/transformer.py:379: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  warnings.warn(
+/hdd3/kykt26/code/dream3r/dream3r/scripts/train_native_student_decoder.py:42: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  ckpt = torch.load(checkpoint_path, map_location=device)
+loaded frozen StatePrior checkpoint=runs/stage6_fusion/state_prior_sweep/state_seed_7/latest.pt proposal_dropout=0.35 distill_weight=0.5 dropout_consistency_weight=0.25 temporal_loss_weight=0.05 scale_drift_loss_weight=0.05
+split: train=237 test=59 use_state=False shuffle_state=False seed=7
+epoch    1  loss=0.17312  eval={"kitti": {"n": 49, "B_fast3r": 0.2326, "B_mast3r": 0.1523, "B_spann3r": 0.1618, "B_oracle": 0.136, "B_patch_oracle": 0.0976, "Teacher_FrozenStatePrior": 0.156, "Ours_NativeStudent": 0.1557, "best_single": 0.1523, "rel_imp_vs_best_single_pp": -2.24, "rel_imp_vs_teacher_pp": 0.16, "oracle_gap_pp": 14.49, "patch_oracle_gap_pp": 59.52, "temporal_delta_abs_rel": 0.0493, "scale_drift_proxy": 0.0317, "teacher_temporal_delta_abs_rel": 0.0494, "teacher_scale_drift_proxy": 0.0318, "mean_residual_norm": 0.003485, "mean_prior_entropy": 0.7669}, "eth3d": {"n": 10, "B_fast3r": 0.236, "B_mast3r": 0.2831, "B_spann3r": 0.1585, "B_oracle": 0.1468, "B_patch_oracle": 0.0974, "Teacher_FrozenStatePrior": 0.1735, "Ours_NativeStudent": 0.173, "best_single": 0.1585, "rel_imp_vs_best_single_pp": -9.18, "rel_imp_vs_teacher_pp": 0.25, "oracle_gap_pp": 17.85, "patch_oracle_gap_pp": 77.62, "temporal_delta_abs_rel": 0.0429, "scale_drift_proxy": 0.0208, "teacher_temporal_delta_abs_rel": 0.0429, "teacher_scale_drift_proxy": 0.0208, "mean_residual_norm": 0.005799, "mean_prior_entropy": 0.8316}}
+epoch   10  loss=0.17464  eval={"kitti": {"n": 49, "B_fast3r": 0.2326, "B_mast3r": 0.1523, "B_spann3r": 0.1618, "B_oracle": 0.136, "B_patch_oracle": 0.0976, "Teacher_FrozenStatePrior": 0.156, "Ours_NativeStudent": 0.1557, "best_single": 0.1523, "rel_imp_vs_best_single_pp": -2.24, "rel_imp_vs_teacher_pp": 0.16, "oracle_gap_pp": 14.49, "patch_oracle_gap_pp": 59.52, "temporal_delta_abs_rel": 0.0493, "scale_drift_proxy": 0.0317, "teacher_temporal_delta_abs_rel": 0.0494, "teacher_scale_drift_proxy": 0.0318, "mean_residual_norm": 0.0038, "mean_prior_entropy": 0.7669}, "eth3d": {"n": 10, "B_fast3r": 0.236, "B_mast3r": 0.2831, "B_spann3r": 0.1585, "B_oracle": 0.1468, "B_patch_oracle": 0.0974, "Teacher_FrozenStatePrior": 0.1735, "Ours_NativeStudent": 0.173, "best_single": 0.1585, "rel_imp_vs_best_single_pp": -9.18, "rel_imp_vs_teacher_pp": 0.25, "oracle_gap_pp": 17.85, "patch_oracle_gap_pp": 77.62, "temporal_delta_abs_rel": 0.0429, "scale_drift_proxy": 0.0208, "teacher_temporal_delta_abs_rel": 0.0429, "teacher_scale_drift_proxy": 0.0208, "mean_residual_norm": 0.006322, "mean_prior_entropy": 0.8316}}
+epoch   20  loss=0.17286  eval={"kitti": {"n": 49, "B_fast3r": 0.2326, "B_mast3r": 0.1523, "B_spann3r": 0.1618, "B_oracle": 0.136, "B_patch_oracle": 0.0976, "Teacher_FrozenStatePrior": 0.156, "Ours_NativeStudent": 0.1557, "best_single": 0.1523, "rel_imp_vs_best_single_pp": -2.24, "rel_imp_vs_teacher_pp": 0.16, "oracle_gap_pp": 14.49, "patch_oracle_gap_pp": 59.52, "temporal_delta_abs_rel": 0.0493, "scale_drift_proxy": 0.0317, "teacher_temporal_delta_abs_rel": 0.0494, "teacher_scale_drift_proxy": 0.0318, "mean_residual_norm": 0.00383, "mean_prior_entropy": 0.7669}, "eth3d": {"n": 10, "B_fast3r": 0.236, "B_mast3r": 0.2831, "B_spann3r": 0.1585, "B_oracle": 0.1468, "B_patch_oracle": 0.0974, "Teacher_FrozenStatePrior": 0.1735, "Ours_NativeStudent": 0.173, "best_single": 0.1585, "rel_imp_vs_best_single_pp": -9.18, "rel_imp_vs_teacher_pp": 0.25, "oracle_gap_pp": 17.85, "patch_oracle_gap_pp": 77.62, "temporal_delta_abs_rel": 0.0429, "scale_drift_proxy": 0.0208, "teacher_temporal_delta_abs_rel": 0.0429, "teacher_scale_drift_proxy": 0.0208, "mean_residual_norm": 0.006373, "mean_prior_entropy": 0.8316}}
+
+Saved NativeStudentDecoder + results to runs/stage6_fusion/native_student_temporal_scale_gate20_seed7/native_student_no_state_seed_7
+{
+  "seed": 7,
+  "epochs": 20,
+  "n_train": 237,
+  "n_test": 59,
+  "expert_order": [
+    "fast3r",
+    "mast3r",
+    "spann3r"
+  ],
+  "use_state": false,
+  "shuffle_state": false,
+  "state_prior_checkpoint": "runs/stage6_fusion/state_prior_sweep/state_seed_7/latest.pt",
+  "state_prior_frozen": true,
+  "proposal_dropout": 0.35,
+  "distill_weight": 0.5,
+  "residual_l2_weight": 0.01,
+  "dropout_consistency_weight": 0.25,
+  "temporal_loss_weight": 0.05,
+  "scale_drift_loss_weight": 0.05,
+  "residual_scale": 0.05,
+  "fallback_contamination_count": 0,
+  "final_train_loss": 0.172856604381767,
+  "loss_decrease_pct": 0.15003665848319836,
+  "final_eval": {
+    "kitti": {
+      "n": 49,
+      "B_fast3r": 0.2326,
+      "B_mast3r": 0.1523,
+      "B_spann3r": 0.1618,
+      "B_oracle": 0.136,
+      "B_patch_oracle": 0.0976,
+      "Teacher_FrozenStatePrior": 0.156,
+      "Ours_NativeStudent": 0.1557,
+      "best_single": 0.1523,
+      "rel_imp_vs_best_single_pp": -2.24,
+      "rel_imp_vs_teacher_pp": 0.16,
+      "oracle_gap_pp": 14.49,
+      "patch_oracle_gap_pp": 59.52,
+      "temporal_delta_abs_rel": 0.0493,
+      "scale_drift_proxy": 0.0317,
+      "teacher_temporal_delta_abs_rel": 0.0494,
+      "teacher_scale_drift_proxy": 0.0318,
+      "mean_residual_norm": 0.00383,
+      "mean_prior_entropy": 0.7669
+    },
+    "eth3d": {
+      "n": 10,
+      "B_fast3r": 0.236,
+      "B_mast3r": 0.2831,
+      "B_spann3r": 0.1585,
+      "B_oracle": 0.1468,
+      "B_patch_oracle": 0.0974,
+      "Teacher_FrozenStatePrior": 0.1735,
+      "Ours_NativeStudent": 0.173,
+      "best_single": 0.1585,
+      "rel_imp_vs_best_single_pp": -9.18,
+      "rel_imp_vs_teacher_pp": 0.25,
+      "oracle_gap_pp": 17.85,
+      "patch_oracle_gap_pp": 77.62,
+      "temporal_delta_abs_rel": 0.0429,
+      "scale_drift_proxy": 0.0208,
+      "teacher_temporal_delta_abs_rel": 0.0429,
+      "teacher_scale_drift_proxy": 0.0208,
+      "mean_residual_norm": 0.006373,
+      "mean_prior_entropy": 0.8316
+    }
+  }
+}

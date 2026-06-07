@@ -1,6 +1,6 @@
 {
-  "last_turn_at": "2026-06-03T12:25:10.731Z",
-  "turn_count": 118,
-  "last_progress_at": "2026-06-03T12:25:10.731Z",
-  "last_agent_output": "继续推进完了。新增的是非核心、可逆的 held-out calibrated semantic controller gate：\n\n- 新脚本：[eval_vlm_calibrated_control"
+  "last_turn_at": "2026-06-07T15:18:42.840Z",
+  "turn_count": 161,
+  "last_progress_at": "2026-06-07T15:18:42.840Z",
+  "last_agent_output": "已经做成今晚可用的 3R 模型包：`Dream3R v1.1-rc1`。\n\n入口是 [release_v11.py](E:/Dream3R/code/dream3r/release_v11.py)：\n"
 }

@@ -1,0 +1,215 @@
+{
+  "schema_version": "dream3r_foundation3r_dense_teacher_cache_v1",
+  "cache_type": "foundation3r_dense_teacher",
+  "teacher_backend": "vggt_omega",
+  "window_manifest": "runs/stage6_fusion/foundation3r_dense_teacher_50x2_20260607/kitti_50win_manifest.json",
+  "n_windows": 50,
+  "n_failures": 0,
+  "fallback_contamination_count": 0,
+  "proposal_fields_stripped": true,
+  "teacher_used_at_inference": false,
+  "proposal_inputs_used": false,
+  "forbidden_entry_keys": [
+    "expert_confidences",
+    "expert_order",
+    "proposal_confidences",
+    "proposal_pointmaps",
+    "proposals",
+    "teacher_model"
+  ],
+  "runtime_ms": 94768.96501332521,
+  "failure_flags": [],
+  "output": "runs/stage6_fusion/foundation3r_dense_teacher_50x2_20260607/kitti_dense_teacher_cache.pt",
+  "entry_shapes": [
+    {
+      "window_id": "2011_09_26_drive_0001_sync_02",
+      "teacher_pointmap": [
+        4,
+        196,
+        3
+      ],
+      "teacher_confidence": [
+        4,
+        196,
+        1
+      ],
+      "teacher_valid_mask": [
+        4,
+        196
+      ],
+      "has_gt": true,
+      "has_state": true
+    },
+    {
+      "window_id": "2011_09_26_drive_0001_sync_03",
+      "teacher_pointmap": [
+        4,
+        196,
+        3
+      ],
+      "teacher_confidence": [
+        4,
+        196,
+        1
+      ],
+      "teacher_valid_mask": [
+        4,
+        196
+      ],
+      "has_gt": true,
+      "has_state": true
+    },
+    {
+      "window_id": "2011_09_26_drive_0005_sync_02",
+      "teacher_pointmap": [
+        4,
+        196,
+        3
+      ],
+      "teacher_confidence": [
+        4,
+        196,
+        1
+      ],
+      "teacher_valid_mask": [
+        4,
+        196
+      ],
+      "has_gt": true,
+      "has_state": true
+    },
+    {
+      "window_id": "2011_09_26_drive_0005_sync_03",
+      "teacher_pointmap": [
+        4,
+        196,
+        3
+      ],
+      "teacher_confidence": [
+        4,
+        196,
+        1
+      ],
+      "teacher_valid_mask": [
+        4,
+        196
+      ],
+      "has_gt": true,
+      "has_state": true
+    },
+    {
+      "window_id": "2011_09_26_drive_0011_sync_02",
+      "teacher_pointmap": [
+        4,
+        196,
+        3
+      ],
+      "teacher_confidence": [
+        4,
+        196,
+        1
+      ],
+      "teacher_valid_mask": [
+        4,
+        196
+      ],
+      "has_gt": true,
+      "has_state": true
+    },
+    {
+      "window_id": "2011_09_26_drive_0011_sync_03",
+      "teacher_pointmap": [
+        4,
+        196,
+        3
+      ],
+      "teacher_confidence": [
+        4,
+        196,
+        1
+      ],
+      "teacher_valid_mask": [
+        4,
+        196
+      ],
+      "has_gt": true,
+      "has_state": true
+    },
+    {
+      "window_id": "2011_09_26_drive_0014_sync_02",
+      "teacher_pointmap": [
+        4,
+        196,
+        3
+      ],
+      "teacher_confidence": [
+        4,
+        196,
+        1
+      ],
+      "teacher_valid_mask": [
+        4,
+        196
+      ],
+      "has_gt": true,
+      "has_state": true
+    },
+    {
+      "window_id": "2011_09_26_drive_0014_sync_03",
+      "teacher_pointmap": [
+        4,
+        196,
+        3
+      ],
+      "teacher_confidence": [
+        4,
+        196,
+        1
+      ],
+      "teacher_valid_mask": [
+        4,
+        196
+      ],
+      "has_gt": true,
+      "has_state": true
+    },
+    {
+      "window_id": "2011_09_26_drive_0015_sync_02",
+      "teacher_pointmap": [
+        4,
+        196,
+        3
+      ],
+      "teacher_confidence": [
+        4,
+        196,
+        1
+      ],
+      "teacher_valid_mask": [
+        4,
+        196
+      ],
+      "has_gt": true,
+      "has_state": true
+    },
+    {
+      "window_id": "2011_09_26_drive_0015_sync_03",
+      "teacher_pointmap": [
+        4,
+        196,
+        3
+      ],
+      "teacher_confidence": [
+        4,
+        196,
+        1
+      ],
+      "teacher_valid_mask": [
+        4,
+        196
+      ],
+      "has_gt": true,
+      "has_state": true
+    }
+  ]
+}

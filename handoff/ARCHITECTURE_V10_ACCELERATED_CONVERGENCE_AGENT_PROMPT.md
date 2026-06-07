@@ -3,6 +3,11 @@
 Use this prompt for the next agent when the goal is to push Dream3R architecture
 forward quickly and materially, not to continue small residual-head tweaks.
 
+Release-readiness note, 2026-06-05: the next agent must start from
+`decisions/DEC-20260605-037-vggt-omega-cache-control-gate.md` and
+`release/DREAM3R_RC_CARD.md`. VGGT-Omega is oracle-positive but release-control
+negative; package and verify frozen StatePrior + bounded residual as the RC.
+
 Post-execution note, 2026-06-02: the first native student decoder/distillation
 gate has been executed and documented in
 `decisions/DEC-20260602-024-native-student-decoder-gate.md`. It is executable
@@ -11,8 +16,11 @@ U1 follow-up is documented in `decisions/DEC-20260602-025-image-state-native-stu
 and is negative: correct-state loses to no-state and the locked baseline.
 The VGGT-Omega fallback is documented in
 `decisions/DEC-20260602-026-vggt-omega-admission-preflight.md`; its smoke script
-is ready, but real admission is blocked on the approved checkpoint. Future
-agents should not recreate these scaffolds or rerun U1 unchanged.
+is ready, but real admission is blocked on the approved checkpoint. On
+2026-06-04, `decisions/DEC-20260604-035-vggt-omega-admission-runner.md` added a
+resumable staging runner. After user checkpoint upload, the BUAA-Server GPU1
+one-window smoke is real-backend admitted. Future agents should not recreate
+these scaffolds, rerun U1 unchanged, or repeat the same VGGT-Omega smoke.
 
 ```text
 You are taking over Dream3R on 2026-06-02.
@@ -40,7 +48,9 @@ Mandatory read order:
 11. E:\Dream3R\planning\DREAM3R_V22_ADMISSION_RUNBOOK.md
 12. E:\Dream3R\decisions\DEC-20260602-025-image-state-native-student-u1.md
 13. E:\Dream3R\decisions\DEC-20260602-026-vggt-omega-admission-preflight.md
-14. E:\Dream3R\WORKFLOW_STATUS.md
+14. E:\Dream3R\decisions\DEC-20260604-035-vggt-omega-admission-runner.md
+15. E:\Dream3R\cycles\CYCLE-20260604-vggt-omega-admission-runner.md
+16. E:\Dream3R\WORKFLOW_STATUS.md
 
 Current evidence:
 - StatePriorHead is positive: Dream state predicts useful expert priors.
@@ -52,6 +62,9 @@ Current evidence:
   0.1649/0.2842, no-state = 0.1526/0.1702.
 - VGGT-Omega one-window admission is blocked until
   `/hdd3/kykt26/checkpoints/vggt_omega/VGGT-Omega-1B-512/model.pt` exists.
+- The VGGT-Omega admission runner is available at
+  `code/dream3r/scripts/stage_vggt_omega_admission.py`; the latest server
+  smoke is admitted with `backend=real` and zero fallback contamination.
 
 Architecture target:
 Dream3R-AC = proposal teachers + Dream state + frozen StatePrior baseline

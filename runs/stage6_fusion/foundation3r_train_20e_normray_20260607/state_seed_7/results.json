@@ -1,0 +1,38 @@
+{
+  "seed": 7,
+  "epochs": 20,
+  "n_train": 80,
+  "n_test": 20,
+  "d_memory": 128,
+  "image_size": 224,
+  "patch_size": 16,
+  "use_state": true,
+  "shuffle_state": false,
+  "teacher_weight": 1.0,
+  "gt_weight": 1.0,
+  "model_dim": 64,
+  "state_dim": 32,
+  "hidden": 128,
+  "num_layers": 1,
+  "num_heads": 4,
+  "proposal_inputs_used": false,
+  "teacher_used_at_inference": false,
+  "scale_normalized_targets": true,
+  "final_train_loss": 0.5764437889680266,
+  "final_eval": {
+    "kitti": {
+      "n": 10,
+      "Ours_Foundation3R": 0.4734,
+      "Teacher_Dense": 0.3554,
+      "temporal_delta_abs_rel": 0.0402,
+      "scale_drift_proxy": 0.0365
+    },
+    "eth3d": {
+      "n": 10,
+      "Ours_Foundation3R": 0.3271,
+      "Teacher_Dense": 0.0913,
+      "temporal_delta_abs_rel": 0.028,
+      "scale_drift_proxy": 0.0082
+    }
+  }
+}

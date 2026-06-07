@@ -1,0 +1,107 @@
+{
+  "version": "v1.0-rc1",
+  "release_candidate": "frozen_state_prior_bounded_residual",
+  "selected_metrics": {
+    "kitti_abs_rel": 0.1448,
+    "eth3d_abs_rel": 0.1475,
+    "shuffle_kitti_abs_rel": 0.1521,
+    "shuffle_eth3d_abs_rel": 0.2467
+  },
+  "promotion_candidate": {
+    "version_target": "v1.1",
+    "candidate": "unified_domain_conditional_vggt_teacher",
+    "status": "packaged_as_usable_v1_1_rc1",
+    "kitti_abs_rel": 0.1448,
+    "eth3d_abs_rel": 0.057,
+    "promotable_to_official": true,
+    "remaining_action": "optionally promote v1.1-rc1 to official after external packaging review"
+  },
+  "usable_model_v1_1": {
+    "version": "v1.1-rc1",
+    "candidate": "domain_conditional_vggt_teacher",
+    "status": "usable_release_candidate",
+    "kitti_abs_rel": 0.1448,
+    "eth3d_abs_rel": 0.057,
+    "metric_direction": "lower_is_better",
+    "api_builder": "dream3r.release_v11.build_dream3r_v11_release",
+    "api_module": "code/dream3r/release_v11.py",
+    "unified_gate_artifact": "runs/v22_admission/domain_conditional_teacher/unified_gate_candidate_with_kitti_no_state_server.json",
+    "verifier": "code/dream3r/scripts/verify_v11_release.py",
+    "doc": "release/USABLE_MODEL_V1_1.md"
+  },
+  "context_compaction": {
+    "date": "2026-06-08",
+    "doc": "handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md",
+    "status": "current_resume_anchor",
+    "covers": [
+      "v1.1 usable model",
+      "v1.0 official fallback",
+      "VGGT-Omega status",
+      "Qwen diagnostic-only status",
+      "Foundation3R proposal-free status",
+      "frozen core policy",
+      "validation evidence",
+      "next work priorities"
+    ]
+  },
+  "server_artifacts": {
+    "bounded_state": "/hdd3/kykt26/code/dream3r/runs/stage6_fusion/bounded_refine_sweep/frozen_prior_state_seed_7/results.json",
+    "bounded_state_checkpoint": "/hdd3/kykt26/code/dream3r/runs/stage6_fusion/bounded_refine_sweep/frozen_prior_state_seed_7/latest.pt",
+    "bounded_shuffle": "/hdd3/kykt26/code/dream3r/runs/stage6_fusion/bounded_refine_sweep/frozen_prior_shuffle_state_seed_7/results.json",
+    "vggt_smoke": "/hdd3/kykt26/code/dream3r/runs/v22_admission/vggt_omega_smoke/results_after_upload_fix_20260604.json",
+    "vggt_oracle_50x2": "/hdd3/kykt26/code/dream3r/runs/v22_admission/vggt_omega_oracle/oracle_admission_50x2_cache_20260605.json",
+    "vggt_state_control": "/hdd3/kykt26/code/dream3r/runs/v22_admission/vggt_omega_cache_gate/scf_state_seed7/results.json",
+    "vggt_no_state_control": "/hdd3/kykt26/code/dream3r/runs/v22_admission/vggt_omega_cache_gate/scf_no_state_seed7/results.json",
+    "vggt_shuffle_control": "/hdd3/kykt26/code/dream3r/runs/v22_admission/vggt_omega_cache_gate/scf_shuffle_state_seed7/results.json",
+    "domain_conditional_unified_gate": "/hdd3/kykt26/code/dream3r/runs/v22_admission/domain_conditional_teacher/unified_gate_candidate_with_kitti_no_state_server.json",
+    "kitti_no_state_control": "/hdd3/kykt26/code/dream3r/runs/stage6_fusion/bounded_refine_sweep/frozen_prior_no_state_seed_7/results.json"
+  },
+  "local_mirrors": {
+    "bounded_state": "runs/stage6_fusion/bounded_refine_sweep/frozen_prior_state_seed_7/results.json",
+    "bounded_shuffle": "runs/stage6_fusion/bounded_refine_sweep/frozen_prior_shuffle_state_seed_7/results.json",
+    "vggt_oracle_50x2": "runs/v22_admission/vggt_omega_oracle/oracle_admission_50x2_cache_20260605.json",
+    "vggt_state_control": "runs/v22_admission/vggt_omega_cache_gate/scf_state_seed7_results.json",
+    "vggt_no_state_control": "runs/v22_admission/vggt_omega_cache_gate/scf_no_state_seed7_results.json",
+    "vggt_shuffle_control": "runs/v22_admission/vggt_omega_cache_gate/scf_shuffle_state_seed7_results.json",
+    "domain_conditional_unified_gate": "runs/v22_admission/domain_conditional_teacher/unified_gate_candidate_with_kitti_no_state_server.json",
+    "kitti_no_state_control": "runs/stage6_fusion/bounded_refine_sweep/frozen_prior_no_state_seed_7/results.json"
+  },
+  "release_docs": {
+    "architecture_map": "ARCHITECTURE.md",
+    "architecture_status": "release/ARCHITECTURE_STATUS.json",
+    "official_version": "release/OFFICIAL_VERSION.md",
+    "usable_model_v1_1": "release/USABLE_MODEL_V1_1.md",
+    "architecture_v1_0_rc": "release/ARCHITECTURE_V1_0_RC.md",
+    "candidate_card": "release/DREAM3R_RC_CARD.md",
+    "runbook": "release/RUNBOOK.md",
+    "method_onepager": "release/METHOD_ONEPAGER.md",
+    "method_figure": "release/METHOD_FIGURE.md",
+    "result_table": "release/RESULT_TABLE.md",
+    "presentation_outline": "release/PRESENTATION_OUTLINE.md",
+    "publish_checklist": "release/PUBLISH_CHECKLIST.md",
+    "reproduce": "release/REPRODUCE.md",
+    "verify_report": "release/VERIFY_REPORT.md",
+    "limitations": "release/LIMITATIONS.md",
+    "non_claims": "release/NON_CLAIMS.md"
+  },
+  "verification_entrypoints": {
+    "release_verifier": "code/dream3r/scripts/verify_release_candidate.py",
+    "release_verifier_test": "code/dream3r/tests/test_release_candidate_verifier.py",
+    "v1_1_release_verifier": "code/dream3r/scripts/verify_v11_release.py",
+    "v1_1_release_verifier_test": "code/dream3r/tests/test_release_v11_verifier.py",
+    "unified_domain_conditional_gate": "code/dream3r/scripts/eval_unified_domain_conditional_gate.py",
+    "unified_domain_conditional_gate_test": "code/dream3r/tests/test_unified_domain_conditional_gate.py"
+  },
+  "official_api": {
+    "module": "code/dream3r/release_candidate.py",
+    "test": "code/dream3r/tests/test_release_candidate_architecture.py",
+    "builder": "dream3r.release_candidate.build_dream3r_release_candidate",
+    "class": "dream3r.release_candidate.Dream3RReleaseCandidate"
+  },
+  "usable_v1_1_api": {
+    "module": "code/dream3r/release_v11.py",
+    "test": "code/dream3r/tests/test_release_v11_architecture.py",
+    "builder": "dream3r.release_v11.build_dream3r_v11_release",
+    "class": "dream3r.release_v11.Dream3RDomainConditionalRelease"
+  }
+}

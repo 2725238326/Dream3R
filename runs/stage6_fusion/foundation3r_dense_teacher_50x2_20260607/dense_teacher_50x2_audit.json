@@ -1,0 +1,32 @@
+{
+  "schema_version": "dream3r_foundation3r_dense_teacher_audit_v1",
+  "caches": {
+    "kitti": {
+      "teacher_backend": "vggt_omega",
+      "n_windows": 50,
+      "n_failures": 0,
+      "fallback_contamination_count": 0,
+      "proposal_inputs_used": false,
+      "teacher_used_at_inference": false,
+      "proposal_fields_stripped": true,
+      "forbidden_leak_count": 0,
+      "shape_fail_count": 0,
+      "missing_gt_count": 0,
+      "missing_state_count": 0
+    },
+    "eth3d": {
+      "teacher_backend": "vggt_omega",
+      "n_windows": 50,
+      "n_failures": 0,
+      "fallback_contamination_count": 0,
+      "proposal_inputs_used": false,
+      "teacher_used_at_inference": false,
+      "proposal_fields_stripped": true,
+      "forbidden_leak_count": 0,
+      "shape_fail_count": 0,
+      "missing_gt_count": 0,
+      "missing_state_count": 0
+    }
+  },
+  "status": "pass"
+}

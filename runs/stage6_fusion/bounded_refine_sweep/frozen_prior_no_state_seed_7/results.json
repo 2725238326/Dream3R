@@ -1,0 +1,60 @@
+{
+  "seed": 7,
+  "epochs": 300,
+  "n_train": 237,
+  "n_test": 59,
+  "expert_order": [
+    "fast3r",
+    "mast3r",
+    "spann3r"
+  ],
+  "use_state": false,
+  "shuffle_state": false,
+  "use_state_prior": true,
+  "prior_hidden": 128,
+  "prior_logit_scale": 1.0,
+  "residual_refine_scale": 0.05,
+  "state_prior_checkpoint": "runs/stage6_fusion/state_prior_sweep/state_seed_7/latest.pt",
+  "freeze_state_prior": true,
+  "prior_kl_weight": 0.1,
+  "final_train_loss": 0.22573941128666392,
+  "loss_decrease_pct": -47.32860652296203,
+  "final_eval": {
+    "kitti": {
+      "n": 49,
+      "B_fast3r": 0.2326,
+      "B_mast3r": 0.1523,
+      "B_spann3r": 0.1618,
+      "B_oracle": 0.136,
+      "B_patch_oracle": 0.0976,
+      "Ours_ProposalSetDecoder": 0.1553,
+      "best_single": 0.1523,
+      "rel_imp_vs_best_single_pp": -1.98,
+      "oracle_gap_pp": 14.2,
+      "patch_oracle_gap_pp": 59.11,
+      "temporal_delta_abs_rel": 0.0495,
+      "scale_drift_proxy": 0.0319,
+      "mean_uncertainty": 1.0,
+      "mean_weight_entropy": 0.7635,
+      "mean_prior_entropy": 0.7669
+    },
+    "eth3d": {
+      "n": 10,
+      "B_fast3r": 0.236,
+      "B_mast3r": 0.2831,
+      "B_spann3r": 0.1585,
+      "B_oracle": 0.1468,
+      "B_patch_oracle": 0.0974,
+      "Ours_ProposalSetDecoder": 0.1728,
+      "best_single": 0.1585,
+      "rel_imp_vs_best_single_pp": -9.03,
+      "oracle_gap_pp": 17.68,
+      "patch_oracle_gap_pp": 77.37,
+      "temporal_delta_abs_rel": 0.0436,
+      "scale_drift_proxy": 0.0206,
+      "mean_uncertainty": 1.0,
+      "mean_weight_entropy": 0.8381,
+      "mean_prior_entropy": 0.8316
+    }
+  }
+}

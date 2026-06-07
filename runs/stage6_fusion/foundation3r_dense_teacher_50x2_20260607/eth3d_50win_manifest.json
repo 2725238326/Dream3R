@@ -1,0 +1,909 @@
+{
+  "schema_version": "dream3r_vlm_window_manifest_v1",
+  "dataset": "eth3d",
+  "root": "/hdd3/kykt26/data",
+  "regime_labels": "runs/eth3d_cross_dataset_regime_labels/regime_labels.json",
+  "n_windows": 50,
+  "windows": [
+    {
+      "window_id": "delivery_area__images_rig_cam5_undistorted__0000",
+      "dataset": "eth3d",
+      "sequence": "delivery_area__images_rig_cam5_undistorted__0000",
+      "scene": "delivery_area",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477843917481127523.png",
+        "images_rig_cam5_undistorted/1477843917554855523.png",
+        "images_rig_cam5_undistorted/1477843917628583523.png",
+        "images_rig_cam5_undistorted/1477843917702311523.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843917481127523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843917554855523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843917628583523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843917702311523.png"
+      ]
+    },
+    {
+      "window_id": "delivery_area__images_rig_cam5_undistorted__0004",
+      "dataset": "eth3d",
+      "sequence": "delivery_area__images_rig_cam5_undistorted__0004",
+      "scene": "delivery_area",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477843917776039523.png",
+        "images_rig_cam5_undistorted/1477843917849767523.png",
+        "images_rig_cam5_undistorted/1477843917923495523.png",
+        "images_rig_cam5_undistorted/1477843917997223523.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843917776039523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843917849767523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843917923495523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843917997223523.png"
+      ]
+    },
+    {
+      "window_id": "delivery_area__images_rig_cam5_undistorted__0008",
+      "dataset": "eth3d",
+      "sequence": "delivery_area__images_rig_cam5_undistorted__0008",
+      "scene": "delivery_area",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477843918070951523.png",
+        "images_rig_cam5_undistorted/1477843918144679523.png",
+        "images_rig_cam5_undistorted/1477843918218407523.png",
+        "images_rig_cam5_undistorted/1477843918292135523.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918070951523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918144679523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918218407523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918292135523.png"
+      ]
+    },
+    {
+      "window_id": "delivery_area__images_rig_cam5_undistorted__0012",
+      "dataset": "eth3d",
+      "sequence": "delivery_area__images_rig_cam5_undistorted__0012",
+      "scene": "delivery_area",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477843918365863523.png",
+        "images_rig_cam5_undistorted/1477843918439591523.png",
+        "images_rig_cam5_undistorted/1477843918513319523.png",
+        "images_rig_cam5_undistorted/1477843918587047523.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918365863523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918439591523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918513319523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918587047523.png"
+      ]
+    },
+    {
+      "window_id": "delivery_area__images_rig_cam5_undistorted__0016",
+      "dataset": "eth3d",
+      "sequence": "delivery_area__images_rig_cam5_undistorted__0016",
+      "scene": "delivery_area",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477843918660775523.png",
+        "images_rig_cam5_undistorted/1477843918734503523.png",
+        "images_rig_cam5_undistorted/1477843918808231523.png",
+        "images_rig_cam5_undistorted/1477843918881959523.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918660775523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918734503523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918808231523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918881959523.png"
+      ]
+    },
+    {
+      "window_id": "delivery_area__images_rig_cam5_undistorted__0020",
+      "dataset": "eth3d",
+      "sequence": "delivery_area__images_rig_cam5_undistorted__0020",
+      "scene": "delivery_area",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477843918955687523.png",
+        "images_rig_cam5_undistorted/1477843919029415523.png",
+        "images_rig_cam5_undistorted/1477843919103143523.png",
+        "images_rig_cam5_undistorted/1477843919176871523.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843918955687523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843919029415523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843919103143523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843919176871523.png"
+      ]
+    },
+    {
+      "window_id": "delivery_area__images_rig_cam5_undistorted__0024",
+      "dataset": "eth3d",
+      "sequence": "delivery_area__images_rig_cam5_undistorted__0024",
+      "scene": "delivery_area",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477843919250599523.png",
+        "images_rig_cam5_undistorted/1477843919324327523.png",
+        "images_rig_cam5_undistorted/1477843919398055523.png",
+        "images_rig_cam5_undistorted/1477843919471783523.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843919250599523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843919324327523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843919398055523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843919471783523.png"
+      ]
+    },
+    {
+      "window_id": "delivery_area__images_rig_cam5_undistorted__0028",
+      "dataset": "eth3d",
+      "sequence": "delivery_area__images_rig_cam5_undistorted__0028",
+      "scene": "delivery_area",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477843919545511523.png",
+        "images_rig_cam5_undistorted/1477843919619239523.png",
+        "images_rig_cam5_undistorted/1477843919692967523.png",
+        "images_rig_cam5_undistorted/1477843919766695523.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843919545511523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843919619239523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843919692967523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843919766695523.png"
+      ]
+    },
+    {
+      "window_id": "delivery_area__images_rig_cam5_undistorted__0032",
+      "dataset": "eth3d",
+      "sequence": "delivery_area__images_rig_cam5_undistorted__0032",
+      "scene": "delivery_area",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477843919840423523.png",
+        "images_rig_cam5_undistorted/1477843919914151523.png",
+        "images_rig_cam5_undistorted/1477843919987879523.png",
+        "images_rig_cam5_undistorted/1477843920061607523.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843919840423523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843919914151523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843919987879523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843920061607523.png"
+      ]
+    },
+    {
+      "window_id": "delivery_area__images_rig_cam5_undistorted__0036",
+      "dataset": "eth3d",
+      "sequence": "delivery_area__images_rig_cam5_undistorted__0036",
+      "scene": "delivery_area",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477843920135335523.png",
+        "images_rig_cam5_undistorted/1477843920209063523.png",
+        "images_rig_cam5_undistorted/1477843920282791523.png",
+        "images_rig_cam5_undistorted/1477843920356519523.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843920135335523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843920209063523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843920282791523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843920356519523.png"
+      ]
+    },
+    {
+      "window_id": "electro__images_rig_cam5_undistorted__0000",
+      "dataset": "eth3d",
+      "sequence": "electro__images_rig_cam5_undistorted__0000",
+      "scene": "electro",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1474975187520882738.png",
+        "images_rig_cam5_undistorted/1474975187594610738.png",
+        "images_rig_cam5_undistorted/1474975187668338738.png",
+        "images_rig_cam5_undistorted/1474975187742066738.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975187520882738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975187594610738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975187668338738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975187742066738.png"
+      ]
+    },
+    {
+      "window_id": "electro__images_rig_cam5_undistorted__0004",
+      "dataset": "eth3d",
+      "sequence": "electro__images_rig_cam5_undistorted__0004",
+      "scene": "electro",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1474975187815794738.png",
+        "images_rig_cam5_undistorted/1474975187889522738.png",
+        "images_rig_cam5_undistorted/1474975187963250738.png",
+        "images_rig_cam5_undistorted/1474975188036978738.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975187815794738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975187889522738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975187963250738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975188036978738.png"
+      ]
+    },
+    {
+      "window_id": "electro__images_rig_cam5_undistorted__0008",
+      "dataset": "eth3d",
+      "sequence": "electro__images_rig_cam5_undistorted__0008",
+      "scene": "electro",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1474975188110706738.png",
+        "images_rig_cam5_undistorted/1474975188184434738.png",
+        "images_rig_cam5_undistorted/1474975188258162738.png",
+        "images_rig_cam5_undistorted/1474975188331890738.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975188110706738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975188184434738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975188258162738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975188331890738.png"
+      ]
+    },
+    {
+      "window_id": "electro__images_rig_cam5_undistorted__0012",
+      "dataset": "eth3d",
+      "sequence": "electro__images_rig_cam5_undistorted__0012",
+      "scene": "electro",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1474975188405618738.png",
+        "images_rig_cam5_undistorted/1474975188479346738.png",
+        "images_rig_cam5_undistorted/1474975188553074738.png",
+        "images_rig_cam5_undistorted/1474975188626802738.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975188405618738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975188479346738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975188553074738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975188626802738.png"
+      ]
+    },
+    {
+      "window_id": "electro__images_rig_cam5_undistorted__0016",
+      "dataset": "eth3d",
+      "sequence": "electro__images_rig_cam5_undistorted__0016",
+      "scene": "electro",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1474975188700530738.png",
+        "images_rig_cam5_undistorted/1474975188774258738.png",
+        "images_rig_cam5_undistorted/1474975188847986738.png",
+        "images_rig_cam5_undistorted/1474975188921714738.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975188700530738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975188774258738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975188847986738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975188921714738.png"
+      ]
+    },
+    {
+      "window_id": "electro__images_rig_cam5_undistorted__0020",
+      "dataset": "eth3d",
+      "sequence": "electro__images_rig_cam5_undistorted__0020",
+      "scene": "electro",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1474975188995442738.png",
+        "images_rig_cam5_undistorted/1474975189069170738.png",
+        "images_rig_cam5_undistorted/1474975189142898738.png",
+        "images_rig_cam5_undistorted/1474975189216626738.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975188995442738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975189069170738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975189142898738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975189216626738.png"
+      ]
+    },
+    {
+      "window_id": "electro__images_rig_cam5_undistorted__0024",
+      "dataset": "eth3d",
+      "sequence": "electro__images_rig_cam5_undistorted__0024",
+      "scene": "electro",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1474975189290354738.png",
+        "images_rig_cam5_undistorted/1474975189364082738.png",
+        "images_rig_cam5_undistorted/1474975189437810738.png",
+        "images_rig_cam5_undistorted/1474975189511538738.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975189290354738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975189364082738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975189437810738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975189511538738.png"
+      ]
+    },
+    {
+      "window_id": "electro__images_rig_cam5_undistorted__0028",
+      "dataset": "eth3d",
+      "sequence": "electro__images_rig_cam5_undistorted__0028",
+      "scene": "electro",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1474975189585266738.png",
+        "images_rig_cam5_undistorted/1474975189658994738.png",
+        "images_rig_cam5_undistorted/1474975189732722738.png",
+        "images_rig_cam5_undistorted/1474975189806450738.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975189585266738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975189658994738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975189732722738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975189806450738.png"
+      ]
+    },
+    {
+      "window_id": "electro__images_rig_cam5_undistorted__0032",
+      "dataset": "eth3d",
+      "sequence": "electro__images_rig_cam5_undistorted__0032",
+      "scene": "electro",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1474975189880178738.png",
+        "images_rig_cam5_undistorted/1474975189953906738.png",
+        "images_rig_cam5_undistorted/1474975190027634738.png",
+        "images_rig_cam5_undistorted/1474975190101362738.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975189880178738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975189953906738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975190027634738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975190101362738.png"
+      ]
+    },
+    {
+      "window_id": "electro__images_rig_cam5_undistorted__0036",
+      "dataset": "eth3d",
+      "sequence": "electro__images_rig_cam5_undistorted__0036",
+      "scene": "electro",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1474975190175090738.png",
+        "images_rig_cam5_undistorted/1474975190248818738.png",
+        "images_rig_cam5_undistorted/1474975190322546738.png",
+        "images_rig_cam5_undistorted/1474975190396274738.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975190175090738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975190248818738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975190322546738.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/electro/images/images_rig_cam5_undistorted/1474975190396274738.png"
+      ]
+    },
+    {
+      "window_id": "forest__images_rig_cam5_undistorted__0000",
+      "dataset": "eth3d",
+      "sequence": "forest__images_rig_cam5_undistorted__0000",
+      "scene": "forest",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1474982922066603972.png",
+        "images_rig_cam5_undistorted/1474982922140331972.png",
+        "images_rig_cam5_undistorted/1474982922214059972.png",
+        "images_rig_cam5_undistorted/1474982922287787972.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982922066603972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982922140331972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982922214059972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982922287787972.png"
+      ]
+    },
+    {
+      "window_id": "forest__images_rig_cam5_undistorted__0004",
+      "dataset": "eth3d",
+      "sequence": "forest__images_rig_cam5_undistorted__0004",
+      "scene": "forest",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1474982922361515972.png",
+        "images_rig_cam5_undistorted/1474982922435243972.png",
+        "images_rig_cam5_undistorted/1474982922508971972.png",
+        "images_rig_cam5_undistorted/1474982922582699972.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982922361515972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982922435243972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982922508971972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982922582699972.png"
+      ]
+    },
+    {
+      "window_id": "forest__images_rig_cam5_undistorted__0008",
+      "dataset": "eth3d",
+      "sequence": "forest__images_rig_cam5_undistorted__0008",
+      "scene": "forest",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1474982922656427972.png",
+        "images_rig_cam5_undistorted/1474982922730155972.png",
+        "images_rig_cam5_undistorted/1474982922803883972.png",
+        "images_rig_cam5_undistorted/1474982922877611972.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982922656427972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982922730155972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982922803883972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982922877611972.png"
+      ]
+    },
+    {
+      "window_id": "forest__images_rig_cam5_undistorted__0012",
+      "dataset": "eth3d",
+      "sequence": "forest__images_rig_cam5_undistorted__0012",
+      "scene": "forest",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1474982922951339972.png",
+        "images_rig_cam5_undistorted/1474982923025067972.png",
+        "images_rig_cam5_undistorted/1474982923098795972.png",
+        "images_rig_cam5_undistorted/1474982923172523972.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982922951339972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982923025067972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982923098795972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982923172523972.png"
+      ]
+    },
+    {
+      "window_id": "forest__images_rig_cam5_undistorted__0016",
+      "dataset": "eth3d",
+      "sequence": "forest__images_rig_cam5_undistorted__0016",
+      "scene": "forest",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1474982923246251972.png",
+        "images_rig_cam5_undistorted/1474982923319979972.png",
+        "images_rig_cam5_undistorted/1474982923393707972.png",
+        "images_rig_cam5_undistorted/1474982923467435972.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982923246251972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982923319979972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982923393707972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982923467435972.png"
+      ]
+    },
+    {
+      "window_id": "forest__images_rig_cam5_undistorted__0020",
+      "dataset": "eth3d",
+      "sequence": "forest__images_rig_cam5_undistorted__0020",
+      "scene": "forest",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1474982923541163972.png",
+        "images_rig_cam5_undistorted/1474982923614891972.png",
+        "images_rig_cam5_undistorted/1474982923688619972.png",
+        "images_rig_cam5_undistorted/1474982923762347972.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982923541163972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982923614891972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982923688619972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982923762347972.png"
+      ]
+    },
+    {
+      "window_id": "forest__images_rig_cam5_undistorted__0024",
+      "dataset": "eth3d",
+      "sequence": "forest__images_rig_cam5_undistorted__0024",
+      "scene": "forest",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1474982923836075972.png",
+        "images_rig_cam5_undistorted/1474982923909803972.png",
+        "images_rig_cam5_undistorted/1474982923983531972.png",
+        "images_rig_cam5_undistorted/1474982924057259972.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982923836075972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982923909803972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982923983531972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982924057259972.png"
+      ]
+    },
+    {
+      "window_id": "forest__images_rig_cam5_undistorted__0028",
+      "dataset": "eth3d",
+      "sequence": "forest__images_rig_cam5_undistorted__0028",
+      "scene": "forest",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1474982924130987972.png",
+        "images_rig_cam5_undistorted/1474982924204715972.png",
+        "images_rig_cam5_undistorted/1474982924278443972.png",
+        "images_rig_cam5_undistorted/1474982924352171972.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982924130987972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982924204715972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982924278443972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982924352171972.png"
+      ]
+    },
+    {
+      "window_id": "forest__images_rig_cam5_undistorted__0032",
+      "dataset": "eth3d",
+      "sequence": "forest__images_rig_cam5_undistorted__0032",
+      "scene": "forest",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1474982924425899972.png",
+        "images_rig_cam5_undistorted/1474982924499627972.png",
+        "images_rig_cam5_undistorted/1474982924573355972.png",
+        "images_rig_cam5_undistorted/1474982924647083972.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982924425899972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982924499627972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982924573355972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982924647083972.png"
+      ]
+    },
+    {
+      "window_id": "forest__images_rig_cam5_undistorted__0036",
+      "dataset": "eth3d",
+      "sequence": "forest__images_rig_cam5_undistorted__0036",
+      "scene": "forest",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1474982924720811972.png",
+        "images_rig_cam5_undistorted/1474982924794539972.png",
+        "images_rig_cam5_undistorted/1474982924868267972.png",
+        "images_rig_cam5_undistorted/1474982924941995972.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982924720811972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982924794539972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982924868267972.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/forest/images/images_rig_cam5_undistorted/1474982924941995972.png"
+      ]
+    },
+    {
+      "window_id": "playground__images_rig_cam5_undistorted__0000",
+      "dataset": "eth3d",
+      "sequence": "playground__images_rig_cam5_undistorted__0000",
+      "scene": "playground",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477833684658155598.png",
+        "images_rig_cam5_undistorted/1477833684731883598.png",
+        "images_rig_cam5_undistorted/1477833684805611598.png",
+        "images_rig_cam5_undistorted/1477833684879339598.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833684658155598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833684731883598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833684805611598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833684879339598.png"
+      ]
+    },
+    {
+      "window_id": "playground__images_rig_cam5_undistorted__0004",
+      "dataset": "eth3d",
+      "sequence": "playground__images_rig_cam5_undistorted__0004",
+      "scene": "playground",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477833684953067598.png",
+        "images_rig_cam5_undistorted/1477833685026795598.png",
+        "images_rig_cam5_undistorted/1477833685100523598.png",
+        "images_rig_cam5_undistorted/1477833685174251598.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833684953067598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833685026795598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833685100523598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833685174251598.png"
+      ]
+    },
+    {
+      "window_id": "playground__images_rig_cam5_undistorted__0008",
+      "dataset": "eth3d",
+      "sequence": "playground__images_rig_cam5_undistorted__0008",
+      "scene": "playground",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477833685247979598.png",
+        "images_rig_cam5_undistorted/1477833685321707598.png",
+        "images_rig_cam5_undistorted/1477833685395435598.png",
+        "images_rig_cam5_undistorted/1477833685469163598.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833685247979598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833685321707598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833685395435598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833685469163598.png"
+      ]
+    },
+    {
+      "window_id": "playground__images_rig_cam5_undistorted__0012",
+      "dataset": "eth3d",
+      "sequence": "playground__images_rig_cam5_undistorted__0012",
+      "scene": "playground",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477833685542891598.png",
+        "images_rig_cam5_undistorted/1477833685616619598.png",
+        "images_rig_cam5_undistorted/1477833685690347598.png",
+        "images_rig_cam5_undistorted/1477833685764075598.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833685542891598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833685616619598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833685690347598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833685764075598.png"
+      ]
+    },
+    {
+      "window_id": "playground__images_rig_cam5_undistorted__0016",
+      "dataset": "eth3d",
+      "sequence": "playground__images_rig_cam5_undistorted__0016",
+      "scene": "playground",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477833685837803598.png",
+        "images_rig_cam5_undistorted/1477833685911531598.png",
+        "images_rig_cam5_undistorted/1477833685985259598.png",
+        "images_rig_cam5_undistorted/1477833686058987598.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833685837803598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833685911531598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833685985259598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833686058987598.png"
+      ]
+    },
+    {
+      "window_id": "playground__images_rig_cam5_undistorted__0020",
+      "dataset": "eth3d",
+      "sequence": "playground__images_rig_cam5_undistorted__0020",
+      "scene": "playground",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477833686132715598.png",
+        "images_rig_cam5_undistorted/1477833686206443598.png",
+        "images_rig_cam5_undistorted/1477833686280171598.png",
+        "images_rig_cam5_undistorted/1477833686353899598.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833686132715598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833686206443598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833686280171598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833686353899598.png"
+      ]
+    },
+    {
+      "window_id": "playground__images_rig_cam5_undistorted__0024",
+      "dataset": "eth3d",
+      "sequence": "playground__images_rig_cam5_undistorted__0024",
+      "scene": "playground",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477833686427627598.png",
+        "images_rig_cam5_undistorted/1477833686501355598.png",
+        "images_rig_cam5_undistorted/1477833686575083598.png",
+        "images_rig_cam5_undistorted/1477833686648811598.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833686427627598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833686501355598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833686575083598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833686648811598.png"
+      ]
+    },
+    {
+      "window_id": "playground__images_rig_cam5_undistorted__0028",
+      "dataset": "eth3d",
+      "sequence": "playground__images_rig_cam5_undistorted__0028",
+      "scene": "playground",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477833686722539598.png",
+        "images_rig_cam5_undistorted/1477833686796267598.png",
+        "images_rig_cam5_undistorted/1477833686869995598.png",
+        "images_rig_cam5_undistorted/1477833686943723598.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833686722539598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833686796267598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833686869995598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833686943723598.png"
+      ]
+    },
+    {
+      "window_id": "playground__images_rig_cam5_undistorted__0032",
+      "dataset": "eth3d",
+      "sequence": "playground__images_rig_cam5_undistorted__0032",
+      "scene": "playground",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477833687017451598.png",
+        "images_rig_cam5_undistorted/1477833687091179598.png",
+        "images_rig_cam5_undistorted/1477833687164907598.png",
+        "images_rig_cam5_undistorted/1477833687238635598.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833687017451598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833687091179598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833687164907598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833687238635598.png"
+      ]
+    },
+    {
+      "window_id": "playground__images_rig_cam5_undistorted__0036",
+      "dataset": "eth3d",
+      "sequence": "playground__images_rig_cam5_undistorted__0036",
+      "scene": "playground",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477833687312363598.png",
+        "images_rig_cam5_undistorted/1477833687386091598.png",
+        "images_rig_cam5_undistorted/1477833687459819598.png",
+        "images_rig_cam5_undistorted/1477833687533547598.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833687312363598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833687386091598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833687459819598.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/playground/images/images_rig_cam5_undistorted/1477833687533547598.png"
+      ]
+    },
+    {
+      "window_id": "terrains__images_rig_cam5_undistorted__0000",
+      "dataset": "eth3d",
+      "sequence": "terrains__images_rig_cam5_undistorted__0000",
+      "scene": "terrains",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477838497933937559.png",
+        "images_rig_cam5_undistorted/1477838498007665559.png",
+        "images_rig_cam5_undistorted/1477838498081393559.png",
+        "images_rig_cam5_undistorted/1477838498155121559.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838497933937559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838498007665559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838498081393559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838498155121559.png"
+      ]
+    },
+    {
+      "window_id": "terrains__images_rig_cam5_undistorted__0004",
+      "dataset": "eth3d",
+      "sequence": "terrains__images_rig_cam5_undistorted__0004",
+      "scene": "terrains",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477838498228849559.png",
+        "images_rig_cam5_undistorted/1477838498302577559.png",
+        "images_rig_cam5_undistorted/1477838498376305559.png",
+        "images_rig_cam5_undistorted/1477838498450033559.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838498228849559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838498302577559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838498376305559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838498450033559.png"
+      ]
+    },
+    {
+      "window_id": "terrains__images_rig_cam5_undistorted__0008",
+      "dataset": "eth3d",
+      "sequence": "terrains__images_rig_cam5_undistorted__0008",
+      "scene": "terrains",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477838498523761559.png",
+        "images_rig_cam5_undistorted/1477838498597489559.png",
+        "images_rig_cam5_undistorted/1477838498671217559.png",
+        "images_rig_cam5_undistorted/1477838498744945559.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838498523761559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838498597489559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838498671217559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838498744945559.png"
+      ]
+    },
+    {
+      "window_id": "terrains__images_rig_cam5_undistorted__0012",
+      "dataset": "eth3d",
+      "sequence": "terrains__images_rig_cam5_undistorted__0012",
+      "scene": "terrains",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477838498818673559.png",
+        "images_rig_cam5_undistorted/1477838498892401559.png",
+        "images_rig_cam5_undistorted/1477838498966129559.png",
+        "images_rig_cam5_undistorted/1477838499039857559.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838498818673559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838498892401559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838498966129559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838499039857559.png"
+      ]
+    },
+    {
+      "window_id": "terrains__images_rig_cam5_undistorted__0016",
+      "dataset": "eth3d",
+      "sequence": "terrains__images_rig_cam5_undistorted__0016",
+      "scene": "terrains",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477838499113585559.png",
+        "images_rig_cam5_undistorted/1477838499187313559.png",
+        "images_rig_cam5_undistorted/1477838499261041559.png",
+        "images_rig_cam5_undistorted/1477838499334769559.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838499113585559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838499187313559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838499261041559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838499334769559.png"
+      ]
+    },
+    {
+      "window_id": "terrains__images_rig_cam5_undistorted__0020",
+      "dataset": "eth3d",
+      "sequence": "terrains__images_rig_cam5_undistorted__0020",
+      "scene": "terrains",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477838499408497559.png",
+        "images_rig_cam5_undistorted/1477838499482225559.png",
+        "images_rig_cam5_undistorted/1477838499555953559.png",
+        "images_rig_cam5_undistorted/1477838499629681559.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838499408497559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838499482225559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838499555953559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838499629681559.png"
+      ]
+    },
+    {
+      "window_id": "terrains__images_rig_cam5_undistorted__0024",
+      "dataset": "eth3d",
+      "sequence": "terrains__images_rig_cam5_undistorted__0024",
+      "scene": "terrains",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477838499703409559.png",
+        "images_rig_cam5_undistorted/1477838499777137559.png",
+        "images_rig_cam5_undistorted/1477838499850865559.png",
+        "images_rig_cam5_undistorted/1477838499924593559.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838499703409559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838499777137559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838499850865559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838499924593559.png"
+      ]
+    },
+    {
+      "window_id": "terrains__images_rig_cam5_undistorted__0028",
+      "dataset": "eth3d",
+      "sequence": "terrains__images_rig_cam5_undistorted__0028",
+      "scene": "terrains",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477838499998321559.png",
+        "images_rig_cam5_undistorted/1477838500072049559.png",
+        "images_rig_cam5_undistorted/1477838500145777559.png",
+        "images_rig_cam5_undistorted/1477838500219505559.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838499998321559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838500072049559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838500145777559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838500219505559.png"
+      ]
+    },
+    {
+      "window_id": "terrains__images_rig_cam5_undistorted__0032",
+      "dataset": "eth3d",
+      "sequence": "terrains__images_rig_cam5_undistorted__0032",
+      "scene": "terrains",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477838500293233559.png",
+        "images_rig_cam5_undistorted/1477838500366961559.png",
+        "images_rig_cam5_undistorted/1477838500440689559.png",
+        "images_rig_cam5_undistorted/1477838500514417559.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838500293233559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838500366961559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838500440689559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838500514417559.png"
+      ]
+    },
+    {
+      "window_id": "terrains__images_rig_cam5_undistorted__0036",
+      "dataset": "eth3d",
+      "sequence": "terrains__images_rig_cam5_undistorted__0036",
+      "scene": "terrains",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477838500588145559.png",
+        "images_rig_cam5_undistorted/1477838500661873559.png",
+        "images_rig_cam5_undistorted/1477838500735601559.png",
+        "images_rig_cam5_undistorted/1477838500809329559.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838500588145559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838500661873559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838500735601559.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/terrains/images/images_rig_cam5_undistorted/1477838500809329559.png"
+      ]
+    }
+  ]
+}

@@ -3,7 +3,12 @@
 import torch
 
 from dream3r.native_student_decoder import NativeStudentDecoder
-from dream3r.scripts.train_native_student_decoder import load_state_prior_checkpoint
+from dream3r.scripts.train_native_student_decoder import (
+    _dropout_consistency_loss,
+    _scale_drift_loss,
+    _temporal_proxy_loss,
+    load_state_prior_checkpoint,
+)
 from dream3r.state_prior_head import StatePriorHead
 
 
@@ -94,3 +99,38 @@ def test_load_state_prior_checkpoint_freezes_teacher(tmp_path):
     assert torch.allclose(student.state_prior.prior_mlp[-1].bias, torch.tensor([-2.0, 2.0]))
     assert not student.state_prior.context_proj.weight.requires_grad
     assert not student.state_prior.prior_mlp[-1].bias.requires_grad
+
+
+def test_dropout_consistency_loss_detaches_full_output_target():
+    dropped = torch.zeros(1, 2, 3, 3, requires_grad=True)
+    full = torch.ones(1, 2, 3, 3, requires_grad=True)
+    mask = torch.ones(1, 2, 3, dtype=torch.bool)
+
+    loss = _dropout_consistency_loss(dropped, full, mask)
+    loss.backward()
+
+    assert dropped.grad is not None
+    assert full.grad is None
+
+
+def test_temporal_and_scale_proxy_losses_backprop_to_prediction():
+    pred = torch.tensor(
+        [[
+            [[0.0, 0.0, 1.0], [0.0, 0.0, 2.0]],
+            [[0.0, 0.0, 1.5], [0.0, 0.0, 2.5]],
+        ]],
+        requires_grad=True,
+    )
+    target = torch.tensor(
+        [[
+            [[0.0, 0.0, 1.0], [0.0, 0.0, 2.0]],
+            [[0.0, 0.0, 2.0], [0.0, 0.0, 3.0]],
+        ]]
+    )
+    mask = torch.ones(1, 2, 2, dtype=torch.bool)
+
+    loss = _temporal_proxy_loss(pred, target, mask) + _scale_drift_loss(pred, target, mask)
+    loss.backward()
+
+    assert torch.isfinite(loss)
+    assert pred.grad is not None

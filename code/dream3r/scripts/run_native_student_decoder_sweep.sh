@@ -13,6 +13,9 @@ LR="${LR:-5e-4}"
 PROPOSAL_DROPOUT="${PROPOSAL_DROPOUT:-0.35}"
 DISTILL_WEIGHT="${DISTILL_WEIGHT:-0.5}"
 RESIDUAL_SCALE="${RESIDUAL_SCALE:-0.05}"
+DROPOUT_CONSISTENCY_WEIGHT="${DROPOUT_CONSISTENCY_WEIGHT:-0.0}"
+TEMPORAL_LOSS_WEIGHT="${TEMPORAL_LOSS_WEIGHT:-0.0}"
+SCALE_DRIFT_LOSS_WEIGHT="${SCALE_DRIFT_LOSS_WEIGHT:-0.0}"
 
 cd "$ROOT"
 mkdir -p "$OUT"
@@ -32,6 +35,9 @@ run_one() {
       --proposal-dropout "$PROPOSAL_DROPOUT" \
       --distill-weight "$DISTILL_WEIGHT" \
       --residual-scale "$RESIDUAL_SCALE" \
+      --dropout-consistency-weight "$DROPOUT_CONSISTENCY_WEIGHT" \
+      --temporal-loss-weight "$TEMPORAL_LOSS_WEIGHT" \
+      --scale-drift-loss-weight "$SCALE_DRIFT_LOSS_WEIGHT" \
       "$@" \
       2>&1 | tee "$OUT/$name.log"
   echo "[$(date '+%F %T')] OK $name" | tee -a "$OUT/sweep.log"

@@ -9,7 +9,7 @@ import torch
 
 from dream3r.modules import Critic
 from dream3r.scripts.build_oracle_expert_labels import (
-    EXPERT_ORDER,
+    DEFAULT_EXPERT_ORDER,
     _evaluate_expert,
     _load_adapter,
     _pointmap_abs_rel,
@@ -18,6 +18,8 @@ from dream3r.scripts.build_oracle_expert_labels import (
     _sequence_sample,
     _top_regime,
 )
+
+EXPERT_ORDER = DEFAULT_EXPERT_ORDER
 
 
 def _action_for(abs_rel: float, alt_abs_rel: float,

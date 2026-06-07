@@ -1,0 +1,27 @@
+{
+  "schema_version": "dream3r_vlm_window_manifest_v1",
+  "dataset": "eth3d",
+  "root": "/hdd3/kykt26/data",
+  "regime_labels": "runs/eth3d_cross_dataset_regime_labels/regime_labels.json",
+  "n_windows": 1,
+  "windows": [
+    {
+      "window_id": "delivery_area__images_rig_cam5_undistorted__0000",
+      "dataset": "eth3d",
+      "sequence": "delivery_area__images_rig_cam5_undistorted__0000",
+      "scene": "delivery_area",
+      "frame_ids": [
+        "images_rig_cam5_undistorted/1477843917481127523.png",
+        "images_rig_cam5_undistorted/1477843917554855523.png",
+        "images_rig_cam5_undistorted/1477843917628583523.png",
+        "images_rig_cam5_undistorted/1477843917702311523.png"
+      ],
+      "frames": [
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843917481127523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843917554855523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843917628583523.png",
+        "/hdd3/kykt26/data/eth3d/low_res_many_view/training/delivery_area/images/images_rig_cam5_undistorted/1477843917702311523.png"
+      ]
+    }
+  ]
+}
