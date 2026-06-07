@@ -1,130 +1,125 @@
-# Dream3R v1.0-rc1 Official Version
+# Dream3R v1.1.0 Official Version
 
-Date: 2026-06-06
-Status: official release-candidate package
+Date: 2026-06-08
+Status: formal official release
 
 ## Version Identity
 
 ```text
 name: Dream3R
-version: v1.0-rc1
-release candidate: frozen_state_prior_bounded_residual
+version: v1.1.0
+release candidate: domain_conditional_vggt_teacher
 metric: AbsRel, lower is better
-KITTI / ETH3D: 0.1448 / 0.1475
+KITTI / ETH3D: 0.1448 / 0.0570
+stable fallback: v1.0-rc1
 ```
 
-This is the formal versioned package for the current architecture. It is not
-the ideal proposal-free Dream3R model; it is the strongest controlled,
-state-causal implementation currently available.
-
-## What Is Official In v1.0-rc1
-
-The official path is:
+Dream3R v1.1.0 is the official usable release of the current architecture. It
+is a state-conditioned proposal-fusion 3R model with a domain-conditional
+policy:
 
 ```text
-real proposal teachers
--> cached proposal bank
--> Dream state and conflict metadata
--> frozen StatePrior
--> bounded convex proposal fusion
--> disagreement-bounded residual refinement
-```
-
-The official import surface is:
-
-```python
-from dream3r.release_candidate import build_dream3r_release_candidate
-
-model = build_dream3r_release_candidate(checkpoint_path=None, d_memory=32)
-out = model(proposal_pointmaps, proposal_confidences, memory_context, conflict_score)
-```
-
-The supported claim is narrow:
-
-```text
-Dream3R v1.0-rc1 is a controlled state-conditioned proposal-fusion release
-candidate that improves over the best single proposal expert and preserves
-state-causality against shuffled-state controls on the selected KITTI/ETH3D
-gate.
-```
-
-## What Is Not Official
-
-The following are implemented or staged but not part of the official model
-path:
-
-| Lane | Status | Reason |
-| --- | --- | --- |
-| NativeStudentDecoder | implemented; causal but flat | `0.1451 / 0.1480`, does not beat RC |
-| ImageStateStudentDecoder | implemented; negative | loses to controls and baseline |
-| VGGT-Omega | real backend admitted | raw 4-expert KITTI release controls fail |
-| domain-conditional VGGT policy | unified gate passed; v1.1 promotion candidate | not packaged as the official version yet |
-| Qwen semantic controller | schema/runtime implemented | diagnostic-negative for routing/Critic gates |
-| v0.4 typed pipeline | implemented substrate | not the selected metric path |
-
-## v1.1 Promotion Candidate
-
-The passed promotion-candidate policy is:
-
-```text
-KITTI -> Dream3R v1.0-rc1 bounded StatePrior + residual
+KITTI -> v1.0-rc1 bounded StatePrior + residual
 ETH3D -> VGGT-Omega-expanded SCF correct-state
 ```
 
-Unified gate result:
+It is not a proposal-free foundation 3R model.
 
-```text
-artifact: runs/v22_admission/domain_conditional_teacher/unified_gate_candidate_with_kitti_no_state_server.json
-KITTI state/no-state/shuffle: 0.1448 / 0.1553 / 0.1521
-ETH3D state/no-state/shuffle: 0.0570 / 0.0583 / 0.0598
-status: pass
-promotable_to_official: true
+## Official Import
+
+```python
+from dream3r.release_v11 import build_dream3r_v11_release
+
+model = build_dream3r_v11_release()
+out = model(
+    proposal_pointmaps,
+    proposal_confidences,
+    memory_context,
+    conflict_score,
+    domain="eth3d",
+)
 ```
 
-This is not silently promoted in this file. A v1.1 package needs its own
-version switch, artifact manifest update, verifier update, and reproducibility
-notes.
+## Evidence
+
+Unified gate artifact:
+
+```text
+runs/v22_admission/domain_conditional_teacher/unified_gate_candidate_with_kitti_no_state_server.json
+```
+
+State-causality controls:
+
+```text
+KITTI state/no-state/shuffle: 0.1448 / 0.1553 / 0.1521
+ETH3D state/no-state/shuffle: 0.0570 / 0.0583 / 0.0598
+```
+
+The correct-state branch beats no-state and shuffled-state on both domains.
+
+## Completion Evidence
+
+```text
+local v1.1 verifier: pass
+local v1.1 smoke: pass
+local v1.0 fallback verifier: pass
+local release tests: 12 passed
+local full test suite: 300 passed, 2 skipped
+BUAA-Server v1.1 verifier: pass
+BUAA-Server v1.1 smoke: pass
+BUAA-Server v1.0 fallback verifier: pass
+BUAA-Server release tests: 12 passed
+```
+
+Smoke artifact:
+
+```text
+runs/release/v11_smoke/smoke_v11_release_model.json
+```
 
 ## Required Verification
 
-Local package verification:
+Local:
 
 ```powershell
-cd E:\Dream3R
-python -B code\dream3r\scripts\verify_release_candidate.py
+python -B code\dream3r\scripts\verify_v11_release.py --root .
+python -B code\dream3r\scripts\smoke_v11_release_model.py --output runs\release\v11_smoke\smoke_v11_release_model.json
+python -B code\dream3r\scripts\verify_release_candidate.py --root .
 ```
 
-Expected:
+Server:
 
 ```text
-"status": "pass"
-"version": "v1.0-rc1"
+cd /hdd3/kykt26/code/dream3r
+conda run -n dream3r python -B dream3r/scripts/verify_v11_release.py --root . --skip-frozen-core
+conda run -n dream3r python -B dream3r/scripts/smoke_v11_release_model.py --output runs/release/v11_smoke/smoke_v11_release_model.json
 ```
 
-Targeted tests:
+## Stable Fallback
 
-```powershell
-python -B -m pytest --assert=plain code/dream3r/tests/test_release_candidate_verifier.py -q
-python -B -m pytest --assert=plain code/dream3r/tests/test_release_candidate_architecture.py -q
-python -B -m pytest --assert=plain code/dream3r/tests/test_native_student_decoder.py -q
-```
-
-## Entry Points
-
-Read in this order:
+The previous v1.0 release-candidate is preserved as a stable fallback:
 
 ```text
-ARCHITECTURE.md
-release/OFFICIAL_VERSION.md
-release/ARCHITECTURE_V1_0_RC.md
-release/ARCHITECTURE_STATUS.json
-release/DREAM3R_RC_CARD.md
-release/REPRODUCE.md
-release/VERIFY_REPORT.md
-release/LIMITATIONS.md
-release/NON_CLAIMS.md
+doc: release/STABLE_FALLBACK_V1_0_RC.md
+api: dream3r.release_candidate.build_dream3r_release_candidate
+KITTI / ETH3D: 0.1448 / 0.1475
 ```
 
-The version exists to stabilize the architecture surface. Future model
-improvement should branch from this version and must pass the same
-state/no-state/shuffle control discipline before replacing it.
+## Claim Boundary
+
+Safe to claim:
+
+```text
+Dream3R v1.1.0 is a complete official state-conditioned proposal-fusion 3R
+release with verified KITTI/ETH3D domain branches.
+```
+
+Do not claim:
+
+```text
+proposal-free foundation 3R
+image-only inference
+Qwen geometry improvement
+Foundation3R promotion
+universal SOTA
+```

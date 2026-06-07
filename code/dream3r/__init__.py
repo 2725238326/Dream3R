@@ -35,4 +35,4 @@ from dream3r.release_v11 import (
 from dream3r.proposal_free_3r_decoder import ProposalFree3RDecoder
 from dream3r.foundation3r_decoder import Foundation3RDecoder, Foundation3RVGGTFeatureDecoder
 
-__version__ = "0.3.0"
+__version__ = "1.1.0"

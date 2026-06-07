@@ -151,16 +151,25 @@ def _check_official_api() -> dict[str, Any]:
 def verify(root: Path, check_frozen_core: bool = True) -> dict[str, Any]:
     artifacts_path = root / "release" / "ARTIFACTS.json"
     artifacts = _read_json(artifacts_path)
-    if artifacts.get("release_candidate") != EXPECTED_RC:
+    fallback = artifacts.get("stable_fallback_v1_0")
+    if not isinstance(fallback, dict):
+        fallback = artifacts
+
+    if fallback.get("release_candidate") != EXPECTED_RC:
         raise AssertionError(
-            f"release_candidate expected {EXPECTED_RC}, got {artifacts.get('release_candidate')}"
+            f"release_candidate expected {EXPECTED_RC}, got {fallback.get('release_candidate')}"
         )
-    if artifacts.get("version") != EXPECTED_VERSION:
-        raise AssertionError(f"version expected {EXPECTED_VERSION}, got {artifacts.get('version')}")
+    if fallback.get("version") != EXPECTED_VERSION:
+        raise AssertionError(f"version expected {EXPECTED_VERSION}, got {fallback.get('version')}")
 
     docs = _check_docs(root, artifacts)
     mirrors = _check_local_artifacts(root, artifacts)
-    metrics = _check_selected_metrics(root, artifacts)
+    metrics_manifest = dict(artifacts)
+    metrics_manifest["selected_metrics"] = fallback.get(
+        "selected_metrics",
+        artifacts.get("selected_metrics"),
+    )
+    metrics = _check_selected_metrics(root, metrics_manifest)
     frozen = _check_frozen_core(root) if check_frozen_core else []
     official_api = _check_official_api()
 

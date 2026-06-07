@@ -1,9 +1,9 @@
-"""Dream3R v1.1 domain-conditional release wrapper.
+"""Dream3R v1.1.0 domain-conditional official release wrapper.
 
-This module exposes the best currently controlled Dream3R policy as a stable
-callable surface:
+This module exposes the current official Dream3R policy as a stable callable
+surface:
 
-* KITTI-style windows use the official v1.0-rc1 bounded ProposalSetDecoder.
+* KITTI-style windows use the v1.0-rc1 bounded ProposalSetDecoder fallback.
 * ETH3D-style windows use the VGGT-Omega-expanded SCF head.
 
 The wrapper does not run image experts itself. It consumes the proposal bank
@@ -27,7 +27,7 @@ from dream3r.release_candidate import (
 from dream3r.scf_head import SCFHead
 
 
-RELEASE_V11_VERSION = "v1.1-rc1"
+RELEASE_V11_VERSION = "v1.1.0"
 RELEASE_V11_CANDIDATE = "domain_conditional_vggt_teacher"
 KITTI_POLICY = "v1.0-rc1 bounded StatePrior + residual"
 ETH3D_POLICY = "VGGT-Omega-expanded SCF correct-state"
@@ -37,7 +37,7 @@ ETH3D_EXPERT_ORDER = ("fast3r", "mast3r", "spann3r", "vggt_omega")
 
 @dataclass(frozen=True)
 class Dream3RDomainConditionalConfig:
-    """Configuration for the v1.1 domain-conditional wrapper."""
+    """Configuration for the v1.1.0 domain-conditional wrapper."""
 
     kitti: Dream3RReleaseConfig = field(default_factory=Dream3RReleaseConfig)
     eth3d_n_experts: int = len(ETH3D_EXPERT_ORDER)
@@ -71,7 +71,7 @@ class Dream3RDomainConditionalConfig:
 
 
 class Dream3RDomainConditionalRelease(nn.Module):
-    """Callable v1.1 policy wrapper for proposal-bank inference.
+    """Callable v1.1.0 policy wrapper for proposal-bank inference.
 
     Inputs are the same tensor family as the existing SCF/ProposalSetDecoder
     path. Pass ``domain="kitti"`` or ``domain="eth3d"`` to choose the branch.
@@ -105,9 +105,9 @@ class Dream3RDomainConditionalRelease(nn.Module):
         if config.eth3d_n_experts != len(config.eth3d_expert_order):
             raise ValueError("eth3d_n_experts must match eth3d_expert_order length")
         if not config.eth3d_use_state:
-            raise ValueError("v1.1 ETH3D policy requires use_state=True")
+            raise ValueError("v1.1.0 ETH3D policy requires use_state=True")
         if config.eth3d_use_residual:
-            raise ValueError("v1.1 ETH3D policy uses convex SCF without residual")
+            raise ValueError("v1.1.0 ETH3D policy uses convex SCF without residual")
 
     @classmethod
     def from_checkpoints(
@@ -207,7 +207,7 @@ def build_dream3r_v11_release(
     kitti_checkpoint: str | Path | None = None,
     eth3d_checkpoint: str | Path | None = None,
 ) -> Dream3RDomainConditionalRelease:
-    """Build the v1.1 domain-conditional Dream3R wrapper."""
+    """Build the v1.1.0 domain-conditional Dream3R wrapper."""
 
     if kitti_checkpoint is not None or eth3d_checkpoint is not None:
         return Dream3RDomainConditionalRelease.from_checkpoints(

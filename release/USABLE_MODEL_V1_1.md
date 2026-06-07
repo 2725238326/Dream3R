@@ -1,7 +1,7 @@
-# Dream3R v1.1-rc1 Usable Model
+# Dream3R v1.1.0 Usable Model
 
 Date: 2026-06-08
-Status: usable release candidate, reversible from v1.0-rc1
+Status: current effective architecture, reversible to v1.0-rc1 stable fallback
 
 Compressed handoff:
 
@@ -13,14 +13,15 @@ handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md
 
 ```text
 name: Dream3R
-version: v1.1-rc1
+version: v1.1.0
 candidate: domain_conditional_vggt_teacher
 metric: AbsRel, lower is better
 KITTI / ETH3D: 0.1448 / 0.0570
 ```
 
-This is the strongest controlled model surface currently available tonight.
-It is not a proposal-free foundation model. It is a domain-conditional
+This is the strongest controlled model surface currently available and is the
+current effective Dream3R architecture. It is not a proposal-free foundation
+model. It is a domain-conditional
 proposal-bank 3R model:
 
 ```text
@@ -81,7 +82,7 @@ Expected verifier status:
 
 ```text
 "status": "pass"
-"version": "v1.1-rc1"
+"version": "v1.1.0"
 ```
 
 ## Boundaries
@@ -93,6 +94,6 @@ Do not claim:
 - end-to-end image-only inference;
 - universal SOTA.
 
-This package is a usable controlled model for the existing Dream3R proposal
-bank runtime. The proposal-free Foundation3R/VGGT-feature line remains
-experimental and is not the tonight release.
+This package is the current effective controlled model for the existing
+Dream3R proposal-bank runtime. The proposal-free Foundation3R/VGGT-feature
+line remains experimental and is not the effective release.

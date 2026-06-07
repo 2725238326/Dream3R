@@ -1,8 +1,14 @@
 # Dream Workflow Status
 
-Last updated: 2026-06-08 (Context compaction completed: `handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md`. Current state is idle; v1.1-rc1 is the usable model package, v1.0-rc1 remains official stable fallback, Qwen remains diagnostic-only, VGGT-Omega is used through the v1.1 ETH3D branch and Foundation3R teacher/feature caches, and proposal-free work should resume only through explicit Foundation3R state-modulation/representation gates.)
+Last updated: 2026-06-08 (Full model completion path added for the current effective v1.1 architecture: `smoke_v11_release_model.py` exercises KITTI and ETH3D branches, `test_release_v11_smoke_model.py` locks the contract, and `release/RUNBOOK.md` now gives the v1.1 verifier/smoke/fallback sequence.)
 
-Last updated: 2026-06-07 (Tonight usable model package added: `Dream3R v1.1-rc1` domain-conditional wrapper. Import `build_dream3r_v11_release`; KITTI uses v1.0-rc1, ETH3D uses VGGT-Omega-expanded SCF. Local/server v1.1 tests and verifier pass; v1.0 verifier still passes.)
+Last updated: 2026-06-08 (Architecture identity cleaned up: Dream3R `v1.1.0` is now the current effective architecture, documented at `release/EFFECTIVE_ARCHITECTURE_V1_1.md`; `v1.0-rc1` remains the stable fallback. Mainline work should use the v1.1 wrapper; Foundation3R/proposal-free stays research-only.)
+
+Last updated: 2026-06-08 (Foundation3R state-modulation gate closed negative: explicit FiLM scale/shift + additive state modulation and state-contrastive loss were implemented and tested locally/server-side. GPU1 20e contrast gate gives state `0.3222/0.1504`, no-state `0.3392/0.1484`, shuffle `0.3500/0.1353`; ETH3D fails because shuffle is best. Hybrid retry collapses to `0.4734/0.3271`. Keep `v1.1.0` as usable model; Foundation3R needs target/data/architecture redesign.)
+
+Last updated: 2026-06-08 (Formal release promotion complete: `v1.1.0` is the official model package, `v1.0-rc1` remains stable fallback, Qwen remains diagnostic-only, VGGT-Omega is used through the v1.1 ETH3D branch and Foundation3R teacher/feature caches. Evidence: local v1.1/fallback verifiers and smoke pass, local full suite `300 passed, 2 skipped`, BUAA-Server GPU1 v1.1/fallback verifiers, smoke, and release tests pass.)
+
+Last updated: 2026-06-07 (Tonight usable model package added: `Dream3R v1.1.0` domain-conditional wrapper. Import `build_dream3r_v11_release`; KITTI uses v1.0-rc1, ETH3D uses VGGT-Omega-expanded SCF. Local/server v1.1 tests and verifier pass; v1.0 verifier still passes.)
 
 Last updated: 2026-06-07 (Foundation3R VGGT feature student closed experimental-positive: real VGGT-Omega feature caches 50+50 pass on GPU1; hybrid loss collapses, so VGGT feature mode now defaults to teacher-only. Teacher-only 20e improves over scratch to state `0.3237/0.1424`, no-state `0.3260/0.1489`, shuffle `0.3246/0.1330`, but state causality is not established and it is not promotable over official/v1.1 candidates.)
 
@@ -22,7 +28,7 @@ Last updated: 2026-06-06 (Proposal-free stripped-teacher distillation gate close
 
 Last updated: 2026-06-06 (Proposal-free Dream3R scaffold added and tested locally/server-side. GPU1 gate20 is negative: state `0.3273/0.4029`, no-state `0.3318/0.4050`, shuffle `0.3221/0.4041`. Next proposal-free work is dense teacher distillation/pretraining.)
 
-Last updated: 2026-06-06 (Unified domain-conditional gate passed on BUAA-Server: KITTI `0.1448/0.1553/0.1521`, ETH3D `0.0570/0.0583/0.0598`; all state/no-state/shuffle controls pass. The policy is now a v1.1 promotion candidate; official package remains `v1.0-rc1` pending versioned packaging.)
+Last updated: 2026-06-06 (Unified domain-conditional gate passed on BUAA-Server: KITTI `0.1448/0.1553/0.1521`, ETH3D `0.0570/0.0583/0.0598`; all state/no-state/shuffle controls pass. The policy was later packaged as official `v1.1.0`; `v1.0-rc1` is stable fallback.)
 
 Last updated: 2026-06-06 (Architecture cleanup pass added `ARCHITECTURE.md` as the canonical map and `release/ARCHITECTURE_STATUS.json` as the machine-readable status map.)
 
@@ -100,9 +106,10 @@ Phase 1.5: Dream3R release/research checkpoint, context compressed
 Current checkpoint:
   Read handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md after
   TASK_SNAPSHOT.md.
-  Dream3R v1.1-rc1 is the usable model package: KITTI 0.1448, ETH3D 0.0570.
-  Dream3R v1.0-rc1 remains official stable fallback: KITTI/ETH3D 0.1448/0.1475.
-  Foundation3R is the proposal-free research lane, but not promotable yet.
+  Dream3R v1.1.0 is the official model package: KITTI 0.1448, ETH3D 0.0570.
+  Dream3R v1.0-rc1 remains stable fallback: KITTI/ETH3D 0.1448/0.1475.
+  Foundation3R is the proposal-free research lane, but the 2026-06-08
+  state-modulation gate is not promotable.
   Qwen is diagnostic-only. VGGT-Omega is accepted as teacher/ETH3D branch, not
   a universal replacement.
 

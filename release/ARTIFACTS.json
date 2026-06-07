@@ -1,25 +1,89 @@
 {
-  "version": "v1.0-rc1",
-  "release_candidate": "frozen_state_prior_bounded_residual",
+  "version": "v1.1.0",
+  "release_candidate": "domain_conditional_vggt_teacher",
   "selected_metrics": {
     "kitti_abs_rel": 0.1448,
-    "eth3d_abs_rel": 0.1475,
-    "shuffle_kitti_abs_rel": 0.1521,
-    "shuffle_eth3d_abs_rel": 0.2467
+    "eth3d_abs_rel": 0.057,
+    "kitti_no_state_abs_rel": 0.1553,
+    "kitti_shuffle_abs_rel": 0.1521,
+    "eth3d_no_state_abs_rel": 0.0583,
+    "eth3d_shuffle_abs_rel": 0.0598
+  },
+  "stable_fallback_v1_0": {
+    "version": "v1.0-rc1",
+    "release_candidate": "frozen_state_prior_bounded_residual",
+    "status": "stable_fallback",
+    "api_builder": "dream3r.release_candidate.build_dream3r_release_candidate",
+    "doc": "release/STABLE_FALLBACK_V1_0_RC.md",
+    "selected_metrics": {
+      "kitti_abs_rel": 0.1448,
+      "eth3d_abs_rel": 0.1475,
+      "shuffle_kitti_abs_rel": 0.1521,
+      "shuffle_eth3d_abs_rel": 0.2467
+    }
   },
   "promotion_candidate": {
     "version_target": "v1.1",
     "candidate": "unified_domain_conditional_vggt_teacher",
-    "status": "packaged_as_usable_v1_1_rc1",
+    "status": "promoted_to_official_release",
     "kitti_abs_rel": 0.1448,
     "eth3d_abs_rel": 0.057,
     "promotable_to_official": true,
-    "remaining_action": "optionally promote v1.1-rc1 to official after external packaging review"
+    "remaining_action": "none; v1.1.0 is the formal official release"
+  },
+  "official_release": {
+    "version": "v1.1.0",
+    "candidate": "domain_conditional_vggt_teacher",
+    "status": "formal_official_release",
+    "doc": "release/OFFICIAL_VERSION.md",
+    "api_builder": "dream3r.release_v11.build_dream3r_v11_release",
+    "smoke_script": "code/dream3r/scripts/smoke_v11_release_model.py",
+    "smoke_artifact": "runs/release/v11_smoke/smoke_v11_release_model.json",
+    "stable_fallback": "v1.0-rc1",
+    "kitti_abs_rel": 0.1448,
+    "eth3d_abs_rel": 0.057,
+    "metric_direction": "lower_is_better",
+    "claim_boundary": "state-conditioned proposal-fusion 3R, not proposal-free foundation 3R"
+  },
+  "current_effective_architecture": {
+    "version": "v1.1.0",
+    "candidate": "domain_conditional_vggt_teacher",
+    "status": "formal_official_release",
+    "doc": "release/EFFECTIVE_ARCHITECTURE_V1_1.md",
+    "api_builder": "dream3r.release_v11.build_dream3r_v11_release",
+    "smoke_script": "code/dream3r/scripts/smoke_v11_release_model.py",
+    "smoke_artifact": "runs/release/v11_smoke/smoke_v11_release_model.json",
+    "stable_fallback": "v1.0-rc1",
+    "kitti_abs_rel": 0.1448,
+    "eth3d_abs_rel": 0.057,
+    "metric_direction": "lower_is_better",
+    "claim_boundary": "state-conditioned proposal-fusion 3R, not proposal-free foundation 3R"
+  },
+  "complete_model_v1_1": {
+    "version": "v1.1.0",
+    "status": "complete_official_model_package",
+    "doc": "release/COMPLETE_MODEL_V1_1.md",
+    "verifier": "code/dream3r/scripts/verify_v11_release.py",
+    "smoke_script": "code/dream3r/scripts/smoke_v11_release_model.py",
+    "smoke_artifact": "runs/release/v11_smoke/smoke_v11_release_model.json",
+    "local_evidence": [
+      "v1.1 verifier pass",
+      "v1.1 smoke pass",
+      "v1.0 fallback verifier pass",
+      "release tests 12 passed",
+      "full test suite 300 passed, 2 skipped"
+    ],
+    "server_evidence": [
+      "v1.1 verifier pass",
+      "v1.1 smoke pass",
+      "v1.0 fallback verifier pass",
+      "release tests 12 passed"
+    ]
   },
   "usable_model_v1_1": {
-    "version": "v1.1-rc1",
+    "version": "v1.1.0",
     "candidate": "domain_conditional_vggt_teacher",
-    "status": "usable_release_candidate",
+    "status": "formal_official_release",
     "kitti_abs_rel": 0.1448,
     "eth3d_abs_rel": 0.057,
     "metric_direction": "lower_is_better",
@@ -35,7 +99,7 @@
     "status": "current_resume_anchor",
     "covers": [
       "v1.1 usable model",
-      "v1.0 official fallback",
+      "v1.0 stable fallback",
       "VGGT-Omega status",
       "Qwen diagnostic-only status",
       "Foundation3R proposal-free status",
@@ -43,6 +107,41 @@
       "validation evidence",
       "next work priorities"
     ]
+  },
+  "clean_architecture_map": {
+    "date": "2026-06-08",
+    "doc": "planning/DREAM3R_CLEAN_ARCHITECTURE_MAP_20260608.md",
+    "status": "current_architecture_cleanup_anchor",
+    "lanes": [
+      "usable release",
+      "proposal-free research",
+      "teacher/proposal infrastructure",
+      "diagnostic/non-geometry signals",
+      "frozen substrate"
+    ],
+    "rule": "treat v1.1.0 as the official release; treat Foundation3R/proposal-free state-modulation as negative until target/data/architecture changes"
+  },
+  "foundation3r_state_modulation_gate": {
+    "date": "2026-06-08",
+    "status": "gate_negative_not_promotable",
+    "mechanism": "film_scale_shift_plus_additive_state_and_state_contrastive_margin_loss",
+    "artifact_root": "runs/stage6_fusion/foundation3r_state_mod_contrast20_20260608/",
+    "hybrid_retry_artifact": "runs/stage6_fusion/foundation3r_state_mod_hybrid20_20260608/state_seed_7/results.json",
+    "controls": {
+      "state_kitti_abs_rel": 0.3222,
+      "state_eth3d_abs_rel": 0.1504,
+      "no_state_kitti_abs_rel": 0.3392,
+      "no_state_eth3d_abs_rel": 0.1484,
+      "shuffle_state_kitti_abs_rel": 0.35,
+      "shuffle_state_eth3d_abs_rel": 0.1353
+    },
+    "hybrid_retry": {
+      "state_kitti_abs_rel": 0.4734,
+      "state_eth3d_abs_rel": 0.3271
+    },
+    "decision": "decisions/DEC-20260608-050-foundation3r-state-modulation-gate.md",
+    "cycle": "cycles/CYCLE-20260608-foundation3r-state-modulation-gate.md",
+    "rule": "do not promote Foundation3R; next proposal-free attempt must change target/data/architecture"
   },
   "server_artifacts": {
     "bounded_state": "/hdd3/kykt26/code/dream3r/runs/stage6_fusion/bounded_refine_sweep/frozen_prior_state_seed_7/results.json",
@@ -69,7 +168,10 @@
   "release_docs": {
     "architecture_map": "ARCHITECTURE.md",
     "architecture_status": "release/ARCHITECTURE_STATUS.json",
+    "complete_model_v1_1": "release/COMPLETE_MODEL_V1_1.md",
+    "effective_architecture_v1_1": "release/EFFECTIVE_ARCHITECTURE_V1_1.md",
     "official_version": "release/OFFICIAL_VERSION.md",
+    "stable_fallback_v1_0": "release/STABLE_FALLBACK_V1_0_RC.md",
     "usable_model_v1_1": "release/USABLE_MODEL_V1_1.md",
     "architecture_v1_0_rc": "release/ARCHITECTURE_V1_0_RC.md",
     "candidate_card": "release/DREAM3R_RC_CARD.md",
@@ -89,19 +191,21 @@
     "release_verifier_test": "code/dream3r/tests/test_release_candidate_verifier.py",
     "v1_1_release_verifier": "code/dream3r/scripts/verify_v11_release.py",
     "v1_1_release_verifier_test": "code/dream3r/tests/test_release_v11_verifier.py",
+    "v1_1_release_smoke": "code/dream3r/scripts/smoke_v11_release_model.py",
+    "v1_1_release_smoke_test": "code/dream3r/tests/test_release_v11_smoke_model.py",
     "unified_domain_conditional_gate": "code/dream3r/scripts/eval_unified_domain_conditional_gate.py",
     "unified_domain_conditional_gate_test": "code/dream3r/tests/test_unified_domain_conditional_gate.py"
   },
   "official_api": {
-    "module": "code/dream3r/release_candidate.py",
-    "test": "code/dream3r/tests/test_release_candidate_architecture.py",
-    "builder": "dream3r.release_candidate.build_dream3r_release_candidate",
-    "class": "dream3r.release_candidate.Dream3RReleaseCandidate"
-  },
-  "usable_v1_1_api": {
     "module": "code/dream3r/release_v11.py",
     "test": "code/dream3r/tests/test_release_v11_architecture.py",
     "builder": "dream3r.release_v11.build_dream3r_v11_release",
     "class": "dream3r.release_v11.Dream3RDomainConditionalRelease"
+  },
+  "stable_fallback_api": {
+    "module": "code/dream3r/release_candidate.py",
+    "test": "code/dream3r/tests/test_release_candidate_architecture.py",
+    "builder": "dream3r.release_candidate.build_dream3r_release_candidate",
+    "class": "dream3r.release_candidate.Dream3RReleaseCandidate"
   }
 }

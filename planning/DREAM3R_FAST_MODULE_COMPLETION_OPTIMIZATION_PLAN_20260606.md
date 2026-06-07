@@ -54,7 +54,7 @@ code/dream3r/config.py
 | `NativeStudentDecoder` | executable; causal; objective patches implemented; still flat vs RC | larger bounded target change if model improvement is required | stop same-loss sweeps; consider stronger teacher/target redesign only |
 | `ImageStateStudentDecoder` | implemented; negative | better image-token target and less anchor collapse | defer, do not rerun unchanged |
 | `SCFHead` | accepted precursor | no more headline work | use metrics/helpers only |
-| VGGT-Omega | real teacher; oracle-positive ETH3D | domain-conditional teacher rule | defer until RC packaging is stable |
+| VGGT-Omega | real teacher; oracle-positive ETH3D | domain-conditional teacher rule | now used by official v1.1.0 ETH3D branch |
 | Qwen semantic controller | diagnostic-negative | broader task definition only | freeze as diagnostic |
 | Release docs | mostly complete | final manuscript/deck conversion | continue in `release/` |
 

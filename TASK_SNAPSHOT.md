@@ -1,8 +1,20 @@
 # Dream Task Snapshot
 
-Last updated: 2026-06-08 (Context compaction completed at `handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md`. It consolidates the current usable model, official fallback, Qwen/VGGT/Foundation3R status, frozen-core policy, server paths, validation evidence, non-claims, dirty-worktree warning, and next work priorities. Status remains idle: use `v1.1-rc1` for the usable package, preserve `v1.0-rc1` as official stable fallback, and continue proposal-free research only through explicit Foundation3R state-modulation/representation gates. Earlier last-updated note follows.)
+Last updated: 2026-06-08 (Formal release promotion completed and verified: Dream3R `v1.1.0` is now the official release via `dream3r.release_v11.build_dream3r_v11_release`; `v1.0-rc1` is stable fallback/regression gate. Local evidence: v1.1 verifier pass, v1.1 smoke pass, v1.0 fallback verifier pass, release tests `12 passed`, full suite `300 passed, 2 skipped`, frozen core diff empty. BUAA-Server GPU1 evidence: JSON pass, v1.1 verifier pass, v1.1 smoke pass, v1.0 fallback verifier pass, release tests `12 passed`. Earlier last-updated note follows.)
 
-Last updated: 2026-06-07 (Tonight usable 3R model package added: `Dream3R v1.1-rc1` via `code/dream3r/release_v11.py`. Policy is KITTI -> v1.0-rc1 bounded StatePrior/residual, ETH3D -> VGGT-Omega-expanded SCF. Metrics/control gate: KITTI `0.1448/0.1553/0.1521`, ETH3D `0.0570/0.0583/0.0598`. Added `release/USABLE_MODEL_V1_1.md`, `verify_v11_release.py`, tests, ARTIFACTS entries, DEC-049/cycle. Local and BUAA-Server v1.1 tests/verifier pass; v1.0 verifier still pass. Earlier last-updated note follows.)
+Last updated: 2026-06-08 (Complete model package document added at `release/COMPLETE_MODEL_V1_1.md`; publish checklist, verification report, reproduce notes, artifact manifest, and v1.1 verifier now recognize `v1.1.0` as the complete official model package. Earlier last-updated note follows.)
+
+Last updated: 2026-06-08 (Full current-effective model completion path added: `code/dream3r/scripts/smoke_v11_release_model.py` plus `test_release_v11_smoke_model.py` now smoke-test both v1.1 domain branches, and `release/RUNBOOK.md` now starts from v1.1 verifier + smoke + v1.0 fallback verifier. Earlier last-updated note follows.)
+
+Last updated: 2026-06-08 (Current effective architecture updated to Dream3R `v1.1.0` and documented at `release/EFFECTIVE_ARCHITECTURE_V1_1.md`: KITTI -> v1.0 bounded StatePrior/residual, ETH3D -> VGGT-Omega-expanded SCF, metrics `0.1448/0.0570`. `v1.0-rc1` is preserved as stable fallback, not deleted. Proposal-free/Foundation3R remains research-negative until target/data/architecture changes. Earlier last-updated note follows.)
+
+Last updated: 2026-06-08 (Architecture cleanup map added at `planning/DREAM3R_CLEAN_ARCHITECTURE_MAP_20260608.md`. It separates the codebase into usable release, proposal-free research, teacher/proposal infrastructure, diagnostic signals, and frozen substrate. Current usable model remains `v1.1.0`; proposal-free/Foundation3R remains negative until target/data/architecture changes. Earlier last-updated note follows.)
+
+Last updated: 2026-06-08 (Foundation3R state-modulation gate closed negative after real code/test/server run: added FiLM scale/shift + additive Dream-state modulation and optional state-contrastive margin loss in non-core Foundation3R files. Local and BUAA-Server tests `12 passed`. GPU1 20e contrast gate: state `0.3222/0.1504`, no-state `0.3392/0.1484`, shuffle `0.3500/0.1353`; KITTI improves with correct state, but ETH3D fails because shuffle is best. Hybrid retry collapses to `0.4734/0.3271`. Do not claim Foundation3R/proposal-free success; current usable model remains `v1.1.0`; next proposal-free step must change target/data/architecture, not rerun this small decoder. Earlier last-updated note follows.)
+
+Last updated: 2026-06-08 (Context compaction completed at `handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md`. It consolidates the current usable model, stable fallback, Qwen/VGGT/Foundation3R status, frozen-core policy, server paths, validation evidence, non-claims, dirty-worktree warning, and next work priorities. Status remains idle: use `v1.1.0` for the official package, preserve `v1.0-rc1` as stable fallback, and continue proposal-free research only through explicit Foundation3R state-modulation/representation gates. Earlier last-updated note follows.)
+
+Last updated: 2026-06-07 (Tonight usable 3R model package added: `Dream3R v1.1.0` via `code/dream3r/release_v11.py`. Policy is KITTI -> v1.0-rc1 bounded StatePrior/residual, ETH3D -> VGGT-Omega-expanded SCF. Metrics/control gate: KITTI `0.1448/0.1553/0.1521`, ETH3D `0.0570/0.0583/0.0598`. Added `release/USABLE_MODEL_V1_1.md`, `verify_v11_release.py`, tests, ARTIFACTS entries, DEC-049/cycle. Local and BUAA-Server v1.1 tests/verifier pass; v1.0 verifier still pass. Earlier last-updated note follows.)
 
 Last updated: 2026-06-07 (Foundation3R VGGT feature student gate closed experimental-positive but not promotable: real VGGT-Omega aggregator features were cached for KITTI/ETH3D 50+50 on BUAA-Server GPU1 with failures 0/fallback 0. Hybrid loss collapses to `0.4734/0.3271`, so `train_foundation3r.py` now defaults `input_mode=vggt_features` to teacher-only. Teacher-only 20e gives state `0.3237/0.1424`, no-state `0.3260/0.1489`, shuffle `0.3246/0.1330` vs dense teacher `0.3554/0.0913`. VGGT features help versus scratch, but Dream state is not causally useful yet; next is explicit state modulation or v1.1 packaging, not another unchanged sweep. Earlier last-updated note follows.)
 
@@ -22,7 +34,7 @@ Last updated: 2026-06-06 (Proposal-free teacher distillation gate implemented an
 
 Last updated: 2026-06-06 (Proposal-free Dream3R route started: `ProposalFree3RDecoder` + trainer + tests added. Forward contract is `image tokens + Dream state -> pointmap` with no proposal inputs. BUAA-Server GPU1 gate20 is metric/control-negative: state `0.3273/0.4029`, no-state `0.3318/0.4050`, shuffle `0.3221/0.4041`; next proposal-free step must be dense teacher distillation/pretraining, not another shallow decoder run. Earlier last-updated note follows.)
 
-Last updated: 2026-06-06 (Unified domain-conditional gate passed locally and on BUAA-Server: KITTI state/no-state/shuffle `0.1448/0.1553/0.1521`, ETH3D state/no-state/shuffle `0.0570/0.0583/0.0598`, `promotable_to_official=true`. It is now a v1.1 promotion candidate; official package remains `v1.0-rc1` until deliberate v1.1 packaging. Earlier last-updated note follows.)
+Last updated: 2026-06-06 (Unified domain-conditional gate passed locally and on BUAA-Server: KITTI state/no-state/shuffle `0.1448/0.1553/0.1521`, ETH3D state/no-state/shuffle `0.0570/0.0583/0.0598`, `promotable_to_official=true`. This gate was later promoted into official `v1.1.0`; `v1.0-rc1` is stable fallback. Earlier last-updated note follows.)
 
 Last updated: 2026-06-06 (Architecture cleanup pass closed: `ARCHITECTURE.md` is now the canonical architecture map and `release/ARCHITECTURE_STATUS.json` is the machine-readable status map separating official v1.0-rc1, experimental domain-conditional VGGT, side lanes, frozen core, and next unified gate. Earlier last-updated note follows.)
 
@@ -110,7 +122,7 @@ Last updated: 2026-05-27 (state-conditioned reconstruction pivot: added `specs/S
 
 Last updated: 2026-05-22 (v0.5 iteration test plan added after user asked how to iterate, test, and start completing the architecture plans: `planning/DREAM3R_V05_ITERATION_TEST_PLAN.md` defines L0-L4 completion standards, S0 local v0.4 edge tests, S1 A6 KITTI 8-10 window memory evidence, S2 A2 staged adapter real-backend closure, S3 A5 Test3R off-path, S4 A3 dynamic-mask promotion design, server runbook outline, evidence schema, gates, risks, and a short agent prompt; `handoff/ARCHITECTURE_V05_AGENT_START_PROMPT.md` added. Planning only; no v0.5 axis closed. Earlier last-updated note follows.) Last updated: 2026-05-22 (cycle 043 architecture-focus round after user re-prioritization "架构是最重要的内容; 开题报告和综述放一边": W20 SOTA Feature Matrix expanded at `code/dream3r/SOTA_FEATURE_MATRIX.md` (family-grouped 2nd pass) + v0.5 axes spec drafted at `specs/SPEC-20260522-001-dream3r-v05-axes.md` (8 axes A1-A8 with explicit `closes_iff`); markdown only; v0.3 + v0.4 code byte-identical; both candidate-not-final per DEC-20260501-004; sync chain applied. Earlier last-updated note follows.) Last updated: 2026-05-22 (v0.4 architecture closure round, parallel to proposal track: added `code/dream3r/contracts.py` + `repair.py` + `orchestrator.py` + 3 new test files + `ARCHITECTURE_V04_STATUS.md`; 24 new tests + 130 pre-existing tests all pass; v0.3 model.py / modules.py / bus.py / anchor_bank.py / nsa_attention.py / composer_experts/* are byte-identical to before this round; driven by `ARCHITECTURE_V04_AGENT_PROMPT.md`. Proposal-track last-updated note follows.) Last updated: 2026-05-17 (post cycle 042: user 指令开题报告扩展为双支柱项目 — 支柱 A Dream3R 新架构模型 (已有 §1-§9) + 支柱 B KYKT 聚合管理平台 (待新增); PROPOSAL_EXPANSION_PLAN.md + AGENT_HANDOFF_PROPOSAL_EXPANSION.md 已创建; 待其他 agent 执行扩展写作)
 
-Status: **idle** (context compressed in `handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md`; usable model is `v1.1-rc1` via `dream3r.release_v11.build_dream3r_v11_release`; official stable package `v1.0-rc1` is preserved. Foundation3R remains experimental.)
+Status: **idle** (formal-release promotion pass complete; official model is `v1.1.0` via `dream3r.release_v11.build_dream3r_v11_release`; stable fallback `v1.0-rc1` is preserved. Foundation3R state-modulation gate is negative and remains experimental.)
 
 ## Release-readiness gate (2026-06-05)
 
@@ -1121,50 +1133,32 @@ If this file's "Last updated" timestamp is older than the latest cycle log under
 ## Current task
 
 ```text
-task_id:    dream3r-qwen-semantic-controller-architecture-integration-2026-06-03
-phase:      V11 architecture integration dry-run
-status:     in_progress
-driver:     user asked to begin the new Qwen-based optimization and integrate it into the Dream3R architecture
-priority:   integrate cached semantic VLM features into Router/Critic control evaluation without treating Qwen as geometry or editing frozen core files
+task_id:    dream3r-v11-formal-official-release-2026-06-08
+phase:      formal release promotion and verification
+status:     complete
+driver:     user asked to push Dream3R to a usable formal version and clarify the architecture
+priority:   make v1.1.0 the documented official package, preserve v1.0-rc1 as fallback, verify locally and on BUAA-Server
 ```
 
 One-line description:
 
 ```text
-V11 Qwen semantic-controller architecture integration is active. Add a real
-window-manifest builder and a VLM controller dry-run evaluator that consumes
-semantic cache features, shuffled controls, and disabled controls. Use mock
-labels for local tests while real Qwen remains blocked.
+Dream3R v1.1.0 is being promoted from usable/current-effective package to the
+formal official release. The active API is
+dream3r.release_v11.build_dream3r_v11_release; v1.0-rc1 stays as stable
+fallback only. Frozen core remains closed.
 ```
 
-## Subtask board (active V11 Qwen semantic-controller integration)
+## Subtask board (active v1.1.0 formal release promotion)
 
 | ID | Subtask | Status | Canonical artifact |
 | --- | --- | --- | --- |
-| C20260603-V11I-S1 | Mark snapshot in progress and lock Qwen-as-controller boundary | done | `TASK_SNAPSHOT.md`, DEC-028 |
-| C20260603-V11I-S2 | Implement real KITTI/ETH3D window manifest builder outside frozen core | done | `code/dream3r/scripts/build_vlm_window_manifest.py` |
-| C20260603-V11I-S3 | Implement Router/Critic VLM dry-run evaluator with real/shuffle/disabled controls | done | `code/dream3r/scripts/eval_vlm_controller_dryrun.py` |
-| C20260603-V11I-S4 | Add tests for manifest generation and VLM controller dry-run causality schema | done | `code/dream3r/tests/test_vlm_controller_integration.py` |
-| C20260603-V11I-S5 | Run py_compile, targeted pytest, and local mock dry-run artifact | done | `runs/vlm_semantic_controller/qwen3vl2b_smoke/mock_controller_dryrun.json`; 6 tests passed |
-| C20260603-V11I-S6 | Update DEC/cycle/guidance chain and close snapshot | done | `decisions/DEC-20260603-029-qwen-semantic-controller-integration.md`, `cycles/CYCLE-20260603-qwen-semantic-controller-integration.md`, guidance files |
-| C20260603-V11G-S1 | Mark snapshot in progress and verify V11 boundaries / frozen-core list | done | `TASK_SNAPSHOT.md`, V11 handoff |
-| C20260603-V11G-S2 | Inspect code/test patterns for non-core scripts and cache/test conventions | done | `code/dream3r/scripts/`, `code/dream3r/tests/` |
-| C20260603-V11G-S3 | Implement offline VLM semantic label-cache builder with strict schema and mock/Qwen backend interface | done | `code/dream3r/scripts/build_vlm_semantic_labels.py` |
-| C20260603-V11G-S4 | Add mock backend tests for schema validation, explicit failures, feature conversion, shuffled/disabled controls | done | `code/dream3r/tests/test_vlm_semantic_labels.py` |
-| C20260603-V11G-S5 | Run local py_compile, targeted pytest, and mock smoke cache build | done | `runs/vlm_semantic_controller/qwen3vl2b_smoke/schema_report.json` |
-| C20260603-V11G-S6 | Check whether Qwen weights/dependencies are already available without download/environment mutation | done | Qwen weights missing on checked BUAA-Server paths; `dream3r` env has `transformers 4.46.0`; no Qwen inference run |
-| C20260603-V11G-S7 | Update DEC/cycle/guidance chain and close snapshot | done | `decisions/DEC-20260603-028-vlm-semantic-label-cache-gate.md`, `cycles/CYCLE-20260603-vlm-semantic-label-cache-gate.md`, guidance files |
-| C20260603-S1 | Mark snapshot in progress and locate current documentation chain | done | `TASK_SNAPSHOT.md` |
-| C20260603-S2 | Check official Qwen3-VL capability boundaries and existing Dream3R VLM mechanism slot | done | official Qwen3-VL sources; `planning/ARCHITECTURE_MECHANISM_INTAKE.md` |
-| C20260603-S3 | Write comprehensive V11 semantic-controller research plan | done | `planning/DREAM3R_V11_VLM_SEMANTIC_CONTROLLER_RESEARCH_PLAN.md` |
-| C20260603-S4 | Add DEC, cycle log, and new-agent prompt | done | `decisions/DEC-20260603-027-vlm-semantic-controller-plan.md`, `cycles/CYCLE-20260603-vlm-semantic-controller-plan.md`, `handoff/ARCHITECTURE_V11_VLM_SEMANTIC_CONTROLLER_AGENT_PROMPT.md` |
-| C20260603-S5 | Sync project document group and close snapshot | done | `WORKFLOW_STATUS.md`, `INDEX.md`, `mainwork.md`, registry, guidance files |
-| C20260602-S1 | Verify bounded frozen-StatePrior baseline artifacts on BUAA-Server | done | `/hdd3/kykt26/code/dream3r/runs/stage6_fusion/bounded_refine_sweep/` |
-| C20260602-S2 | Inspect non-core decoder/trainer cache path and lock implementation boundary | done | `code/dream3r/proposal_set_decoder.py`, `code/dream3r/scripts/train_proposal_set_decoder.py` |
-| C20260602-S3 | Add native student decoder/distillation scaffold outside frozen core | done | `code/dream3r/native_student_decoder.py`, `code/dream3r/scripts/train_native_student_decoder.py`, tests |
-| C20260602-S4 | Run local py_compile and targeted tests | done | local verification output |
-| C20260602-S5 | Sync to BUAA-Server and run bounded GPU1 smoke if command is valid | done | `runs/stage6_fusion/native_student_decoder_smoke_seed7`, `runs/stage6_fusion/native_student_decoder_gate20_seed7` |
-| C20260602-S6 | Update decision/cycle/guidance chain and close pass | done | `cycles/`, `decisions/`, `TASK_SNAPSHOT.md`, `WORKFLOW_STATUS.md`, `INDEX.md`, `mainwork.md`, registry |
+| C20260608-FR-S1 | Audit v1.1 package and release-state drift | done | `rg` release-state audit; `release/OFFICIAL_VERSION.md`; `verify_v11_release.py` |
+| C20260608-FR-S2 | Promote code/package identity to v1.1.0 official | done | `code/dream3r/release_v11.py`; `code/dream3r/__init__.py` |
+| C20260608-FR-S3 | Update manifest/docs chain and fallback split | done | `release/ARTIFACTS.json`; `release/ARCHITECTURE_STATUS.json`; `ARCHITECTURE.md`; release docs |
+| C20260608-FR-S4 | Run local verifier/smoke/tests/frozen-core check | done | v1.1 verifier pass; v1.1 smoke pass; v1.0 fallback verifier pass; release tests `12 passed`; full suite `300 passed, 2 skipped`; frozen core diff empty |
+| C20260608-FR-S5 | Sync to BUAA-Server and run official release validation | done | BUAA-Server GPU1 JSON pass; v1.1 verifier pass; v1.1 smoke pass; v1.0 fallback verifier pass; release tests `12 passed` |
+| C20260608-FR-S6 | Close snapshot to idle with final evidence | done | `TASK_SNAPSHOT.md`; final report |
 
 ## Cycle 040 subtask board (closed 2026-05-17)
 
@@ -1920,6 +1914,38 @@ Next expected research object after cycle 030:
 ## Last completed task pass
 
 ```text
+pass_name:        Dream3R v1.1.0 formal official release promotion
+date:             2026-06-08
+trigger:          User asked to quickly push Dream3R into a usable formal
+                  version and clean up the architecture story.
+files_modified:   code/dream3r/release_v11.py, code/dream3r/__init__.py,
+                  code/dream3r/scripts/verify_v11_release.py,
+                  code/dream3r/scripts/verify_release_candidate.py,
+                  release/OFFICIAL_VERSION.md, release/ARTIFACTS.json,
+                  release/ARCHITECTURE_STATUS.json, ARCHITECTURE.md,
+                  TASK_SNAPSHOT.md, README.md, INDEX.md, WORKFLOW_STATUS.md,
+                  release docs and planning cleanup docs.
+new_artifacts:    release/COMPLETE_MODEL_V1_1.md
+                  release/EFFECTIVE_ARCHITECTURE_V1_1.md
+                  release/STABLE_FALLBACK_V1_0_RC.md
+                  code/dream3r/scripts/smoke_v11_release_model.py
+                  code/dream3r/tests/test_release_v11_smoke_model.py
+                  runs/release/v11_smoke/smoke_v11_release_model.json
+result:           Dream3R v1.1.0 is the official state-conditioned
+                  proposal-fusion release. KITTI uses the v1.0-rc1 bounded
+                  StatePrior/residual path; ETH3D uses the VGGT-Omega-expanded
+                  SCF correct-state branch. Metrics: KITTI 0.1448, ETH3D
+                  0.0570. v1.0-rc1 remains stable fallback at 0.1448/0.1475.
+verification:     Local v1.1 verifier pass; local v1.1 smoke pass; local v1.0
+                  fallback verifier pass; local release tests 12 passed;
+                  local full suite 300 passed, 2 skipped; git diff --check
+                  whitespace-clean except line-ending warnings; frozen core
+                  diff empty. BUAA-Server GPU1 JSON pass; v1.1 verifier pass;
+                  v1.1 smoke pass; v1.0 fallback verifier pass; release tests
+                  12 passed.
+non_claims:       Not proposal-free foundation 3R; not Qwen geometry; not
+                  Foundation3R promotion; not universal SOTA.
+
 pass_name:        V11 VLM semantic label-cache gate
 date:             2026-06-03
 trigger:          User asked to test Qwen3-VL-2B-Instruct as an offline
@@ -2083,33 +2109,37 @@ prior_pass_files: TASK_SNAPSHOT.md, WORKFLOW_STATUS.md, RESEARCH_STATE.md,
 If a new agent or new conversation is picking this up cold:
 
 ```text
-CURRENT RESUME OVERRIDE (V11 semantic label-cache gate closed; 2026-06-03):
+CURRENT RESUME OVERRIDE (v1.1.0 formal release promotion; 2026-06-08):
 
 1. Read this file (you are here).
 
-2. For VLM semantic-controller research, read:
-   planning/DREAM3R_V11_VLM_SEMANTIC_CONTROLLER_RESEARCH_PLAN.md
-   handoff/ARCHITECTURE_V11_VLM_SEMANTIC_CONTROLLER_AGENT_PROMPT.md
-   decisions/DEC-20260603-027-vlm-semantic-controller-plan.md
-   decisions/DEC-20260603-028-vlm-semantic-label-cache-gate.md
-   cycles/CYCLE-20260603-vlm-semantic-label-cache-gate.md
+2. For the current official package, read:
+   release/OFFICIAL_VERSION.md
+   release/COMPLETE_MODEL_V1_1.md
+   release/EFFECTIVE_ARCHITECTURE_V1_1.md
+   release/STABLE_FALLBACK_V1_0_RC.md
+   ARCHITECTURE.md
+   planning/DREAM3R_CLEAN_ARCHITECTURE_MAP_20260608.md
 
-3. The label-cache builder already exists:
-   code/dream3r/scripts/build_vlm_semantic_labels.py
-   code/dream3r/tests/test_vlm_semantic_labels.py
-   runs/vlm_semantic_controller/qwen3vl2b_smoke/schema_report.json
+3. The active official import is:
+   dream3r.release_v11.build_dream3r_v11_release
 
-4. The next executable gate is to build a real KITTI/ETH3D window manifest from
-   existing cache windows, then run a 10-window Qwen smoke on BUAA-Server GPU1
-   only after weights and compatible dependencies are staged or approved.
+4. The stable fallback import is:
+   dream3r.release_candidate.build_dream3r_release_candidate
 
-5. Do not treat Qwen3-VL-2B-Instruct as geometry. It may support Router,
-   Critic, Dream state auxiliary supervision, and teacher scheduling only.
+5. Validate with:
+   python -B code/dream3r/scripts/verify_v11_release.py --root .
+   python -B code/dream3r/scripts/smoke_v11_release_model.py --output runs/release/v11_smoke/smoke_v11_release_model.json
+   python -B code/dream3r/scripts/verify_release_candidate.py --root .
 
-6. The locked geometry baseline remains 0.1448/0.1475. U1 remains negative.
-   VGGT-Omega remains blocked on approved checkpoint access.
+6. Sync and validate on BUAA-Server GPU1 for model-code checks. Do not edit
+   frozen core files. Do not claim proposal-free/Foundation3R success.
 
 Historical override follows.
+
+CURRENT RESUME OVERRIDE (V11 semantic label-cache gate closed; 2026-06-03):
+
+1. Qwen is diagnostic-only and not geometry.
 
 CURRENT RESUME OVERRIDE (native student gate closed; 2026-06-02):
 

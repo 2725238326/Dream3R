@@ -33,9 +33,10 @@ Current architecture state:
 ```text
 official:      Dream3R v1.0-rc1, 0.1448/0.1475
 usable:        Dream3R v1.1-rc1, KITTI 0.1448 / ETH3D 0.0570
-proposal-free: Foundation3R VGGT feature-student lane exists; experimental-positive but state-causality weak
-next gate:     explicit state modulation for proposal-free Foundation3R,
-               or external packaging review for v1.1 stable promotion
+proposal-free: Foundation3R VGGT feature-student lane exists, but the
+               2026-06-08 state-modulation gate is negative
+next gate:     change Foundation3R target/data/architecture, or use v1.1
+               for near-term release/demo
 ```
 
 Foundation3R proposal-free plan:
@@ -47,7 +48,8 @@ forbid:    proposal pointmaps, expert confidences, teacher model calls at infere
 status:    Sprint 0/1 scaffold-positive; 50+50 real KITTI/ETH3D dense cache gate pass
 training:  scratch student diagnostics negative; best test about KITTI 0.4734 / ETH3D 0.3271
 vggt:      feature-student teacher-only 20e state 0.3237/0.1424; no-state 0.3260/0.1489; shuffle 0.3246/0.1330
-next:      state modulation or larger representation gate; keep VGGT-Omega teacher/feature backbone, not proposal geometry
+state-mod: FiLM scale/shift + state-contrast 20e state 0.3222/0.1504; no-state 0.3392/0.1484; shuffle 0.3500/0.1353; not promotable because ETH3D prefers shuffle
+next:      change target/data/architecture; keep VGGT-Omega teacher/feature backbone, not proposal geometry
 ```
 
 ## 2026-06-05 release-readiness gate

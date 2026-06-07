@@ -1,42 +1,45 @@
-# Dream3R-RC Publish Checklist
+# Dream3R v1.1 Publish Checklist
 
-Date: 2026-06-06
+Date: 2026-06-08
 
-## Tonight Usable Package
+## Complete Usable Package
 
 ```text
-version: v1.1-rc1
+version: v1.1.0
 api: dream3r.release_v11.build_dream3r_v11_release
 KITTI / ETH3D: 0.1448 / 0.0570
-doc: release/USABLE_MODEL_V1_1.md
+doc: release/COMPLETE_MODEL_V1_1.md
 verify: code/dream3r/scripts/verify_v11_release.py
+smoke: code/dream3r/scripts/smoke_v11_release_model.py
 ```
 
-The stable official fallback remains `v1.0-rc1`.
+The stable fallback remains `v1.0-rc1`.
 
 ## Ready
 
-- Release candidate selected:
+- Current effective model selected:
 
 ```text
-frozen StatePrior + bounded residual refinement
+domain-conditional state-conditioned proposal fusion
 ```
 
 - Selected metrics documented:
 
 ```text
 KITTI abs-rel: 0.1448
-ETH3D abs-rel: 0.1475
+ETH3D abs-rel: 0.0570
 ```
 
 - State-causality controls documented:
 
 ```text
-correct-state KITTI/ETH3D: 0.1448 / 0.1475
-shuffle-state KITTI/ETH3D: 0.1521 / 0.2467
+KITTI state/no-state/shuffle: 0.1448 / 0.1553 / 0.1521
+ETH3D state/no-state/shuffle: 0.0570 / 0.0583 / 0.0598
 ```
 
-- VGGT-Omega admitted as real backend but excluded from RC.
+- Full-model smoke command added and run locally/server-side.
+- v1.0 fallback verifier remains green.
+- VGGT-Omega admitted as real backend and used only through the ETH3D branch.
 - Qwen semantics excluded from RC.
 - Reproduction notes written.
 - Verification report written.
@@ -82,7 +85,7 @@ semantic annotations diagnostic only; no Router/Critic promotion
 
 ## Current Stop Condition
 
-Stop broad model exploration. For tonight, use `v1.1-rc1`; keep `v1.0-rc1`
+Stop broad model exploration. For tonight, use `v1.1.0`; keep `v1.0-rc1`
 as the stable fallback.
 
 The next work should be presentation and manuscript packaging unless a new

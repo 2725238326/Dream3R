@@ -1,4 +1,4 @@
-"""Verify the Dream3R v1.1 usable domain-conditional model package."""
+"""Verify the Dream3R v1.1.0 official domain-conditional model package."""
 
 from __future__ import annotations
 
@@ -13,6 +13,7 @@ _CODE_ROOT = Path(__file__).resolve().parents[2]
 if str(_CODE_ROOT) not in sys.path:
     sys.path.insert(0, str(_CODE_ROOT))
 
+import dream3r as dream3r_pkg  # noqa: E402
 from dream3r.release_v11 import (  # noqa: E402
     RELEASE_V11_CANDIDATE,
     RELEASE_V11_VERSION,
@@ -61,6 +62,24 @@ def _check_frozen_core(root: Path) -> list[str]:
 
 def verify(root: Path, check_frozen_core: bool = True) -> dict[str, Any]:
     artifacts = _read_json(root / "release" / "ARTIFACTS.json")
+    official = artifacts.get("official_release")
+    if not isinstance(official, dict):
+        raise AssertionError("release/ARTIFACTS.json missing official_release")
+    if official.get("version") != RELEASE_V11_VERSION:
+        raise AssertionError(f"official release version mismatch: {official.get('version')}")
+    if official.get("candidate") != RELEASE_V11_CANDIDATE:
+        raise AssertionError(
+            f"official release candidate mismatch: {official.get('candidate')}"
+        )
+    effective = artifacts.get("current_effective_architecture")
+    if not isinstance(effective, dict):
+        raise AssertionError("release/ARTIFACTS.json missing current_effective_architecture")
+    if effective.get("version") != RELEASE_V11_VERSION:
+        raise AssertionError(f"effective architecture version mismatch: {effective.get('version')}")
+    if effective.get("candidate") != RELEASE_V11_CANDIDATE:
+        raise AssertionError(
+            f"effective architecture candidate mismatch: {effective.get('candidate')}"
+        )
     usable = artifacts.get("usable_model_v1_1")
     if not isinstance(usable, dict):
         raise AssertionError("release/ARTIFACTS.json missing usable_model_v1_1")
@@ -68,6 +87,17 @@ def verify(root: Path, check_frozen_core: bool = True) -> dict[str, Any]:
         raise AssertionError(f"v1.1 version mismatch: {usable.get('version')}")
     if usable.get("candidate") != RELEASE_V11_CANDIDATE:
         raise AssertionError(f"v1.1 candidate mismatch: {usable.get('candidate')}")
+
+    expected_package_version = (
+        RELEASE_V11_VERSION[1:]
+        if RELEASE_V11_VERSION.startswith("v")
+        else RELEASE_V11_VERSION
+    )
+    package_version = getattr(dream3r_pkg, "__version__", None)
+    if package_version != expected_package_version:
+        raise AssertionError(
+            f"dream3r.__version__ mismatch: {package_version} != {expected_package_version}"
+        )
 
     gate_rel = usable.get("unified_gate_artifact")
     if not gate_rel:
@@ -92,13 +122,33 @@ def verify(root: Path, check_frozen_core: bool = True) -> dict[str, Any]:
         raise AssertionError("KITTI metric mismatch between API and artifact manifest")
     if meta["selected_eth3d_abs_rel"] != usable["eth3d_abs_rel"]:
         raise AssertionError("ETH3D metric mismatch between API and artifact manifest")
+    if effective.get("kitti_abs_rel") != usable["kitti_abs_rel"]:
+        raise AssertionError("KITTI metric mismatch between effective and usable manifests")
+    if effective.get("eth3d_abs_rel") != usable["eth3d_abs_rel"]:
+        raise AssertionError("ETH3D metric mismatch between effective and usable manifests")
+    if official.get("kitti_abs_rel") != usable["kitti_abs_rel"]:
+        raise AssertionError("KITTI metric mismatch between official and usable manifests")
+    if official.get("eth3d_abs_rel") != usable["eth3d_abs_rel"]:
+        raise AssertionError("ETH3D metric mismatch between official and usable manifests")
 
     docs_checked = []
     for rel_path in (
+        "release/OFFICIAL_VERSION.md",
+        "release/EFFECTIVE_ARCHITECTURE_V1_1.md",
+        "release/COMPLETE_MODEL_V1_1.md",
         "release/USABLE_MODEL_V1_1.md",
+        "release/RUNBOOK.md",
+        "release/PUBLISH_CHECKLIST.md",
+        "release/REPRODUCE.md",
+        "release/VERIFY_REPORT.md",
         "release/ARTIFACTS.json",
         "release/ARCHITECTURE_STATUS.json",
         "ARCHITECTURE.md",
+        "TASK_SNAPSHOT.md",
+        "INDEX.md",
+        "README.md",
+        "WORKFLOW_STATUS.md",
+        "planning/DREAM3R_CLEAN_ARCHITECTURE_MAP_20260608.md",
     ):
         path = root / rel_path
         if not path.exists():
@@ -120,6 +170,7 @@ def verify(root: Path, check_frozen_core: bool = True) -> dict[str, Any]:
         },
         "api": {
             "builder": "dream3r.release_v11.build_dream3r_v11_release",
+            "package_version": package_version,
             "policy": meta["policy"],
             "expert_order": meta["expert_order"],
         },
@@ -141,4 +192,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

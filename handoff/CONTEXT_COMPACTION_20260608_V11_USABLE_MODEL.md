@@ -173,9 +173,21 @@ teacher-only 20e shuffle: 0.3246/0.1330
 verdict: experimental-positive vs scratch, but state causality is not established
 ```
 
-Next Foundation3R work must add explicit Dream-state modulation or a stronger
-representation gate while preserving proposal-free inference. Do not spend
-more runs on the unchanged scratch head or unchanged teacher-only feature head.
+Foundation3R explicit state modulation, 2026-06-08:
+
+```text
+mechanism: FiLM scale/shift + additive gated Dream state + state-contrastive margin loss
+artifact root: runs/stage6_fusion/foundation3r_state_mod_contrast20_20260608/
+state: KITTI 0.3222, ETH3D 0.1504
+no-state: KITTI 0.3392, ETH3D 0.1484
+shuffle: KITTI 0.3500, ETH3D 0.1353
+hybrid retry: KITTI 0.4734, ETH3D 0.3271
+verdict: negative for promotion; KITTI benefits from correct state, but ETH3D prefers shuffle
+```
+
+Next Foundation3R work must change target/data/architecture while preserving
+proposal-free inference. Do not spend more runs on the unchanged scratch head,
+unchanged teacher-only feature head, or this same small state-modulated decoder.
 
 ## Frozen Core
 
@@ -245,7 +257,7 @@ Near-term usable-model path:
 Research path:
 
 ```text
-1. Continue proposal-free Foundation3R only through explicit state modulation or stronger pretrained representation.
+1. Continue proposal-free Foundation3R only by changing target/data/architecture; the first explicit state-modulation gate failed cross-domain causality.
 2. Keep no-proposal and no-teacher-inference controls.
 3. Require state/no-state/shuffle separation before any promotion.
 4. Treat Qwen as optional diagnostic metadata only until a larger causal Critic/proposal-disagreement gate is built.

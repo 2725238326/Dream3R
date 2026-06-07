@@ -1,5 +1,7 @@
 # Dream Research State
 
+Last updated: 2026-06-08 (Foundation3R state-modulation gate closed negative: FiLM state modulation and contrastive state loss were implemented and tested, but GPU1 controls are state `0.3222/0.1504`, no-state `0.3392/0.1484`, shuffle `0.3500/0.1353`; ETH3D prefers shuffle. Do not claim proposal-free success.)
+
 Last updated: 2026-06-08 (Context compaction completed at `handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md`. Current usable model is Dream3R `v1.1-rc1` with KITTI/ETH3D `0.1448/0.0570`; official stable fallback remains `v1.0-rc1` with `0.1448/0.1475`; Qwen is diagnostic-only; Foundation3R is proposal-free experimental and needs explicit state-modulation/representation gates.)
 
 Last updated: 2026-06-06 (Dream3R is now packaged as formal `v1.0-rc1`: frozen-StatePrior + bounded residual, 0.1448/0.1475, with official version doc, frozen architecture doc, artifact manifest, and release verifier.)

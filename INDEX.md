@@ -1,5 +1,15 @@
 # Dream Index
 
+Last updated: 2026-06-08 (Formal release promotion completed: `release/OFFICIAL_VERSION.md`, `release/COMPLETE_MODEL_V1_1.md`, `release/PUBLISH_CHECKLIST.md`, `release/VERIFY_REPORT.md`, and `release/REPRODUCE.md` now foreground v1.1.0 as the complete official model package; v1.0-rc1 is stable fallback.)
+
+Last updated: 2026-06-08 (v1.1 full-model smoke path added: `code/dream3r/scripts/smoke_v11_release_model.py`, `code/dream3r/tests/test_release_v11_smoke_model.py`, and updated `release/RUNBOOK.md`.)
+
+Last updated: 2026-06-08 (Current effective architecture document added: `release/EFFECTIVE_ARCHITECTURE_V1_1.md`. It promotes v1.1.0 from "usable package" to the current effective architecture while keeping v1.0-rc1 as stable fallback and Foundation3R as research-only.)
+
+Last updated: 2026-06-08 (Clean architecture map added: `planning/DREAM3R_CLEAN_ARCHITECTURE_MAP_20260608.md`. It separates usable release, proposal-free research, teacher/proposal infrastructure, diagnostics, and frozen substrate so modules are not treated as competing main architectures.)
+
+Last updated: 2026-06-08 (Foundation3R state-modulation gate added: `decisions/DEC-20260608-050-foundation3r-state-modulation-gate.md`, `cycles/CYCLE-20260608-foundation3r-state-modulation-gate.md`, updated Foundation3R decoder/trainer/tests, and GPU1 outputs under `runs/stage6_fusion/foundation3r_state_mod_*20_20260608/`. Gate is negative for promotion.)
+
 Last updated: 2026-06-08 (Context compaction handoff added: `handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md`. It is now the shortest complete resume anchor for v1.1 usable release state, v1.0 fallback, VGGT/Qwen/Foundation3R boundaries, verification evidence, and next work.)
 
 Last updated: 2026-06-07 (Dream3R v1.1 usable model package added: `code/dream3r/release_v11.py`, `code/dream3r/scripts/verify_v11_release.py`, `code/dream3r/tests/test_release_v11_architecture.py`, `code/dream3r/tests/test_release_v11_verifier.py`, `release/USABLE_MODEL_V1_1.md`, `decisions/DEC-20260607-049-v11-usable-model-package.md`, `cycles/CYCLE-20260607-v11-usable-model-package.md`.)
@@ -22,7 +32,7 @@ Last updated: 2026-06-06 (Proposal-free teacher distillation gate added: `code/d
 
 Last updated: 2026-06-06 (Proposal-free 3R route added: `code/dream3r/proposal_free_3r_decoder.py`, `code/dream3r/scripts/train_proposal_free_3r.py`, `code/dream3r/tests/test_proposal_free_3r_decoder.py`, `decisions/DEC-20260606-041-proposal-free-3r-decoder-gate.md`, and `cycles/CYCLE-20260606-proposal-free-3r-decoder-gate.md`; gate20 is negative and preserved as scaffold evidence.)
 
-Last updated: 2026-06-06 (Unified domain-conditional gate passed: `decisions/DEC-20260606-040-unified-domain-conditional-gate.md`, `cycles/CYCLE-20260606-unified-domain-conditional-gate.md`, `code/dream3r/scripts/eval_unified_domain_conditional_gate.py`, `code/dream3r/tests/test_unified_domain_conditional_gate.py`, and `runs/v22_admission/domain_conditional_teacher/unified_gate_candidate_with_kitti_no_state_server.json`; this is the v1.1 promotion candidate, not yet the official package.)
+Last updated: 2026-06-06 (Unified domain-conditional gate passed: `decisions/DEC-20260606-040-unified-domain-conditional-gate.md`, `cycles/CYCLE-20260606-unified-domain-conditional-gate.md`, `code/dream3r/scripts/eval_unified_domain_conditional_gate.py`, `code/dream3r/tests/test_unified_domain_conditional_gate.py`, and `runs/v22_admission/domain_conditional_teacher/unified_gate_candidate_with_kitti_no_state_server.json`; this was later promoted into official `v1.1.0`.)
 
 Last updated: 2026-06-06 (Canonical architecture map added: `ARCHITECTURE.md`; machine-readable status map added: `release/ARCHITECTURE_STATUS.json`.)
 
@@ -100,7 +110,7 @@ Quick navigation for humans and agents. **Read `TASK_SNAPSHOT.md` first** (it is
 | File | Role |
 |---|---|
 | `TASK_SNAPSHOT.md` | **Read first.** Highest-authority resume pointer: current task id, subtask board, status (`idle` / `in_progress` / `blocked`), `If interrupted, resume from` block, recent failure modes |
-| `handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md` | Compressed 2026-06-08 handoff: current usable model, official fallback, VGGT/Qwen/Foundation3R boundaries, validation evidence, server paths, non-claims, and next priorities |
+| `handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md` | Compressed 2026-06-08 handoff: current usable model, stable fallback, VGGT/Qwen/Foundation3R boundaries, validation evidence, server paths, non-claims, and next priorities |
 | `ARCHITECTURE.md` | Canonical Dream3R architecture map: official path, experimental path, rejected side lanes, frozen core, and next gate |
 | `README.md` | Workspace overview, purpose, non-negotiables |
 | `INDEX.md` | This file; topic-based navigation |
@@ -114,7 +124,8 @@ Quick navigation for humans and agents. **Read `TASK_SNAPSHOT.md` first** (it is
 
 | File | Role |
 |---|---|
-| `release/OFFICIAL_VERSION.md` | Formal `v1.0-rc1` entrypoint: version identity, official claim, non-official lanes, verification commands |
+| `release/OFFICIAL_VERSION.md` | Formal `v1.1.0` entrypoint: version identity, official claim, fallback lane, verification commands |
+| `release/STABLE_FALLBACK_V1_0_RC.md` | Stable fallback `v1.0-rc1` identity and regression boundary |
 | `release/ARCHITECTURE_V1_0_RC.md` | Frozen v1.0-rc1 architecture surface and component boundaries |
 | `release/ARTIFACTS.json` | Versioned artifact manifest for selected metrics, local mirrors, server paths, docs, and verifier entrypoints |
 | `release/ARCHITECTURE_STATUS.json` | Machine-readable architecture status: official, experimental, not-official, frozen core, next gate |
@@ -239,6 +250,7 @@ Recent (most relevant for resume):
 
 | File | Cycle | Role |
 |---|---|---|
+| `CYCLE-20260608-foundation3r-state-modulation-gate.md` | gate | Foundation3R explicit state-modulation implementation and GPU1 gate. Adds FiLM scale/shift state modulation plus contrastive state loss; local/server tests pass; 20e controls fail cross-domain causality, so no promotion |
 | `CYCLE-20260608-context-compaction.md` | context | 2026-06-08 context compaction pass. Adds `handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md` and syncs current v1.1/v1.0/Qwen/VGGT/Foundation3R boundaries across guidance entrypoints; no new model run, architecture decision, checkpoint change, or frozen-core edit |
 | `CYCLE-20260522-001.md` | 043 | Architecture-focus round after user re-prioritization "架构是最重要的内容; 开题报告和综述放一边". W20 SOTA Feature Matrix expansion to family-grouped second pass (`code/dream3r/SOTA_FEATURE_MATRIX.md`; 8 family sections; 30+ external methods mapped) + v0.5 axes spec drafting (`specs/SPEC-20260522-001-dream3r-v05-axes.md`; 8 axes A1-A8 with explicit `closes_iff`; v0.5 additive to v0.4 by default). Markdown only; v0.3 + v0.4 code byte-identical; both candidate-not-final per DEC-20260501-004; no DEC proposed; sync chain applied (INDEX.md + WORKFLOW_STATUS.md + TASK_SNAPSHOT.md). Auto-memory updated: track-priorities feedback recorded |
 | `CYCLE-20260517-003.md` | 042 | Dream3R 开题报告最终修订 + PDF 编译 + advisor 提交 packaging (DEC-20260517-003 authorized; content frozen; bottom metadata cleanup + §8.1 past-tense; references.bib 44 entries; PDF 263 KB pandoc+xelatex; cover note + submission record G3a/G3b clean; STYLE_CONTRACT v1 closed 50 rows 7 entries; proposal track functionally closed; no spec / code / server action) |

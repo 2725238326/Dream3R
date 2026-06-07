@@ -1,26 +1,71 @@
-# Dream3R RC Reproduction Notes
+# Dream3R Reproduction Notes
 
-Date: 2026-06-05
+Date: 2026-06-08
 
 ## Scope
 
-This document reproduces the release-candidate decision, not a paper-scale
-benchmark sweep.
+This document reproduces the current complete official model package and the
+stable fallback, not a paper-scale benchmark sweep.
 
-The selected RC is:
+The current complete package is:
 
 ```text
-frozen StatePrior + bounded residual refinement
+Dream3R v1.1.0
+KITTI -> v1.0-rc1 bounded StatePrior + residual
+ETH3D -> VGGT-Omega-expanded SCF correct-state
+KITTI / ETH3D: 0.1448 / 0.0570
 ```
 
-The selected metrics are:
+The stable fallback is:
 
 ```text
-KITTI abs-rel: 0.1448
-ETH3D abs-rel: 0.1475
+Dream3R v1.0-rc1 frozen StatePrior + bounded residual refinement
+KITTI / ETH3D: 0.1448 / 0.1475
 ```
 
 Metric direction: lower is better.
+
+## Local v1.1 Completion Check
+
+```powershell
+cd E:\Dream3R
+python -B code\dream3r\scripts\verify_v11_release.py --root .
+python -B code\dream3r\scripts\smoke_v11_release_model.py --output runs\release\v11_smoke\smoke_v11_release_model.json
+python -B code\dream3r\scripts\verify_release_candidate.py --root .
+python -B -m pytest --assert=plain code\dream3r\tests\test_release_candidate_architecture.py code\dream3r\tests\test_release_candidate_verifier.py code\dream3r\tests\test_release_v11_architecture.py code\dream3r\tests\test_release_v11_verifier.py code\dream3r\tests\test_release_v11_smoke_model.py -q
+```
+
+Expected:
+
+```text
+v1.1 verifier: pass
+v1.1 smoke: pass
+v1.0 fallback verifier: pass
+release tests: 12 passed
+full test suite: 300 passed, 2 skipped
+```
+
+## Server v1.1 Completion Check
+
+Use BUAA-Server GPU1 for model code:
+
+```bash
+ssh BUAA-Server
+cd /hdd3/kykt26/code/dream3r
+export CUDA_VISIBLE_DEVICES=1
+conda run -n dream3r python -B dream3r/scripts/verify_v11_release.py --root . --skip-frozen-core
+conda run -n dream3r python -B dream3r/scripts/smoke_v11_release_model.py --output runs/release/v11_smoke/smoke_v11_release_model.json
+conda run -n dream3r python -B -m pytest --assert=plain dream3r/tests/test_release_candidate_architecture.py dream3r/tests/test_release_candidate_verifier.py dream3r/tests/test_release_v11_architecture.py dream3r/tests/test_release_v11_verifier.py dream3r/tests/test_release_v11_smoke_model.py -q
+```
+
+Expected:
+
+```text
+v1.1 verifier: pass
+v1.1 smoke: pass
+v1.0 fallback verifier: pass
+release tests: 12 passed
+```
 
 ## Local Verification
 
@@ -142,4 +187,3 @@ shuffle-state: KITTI 0.2180, ETH3D 0.0598
 Interpretation: VGGT-Omega is admitted as a real optional teacher backend, but
 not as the RC model path because the state-causality control is not robust on
 KITTI.
-

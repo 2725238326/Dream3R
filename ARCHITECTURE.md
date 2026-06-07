@@ -5,13 +5,14 @@ Status: canonical architecture entrypoint
 
 ## Current Answer
 
-Dream3R is now organized as one official release path plus bounded side lanes.
+Dream3R is now organized as one current effective architecture, one stable
+fallback, and bounded research/diagnostic side lanes.
 
 ```text
-Official:     Dream3R v1.0-rc1
+Effective:    Dream3R v1.1.0 domain-conditional wrapper
 Metric:       AbsRel, lower is better
-KITTI/ETH3D:  0.1448 / 0.1475
-Usable now:   Dream3R v1.1-rc1 domain-conditional wrapper, 0.1448 / 0.0570
+KITTI/ETH3D:  0.1448 / 0.0570
+Fallback:     Dream3R v1.0-rc1 bounded StatePrior, 0.1448 / 0.1475
 ```
 
 The architecture is not a single monolithic `model.py` path. The official
@@ -27,7 +28,7 @@ real proposal teachers
 -> final pointmap
 ```
 
-Tonight usable import:
+Current effective import:
 
 ```python
 from dream3r.release_v11 import build_dream3r_v11_release
@@ -42,31 +43,35 @@ Use this order when resuming work:
 
 ```text
 1. TASK_SNAPSHOT.md
-2. handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md
-3. ARCHITECTURE.md                         # this file
-4. release/USABLE_MODEL_V1_1.md            # usable v1.1 package
-5. release/OFFICIAL_VERSION.md             # official stable version identity
-6. release/ARCHITECTURE_V1_0_RC.md         # official implementation contract
-7. release/ARCHITECTURE_STATUS.json        # machine-readable status map
+2. planning/DREAM3R_CLEAN_ARCHITECTURE_MAP_20260608.md  # lane/status cleanup
+3. handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md
+4. ARCHITECTURE.md                         # this file
+5. release/OFFICIAL_VERSION.md             # official v1.1.0 identity
+6. release/EFFECTIVE_ARCHITECTURE_V1_1.md  # current effective architecture
+7. release/COMPLETE_MODEL_V1_1.md          # complete official package
+8. release/STABLE_FALLBACK_V1_0_RC.md      # stable fallback identity
+9. release/ARCHITECTURE_STATUS.json        # machine-readable status map
 ```
 
 ## Official Path
 
 | Layer | File | Status |
 | --- | --- | --- |
-| Official API | `code/dream3r/release_candidate.py` | active v1.0-rc1 import surface |
+| Official API | `code/dream3r/release_v11.py` | active v1.1.0 import surface |
+| Stable fallback API | `code/dream3r/release_candidate.py` | preserved v1.0-rc1 import surface |
 | State prior | `code/dream3r/state_prior_head.py` | active support module |
 | Proposal decoder | `code/dream3r/proposal_set_decoder.py` | active metric head |
-| RC trainer | `code/dream3r/scripts/train_proposal_set_decoder.py` | active reproduction path |
-| Release verifier | `code/dream3r/scripts/verify_release_candidate.py` | active package gate |
+| SCF head | `code/dream3r/scf_head.py` | active ETH3D branch support |
+| Release verifier | `code/dream3r/scripts/verify_v11_release.py` | active official package gate |
+| Fallback verifier | `code/dream3r/scripts/verify_release_candidate.py` | stable fallback gate |
 
 Official import:
 
 ```python
-from dream3r.release_candidate import build_dream3r_release_candidate
+from dream3r.release_v11 import build_dream3r_v11_release
 
-model = build_dream3r_release_candidate(checkpoint_path=None, d_memory=32)
-out = model(proposal_pointmaps, proposal_confidences, memory_context, conflict_score)
+model = build_dream3r_v11_release()
+out = model(proposal_pointmaps, proposal_confidences, memory_context, conflict_score, domain="eth3d")
 ```
 
 ## Experimental Path
@@ -95,9 +100,9 @@ promotable_to_official: true
 artifact: runs/v22_admission/domain_conditional_teacher/unified_gate_candidate_with_kitti_no_state_server.json
 ```
 
-Boundary: this is now packaged as usable `v1.1-rc1` in `release_v11.py` and
-`release/USABLE_MODEL_V1_1.md`. The current official stable release identity
-remains `v1.0-rc1` until `release/OFFICIAL_VERSION.md` is deliberately switched.
+Boundary: this is now the official `v1.1.0` release in `release_v11.py` and
+`release/OFFICIAL_VERSION.md`. The previous `v1.0-rc1` package remains as a
+stable fallback and regression gate.
 
 ## Side Lanes Not In Official Path
 
@@ -106,7 +111,7 @@ remains `v1.0-rc1` until `release/OFFICIAL_VERSION.md` is deliberately switched.
 | NativeStudent | `code/dream3r/native_student_decoder.py` | causal but flat at `0.1451 / 0.1480` | do not repeat same loss sweeps |
 | ImageStateStudent | `code/dream3r/image_state_student_decoder.py` | negative | do not rerun unchanged |
 | ProposalFree3R | `code/dream3r/proposal_free_3r_decoder.py`, `scripts/train_proposal_free_3r.py`, `scripts/build_proposal_free_teacher_cache.py` | proposal-free contract works; sparse-GT gate20 negative at `0.3273 / 0.4029`; stripped-teacher gate20 negative at `0.3319 / 0.4056`; larger AbsRel teacher gate negative at `0.3326 / 0.4058` | stop shallow head sweeps; use only as scaffold for stronger backbone/dense pretraining |
-| Foundation3R | `code/dream3r/foundation3r_decoder.py`, `scripts/build_foundation3r_dense_teacher_cache.py`, `scripts/train_foundation3r.py` | dense-teacher cache and training chain work; scratch student negative at `0.4734 / 0.3271`; VGGT feature teacher-only 20e improves to state `0.3237 / 0.1424`, no-state `0.3260 / 0.1489`, shuffle `0.3246 / 0.1330` | use VGGT features as experimental proposal-free baseline; do not claim state causality yet |
+| Foundation3R | `code/dream3r/foundation3r_decoder.py`, `scripts/build_foundation3r_dense_teacher_cache.py`, `scripts/train_foundation3r.py` | dense-teacher cache and training chain work; scratch student negative at `0.4734 / 0.3271`; VGGT feature teacher-only 20e improves over scratch but fails state causality; 2026-06-08 explicit state-modulation + contrast gate gives state `0.3222 / 0.1504`, no-state `0.3392 / 0.1484`, shuffle `0.3500 / 0.1353` | do not promote; next proposal-free attempt must change target/data/architecture, not rerun this small decoder |
 | VGGT-Omega | `code/dream3r/scripts/stage_vggt_omega_admission.py`, `eval_vggt_omega_oracle_admission.py` | real teacher, ETH3D-positive | use only via domain-conditional gate |
 | Qwen semantics | VLM semantic scripts | diagnostic-negative | not a geometry path |
 | v0.4 core pipeline | `model.py`, `modules.py`, `bus.py`, `orchestrator.py`, `repair.py`, `contracts.py` | substrate | frozen for RC work |
@@ -135,17 +140,19 @@ is near-term release packaging or a truly proposal-free 3R line:
 
 ```text
 Release goal:
-  Use the packaged v1.1-rc1 wrapper for tonight demos, or deliberately promote
-  it to official stable after external packaging review.
+  Use the official v1.1.0 wrapper for demos, packaging, and paper-facing
+  proposal-fusion claims. Keep v1.0-rc1 only as the stable fallback.
 
 Proposal-free goal:
-  Improve the VGGT feature-student with explicit state modulation or stronger
-  representation while preserving no proposal/no teacher inference.
+  The first explicit state-modulation attempt was implemented and gated on
+  2026-06-08, but it failed cross-domain state causality. The next attempt must
+  change the target/data/architecture while preserving no proposal/no teacher
+  inference.
 
-Release promotion condition:
+Release maintenance condition:
   1. Keep the six-control gate artifact immutable and referenced.
-  2. Add a v1.1 policy/API wrapper without editing frozen core files.
-  3. Update release/OFFICIAL_VERSION.md and release/ARTIFACTS.json.
+  2. Keep the v1.1 policy/API wrapper green without editing frozen core files.
+  3. Keep release/OFFICIAL_VERSION.md and release/ARTIFACTS.json synchronized.
   4. Re-run verifier/tests locally and on BUAA-Server GPU1 where model code is
      involved.
 
@@ -156,9 +163,8 @@ Proposal-free promotion condition:
   4. Keep proposal_inputs_used=false and teacher_used_at_inference=false.
 ```
 
-Until that packaging decision is made, the official architecture remains
-`v1.0-rc1`; the passed domain-conditional policy is the current v1.1 promotion
-candidate.
+The packaging decision has been made: the official architecture is `v1.1.0`.
+`v1.0-rc1` is retained for fallback and regression checks.
 
 ## Proposal-Free Route
 

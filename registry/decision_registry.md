@@ -1,5 +1,7 @@
 # Decision Registry
 
+Last updated: 2026-06-08 (DEC-20260608-050 Foundation3R state-modulation gate appended; mechanism implemented but gate negative, so Foundation3R is still not promotable.)
+
 Last updated: 2026-06-08 (No new architecture decision; context compaction handoff added at `handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md` to preserve DEC-027 through DEC-049 state without expanding this registry further.)
 
 Last updated: 2026-06-07 (DEC-20260607-049 v1.1 usable model package appended; `build_dream3r_v11_release` now exposes the domain-conditional VGGT policy as a verified usable release candidate.)
@@ -56,6 +58,7 @@ Status: seeded.
 
 | ID | Date | Scope | Decision | Status | User approval needed | Linked file |
 |---|---|---|---|---|---|---|
+| DEC-20260608-050 | 2026-06-08 | Dream3R/Foundation3R | Add explicit Dream-state modulation and state-contrastive loss, but keep Foundation3R non-promotable after failed cross-domain control gate | accepted; gate negative | no | `decisions/DEC-20260608-050-foundation3r-state-modulation-gate.md` |
 | DEC-20260501-001 | 2026-05-01 | workspace | Create Dream as KYKT research workspace | accepted | no | `README.md` |
 | DEC-20260501-002 | 2026-05-01 | operating mode | Use Breadth Map + Minimal Demo | accepted | no | `paradigm/RESEARCH_PARADIGM.md` |
 | DEC-20260501-003 | 2026-05-01 | Phase 1 | Run broad source-map research before implementation | accepted | no | `archive/PHASE1_RESEARCH_PLAN.md` |

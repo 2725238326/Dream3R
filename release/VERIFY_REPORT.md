@@ -2,21 +2,57 @@
 
 Date: 2026-06-05
 
+Update 2026-06-08: v1.1.0 is now the current complete official model package.
+The package has an effective architecture doc, verifier, full-model smoke, and
+runbook. Local checks passed: v1.1 verifier `pass`, v1.1 smoke `pass`, v1.0
+fallback verifier `pass`, release tests `12 passed`, full test suite
+`300 passed, 2 skipped`. BUAA-Server checks passed: v1.1 verifier `pass`,
+v1.1 smoke `pass`, v1.0 fallback verifier `pass`, release tests `12 passed`.
+
+Current complete model:
+
+```text
+Dream3R v1.1.0
+KITTI -> v1.0-rc1 bounded StatePrior + residual
+ETH3D -> VGGT-Omega-expanded SCF correct-state
+KITTI / ETH3D: 0.1448 / 0.0570
+```
+
 Update 2026-06-06: after adding the official v1.0-rc1 architecture wrapper,
 the full local test suite and BUAA-Server GPU1 training-smoke subset were run.
 The RC remains unchanged.
 
 Update 2026-06-06: a domain-conditional VGGT teacher candidate was evaluated.
 It reports KITTI `0.1448` via v1.0-rc1 and ETH3D `0.0570` via VGGT-expanded
-SCF correct-state. It is experimental, not official, because it still needs a
-unified domain-conditional cache/control rerun.
+SCF correct-state. It was experimental at this point because it still needed a
+unified domain-conditional cache/control rerun; that later gate passed and was
+packaged as v1.1.0.
 
 Update 2026-06-06: the unified domain-conditional gate was then run locally and
 on BUAA-Server. It passes all declared state/no-state/shuffle controls and
-reports `promotable_to_official=true`; it is now a v1.1 promotion candidate,
-while the packaged official version remains `v1.0-rc1`.
+reports `promotable_to_official=true`; it was then promoted into the official
+`v1.1.0` package, while `v1.0-rc1` remains stable fallback.
 
-## Verdict
+## Current Verdict
+
+Dream3R has a complete official model package:
+
+```text
+v1.1.0 domain_conditional_vggt_teacher
+```
+
+Metric direction: lower is better.
+
+Completion entrypoints:
+
+```text
+release/COMPLETE_MODEL_V1_1.md
+release/EFFECTIVE_ARCHITECTURE_V1_1.md
+code/dream3r/scripts/verify_v11_release.py
+code/dream3r/scripts/smoke_v11_release_model.py
+```
+
+## Stable Fallback Verdict
 
 Dream3R has a release candidate:
 
@@ -83,12 +119,12 @@ shuffle-state: KITTI 0.2180, ETH3D 0.0598
 ```
 
 Interpretation: VGGT-Omega is a valid optional teacher and is strong on
-ETH3D/indoor-like windows, but it is not the release model path because it
-fails the current KITTI/state-causality release gate.
+ETH3D/indoor-like windows, but it is not a standalone release model path
+because it fails the current KITTI/state-causality release gate.
 
 ## Unified Domain-Conditional Gate Evidence
 
-The passed promotion-candidate policy is:
+The official v1.1.0 policy is:
 
 ```text
 KITTI -> Dream3R v1.0-rc1 bounded StatePrior + residual
@@ -110,10 +146,9 @@ KITTI state/no-state/shuffle: 0.1448 / 0.1553 / 0.1521
 ETH3D state/no-state/shuffle: 0.0570 / 0.0583 / 0.0598
 ```
 
-Interpretation: this closes the previous unified-gate blocker and makes the
-domain-conditional policy the current v1.1 promotion candidate. It does not
-silently rewrite the official package; `release/OFFICIAL_VERSION.md` remains
-`v1.0-rc1` until a deliberate v1.1 packaging update is made.
+Interpretation: this closes the previous unified-gate blocker and supplies the
+evidence for the official `v1.1.0` package. `release/OFFICIAL_VERSION.md` now
+identifies v1.1.0 as official; `v1.0-rc1` is retained as stable fallback.
 
 ## Qwen/VLM Gate Evidence
 
@@ -147,6 +182,13 @@ Expanded local verification, 2026-06-06:
 ```text
 python -B -m pytest --assert=plain code/dream3r/tests -q
 # 273 passed, 2 skipped
+```
+
+Expanded local verification, 2026-06-08:
+
+```text
+python -B -m pytest --assert=plain code/dream3r/tests -q
+# 300 passed, 2 skipped
 ```
 
 Targeted release/training subset:
@@ -230,8 +272,8 @@ code/dream3r/config.py
 
 - The RC is a bounded controlled candidate, not a SOTA/public-leaderboard
   claim.
-- The passed domain-conditional policy still needs v1.1 packaging/verifier
-  work before it replaces the official `v1.0-rc1` package.
+- The official v1.1.0 package is still a controlled proposal-fusion release,
+  not a proposal-free foundation model.
 - Native proposal-free Dream3R decoding is not yet competitive with the
   selected bounded baseline. Sparse GT, stripped teacher, and larger
   scale-aligned teacher gates are all negative.

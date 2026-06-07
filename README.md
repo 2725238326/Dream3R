@@ -1,8 +1,12 @@
 # Dream Research Workspace
 
+Last updated: 2026-06-08 (Current effective architecture is now Dream3R `v1.1.0`, documented at `release/EFFECTIVE_ARCHITECTURE_V1_1.md`: KITTI `0.1448`, ETH3D `0.0570`, with v1.0-rc1 preserved as stable fallback. This is a state-conditioned proposal-fusion architecture, not a proposal-free Foundation3R claim.)
+
+Last updated: 2026-06-08 (Foundation3R state-modulation gate implemented and closed negative: explicit Dream-state FiLM modulation plus state-contrastive loss pass local/server tests, but GPU1 controls fail cross-domain causality. State `0.3222/0.1504`, no-state `0.3392/0.1484`, shuffle `0.3500/0.1353`; ETH3D prefers shuffle. Current usable model remains `v1.1.0`.)
+
 Last updated: 2026-06-08 (Context compaction anchor added at `handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md`. Read it after `TASK_SNAPSHOT.md` to recover the full current state: v1.1 usable model, v1.0 fallback, VGGT/Qwen/Foundation3R status, frozen core, validation evidence, and next priorities.)
 
-Last updated: 2026-06-07 (Tonight usable Dream3R model package added: `v1.1-rc1` in `code/dream3r/release_v11.py`, documented at `release/USABLE_MODEL_V1_1.md`, verified locally and on BUAA-Server. It routes KITTI to v1.0-rc1 and ETH3D to VGGT-Omega-expanded SCF: KITTI/ETH3D `0.1448/0.0570`.)
+Last updated: 2026-06-07 (Tonight usable Dream3R model package added: `v1.1.0` in `code/dream3r/release_v11.py`, documented at `release/USABLE_MODEL_V1_1.md`, verified locally and on BUAA-Server. It routes KITTI to v1.0-rc1 and ETH3D to VGGT-Omega-expanded SCF: KITTI/ETH3D `0.1448/0.0570`.)
 
 Last updated: 2026-06-07 (Foundation3R VGGT feature student added and gated: real VGGT-Omega aggregator features are cached for KITTI/ETH3D 50+50, `input_mode=vggt_features` now defaults to teacher-only loss, and GPU1 teacher-only 20e gives state `0.3237/0.1424`, no-state `0.3260/0.1489`, shuffle `0.3246/0.1330`. This proves VGGT features help versus scratch, but state causality is not established, so it is experimental and not official.)
 
@@ -22,7 +26,7 @@ Last updated: 2026-06-06 (Proposal-free teacher distillation gate closed negativ
 
 Last updated: 2026-06-06 (Proposal-free route started: `code/dream3r/proposal_free_3r_decoder.py` and `code/dream3r/scripts/train_proposal_free_3r.py` add a clean `image tokens + Dream state -> pointmap` contract with no proposal inputs. GPU1 gate20 is negative, so this is a scaffold for dense teacher distillation/pretraining, not a model claim.)
 
-Last updated: 2026-06-06 (Unified domain-conditional gate passed locally and on BUAA-Server: KITTI state/no-state/shuffle `0.1448/0.1553/0.1521`, ETH3D state/no-state/shuffle `0.0570/0.0583/0.0598`; `promotable_to_official=true`. This is the v1.1 promotion candidate, while `v1.0-rc1` remains the current official package until a deliberate version switch.)
+Last updated: 2026-06-06 (Unified domain-conditional gate passed locally and on BUAA-Server: KITTI state/no-state/shuffle `0.1448/0.1553/0.1521`, ETH3D state/no-state/shuffle `0.0570/0.0583/0.0598`; `promotable_to_official=true`. This gate was later promoted into the official `v1.1.0` package; `v1.0-rc1` is now only the stable fallback.)
 
 Last updated: 2026-06-06 (Canonical architecture entrypoint added at `ARCHITECTURE.md`; machine-readable status map added at `release/ARCHITECTURE_STATUS.json`. Use these first to separate official v1.0-rc1, experimental domain-conditional VGGT, and rejected/side lanes.)
 
@@ -240,8 +244,8 @@ The latest architecture promotion result is:
 ```text
 runs/v22_admission/domain_conditional_teacher/unified_gate_candidate_with_kitti_no_state_server.json
 status: pass
-target: v1.1 promotion candidate
-official package still: v1.0-rc1
+target: v1.1.0 official release
+stable fallback: v1.0-rc1
 ```
 
 The current strategy is **not** to prematurely choose one method such as Mamba-3R, Event-DUSt3R, or SplatBridge-4D.
