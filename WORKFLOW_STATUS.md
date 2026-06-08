@@ -1,5 +1,19 @@
 # Dream Workflow Status
 
+Last updated: 2026-06-08 (Opening report expanded from a short outline into a fuller previous-stage report. Source: `reports/opening/DREAM3R_OPENING_REPORT_STUDENT_FINAL.md`; new material covers early Dream3R work, model-family review, framework decomposition, candidate-geometry cache/interface plan, experiment controls, feasibility, and expected outputs. PDF re-rendered under `reports/pdf/Dream3R_开题报告_20260608.pdf`; page count 5; QA first/last page images refreshed.)
+
+Last updated: 2026-06-08 (Midterm report refocused to answer "this period's main changes": current source `reports/midterm/DREAM3R_MIDTERM_REPORT_DRAFT.md` starts from v1.1.0 model identity, VGGT-Omega integration, Qwen diagnostic status, Foundation3R/non-promoted branches, validation chain, metrics, and remaining limits. Fixed model terms such as `Transformer` were kept. PDFs re-rendered under `reports/pdf/`; page counts: midterm 5, opening 4; midterm first/last QA images checked.)
+
+Last updated: 2026-06-08 (Student-style opening and midterm reports rendered to PDF under `reports/pdf/`. Pandoc+xelatex completed with MiKTeX unsupported-Windows warnings but exit code 0; page counts: midterm 6 pages, opening 4 pages; first/last page PNG QA checked.)
+
+Last updated: 2026-06-08 (Midterm report/PPT language cleanup applied: the current report and outline now frame Dream3R directly as state-conditioned proposal-fusion over a 3R proposal bank, with Qwen/Foundation3R recorded as diagnostic/research branches through evidence rather than corrective "not X but Y" wording.)
+
+Last updated: 2026-06-08 (Midterm optimization and PPT plan added. Optimization lanes: v1.1 formal evaluation, confidence/conflict-aware fusion improvements, and Foundation3R proposal-free redesign. PPT plan: 20-slide defense narrative with speaker-script skeleton under `reports/midterm/DREAM3R_MIDTERM_PPT_OUTLINE_AND_SCRIPT.md`.)
+
+Last updated: 2026-06-08 (Midterm report prose draft started: `reports/midterm/DREAM3R_MIDTERM_REPORT_DRAFT.md`; style notes: `reports/midterm/DREAM3R_MIDTERM_WRITING_STYLE_NOTES.md`. Current writing stance: Dream3R v1.1.0 is a state-conditioned proposal-fusion 3R model with verified state/no-state/shuffle controls, while Qwen and Foundation3R remain non-promoted research/diagnostic branches.)
+
+Last updated: 2026-06-08 (Report planning added: opening report is treated as previous-stage material; midterm report/PPT should be built from post-opening progress, current v1.1.0 evidence, non-promoted branches, platform/runtime chain, limitations, and next-stage plan. Plan file: `planning/DREAM3R_REPORT_AND_MIDTERM_PPT_PLAN_20260608.md`.)
+
 Last updated: 2026-06-08 (Dream3R v1.1 real proposal-cache runtime demo added and verified: `run_dream3r_v11_cache_demo.py` consumes existing SCF/VGGT-Omega caches, validates strict branch expert order, adapts cache `d_memory`, and writes `runs/release/v11_cache_demo/cache_demo_kitti.json` plus `cache_demo_eth3d.json`. Local focused tests `11 passed`; BUAA-Server GPU1 real-cache KITTI/ETH3D pass and focused tests `11 passed`. This strengthens runtime deliverability without changing the official metric claim.)
 
 Last updated: 2026-06-08 (Dream3R v1.1 afternoon-deliverable packaging complete and verified: model card, architecture diagram, afternoon deliverable page, one-command demo script, demo JSON artifacts, tests, manifest/docs sync, and stable-core verifier policy were added. Local evidence: v1.1/v1.0 verifiers pass, release tests `14 passed`, JSON checks pass, `git diff --check` no whitespace errors. BUAA-Server GPU1 evidence: demo KITTI/ETH3D pass, v1.1/v1.0 verifiers pass, release tests `14 passed`, v1.2 architecture tests `4 passed`. v1.1.0 remains the official deliverable; v1.2-exp0 remains experimental until real-cache controls pass.)
@@ -108,6 +122,10 @@ Last updated: 2026-05-22 (cycle 043 architecture-focus round after user re-prior
 
 ```text
 Phase 1.5: Dream3R release/research checkpoint, context compressed
+Current writing branch: midterm report v0.1 draft exists under
+  `reports/midterm/DREAM3R_MIDTERM_REPORT_DRAFT.md`; optimization plan and
+  20-slide PPT outline/script also exist under `reports/midterm/`. Next report
+  work is prose polishing, reference-format normalization, then PPTX generation.
 ```
 
 ## Current Mode

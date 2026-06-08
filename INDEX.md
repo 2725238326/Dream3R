@@ -1,5 +1,15 @@
 # Dream Index
 
+Last updated: 2026-06-08 (Rendered report PDFs added: `reports/pdf/Dream3R_中期报告_20260608.pdf` and `reports/pdf/Dream3R_开题报告_20260608.pdf`; opening report student-style source added at `reports/opening/DREAM3R_OPENING_REPORT_STUDENT_FINAL.md`.)
+
+Last updated: 2026-06-08 (Midterm report/PPT language cleanup applied: main report, PPT outline/script, and optimization plan now use direct project-style framing rather than stiff "not X but Y" correction sentences.)
+
+Last updated: 2026-06-08 (Midterm optimization/PPT package added: `reports/midterm/DREAM3R_NEXT_OPTIMIZATION_PLAN.md` and `reports/midterm/DREAM3R_MIDTERM_PPT_OUTLINE_AND_SCRIPT.md`.)
+
+Last updated: 2026-06-08 (Midterm report v0.1 draft added at `reports/midterm/DREAM3R_MIDTERM_REPORT_DRAFT.md`; style notes added at `reports/midterm/DREAM3R_MIDTERM_WRITING_STYLE_NOTES.md` to keep the prose close to local 3R paper rhetoric rather than internal AI/task-summary language.)
+
+Last updated: 2026-06-08 (Report/PPT planning boundary added: `planning/DREAM3R_REPORT_AND_MIDTERM_PPT_PLAN_20260608.md` separates previous-stage opening report materials from the new midterm report and midterm PPT plan.)
+
 Last updated: 2026-06-08 (Dream3R v1.1 real proposal-cache runtime demo added and verified: `code/dream3r/scripts/run_dream3r_v11_cache_demo.py`, focused mock-cache tests, and mirrored JSON artifacts under `runs/release/v11_cache_demo/`. BUAA-Server GPU1 real-cache KITTI/ETH3D pass; server focused tests `11 passed`. This is runtime-contract evidence, not a benchmark rerun.)
 
 Last updated: 2026-06-08 (Dream3R v1.1 afternoon deliverable packaging complete and verified: `release/MODEL_CARD_V1_1.md`, `release/ARCHITECTURE_DIAGRAM_V1_1.md`, `release/AFTERNOON_DELIVERABLE_V1_1.md`, `code/dream3r/scripts/run_dream3r_v11_demo.py`, `code/dream3r/tests/test_v11_demo_script.py`, and demo artifacts under `runs/release/v11_demo/`; local release tests `14 passed`, BUAA-Server GPU1 release tests `14 passed`, v1.2 architecture tests `4 passed`.)
@@ -148,6 +158,29 @@ Quick navigation for humans and agents. **Read `TASK_SNAPSHOT.md` first** (it is
 | `code/dream3r/tests/test_release_candidate_verifier.py` | Unit test for the release verifier without git dependency |
 
 ## Subdirectories By Purpose
+
+### `reports/midterm/` - 中期报告与中期答辩材料
+
+| File | Role |
+|---|---|
+| `DREAM3R_MIDTERM_REPORT_DRAFT.md` | 中期报告 v0.1 中文正文初稿。采用“领域问题 -> 传统流程限制 -> 前馈式 3R 范式 -> Dream3R 状态条件化 proposal-fusion -> 实验与局限”的论文叙述线 |
+| `DREAM3R_MIDTERM_WRITING_STYLE_NOTES.md` | 中期报告写作风格说明：避免内部工程/AI 总结口吻，保留 DUSt3R/VGGT/Fast3R 等论文常用的问题定位方式 |
+| `DREAM3R_NEXT_OPTIMIZATION_PLAN.md` | 中期后优化路线：v1.1 formal eval、融合模型优化、Foundation3R proposal-free 重设计 |
+| `DREAM3R_MIDTERM_PPT_OUTLINE_AND_SCRIPT.md` | 20 页中期 PPT 页纲与讲稿骨架：开题目标、3R 背景、v1.1 架构、结果、负分支、优化计划 |
+
+### `reports/opening/` - 开题报告整理稿
+
+| File | Role |
+|---|---|
+| `DREAM3R_OPENING_REPORT_STUDENT_FINAL.md` | 开题报告学生版源稿：背景、现状、目标、研究内容、技术路线、实验设计、可行性、进度、预期成果 |
+
+### `reports/pdf/` - 报告 PDF 输出
+
+| File | Role |
+|---|---|
+| `Dream3R_中期报告_20260608.pdf` | 中期报告 PDF |
+| `Dream3R_开题报告_20260608.pdf` | 开题报告 PDF |
+| `qa/` | PDF 渲染 QA 页图，用于检查中文和分页 |
 
 ### `paradigm/` - How Dream Operates
 

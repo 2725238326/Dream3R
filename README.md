@@ -1,5 +1,7 @@
 # Dream Research Workspace
 
+Last updated: 2026-06-08 (Dream3R v1.1 real proposal-cache runtime demo added and verified: `code/dream3r/scripts/run_dream3r_v11_cache_demo.py` consumes existing SCF/VGGT-Omega caches, validates strict branch expert order, adapts cache `d_memory`, and writes `runs/release/v11_cache_demo/cache_demo_kitti.json` plus `cache_demo_eth3d.json`. BUAA-Server GPU1 real-cache KITTI/ETH3D pass; focused tests `12 passed`. This is runtime-contract evidence, not a benchmark rerun.)
+
 Last updated: 2026-06-08 (Current effective architecture is now Dream3R `v1.1.0`, documented at `release/EFFECTIVE_ARCHITECTURE_V1_1.md`: KITTI `0.1448`, ETH3D `0.0570`, with v1.0-rc1 preserved as stable fallback. This is a state-conditioned proposal-fusion architecture, not a proposal-free Foundation3R claim.)
 
 Last updated: 2026-06-08 (Foundation3R state-modulation gate implemented and closed negative: explicit Dream-state FiLM modulation plus state-contrastive loss pass local/server tests, but GPU1 controls fail cross-domain causality. State `0.3222/0.1504`, no-state `0.3392/0.1484`, shuffle `0.3500/0.1353`; ETH3D prefers shuffle. Current usable model remains `v1.1.0`.)
