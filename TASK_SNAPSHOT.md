@@ -1,5 +1,13 @@
 # Dream Task Snapshot
 
+Last updated: 2026-06-08 (Dream3R v1.1 real proposal-cache runtime demo added and verified: `run_dream3r_v11_cache_demo.py` now loads existing SCF/VGGT-Omega proposal caches, validates strict v1.1 expert order, adapts cache `d_memory`, writes JSON reports, and is covered by mock cache tests. Local evidence: v1.1 architecture/demo tests `11 passed`, synthetic demo still passes, cache JSON mirrors parse. BUAA-Server GPU1 evidence: real-cache KITTI pass on `runs/stage6_fusion/scf_kitti_cache.pt`, real-cache ETH3D pass on `runs/v22_admission/vggt_omega_cache_gate/scf_eth3d_vggt_omega_cache.pt`, server tests `11 passed`, JSON parse pass. This is runtime-contract evidence, not a benchmark rerun; v1.1.0 remains the official deliverable. Earlier last-updated note follows.)
+
+Last updated: 2026-06-08 (Dream3R v1.1 afternoon-deliverable packaging complete: added `MODEL_CARD_V1_1.md`, `ARCHITECTURE_DIAGRAM_V1_1.md`, `AFTERNOON_DELIVERABLE_V1_1.md`, `run_dream3r_v11_demo.py`, demo JSON artifacts, tests, manifest/docs sync, and controlled stable-core verifier policy. Local evidence: v1.1 demo KITTI/ETH3D pass, v1.1 verifier pass with `stable_core_check_mode=git_diff`, v1.0 fallback verifier pass, release tests `14 passed`, v1.2 tests included in focused local set, JSON parse pass, `git diff --check` no whitespace errors. BUAA-Server GPU1 evidence: demo KITTI/ETH3D pass, v1.1 verifier pass with `stable_core_check_mode=skipped_not_git_repo`, v1.0 fallback verifier pass, release tests `14 passed`, v1.2 architecture tests `4 passed`, JSON parse pass. v1.1.0 is the afternoon deliverable; v1.2-exp0 remains experimental. Earlier last-updated note follows.)
+
+Last updated: 2026-06-08 (Dream3R `v1.2-exp0` controlled core unfreeze started: `model.py` now exposes an optional core proposal-fusion bridge, `modules.py` makes `SpatialMemory.frame_input_dim` configurable, `config.py` threads bridge knobs, and `release_v12_experimental.py` adds the experimental API. v1.1 remains official fallback. Earlier last-updated note follows.)
+
+Last updated: 2026-06-08 (Official v1.1 completion plan added at `planning/DREAM3R_V11_OFFICIAL_COMPLETION_PLAN_20260608.md`: remaining package work is model card, architecture diagram, one-command demo, demo artifacts, docs/manifest sync, and local/server validation. Earlier last-updated note follows.)
+
 Last updated: 2026-06-08 (Formal release promotion completed and verified: Dream3R `v1.1.0` is now the official release via `dream3r.release_v11.build_dream3r_v11_release`; `v1.0-rc1` is stable fallback/regression gate. Local evidence: v1.1 verifier pass, v1.1 smoke pass, v1.0 fallback verifier pass, release tests `12 passed`, full suite `300 passed, 2 skipped`, frozen core diff empty. BUAA-Server GPU1 evidence: JSON pass, v1.1 verifier pass, v1.1 smoke pass, v1.0 fallback verifier pass, release tests `12 passed`. Earlier last-updated note follows.)
 
 Last updated: 2026-06-08 (Complete model package document added at `release/COMPLETE_MODEL_V1_1.md`; publish checklist, verification report, reproduce notes, artifact manifest, and v1.1 verifier now recognize `v1.1.0` as the complete official model package. Earlier last-updated note follows.)
@@ -122,7 +130,7 @@ Last updated: 2026-05-27 (state-conditioned reconstruction pivot: added `specs/S
 
 Last updated: 2026-05-22 (v0.5 iteration test plan added after user asked how to iterate, test, and start completing the architecture plans: `planning/DREAM3R_V05_ITERATION_TEST_PLAN.md` defines L0-L4 completion standards, S0 local v0.4 edge tests, S1 A6 KITTI 8-10 window memory evidence, S2 A2 staged adapter real-backend closure, S3 A5 Test3R off-path, S4 A3 dynamic-mask promotion design, server runbook outline, evidence schema, gates, risks, and a short agent prompt; `handoff/ARCHITECTURE_V05_AGENT_START_PROMPT.md` added. Planning only; no v0.5 axis closed. Earlier last-updated note follows.) Last updated: 2026-05-22 (cycle 043 architecture-focus round after user re-prioritization "架构是最重要的内容; 开题报告和综述放一边": W20 SOTA Feature Matrix expanded at `code/dream3r/SOTA_FEATURE_MATRIX.md` (family-grouped 2nd pass) + v0.5 axes spec drafted at `specs/SPEC-20260522-001-dream3r-v05-axes.md` (8 axes A1-A8 with explicit `closes_iff`); markdown only; v0.3 + v0.4 code byte-identical; both candidate-not-final per DEC-20260501-004; sync chain applied. Earlier last-updated note follows.) Last updated: 2026-05-22 (v0.4 architecture closure round, parallel to proposal track: added `code/dream3r/contracts.py` + `repair.py` + `orchestrator.py` + 3 new test files + `ARCHITECTURE_V04_STATUS.md`; 24 new tests + 130 pre-existing tests all pass; v0.3 model.py / modules.py / bus.py / anchor_bank.py / nsa_attention.py / composer_experts/* are byte-identical to before this round; driven by `ARCHITECTURE_V04_AGENT_PROMPT.md`. Proposal-track last-updated note follows.) Last updated: 2026-05-17 (post cycle 042: user 指令开题报告扩展为双支柱项目 — 支柱 A Dream3R 新架构模型 (已有 §1-§9) + 支柱 B KYKT 聚合管理平台 (待新增); PROPOSAL_EXPANSION_PLAN.md + AGENT_HANDOFF_PROPOSAL_EXPANSION.md 已创建; 待其他 agent 执行扩展写作)
 
-Status: **idle** (formal-release promotion pass complete; official model is `v1.1.0` via `dream3r.release_v11.build_dream3r_v11_release`; stable fallback `v1.0-rc1` is preserved. Foundation3R state-modulation gate is negative and remains experimental.)
+Status: **idle** (v1.1 afternoon-deliverable package and real proposal-cache runtime demo are verified locally plus on BUAA-Server GPU1. Next work is presentation/manuscript use of v1.1 or a separately scoped v1.2 metric/control gate.)
 
 ## Release-readiness gate (2026-06-05)
 
@@ -1133,21 +1141,55 @@ If this file's "Last updated" timestamp is older than the latest cycle log under
 ## Current task
 
 ```text
-task_id:    dream3r-v11-formal-official-release-2026-06-08
-phase:      formal release promotion and verification
-status:     complete
-driver:     user asked to push Dream3R to a usable formal version and clarify the architecture
-priority:   make v1.1.0 the documented official package, preserve v1.0-rc1 as fallback, verify locally and on BUAA-Server
+task_id:    dream3r-v11-afternoon-deliverable-2026-06-08
+phase:      afternoon deliverable packaging and verification
+status:     complete; extended with real proposal-cache runtime demo
+driver:     user needs a submit-ready model by this afternoon
+priority:   package v1.1.0 as the deliverable model with synthetic demo,
+            real-cache runtime demo, docs, tests, and BUAA-Server GPU1 evidence
 ```
 
 One-line description:
 
 ```text
-Dream3R v1.1.0 is being promoted from usable/current-effective package to the
-formal official release. The active API is
-dream3r.release_v11.build_dream3r_v11_release; v1.0-rc1 stays as stable
-fallback only. Frozen core remains closed.
+Dream3R v1.1.0 is the afternoon deliverable. It must remain honest: a
+state-conditioned proposal-fusion 3R package with demo JSON and verification,
+not a proposal-free foundation model. The real-cache demo proves proposal-cache
+consumption only; it is not a benchmark rerun. v1.2-exp0 stays experimental.
 ```
+
+## Subtask board (active v1.1.0 real proposal-cache runtime demo)
+
+| ID | Subtask | Status | Canonical artifact |
+| --- | --- | --- | --- |
+| C20260608-CD-S1 | Add cache demo entrypoint that consumes existing SCF/VGGT-Omega proposal caches | done | `code/dream3r/scripts/run_dream3r_v11_cache_demo.py` |
+| C20260608-CD-S2 | Add strict cache expert-order validation and cache `d_memory` compatibility | done | `code/dream3r/release_v11.py`; `code/dream3r/scripts/run_dream3r_v11_cache_demo.py` |
+| C20260608-CD-S3 | Lock cache demo with mock cache tests | done | `code/dream3r/tests/test_v11_demo_script.py`; `code/dream3r/tests/test_release_v11_architecture.py` |
+| C20260608-CD-S4 | Run local focused tests and synthetic demo regression | done | local v1.1 architecture/demo tests `11 passed`; synthetic KITTI demo pass |
+| C20260608-CD-S5 | Run BUAA-Server GPU1 real-cache demo and tests | done | server real-cache KITTI/ETH3D pass; server tests `11 passed`; JSON parse pass |
+| C20260608-CD-S6 | Mirror cache-demo JSON and update release/status chain | done | `runs/release/v11_cache_demo/`; release docs; `TASK_SNAPSHOT.md` |
+
+## Subtask board (active v1.2 controlled core unfreeze)
+
+| ID | Subtask | Status | Canonical artifact |
+| --- | --- | --- | --- |
+| C20260608-V12-S1 | Select smallest meaningful core unfreeze target | done | core bridge plan; `planning/DREAM3R_V12_CONTROLLED_CORE_UNFREEZE_PLAN_20260608.md` |
+| C20260608-V12-S2 | Add optional proposal-fusion bridge inside core Dream3R | done | `code/dream3r/model.py` |
+| C20260608-V12-S3 | Remove SpatialMemory 768-dim rigidity | done | `code/dream3r/modules.py`; `code/dream3r/config.py` |
+| C20260608-V12-S4 | Add v1.2 experimental API and focused tests | done | `code/dream3r/release_v12_experimental.py`; `test_release_v12_experimental_architecture.py` |
+| C20260608-V12-S5 | Run local focused regression | done | v1.2 tests `4 passed`; spatial/core tests `20 passed`; v1.1/v1.0 tests `9 passed` |
+| C20260608-V12-S6 | Sync to BUAA-Server and run GPU1 tests | done | server GPU1 v1.2 tests `4 passed`; v1.1/v1.0 tests `9 passed`; import smoke `v1.2-exp0` and `v1.1.0` |
+| C20260608-V12-S7 | Close docs/snapshot after server evidence | done | `TASK_SNAPSHOT.md`; final report |
+
+## Subtask board (active v1.1.0 official package completion)
+
+| ID | Subtask | Status | Canonical artifact |
+| --- | --- | --- | --- |
+| C20260608-PC-S1 | Define package-completion stop condition and execution order | done | `planning/DREAM3R_V11_OFFICIAL_COMPLETION_PLAN_20260608.md` |
+| C20260608-PC-S2 | Register plan in publish checklist and navigation | done | `release/PUBLISH_CHECKLIST.md`; `INDEX.md` |
+| C20260608-PC-S3 | Register plan in snapshot/workflow/manifest chain | done | `TASK_SNAPSHOT.md`; `WORKFLOW_STATUS.md`; `release/ARTIFACTS.json` |
+| C20260608-PC-S4 | Execute model card, architecture diagram, demo script, demo artifacts | done | `release/MODEL_CARD_V1_1.md`; `release/ARCHITECTURE_DIAGRAM_V1_1.md`; `release/AFTERNOON_DELIVERABLE_V1_1.md`; `code/dream3r/scripts/run_dream3r_v11_demo.py`; `runs/release/v11_demo/` |
+| C20260608-PC-S5 | Run local and BUAA-Server validation after implementation | done | local v1.1/v1.0 verifiers pass; release tests `14 passed`; server GPU1 demo/verifiers pass; server release tests `14 passed`; server v1.2 tests `4 passed`; JSON checks pass |
 
 ## Subtask board (active v1.1.0 formal release promotion)
 
@@ -1914,6 +1956,61 @@ Next expected research object after cycle 030:
 ## Last completed task pass
 
 ```text
+pass_name:        Dream3R v1.2-exp0 controlled core unfreeze scaffold
+date:             2026-06-08
+trigger:          User correctly objected that a fully frozen core keeps the
+                  architecture wrapper-heavy and weak.
+files_modified:   code/dream3r/model.py, code/dream3r/modules.py,
+                  code/dream3r/config.py, code/dream3r/__init__.py,
+                  code/dream3r/release_v12_experimental.py,
+                  code/dream3r/tests/test_release_v12_experimental_architecture.py,
+                  planning/DREAM3R_V12_CONTROLLED_CORE_UNFREEZE_PLAN_20260608.md,
+                  ARCHITECTURE.md, release/ARTIFACTS.json,
+                  release/ARCHITECTURE_STATUS.json, INDEX.md,
+                  WORKFLOW_STATUS.md, TASK_SNAPSHOT.md
+result:           Added `v1.2-exp0`, an experimental core-integrated
+                  state-conditioned proposal-fusion bridge. `Dream3R.forward`
+                  can now accept proposal banks, pool core Memory latent state,
+                  use Critic conflict, and feed `ProposalSetDecoder` inside the
+                  core model path. `SpatialMemory.frame_input_dim` is now
+                  configurable instead of hard-coded to 768.
+verification:     Local: v1.2 architecture tests `4 passed`; v1.1/v1.0 release
+                  architecture tests `9 passed`; spatial/core tests `20 passed`;
+                  JSON manifests parse; import smoke prints `v1.2-exp0` and
+                  `v1.1.0`; `git diff --check` has no whitespace errors beyond
+                  LF/CRLF warnings. BUAA-Server GPU1: v1.2 architecture tests
+                  `4 passed`; v1.1/v1.0 release architecture tests `9 passed`;
+                  import smoke prints `v1.2-exp0` and `v1.1.0`.
+boundary:         `v1.2-exp0` is not official and not proposal-free. It cannot
+                  replace `v1.1.0` until real cache KITTI/ETH3D metrics and
+                  correct/no-state/shuffle controls pass.
+next_execute:     Build a v1.2 cache-mode train/eval runner over existing
+                  SCF/VGGT proposal caches, then run state/no-state/shuffle
+                  gates against v1.1 metrics.
+
+pass_name:        Dream3R v1.1 official completion planning
+date:             2026-06-08
+trigger:          User agreed the official model still needs a complete,
+                  explainable package surface and asked to finish planning.
+files_modified:   planning/DREAM3R_V11_OFFICIAL_COMPLETION_PLAN_20260608.md,
+                  release/PUBLISH_CHECKLIST.md, INDEX.md, TASK_SNAPSHOT.md,
+                  WORKFLOW_STATUS.md, release/ARTIFACTS.json
+result:           Added the executable package-completion plan for official
+                  v1.1.0. The plan makes the next required deliverables
+                  explicit: model card, architecture diagram, one-command demo,
+                  demo JSON artifacts, docs/manifest sync, and local/server
+                  validation.
+verification:     Local `release/ARTIFACTS.json` parse pass; local doc-chain
+                  `rg` references pass; `git diff --check` has no whitespace
+                  errors beyond LF/CRLF warnings. BUAA-Server docs synced;
+                  server `release/ARTIFACTS.json` parse pass and doc-chain
+                  references present. No model code was changed and frozen core
+                  remains untouched.
+next_execute:     Create `release/MODEL_CARD_V1_1.md`, then
+                  `release/ARCHITECTURE_DIAGRAM_V1_1.md`, then
+                  `code/dream3r/scripts/run_dream3r_v11_demo.py`, then demo
+                  artifacts and validation.
+
 pass_name:        Dream3R v1.1.0 formal official release promotion
 date:             2026-06-08
 trigger:          User asked to quickly push Dream3R into a usable formal
@@ -2104,12 +2201,48 @@ prior_pass_files: TASK_SNAPSHOT.md, WORKFLOW_STATUS.md, RESEARCH_STATE.md,
                   ablation-addendum.md, cycles/CYCLE-20260508-005.md
 ```
 
+```text
+pass_name:        Dream3R v1.1 real proposal-cache runtime demo
+date:             2026-06-08
+trigger:          User asked to quickly push the model toward a usable,
+                  submit-ready architecture instead of only describing it.
+files_modified:   code/dream3r/release_v11.py,
+                  code/dream3r/scripts/run_dream3r_v11_cache_demo.py,
+                  code/dream3r/tests/test_v11_demo_script.py,
+                  code/dream3r/tests/test_release_v11_architecture.py,
+                  release/ARTIFACTS.json,
+                  release/ARCHITECTURE_STATUS.json,
+                  release/MODEL_CARD_V1_1.md,
+                  release/AFTERNOON_DELIVERABLE_V1_1.md,
+                  release/COMPLETE_MODEL_V1_1.md,
+                  release/OFFICIAL_VERSION.md,
+                  release/RUNBOOK.md,
+                  release/REPRODUCE.md,
+                  release/PUBLISH_CHECKLIST.md,
+                  release/VERIFY_REPORT.md,
+                  INDEX.md, WORKFLOW_STATUS.md, TASK_SNAPSHOT.md
+result:           Added a reversible v1.1 proposal-cache runtime demo. It
+                  loads existing SCF/VGGT-Omega cache entries, validates
+                  branch-specific expert order, adapts the release wrapper to
+                  cache `d_memory`, runs the official v1.1 API, and writes
+                  JSON reports under `runs/release/v11_cache_demo/`.
+verification:     Local: v1.1 architecture/demo tests `11 passed`, synthetic
+                  demo regression pass, cache-demo JSON parse pass. BUAA-Server
+                  GPU1: KITTI real-cache demo pass on
+                  `runs/stage6_fusion/scf_kitti_cache.pt`, ETH3D real-cache
+                  demo pass on
+                  `runs/v22_admission/vggt_omega_cache_gate/scf_eth3d_vggt_omega_cache.pt`,
+                  server tests `11 passed`, JSON parse pass.
+claim_boundary:   Runtime-contract evidence only. Do not treat cache-demo
+                  one-entry AbsRel values as official benchmark metrics.
+```
+
 ## If interrupted, resume from
 
 If a new agent or new conversation is picking this up cold:
 
 ```text
-CURRENT RESUME OVERRIDE (v1.1.0 formal release promotion; 2026-06-08):
+CURRENT RESUME OVERRIDE (v1.1.0 official release plus cache runtime demo; 2026-06-08):
 
 1. Read this file (you are here).
 
@@ -2118,6 +2251,8 @@ CURRENT RESUME OVERRIDE (v1.1.0 formal release promotion; 2026-06-08):
    release/COMPLETE_MODEL_V1_1.md
    release/EFFECTIVE_ARCHITECTURE_V1_1.md
    release/STABLE_FALLBACK_V1_0_RC.md
+   release/MODEL_CARD_V1_1.md
+   release/AFTERNOON_DELIVERABLE_V1_1.md
    ARCHITECTURE.md
    planning/DREAM3R_CLEAN_ARCHITECTURE_MAP_20260608.md
 

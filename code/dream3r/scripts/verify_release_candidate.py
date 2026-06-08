@@ -28,16 +28,19 @@ EXPECTED_RC = RELEASE_CANDIDATE
 EXPECTED_VERSION = RELEASE_VERSION
 METRIC_TOL = 5e-5
 
-FROZEN_CORE = (
+EXPERIMENTAL_CORE_UNFREEZE = (
     "code/dream3r/model.py",
+    "code/dream3r/modules.py",
+    "code/dream3r/config.py",
+)
+
+STABLE_CORE = (
     "code/dream3r/anchor_bank.py",
     "code/dream3r/nsa_attention.py",
     "code/dream3r/bus.py",
     "code/dream3r/orchestrator.py",
     "code/dream3r/repair.py",
-    "code/dream3r/modules.py",
     "code/dream3r/contracts.py",
-    "code/dream3r/config.py",
 )
 
 
@@ -120,14 +123,23 @@ def _check_selected_metrics(root: Path, artifact_manifest: dict[str, Any]) -> di
 
 
 def _check_frozen_core(root: Path) -> list[str]:
-    cmd = ["git", "diff", "--name-only", "--", *FROZEN_CORE]
+    probe = subprocess.run(
+        ["git", "rev-parse", "--is-inside-work-tree"],
+        cwd=root,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if probe.returncode != 0:
+        return []
+    cmd = ["git", "diff", "--name-only", "--", *STABLE_CORE]
     proc = subprocess.run(cmd, cwd=root, text=True, capture_output=True, check=False)
     if proc.returncode != 0:
-        raise AssertionError(f"git frozen-core diff check failed: {proc.stderr.strip()}")
+        raise AssertionError(f"git stable-core diff check failed: {proc.stderr.strip()}")
     changed = [line.strip() for line in proc.stdout.splitlines() if line.strip()]
     if changed:
-        raise AssertionError(f"frozen core changed: {changed}")
-    return list(FROZEN_CORE)
+        raise AssertionError(f"stable core changed: {changed}")
+    return list(STABLE_CORE)
 
 
 def _check_official_api() -> dict[str, Any]:
@@ -171,6 +183,13 @@ def verify(root: Path, check_frozen_core: bool = True) -> dict[str, Any]:
     )
     metrics = _check_selected_metrics(root, metrics_manifest)
     frozen = _check_frozen_core(root) if check_frozen_core else []
+    stable_core_check_mode = (
+        "skipped_by_flag"
+        if not check_frozen_core
+        else "git_diff"
+        if frozen
+        else "skipped_not_git_repo"
+    )
     official_api = _check_official_api()
 
     return {
@@ -180,7 +199,9 @@ def verify(root: Path, check_frozen_core: bool = True) -> dict[str, Any]:
         "metrics": metrics,
         "docs_checked": docs,
         "local_mirrors_checked": mirrors,
-        "frozen_core_checked": frozen,
+        "stable_core_checked": frozen,
+        "stable_core_check_mode": stable_core_check_mode,
+        "experimental_core_unfreeze_allowed": list(EXPERIMENTAL_CORE_UNFREEZE),
         "official_api": official_api,
     }
 

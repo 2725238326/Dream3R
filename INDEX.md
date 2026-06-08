@@ -1,6 +1,14 @@
 # Dream Index
 
+Last updated: 2026-06-08 (Dream3R v1.1 real proposal-cache runtime demo added and verified: `code/dream3r/scripts/run_dream3r_v11_cache_demo.py`, focused mock-cache tests, and mirrored JSON artifacts under `runs/release/v11_cache_demo/`. BUAA-Server GPU1 real-cache KITTI/ETH3D pass; server focused tests `11 passed`. This is runtime-contract evidence, not a benchmark rerun.)
+
+Last updated: 2026-06-08 (Dream3R v1.1 afternoon deliverable packaging complete and verified: `release/MODEL_CARD_V1_1.md`, `release/ARCHITECTURE_DIAGRAM_V1_1.md`, `release/AFTERNOON_DELIVERABLE_V1_1.md`, `code/dream3r/scripts/run_dream3r_v11_demo.py`, `code/dream3r/tests/test_v11_demo_script.py`, and demo artifacts under `runs/release/v11_demo/`; local release tests `14 passed`, BUAA-Server GPU1 release tests `14 passed`, v1.2 architecture tests `4 passed`.)
+
+Last updated: 2026-06-08 (Dream3R v1.2 controlled core unfreeze started: `code/dream3r/model.py`, `code/dream3r/modules.py`, and `code/dream3r/config.py` now support an experimental core-integrated proposal-fusion bridge via `code/dream3r/release_v12_experimental.py`; plan at `planning/DREAM3R_V12_CONTROLLED_CORE_UNFREEZE_PLAN_20260608.md`.)
+
 Last updated: 2026-06-08 (Formal release promotion completed: `release/OFFICIAL_VERSION.md`, `release/COMPLETE_MODEL_V1_1.md`, `release/PUBLISH_CHECKLIST.md`, `release/VERIFY_REPORT.md`, and `release/REPRODUCE.md` now foreground v1.1.0 as the complete official model package; v1.0-rc1 is stable fallback.)
+
+Last updated: 2026-06-08 (Official completion plan added: `planning/DREAM3R_V11_OFFICIAL_COMPLETION_PLAN_20260608.md`. It defines today's remaining package work: model card, architecture diagram, one-command demo, demo artifacts, docs sync, and local/server validation.)
 
 Last updated: 2026-06-08 (v1.1 full-model smoke path added: `code/dream3r/scripts/smoke_v11_release_model.py`, `code/dream3r/tests/test_release_v11_smoke_model.py`, and updated `release/RUNBOOK.md`.)
 
@@ -125,12 +133,16 @@ Quick navigation for humans and agents. **Read `TASK_SNAPSHOT.md` first** (it is
 | File | Role |
 |---|---|
 | `release/OFFICIAL_VERSION.md` | Formal `v1.1.0` entrypoint: version identity, official claim, fallback lane, verification commands |
+| `release/MODEL_CARD_V1_1.md` | v1.1 model card: runtime contract, metrics, safe claims, non-claims, and demo commands |
+| `release/ARCHITECTURE_DIAGRAM_V1_1.md` | v1.1 architecture diagram and branch/state-causality explanation |
+| `release/AFTERNOON_DELIVERABLE_V1_1.md` | Short handoff page for the afternoon submit-ready model package |
 | `release/STABLE_FALLBACK_V1_0_RC.md` | Stable fallback `v1.0-rc1` identity and regression boundary |
 | `release/ARCHITECTURE_V1_0_RC.md` | Frozen v1.0-rc1 architecture surface and component boundaries |
 | `release/ARTIFACTS.json` | Versioned artifact manifest for selected metrics, local mirrors, server paths, docs, and verifier entrypoints |
 | `release/ARCHITECTURE_STATUS.json` | Machine-readable architecture status: official, experimental, not-official, frozen core, next gate |
 | `handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md` | Shortest complete resume anchor for the current v1.1 usable release and research boundaries |
-| `code/dream3r/scripts/verify_release_candidate.py` | Read-only package verifier for docs, artifacts, metrics, state-causality, and frozen-core policy |
+| `code/dream3r/scripts/verify_release_candidate.py` | Read-only package verifier for docs, artifacts, metrics, state-causality, stable-core policy, and controlled v1.2 core-unfreeze exceptions |
+| `code/dream3r/scripts/run_dream3r_v11_demo.py` | One-command v1.1 proposal-bank runtime demo; writes KITTI/ETH3D JSON artifacts |
 | `code/dream3r/scripts/eval_unified_domain_conditional_gate.py` | Read-only v1.1 promotion-candidate gate combining KITTI and ETH3D state/no-state/shuffle controls |
 | `code/dream3r/release_candidate.py` | Official importable v1.0-rc1 architecture wrapper |
 | `code/dream3r/tests/test_release_candidate_verifier.py` | Unit test for the release verifier without git dependency |
@@ -183,6 +195,8 @@ Quick navigation for humans and agents. **Read `TASK_SNAPSHOT.md` first** (it is
 | `DREAM3R_PD_FINAL_ARCHITECTURE_PLAN.md` | 2026-05-30 final architecture plan. Selects Dream3R-PD: proposal teachers + Dream state + ProposalSetDecoder + native distillation with proposal dropout; defines P0-P5 execution ladder and stop gates |
 | `DREAM3R_ARCHITECTURE_ACCELERATION_PLAN_20260602.md` | 2026-06-02 acceleration plan. Locks the bounded frozen-StatePrior baseline and redirects next work from residual-head micro-sweeps to native student decoder/distillation or tightly gated teacher-bank admission |
 | `DREAM3R_V11_VLM_SEMANTIC_CONTROLLER_RESEARCH_PLAN.md` | 2026-06-03 V11 research plan, now with DEC-028/DEC-029 gate status. Scopes Qwen3-VL-2B-Instruct as an offline semantic support signal for Router, Critic, state auxiliary supervision, and teacher-admission scheduling, with strict schema plus real/shuffle/disabled dry-run controls |
+| `DREAM3R_V11_OFFICIAL_COMPLETION_PLAN_20260608.md` | 2026-06-08 execution plan for making official v1.1.0 demo/paper-ready: model card, architecture diagram, one-command demo, demo artifacts, docs sync, and local/server validation |
+| `DREAM3R_V12_CONTROLLED_CORE_UNFREEZE_PLAN_20260608.md` | 2026-06-08 controlled core-unfreeze plan. Opens `model.py`, `modules.py`, and `config.py` for v1.2-exp0 so the core Memory/Critic state feeds ProposalSetDecoder directly; v1.1 remains official fallback |
 | `VGGT_OMEGA_DEPLOYMENT_INVENTORY.md` | 2026-05-30 upstream deployment inventory for VGGT-Omega: repo, checkpoint policy, dependency surface, native outputs, ExpertProposal normalization, smoke command shape |
 
 ### `planning/proposal_dream3r/` - Dream3R 开题报告 dual-draft (Track C)

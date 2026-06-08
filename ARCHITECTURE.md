@@ -13,6 +13,7 @@ Effective:    Dream3R v1.1.0 domain-conditional wrapper
 Metric:       AbsRel, lower is better
 KITTI/ETH3D:  0.1448 / 0.0570
 Fallback:     Dream3R v1.0-rc1 bounded StatePrior, 0.1448 / 0.1475
+Research:     Dream3R v1.2-exp0 controlled core bridge, not official
 ```
 
 The architecture is not a single monolithic `model.py` path. The official
@@ -36,6 +37,32 @@ from dream3r.release_v11 import build_dream3r_v11_release
 model = build_dream3r_v11_release()
 out = model(proposal_pointmaps, proposal_confidences, memory_context, conflict_score, domain="eth3d")
 ```
+
+## Active v1.2 Experimental Core Unfreeze
+
+The current architecture repair lane is `v1.2-exp0`. It intentionally opens
+selected core files because the v1.1 release is too wrapper-heavy.
+
+```text
+Core Dream3R forward
+-> Perceiver / Memory / Composer / Critic state
+-> pooled Dream latent state + Critic conflict
+-> ProposalSetDecoder bridge inside model.py
+-> final pointmap / confidence / expert weights
+```
+
+Experimental import:
+
+```python
+from dream3r.release_v12_experimental import build_dream3r_v12_experimental
+
+model = build_dream3r_v12_experimental()
+out = model(x, proposal_pointmaps, proposal_confidences)
+```
+
+Boundary: this is not a v1.1 replacement and not proposal-free. It becomes
+promotable only if real KITTI/ETH3D metrics and state/no-state/shuffle controls
+beat the current official release.
 
 ## Read Order
 
@@ -63,7 +90,9 @@ Use this order when resuming work:
 | Proposal decoder | `code/dream3r/proposal_set_decoder.py` | active metric head |
 | SCF head | `code/dream3r/scf_head.py` | active ETH3D branch support |
 | Release verifier | `code/dream3r/scripts/verify_v11_release.py` | active official package gate |
+| Release cache demo | `code/dream3r/scripts/run_dream3r_v11_cache_demo.py` | active real-cache runtime contract gate |
 | Fallback verifier | `code/dream3r/scripts/verify_release_candidate.py` | stable fallback gate |
+| v1.2 experimental core bridge | `code/dream3r/release_v12_experimental.py` | active research lane, not official |
 
 Official import:
 
@@ -114,23 +143,30 @@ stable fallback and regression gate.
 | Foundation3R | `code/dream3r/foundation3r_decoder.py`, `scripts/build_foundation3r_dense_teacher_cache.py`, `scripts/train_foundation3r.py` | dense-teacher cache and training chain work; scratch student negative at `0.4734 / 0.3271`; VGGT feature teacher-only 20e improves over scratch but fails state causality; 2026-06-08 explicit state-modulation + contrast gate gives state `0.3222 / 0.1504`, no-state `0.3392 / 0.1484`, shuffle `0.3500 / 0.1353` | do not promote; next proposal-free attempt must change target/data/architecture, not rerun this small decoder |
 | VGGT-Omega | `code/dream3r/scripts/stage_vggt_omega_admission.py`, `eval_vggt_omega_oracle_admission.py` | real teacher, ETH3D-positive | use only via domain-conditional gate |
 | Qwen semantics | VLM semantic scripts | diagnostic-negative | not a geometry path |
-| v0.4 core pipeline | `model.py`, `modules.py`, `bus.py`, `orchestrator.py`, `repair.py`, `contracts.py` | substrate | frozen for RC work |
+| v1.2 core bridge | `code/dream3r/model.py`, `code/dream3r/modules.py`, `code/dream3r/config.py`, `code/dream3r/release_v12_experimental.py` | experimental scaffold-positive | run metric/control state/no-state/shuffle gate before promotion |
+| v0.4 core pipeline | `model.py`, `modules.py`, `bus.py`, `orchestrator.py`, `repair.py`, `contracts.py` | substrate | v1.1 fallback remains API-stable; selected files are opened only for v1.2 experiments |
 
-## Frozen Core
+## Core Freeze Boundary
 
-Do not edit these files for release/optimization work unless a new decision
-explicitly opens them:
+For official v1.1 release verification, the public fallback/API behavior must
+remain stable. For v1.2 research, the following files are explicitly opened:
 
 ```text
 code/dream3r/model.py
+code/dream3r/modules.py
+code/dream3r/config.py
+```
+
+The remaining core substrate is still treated as closed unless the v1.2 plan
+requires another explicit change:
+
+```text
 code/dream3r/anchor_bank.py
 code/dream3r/nsa_attention.py
 code/dream3r/bus.py
 code/dream3r/orchestrator.py
 code/dream3r/repair.py
-code/dream3r/modules.py
 code/dream3r/contracts.py
-code/dream3r/config.py
 ```
 
 ## Next Gate To Reduce Mess
@@ -151,9 +187,13 @@ Proposal-free goal:
 
 Release maintenance condition:
   1. Keep the six-control gate artifact immutable and referenced.
-  2. Keep the v1.1 policy/API wrapper green without editing frozen core files.
-  3. Keep release/OFFICIAL_VERSION.md and release/ARTIFACTS.json synchronized.
-  4. Re-run verifier/tests locally and on BUAA-Server GPU1 where model code is
+  2. Keep the v1.1 policy/API wrapper green while preserving the stable-core
+     files; `model.py`, `modules.py`, and `config.py` are open only for the
+     documented v1.2-exp0 bridge.
+  3. Keep the real-cache runtime demo green on BUAA-Server GPU1 when proposal
+     cache compatibility changes.
+  4. Keep release/OFFICIAL_VERSION.md and release/ARTIFACTS.json synchronized.
+  5. Re-run verifier/tests locally and on BUAA-Server GPU1 where model code is
      involved.
 
 Proposal-free promotion condition:

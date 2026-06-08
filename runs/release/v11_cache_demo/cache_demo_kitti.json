@@ -1,0 +1,102 @@
+{
+  "aggregate": {
+    "mean_abs_rel_vs_cache_gt": 0.14787381887435913,
+    "metric_direction": "lower_is_better"
+  },
+  "cache_entries_matched_domain": 246,
+  "cache_entries_total": 246,
+  "cache_paths": [
+    "runs/stage6_fusion/scf_kitti_cache.pt"
+  ],
+  "candidate": "domain_conditional_vggt_teacher",
+  "claim_boundary": {
+    "not_claimed": [
+      "benchmark rerun",
+      "proposal-free foundation 3R",
+      "image-only inference"
+    ],
+    "safe_claim": "v1.1 official release consumes proposal-cache entries"
+  },
+  "d_memory": 128,
+  "demo_mode": "proposal_cache_runtime",
+  "device": "cuda",
+  "domain": "kitti",
+  "entries_ran": 1,
+  "expert_order": [
+    "fast3r",
+    "mast3r",
+    "spann3r"
+  ],
+  "items": [
+    {
+      "entry": {
+        "cache_entry_index": 0,
+        "domain": "kitti",
+        "seq": "2011_09_26_drive_0001_sync_02"
+      },
+      "input_shapes": {
+        "conflict_score": [
+          1,
+          1
+        ],
+        "gt_mask": [
+          1,
+          4,
+          196
+        ],
+        "gt_pointmap": [
+          1,
+          4,
+          196,
+          3
+        ],
+        "memory_context": [
+          1,
+          128
+        ],
+        "proposal_confidences": [
+          1,
+          3,
+          4,
+          196,
+          1
+        ],
+        "proposal_pointmaps": [
+          1,
+          3,
+          4,
+          196,
+          3
+        ]
+      },
+      "output": {
+        "abs_rel_vs_cache_gt": 0.14787381887435913,
+        "domain_branch": "kitti_v1_0_rc1",
+        "expert_weight_sum_max": 1.0,
+        "expert_weight_sum_min": 1.0,
+        "expert_weights_shape": [
+          1,
+          3,
+          4,
+          196
+        ],
+        "final_confidence_shape": [
+          1,
+          4,
+          196,
+          1
+        ],
+        "final_pointmap_shape": [
+          1,
+          4,
+          196,
+          3
+        ]
+      }
+    }
+  ],
+  "model_config_source": "cache d_memory override on v1.1 release policy",
+  "official_api": "dream3r.release_v11.build_dream3r_v11_release",
+  "status": "pass",
+  "version": "v1.1.0"
+}

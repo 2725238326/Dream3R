@@ -2,7 +2,7 @@
 
 Date: 2026-06-08
 
-## Complete Usable Package
+## Complete Official Package
 
 ```text
 version: v1.1.0
@@ -14,6 +14,26 @@ smoke: code/dream3r/scripts/smoke_v11_release_model.py
 ```
 
 The stable fallback remains `v1.0-rc1`.
+
+## Today Completion Plan
+
+The remaining package-completion work is specified in:
+
+```text
+planning/DREAM3R_V11_OFFICIAL_COMPLETION_PLAN_20260608.md
+```
+
+Completed additions for afternoon demo/paper circulation:
+
+- `release/MODEL_CARD_V1_1.md`
+- `release/ARCHITECTURE_DIAGRAM_V1_1.md`
+- `release/AFTERNOON_DELIVERABLE_V1_1.md`
+- `code/dream3r/scripts/run_dream3r_v11_demo.py`
+- `code/dream3r/scripts/run_dream3r_v11_cache_demo.py`
+- `runs/release/v11_demo/demo_kitti.json`
+- `runs/release/v11_demo/demo_eth3d.json`
+- `runs/release/v11_cache_demo/cache_demo_kitti.json`
+- `runs/release/v11_cache_demo/cache_demo_eth3d.json`
 
 ## Ready
 
@@ -38,6 +58,13 @@ ETH3D state/no-state/shuffle: 0.0570 / 0.0583 / 0.0598
 ```
 
 - Full-model smoke command added and run locally/server-side.
+- One-command release demo added and run locally plus on BUAA-Server GPU1.
+- Real proposal-cache runtime demo added and run on BUAA-Server GPU1.
+- Local/server release tests now include the demo test and pass `14 passed`.
+- Focused v1.1 cache-demo tests pass `11 passed` locally and on BUAA-Server.
+- Local stable-core verifier runs in `git_diff` mode; the BUAA-Server package
+  mirror reports `skipped_not_git_repo` because that mirror is not a git
+  checkout.
 - v1.0 fallback verifier remains green.
 - VGGT-Omega admitted as real backend and used only through the ETH3D branch.
 - Qwen semantics excluded from RC.

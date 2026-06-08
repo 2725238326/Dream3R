@@ -2,12 +2,25 @@
 
 Date: 2026-06-05
 
+Update 2026-06-08: v1.1.0 real proposal-cache runtime demo added. The new
+entrypoint `code/dream3r/scripts/run_dream3r_v11_cache_demo.py` consumes
+existing SCF/VGGT-Omega cache entries, validates strict branch expert order,
+adapts cache `d_memory`, and writes JSON reports under
+`runs/release/v11_cache_demo/`. Fresh local focused checks passed
+`11 passed`. Fresh BUAA-Server GPU1 checks passed: KITTI real-cache demo,
+ETH3D real-cache demo, focused tests `11 passed`, and cache-demo JSON parse.
+This is runtime-contract evidence, not a benchmark rerun.
+
 Update 2026-06-08: v1.1.0 is now the current complete official model package.
-The package has an effective architecture doc, verifier, full-model smoke, and
-runbook. Local checks passed: v1.1 verifier `pass`, v1.1 smoke `pass`, v1.0
-fallback verifier `pass`, release tests `12 passed`, full test suite
-`300 passed, 2 skipped`. BUAA-Server checks passed: v1.1 verifier `pass`,
-v1.1 smoke `pass`, v1.0 fallback verifier `pass`, release tests `12 passed`.
+The package has an effective architecture doc, model card, architecture
+diagram, verifier, full-model smoke, one-command branch demo, and runbook.
+Fresh local checks passed: v1.1 verifier `pass`, v1.1 smoke `pass`, v1.1 demo
+KITTI/ETH3D `pass`, v1.0 fallback verifier `pass`, release tests `14 passed`,
+artifact/demo JSON parse `pass`, and `git diff --check` reports no whitespace
+errors. Historical full-suite evidence remains `300 passed, 2 skipped`.
+Fresh BUAA-Server GPU1 checks passed: demo KITTI/ETH3D `pass`, v1.1 verifier
+`pass`, v1.0 fallback verifier `pass`, release tests `14 passed`, v1.2
+architecture tests `4 passed`, and artifact/demo JSON parse `pass`.
 
 Current complete model:
 
@@ -48,8 +61,13 @@ Completion entrypoints:
 ```text
 release/COMPLETE_MODEL_V1_1.md
 release/EFFECTIVE_ARCHITECTURE_V1_1.md
+release/MODEL_CARD_V1_1.md
+release/ARCHITECTURE_DIAGRAM_V1_1.md
+release/AFTERNOON_DELIVERABLE_V1_1.md
 code/dream3r/scripts/verify_v11_release.py
 code/dream3r/scripts/smoke_v11_release_model.py
+code/dream3r/scripts/run_dream3r_v11_demo.py
+code/dream3r/scripts/run_dream3r_v11_cache_demo.py
 ```
 
 ## Stable Fallback Verdict
@@ -241,7 +259,7 @@ Completed checks:
 
 ```text
 git diff --check
-frozen core diff check
+stable-core diff check
 artifact JSON parse check
 ```
 
@@ -252,19 +270,26 @@ diff.
 Known repository hygiene caveat: historical tracked `.pyc` files exist in the
 workspace. They were left untouched to avoid unrelated release-package churn.
 
-## Frozen Core Policy
+## Stable-Core Policy
 
-The following frozen core files are not part of the release edits:
+The following stable-core files are not part of the release edits and remain
+checked by the release verifiers:
 
 ```text
-code/dream3r/model.py
 code/dream3r/anchor_bank.py
 code/dream3r/nsa_attention.py
 code/dream3r/bus.py
 code/dream3r/orchestrator.py
 code/dream3r/repair.py
-code/dream3r/modules.py
 code/dream3r/contracts.py
+```
+
+The following files are intentionally opened only for the documented
+`v1.2-exp0` bridge and are reported as controlled exceptions:
+
+```text
+code/dream3r/model.py
+code/dream3r/modules.py
 code/dream3r/config.py
 ```
 

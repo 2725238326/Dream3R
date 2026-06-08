@@ -1,5 +1,15 @@
 # Dream Workflow Status
 
+Last updated: 2026-06-08 (Dream3R v1.1 real proposal-cache runtime demo added and verified: `run_dream3r_v11_cache_demo.py` consumes existing SCF/VGGT-Omega caches, validates strict branch expert order, adapts cache `d_memory`, and writes `runs/release/v11_cache_demo/cache_demo_kitti.json` plus `cache_demo_eth3d.json`. Local focused tests `11 passed`; BUAA-Server GPU1 real-cache KITTI/ETH3D pass and focused tests `11 passed`. This strengthens runtime deliverability without changing the official metric claim.)
+
+Last updated: 2026-06-08 (Dream3R v1.1 afternoon-deliverable packaging complete and verified: model card, architecture diagram, afternoon deliverable page, one-command demo script, demo JSON artifacts, tests, manifest/docs sync, and stable-core verifier policy were added. Local evidence: v1.1/v1.0 verifiers pass, release tests `14 passed`, JSON checks pass, `git diff --check` no whitespace errors. BUAA-Server GPU1 evidence: demo KITTI/ETH3D pass, v1.1/v1.0 verifiers pass, release tests `14 passed`, v1.2 architecture tests `4 passed`. v1.1.0 remains the official deliverable; v1.2-exp0 remains experimental until real-cache controls pass.)
+
+Last updated: 2026-06-08 (Dream3R v1.2-exp0 scaffold validated locally and on BUAA-Server GPU1: v1.2 architecture tests `4 passed`, v1.1/v1.0 release architecture tests `9 passed`, and import smoke prints `v1.2-exp0` plus `v1.1.0`. Next work is real cache-mode train/eval with state/no-state/shuffle controls.)
+
+Last updated: 2026-06-08 (Dream3R v1.2-exp0 controlled core unfreeze started: core `Dream3R.forward` now has an optional state-conditioned proposal-fusion bridge, `SpatialMemory` frame input dim is configurable, and `release_v12_experimental.py` exposes the experimental API. v1.1 remains official fallback until real cache metrics and state/no-state/shuffle controls pass.)
+
+Last updated: 2026-06-08 (Official v1.1 completion plan added at `planning/DREAM3R_V11_OFFICIAL_COMPLETION_PLAN_20260608.md`: finish model card, architecture diagram, one-command demo, demo artifacts, docs/manifest sync, and local/server validation before demo/paper circulation.)
+
 Last updated: 2026-06-08 (Full model completion path added for the current effective v1.1 architecture: `smoke_v11_release_model.py` exercises KITTI and ETH3D branches, `test_release_v11_smoke_model.py` locks the contract, and `release/RUNBOOK.md` now gives the v1.1 verifier/smoke/fallback sequence.)
 
 Last updated: 2026-06-08 (Architecture identity cleaned up: Dream3R `v1.1.0` is now the current effective architecture, documented at `release/EFFECTIVE_ARCHITECTURE_V1_1.md`; `v1.0-rc1` remains the stable fallback. Mainline work should use the v1.1 wrapper; Foundation3R/proposal-free stays research-only.)

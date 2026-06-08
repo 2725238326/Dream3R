@@ -59,6 +59,20 @@ def test_v11_metadata_records_policy_and_metrics() -> None:
     assert meta["controls"]["eth3d_state_abs_rel"] < meta["controls"]["eth3d_shuffle_abs_rel"]
 
 
+def test_v11_builder_accepts_cache_memory_dimension_override() -> None:
+    model = build_dream3r_v11_release(d_memory=128)
+    pointmaps = torch.randn(1, 3, 1, 3, 3)
+    confidences = torch.rand(1, 3, 1, 3, 1)
+    memory = torch.randn(1, 128)
+    conflict = torch.randn(1, 1)
+
+    out = model(pointmaps, confidences, memory, conflict, domain="kitti")
+
+    assert out["final_pointmap"].shape == (1, 1, 3, 3)
+    assert model.config.kitti.d_memory == 128
+    assert model.config.eth3d_d_memory == 128
+
+
 def test_v11_rejects_unsupported_domain_and_bad_config() -> None:
     model = build_dream3r_v11_release()
     pointmaps = torch.randn(1, 3, 1, 2, 3)
@@ -97,4 +111,3 @@ def test_v11_loads_eth3d_scf_checkpoint(tmp_path) -> None:
     assert loaded.release_metadata()["version"] == RELEASE_V11_VERSION
     assert loaded.config.eth3d_n_experts == 4
     assert loaded.config.eth3d_expert_order == ETH3D_EXPERT_ORDER
-

@@ -1,0 +1,165 @@
+{
+  "candidate": "domain_conditional_vggt_teacher",
+  "claim_boundary": {
+    "not_claimed": [
+      "proposal-free foundation 3R",
+      "image-only inference",
+      "Qwen geometry backend",
+      "universal SOTA"
+    ],
+    "safe_claim": "state-conditioned proposal-fusion 3R release package"
+  },
+  "demo_mode": "synthetic_proposal_bank_runtime",
+  "domain": "kitti",
+  "domain_branch": "kitti_v1_0_rc1",
+  "input_contract": {
+    "conflict_score_shape": [
+      2,
+      1
+    ],
+    "expert_order": [
+      "fast3r",
+      "mast3r",
+      "spann3r"
+    ],
+    "memory_context_shape": [
+      2,
+      32
+    ],
+    "proposal_bank_provider": "synthetic fixture for release demo",
+    "proposal_confidences_shape": [
+      2,
+      3,
+      2,
+      8,
+      1
+    ],
+    "proposal_pointmaps_shape": [
+      2,
+      3,
+      2,
+      8,
+      3
+    ]
+  },
+  "metadata": {
+    "config": {
+      "eth3d_d_memory": 32,
+      "eth3d_expert_order": [
+        "fast3r",
+        "mast3r",
+        "spann3r",
+        "vggt_omega"
+      ],
+      "eth3d_head_dim": 64,
+      "eth3d_hidden": 128,
+      "eth3d_n_experts": 4,
+      "eth3d_use_residual": false,
+      "eth3d_use_state": true,
+      "kitti": {
+        "d_memory": 32,
+        "expert_order": [
+          "fast3r",
+          "mast3r",
+          "spann3r"
+        ],
+        "freeze_state_prior": true,
+        "hidden": 128,
+        "n_experts": 3,
+        "num_heads": 4,
+        "num_layers": 2,
+        "prior_hidden": 128,
+        "prior_kl_weight": 0.1,
+        "prior_logit_scale": 1.0,
+        "residual_refine_scale": 0.05,
+        "state_dim": 64,
+        "token_dim": 64,
+        "use_state": true,
+        "use_state_prior": true
+      }
+    },
+    "controls": {
+      "eth3d_no_state_abs_rel": 0.0583,
+      "eth3d_shuffle_abs_rel": 0.0598,
+      "eth3d_state_abs_rel": 0.057,
+      "kitti_no_state_abs_rel": 0.1553,
+      "kitti_shuffle_abs_rel": 0.1521,
+      "kitti_state_abs_rel": 0.1448
+    },
+    "expert_order": {
+      "eth3d": [
+        "fast3r",
+        "mast3r",
+        "spann3r",
+        "vggt_omega"
+      ],
+      "kitti": [
+        "fast3r",
+        "mast3r",
+        "spann3r"
+      ]
+    },
+    "metric": "AbsRel",
+    "metric_direction": "lower_is_better",
+    "policy": {
+      "eth3d": "VGGT-Omega-expanded SCF correct-state",
+      "kitti": "v1.0-rc1 bounded StatePrior + residual"
+    },
+    "release_candidate": "domain_conditional_vggt_teacher",
+    "selected_eth3d_abs_rel": 0.057,
+    "selected_kitti_abs_rel": 0.1448,
+    "version": "v1.1.0"
+  },
+  "official_api": "dream3r.release_v11.build_dream3r_v11_release",
+  "output_contract": {
+    "expert_weight_normalization_axis": "expert dimension, per batch/view/patch",
+    "expert_weight_sum_max": 1.0,
+    "expert_weight_sum_min": 1.0,
+    "expert_weights_shape": [
+      2,
+      3,
+      2,
+      8
+    ],
+    "final_confidence_shape": [
+      2,
+      2,
+      8,
+      1
+    ],
+    "final_pointmap_shape": [
+      2,
+      2,
+      8,
+      3
+    ]
+  },
+  "seed": 7,
+  "selected_metrics": {
+    "controls": {
+      "eth3d_state_no_state_shuffle": [
+        0.057,
+        0.0583,
+        0.0598
+      ],
+      "kitti_state_no_state_shuffle": [
+        0.1448,
+        0.1553,
+        0.1521
+      ]
+    },
+    "eth3d_abs_rel": 0.057,
+    "kitti_abs_rel": 0.1448,
+    "metric": "AbsRel",
+    "metric_direction": "lower_is_better"
+  },
+  "stable_fallback": {
+    "api": "dream3r.release_candidate.build_dream3r_release_candidate",
+    "eth3d_abs_rel": 0.1475,
+    "kitti_abs_rel": 0.1448,
+    "version": "v1.0-rc1"
+  },
+  "status": "pass",
+  "v12_experimental_note": "v1.2-exp0 is a core-bridge scaffold only; it is not the official release until real-cache metrics and state/no-state/shuffle controls pass.",
+  "version": "v1.1.0"
+}

@@ -32,6 +32,11 @@ from dream3r.release_v11 import (
     Dream3RDomainConditionalRelease,
     build_dream3r_v11_release,
 )
+from dream3r.release_v12_experimental import (
+    Dream3RV12Experimental,
+    Dream3RV12ExperimentalConfig,
+    build_dream3r_v12_experimental,
+)
 from dream3r.proposal_free_3r_decoder import ProposalFree3RDecoder
 from dream3r.foundation3r_decoder import Foundation3RDecoder, Foundation3RVGGTFeatureDecoder
 

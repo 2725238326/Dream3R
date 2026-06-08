@@ -70,12 +70,32 @@ ETH3D  state/no-state/shuffle: 0.0570 / 0.0583 / 0.0598
 
 The correct-state branch beats no-state and shuffled-state on both domains.
 
+Real proposal-cache runtime evidence:
+
+```text
+runs/release/v11_cache_demo/cache_demo_kitti.json
+runs/release/v11_cache_demo/cache_demo_eth3d.json
+```
+
+These reports were generated on BUAA-Server GPU1 by
+`code/dream3r/scripts/run_dream3r_v11_cache_demo.py`. They prove that the
+official v1.1 API consumes existing SCF/VGGT-Omega proposal caches with strict
+expert-order validation. They are not a benchmark rerun.
+
 ## Verification
 
 ```powershell
 cd E:\Dream3R
 python -B code\dream3r\scripts\verify_v11_release.py --root .
 python -B -m pytest --assert=plain code\dream3r\tests\test_release_v11_architecture.py -q
+```
+
+Server cache runtime check:
+
+```bash
+cd /hdd3/kykt26/code/dream3r
+CUDA_VISIBLE_DEVICES=1 conda run -n dream3r python -B dream3r/scripts/run_dream3r_v11_cache_demo.py --domain kitti --output runs/release/v11_cache_demo/cache_demo_kitti.json --max-entries 1 --device cuda
+CUDA_VISIBLE_DEVICES=1 conda run -n dream3r python -B dream3r/scripts/run_dream3r_v11_cache_demo.py --domain eth3d --output runs/release/v11_cache_demo/cache_demo_eth3d.json --max-entries 1 --device cuda
 ```
 
 Expected verifier status:

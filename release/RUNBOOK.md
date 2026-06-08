@@ -29,6 +29,20 @@ python -B code\dream3r\scripts\smoke_v11_release_model.py `
   --output runs\release\v11_smoke\smoke_v11_release_model.json
 ```
 
+Run the release demo for each branch. This writes human-readable handoff JSON:
+
+```powershell
+python -B code\dream3r\scripts\run_dream3r_v11_demo.py `
+  --domain kitti `
+  --output runs\release\v11_demo\demo_kitti.json
+python -B code\dream3r\scripts\run_dream3r_v11_demo.py `
+  --domain eth3d `
+  --output runs\release\v11_demo\demo_eth3d.json
+```
+
+The synthetic demo proves the callable runtime contract. Real proposal-cache
+runtime is verified on BUAA-Server because the cache artifacts live there.
+
 Keep the v1.0 stable fallback verifier green:
 
 ```powershell
@@ -42,6 +56,7 @@ python -B -m pytest --assert=plain `
   code\dream3r\tests\test_release_v11_architecture.py `
   code\dream3r\tests\test_release_v11_verifier.py `
   code\dream3r\tests\test_release_v11_smoke_model.py `
+  code\dream3r\tests\test_v11_demo_script.py `
   code\dream3r\tests\test_release_candidate_architecture.py `
   code\dream3r\tests\test_release_candidate_verifier.py -q
 ```
@@ -71,11 +86,23 @@ Server verifier/smoke:
 
 ```text
 cd /hdd3/kykt26/code/dream3r
-conda run -n dream3r python -B dream3r/scripts/verify_v11_release.py --root . --skip-frozen-core
+conda run -n dream3r python -B dream3r/scripts/verify_v11_release.py --root .
 conda run -n dream3r python -B dream3r/scripts/smoke_v11_release_model.py \
   --output runs/release/v11_smoke/smoke_v11_release_model.json
-conda run -n dream3r python -B dream3r/scripts/verify_release_candidate.py --root . --skip-frozen-core
+conda run -n dream3r python -B dream3r/scripts/run_dream3r_v11_demo.py \
+  --domain kitti --output runs/release/v11_demo/demo_kitti.json
+conda run -n dream3r python -B dream3r/scripts/run_dream3r_v11_demo.py \
+  --domain eth3d --output runs/release/v11_demo/demo_eth3d.json
+CUDA_VISIBLE_DEVICES=1 conda run -n dream3r python -B dream3r/scripts/run_dream3r_v11_cache_demo.py \
+  --domain kitti --output runs/release/v11_cache_demo/cache_demo_kitti.json --max-entries 1 --device cuda
+CUDA_VISIBLE_DEVICES=1 conda run -n dream3r python -B dream3r/scripts/run_dream3r_v11_cache_demo.py \
+  --domain eth3d --output runs/release/v11_cache_demo/cache_demo_eth3d.json --max-entries 1 --device cuda
+conda run -n dream3r python -B dream3r/scripts/verify_release_candidate.py --root .
 ```
+
+On the local git checkout the verifier reports `stable_core_check_mode=git_diff`.
+On the BUAA-Server package mirror it reports `skipped_not_git_repo` because that
+mirror is not a git working tree; model/runtime verification still runs there.
 
 ## Effective Release Evidence
 
@@ -93,6 +120,16 @@ ETH3D state/no-state/shuffle: 0.0570 / 0.0583 / 0.0598
 ```
 
 Correct-state beats no-state and shuffle-state on both domains.
+
+Real-cache runtime demo artifacts:
+
+```text
+runs/release/v11_cache_demo/cache_demo_kitti.json
+runs/release/v11_cache_demo/cache_demo_eth3d.json
+```
+
+These prove that the official v1.1 API consumes existing proposal caches. They
+are not a formal benchmark rerun.
 
 ## Stable Fallback Evidence
 

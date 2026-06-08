@@ -30,7 +30,7 @@ state-causality controls, and explicit non-claims.
 | Proposal decoder | `code/dream3r/proposal_set_decoder.py` | Mixes cached proposal pointmaps with the frozen prior branch. |
 | Official wrapper | `code/dream3r/release_candidate.py` | Stable `v1.0-rc1` import surface and metadata contract. |
 | RC trainer | `code/dream3r/scripts/train_proposal_set_decoder.py` | Reproduces frozen-prior, bounded-residual, shuffle/no-state controls. |
-| Release verifier | `code/dream3r/scripts/verify_release_candidate.py` | Checks local artifacts, metrics, docs, and frozen core policy. |
+| Release verifier | `code/dream3r/scripts/verify_release_candidate.py` | Checks local artifacts, metrics, docs, stable-core policy, and the controlled v1.2 core-unfreeze exception. |
 | Proposal caches | server/local `runs/stage6_fusion/...` | Fixed evidence source for the selected gate. |
 
 ## Frozen Core Boundary

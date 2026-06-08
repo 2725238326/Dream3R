@@ -34,6 +34,7 @@ DEFAULTS = {
 
     # Memory (C2) — v0.3 spatial memory
     "d_memory": 128,
+    "memory_frame_input_dim": None,
     "n_state_tokens": 32,
     "bank_capacity": 256,
     "nsa_select_k": 8,
@@ -75,6 +76,20 @@ DEFAULTS = {
     "n_models": 8,
     "d_routing": 64,
     "cost_alpha": 0.5,
+
+    # Experimental v1.2 core bridge: Memory/Critic state -> proposal fusion.
+    "enable_proposal_fusion_bridge": False,
+    "proposal_fusion_n_experts": 3,
+    "proposal_fusion_token_dim": 64,
+    "proposal_fusion_state_dim": 64,
+    "proposal_fusion_hidden": 128,
+    "proposal_fusion_num_layers": 2,
+    "proposal_fusion_num_heads": 4,
+    "proposal_fusion_use_state": True,
+    "proposal_fusion_use_state_prior": True,
+    "proposal_fusion_prior_hidden": 128,
+    "proposal_fusion_prior_logit_scale": 1.0,
+    "proposal_fusion_residual_refine_scale": 0.05,
 
     # Training
     "batch_size": 4,
@@ -286,6 +301,7 @@ def config_to_model_args(cfg: dict) -> dict:
     else:
         args.update({
             "d_memory": cfg.get("d_memory", 128),
+            "memory_frame_input_dim": cfg.get("memory_frame_input_dim") or cfg["d_model"],
             "n_state_tokens": cfg.get("n_state_tokens", 32),
             "bank_capacity": cfg.get("bank_capacity", 256),
             "nsa_select_k": cfg.get("nsa_select_k", 8),
@@ -307,4 +323,20 @@ def config_to_model_args(cfg: dict) -> dict:
             "d_routing": cfg.get("d_routing", 64),
             "cost_alpha": cfg.get("cost_alpha", 0.5),
         })
+    args.update({
+        "enable_proposal_fusion_bridge": cfg.get("enable_proposal_fusion_bridge", False),
+        "proposal_fusion_n_experts": cfg.get("proposal_fusion_n_experts", 3),
+        "proposal_fusion_token_dim": cfg.get("proposal_fusion_token_dim", 64),
+        "proposal_fusion_state_dim": cfg.get("proposal_fusion_state_dim", 64),
+        "proposal_fusion_hidden": cfg.get("proposal_fusion_hidden", 128),
+        "proposal_fusion_num_layers": cfg.get("proposal_fusion_num_layers", 2),
+        "proposal_fusion_num_heads": cfg.get("proposal_fusion_num_heads", 4),
+        "proposal_fusion_use_state": cfg.get("proposal_fusion_use_state", True),
+        "proposal_fusion_use_state_prior": cfg.get("proposal_fusion_use_state_prior", True),
+        "proposal_fusion_prior_hidden": cfg.get("proposal_fusion_prior_hidden", 128),
+        "proposal_fusion_prior_logit_scale": cfg.get("proposal_fusion_prior_logit_scale", 1.0),
+        "proposal_fusion_residual_refine_scale": cfg.get(
+            "proposal_fusion_residual_refine_scale", 0.05
+        ),
+    })
     return args

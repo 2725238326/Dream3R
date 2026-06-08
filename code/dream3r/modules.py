@@ -922,6 +922,7 @@ class SpatialMemory(nn.Module):
 
     Args:
         d_model:          token dimension for all internal representations
+        frame_input_dim:  incoming frame-token dimension before memory projection
         n_state_tokens:   number of latent state tokens (CUT3R-style)
         bank_capacity:    max AnchorBank entries
         nsa_n_select_k:   top-k for NSA selected branch
@@ -935,6 +936,7 @@ class SpatialMemory(nn.Module):
                  bank_capacity: int = 256, nsa_n_select_k: int = 8,
                  nsa_n_heads: int = 4, sliding_window: int = 4,
                  n_evidence: int = 17, d_evidence: int = 32,
+                 frame_input_dim: int = 768,
                  nsa_confidence_bias_strength: float = 2.0,
                  nsa_geometry_bias_strength: float = 1.0,
                  nsa_top_k_branches: int = 2,
@@ -950,6 +952,7 @@ class SpatialMemory(nn.Module):
                  enable_stable_memory: bool = True):
         super().__init__()
         self.d_model = d_model
+        self.frame_input_dim = frame_input_dim
         self.n_state_tokens = n_state_tokens
         self.sliding_window = sliding_window
         self.memory_use_nsa = memory_use_nsa
@@ -980,7 +983,7 @@ class SpatialMemory(nn.Module):
             top_k_branches=nsa_top_k_branches,
         )
 
-        self.frame_proj = nn.Linear(768, d_model)
+        self.frame_proj = nn.Linear(frame_input_dim, d_model)
         self.evidence_proj = nn.Linear(n_evidence * d_evidence, d_model)
 
         self.write_gate = nn.Sequential(
@@ -1057,7 +1060,7 @@ class SpatialMemory(nn.Module):
                 ) -> Dict[str, torch.Tensor]:
         """
         Args:
-            frame_tokens:      [B, P, D_frame] (D_frame=768)
+            frame_tokens:      [B, P, D_frame]
             evidence_flat:     [B, n_ev * d_ev]
             prev_state_tokens: [B, S, D] latent state from previous window
             t2_pointmap:       [B, P, 3] or None

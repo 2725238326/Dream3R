@@ -39,6 +39,19 @@
     "api_builder": "dream3r.release_v11.build_dream3r_v11_release",
     "smoke_script": "code/dream3r/scripts/smoke_v11_release_model.py",
     "smoke_artifact": "runs/release/v11_smoke/smoke_v11_release_model.json",
+    "demo_script": "code/dream3r/scripts/run_dream3r_v11_demo.py",
+    "demo_artifacts": [
+      "runs/release/v11_demo/demo_kitti.json",
+      "runs/release/v11_demo/demo_eth3d.json"
+    ],
+    "cache_demo_script": "code/dream3r/scripts/run_dream3r_v11_cache_demo.py",
+    "cache_demo_artifacts": [
+      "runs/release/v11_cache_demo/cache_demo_kitti.json",
+      "runs/release/v11_cache_demo/cache_demo_eth3d.json"
+    ],
+    "model_card": "release/MODEL_CARD_V1_1.md",
+    "architecture_diagram": "release/ARCHITECTURE_DIAGRAM_V1_1.md",
+    "afternoon_deliverable": "release/AFTERNOON_DELIVERABLE_V1_1.md",
     "stable_fallback": "v1.0-rc1",
     "kitti_abs_rel": 0.1448,
     "eth3d_abs_rel": 0.057,
@@ -53,6 +66,18 @@
     "api_builder": "dream3r.release_v11.build_dream3r_v11_release",
     "smoke_script": "code/dream3r/scripts/smoke_v11_release_model.py",
     "smoke_artifact": "runs/release/v11_smoke/smoke_v11_release_model.json",
+    "demo_script": "code/dream3r/scripts/run_dream3r_v11_demo.py",
+    "demo_artifacts": [
+      "runs/release/v11_demo/demo_kitti.json",
+      "runs/release/v11_demo/demo_eth3d.json"
+    ],
+    "cache_demo_script": "code/dream3r/scripts/run_dream3r_v11_cache_demo.py",
+    "cache_demo_artifacts": [
+      "runs/release/v11_cache_demo/cache_demo_kitti.json",
+      "runs/release/v11_cache_demo/cache_demo_eth3d.json"
+    ],
+    "model_card": "release/MODEL_CARD_V1_1.md",
+    "architecture_diagram": "release/ARCHITECTURE_DIAGRAM_V1_1.md",
     "stable_fallback": "v1.0-rc1",
     "kitti_abs_rel": 0.1448,
     "eth3d_abs_rel": 0.057,
@@ -66,18 +91,39 @@
     "verifier": "code/dream3r/scripts/verify_v11_release.py",
     "smoke_script": "code/dream3r/scripts/smoke_v11_release_model.py",
     "smoke_artifact": "runs/release/v11_smoke/smoke_v11_release_model.json",
+    "demo_script": "code/dream3r/scripts/run_dream3r_v11_demo.py",
+    "demo_artifacts": [
+      "runs/release/v11_demo/demo_kitti.json",
+      "runs/release/v11_demo/demo_eth3d.json"
+    ],
+    "cache_demo_script": "code/dream3r/scripts/run_dream3r_v11_cache_demo.py",
+    "cache_demo_artifacts": [
+      "runs/release/v11_cache_demo/cache_demo_kitti.json",
+      "runs/release/v11_cache_demo/cache_demo_eth3d.json"
+    ],
+    "model_card": "release/MODEL_CARD_V1_1.md",
+    "architecture_diagram": "release/ARCHITECTURE_DIAGRAM_V1_1.md",
+    "afternoon_deliverable": "release/AFTERNOON_DELIVERABLE_V1_1.md",
     "local_evidence": [
       "v1.1 verifier pass",
       "v1.1 smoke pass",
+      "v1.1 demo KITTI/ETH3D pass",
+      "v1.1 cache-demo focused tests 11 passed",
       "v1.0 fallback verifier pass",
-      "release tests 12 passed",
+      "release tests 14 passed",
+      "stable-core verifier git_diff pass",
       "full test suite 300 passed, 2 skipped"
     ],
     "server_evidence": [
       "v1.1 verifier pass",
       "v1.1 smoke pass",
+      "v1.1 demo KITTI/ETH3D pass",
+      "v1.1 real-cache demo KITTI/ETH3D pass",
+      "v1.1 cache-demo focused tests 11 passed",
       "v1.0 fallback verifier pass",
-      "release tests 12 passed"
+      "release tests 14 passed",
+      "stable-core verifier skipped_not_git_repo on BUAA-Server package mirror",
+      "v1.2 architecture tests 4 passed"
     ]
   },
   "usable_model_v1_1": {
@@ -91,7 +137,38 @@
     "api_module": "code/dream3r/release_v11.py",
     "unified_gate_artifact": "runs/v22_admission/domain_conditional_teacher/unified_gate_candidate_with_kitti_no_state_server.json",
     "verifier": "code/dream3r/scripts/verify_v11_release.py",
+    "cache_demo_script": "code/dream3r/scripts/run_dream3r_v11_cache_demo.py",
+    "cache_demo_artifacts": [
+      "runs/release/v11_cache_demo/cache_demo_kitti.json",
+      "runs/release/v11_cache_demo/cache_demo_eth3d.json"
+    ],
     "doc": "release/USABLE_MODEL_V1_1.md"
+  },
+  "experimental_v1_2_core_bridge": {
+    "version": "v1.2-exp0",
+    "status": "experimental_not_official",
+    "candidate": "core_state_conditioned_proposal_fusion",
+    "api_builder": "dream3r.release_v12_experimental.build_dream3r_v12_experimental",
+    "api_module": "code/dream3r/release_v12_experimental.py",
+    "plan": "planning/DREAM3R_V12_CONTROLLED_CORE_UNFREEZE_PLAN_20260608.md",
+    "opened_core_files": [
+      "code/dream3r/model.py",
+      "code/dream3r/modules.py",
+      "code/dream3r/config.py"
+    ],
+    "test": "code/dream3r/tests/test_release_v12_experimental_architecture.py",
+    "local_evidence": [
+      "v1.2 architecture tests 4 passed",
+      "v1.1/v1.0 release architecture tests 9 passed",
+      "spatial/core tests 20 passed",
+      "import smoke printed v1.2-exp0 and v1.1.0"
+    ],
+    "server_evidence": [
+      "BUAA-Server GPU1 v1.2 architecture tests 4 passed",
+      "BUAA-Server GPU1 v1.1/v1.0 release architecture tests 9 passed",
+      "BUAA-Server GPU1 import smoke printed v1.2-exp0 and v1.1.0"
+    ],
+    "claim_boundary": "experimental core-integrated state-conditioned proposal fusion; not official v1.1 replacement"
   },
   "context_compaction": {
     "date": "2026-06-08",
@@ -153,7 +230,9 @@
     "vggt_no_state_control": "/hdd3/kykt26/code/dream3r/runs/v22_admission/vggt_omega_cache_gate/scf_no_state_seed7/results.json",
     "vggt_shuffle_control": "/hdd3/kykt26/code/dream3r/runs/v22_admission/vggt_omega_cache_gate/scf_shuffle_state_seed7/results.json",
     "domain_conditional_unified_gate": "/hdd3/kykt26/code/dream3r/runs/v22_admission/domain_conditional_teacher/unified_gate_candidate_with_kitti_no_state_server.json",
-    "kitti_no_state_control": "/hdd3/kykt26/code/dream3r/runs/stage6_fusion/bounded_refine_sweep/frozen_prior_no_state_seed_7/results.json"
+    "kitti_no_state_control": "/hdd3/kykt26/code/dream3r/runs/stage6_fusion/bounded_refine_sweep/frozen_prior_no_state_seed_7/results.json",
+    "v1_1_cache_demo_kitti": "/hdd3/kykt26/code/dream3r/runs/release/v11_cache_demo/cache_demo_kitti.json",
+    "v1_1_cache_demo_eth3d": "/hdd3/kykt26/code/dream3r/runs/release/v11_cache_demo/cache_demo_eth3d.json"
   },
   "local_mirrors": {
     "bounded_state": "runs/stage6_fusion/bounded_refine_sweep/frozen_prior_state_seed_7/results.json",
@@ -163,11 +242,18 @@
     "vggt_no_state_control": "runs/v22_admission/vggt_omega_cache_gate/scf_no_state_seed7_results.json",
     "vggt_shuffle_control": "runs/v22_admission/vggt_omega_cache_gate/scf_shuffle_state_seed7_results.json",
     "domain_conditional_unified_gate": "runs/v22_admission/domain_conditional_teacher/unified_gate_candidate_with_kitti_no_state_server.json",
-    "kitti_no_state_control": "runs/stage6_fusion/bounded_refine_sweep/frozen_prior_no_state_seed_7/results.json"
+    "kitti_no_state_control": "runs/stage6_fusion/bounded_refine_sweep/frozen_prior_no_state_seed_7/results.json",
+    "v1_1_cache_demo_kitti": "runs/release/v11_cache_demo/cache_demo_kitti.json",
+    "v1_1_cache_demo_eth3d": "runs/release/v11_cache_demo/cache_demo_eth3d.json"
   },
   "release_docs": {
     "architecture_map": "ARCHITECTURE.md",
     "architecture_status": "release/ARCHITECTURE_STATUS.json",
+    "v1_2_controlled_core_unfreeze_plan": "planning/DREAM3R_V12_CONTROLLED_CORE_UNFREEZE_PLAN_20260608.md",
+    "official_completion_plan_v1_1": "planning/DREAM3R_V11_OFFICIAL_COMPLETION_PLAN_20260608.md",
+    "afternoon_deliverable_v1_1": "release/AFTERNOON_DELIVERABLE_V1_1.md",
+    "model_card_v1_1": "release/MODEL_CARD_V1_1.md",
+    "architecture_diagram_v1_1": "release/ARCHITECTURE_DIAGRAM_V1_1.md",
     "complete_model_v1_1": "release/COMPLETE_MODEL_V1_1.md",
     "effective_architecture_v1_1": "release/EFFECTIVE_ARCHITECTURE_V1_1.md",
     "official_version": "release/OFFICIAL_VERSION.md",
@@ -193,6 +279,10 @@
     "v1_1_release_verifier_test": "code/dream3r/tests/test_release_v11_verifier.py",
     "v1_1_release_smoke": "code/dream3r/scripts/smoke_v11_release_model.py",
     "v1_1_release_smoke_test": "code/dream3r/tests/test_release_v11_smoke_model.py",
+    "v1_1_release_demo": "code/dream3r/scripts/run_dream3r_v11_demo.py",
+    "v1_1_release_cache_demo": "code/dream3r/scripts/run_dream3r_v11_cache_demo.py",
+    "v1_1_release_demo_test": "code/dream3r/tests/test_v11_demo_script.py",
+    "v1_2_experimental_architecture_test": "code/dream3r/tests/test_release_v12_experimental_architecture.py",
     "unified_domain_conditional_gate": "code/dream3r/scripts/eval_unified_domain_conditional_gate.py",
     "unified_domain_conditional_gate_test": "code/dream3r/tests/test_unified_domain_conditional_gate.py"
   },

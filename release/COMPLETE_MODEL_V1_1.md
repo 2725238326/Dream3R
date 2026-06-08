@@ -28,6 +28,7 @@ KITTI / ETH3D: 0.1448 / 0.0570
 API:        dream3r.release_v11.build_dream3r_v11_release
 Verifier:   code/dream3r/scripts/verify_v11_release.py
 Smoke:      code/dream3r/scripts/smoke_v11_release_model.py
+Cache demo: code/dream3r/scripts/run_dream3r_v11_cache_demo.py
 Runbook:    release/RUNBOOK.md
 Fallback:   dream3r.release_candidate.build_dream3r_release_candidate
 Docs:       release/EFFECTIVE_ARCHITECTURE_V1_1.md
@@ -46,17 +47,24 @@ Local:
 ```powershell
 python -B code\dream3r\scripts\verify_v11_release.py --root .
 python -B code\dream3r\scripts\smoke_v11_release_model.py --output runs\release\v11_smoke\smoke_v11_release_model.json
+python -B code\dream3r\scripts\run_dream3r_v11_demo.py --domain kitti --output runs\release\v11_demo\demo_kitti.json
+python -B code\dream3r\scripts\run_dream3r_v11_demo.py --domain eth3d --output runs\release\v11_demo\demo_eth3d.json
 python -B code\dream3r\scripts\verify_release_candidate.py --root .
-python -B -m pytest --assert=plain code\dream3r\tests\test_release_candidate_architecture.py code\dream3r\tests\test_release_candidate_verifier.py code\dream3r\tests\test_release_v11_architecture.py code\dream3r\tests\test_release_v11_verifier.py code\dream3r\tests\test_release_v11_smoke_model.py -q
+python -B -m pytest --assert=plain code\dream3r\tests\test_release_candidate_architecture.py code\dream3r\tests\test_release_candidate_verifier.py code\dream3r\tests\test_release_v11_architecture.py code\dream3r\tests\test_release_v11_verifier.py code\dream3r\tests\test_release_v11_smoke_model.py code\dream3r\tests\test_v11_demo_script.py -q
 ```
 
 Server:
 
 ```text
 cd /hdd3/kykt26/code/dream3r
-conda run -n dream3r python -B dream3r/scripts/verify_v11_release.py --root . --skip-frozen-core
+conda run -n dream3r python -B dream3r/scripts/verify_v11_release.py --root .
 conda run -n dream3r python -B dream3r/scripts/smoke_v11_release_model.py --output runs/release/v11_smoke/smoke_v11_release_model.json
-conda run -n dream3r python -B -m pytest --assert=plain dream3r/tests/test_release_candidate_architecture.py dream3r/tests/test_release_candidate_verifier.py dream3r/tests/test_release_v11_architecture.py dream3r/tests/test_release_v11_verifier.py dream3r/tests/test_release_v11_smoke_model.py -q
+conda run -n dream3r python -B dream3r/scripts/run_dream3r_v11_demo.py --domain kitti --output runs/release/v11_demo/demo_kitti.json
+conda run -n dream3r python -B dream3r/scripts/run_dream3r_v11_demo.py --domain eth3d --output runs/release/v11_demo/demo_eth3d.json
+CUDA_VISIBLE_DEVICES=1 conda run -n dream3r python -B dream3r/scripts/run_dream3r_v11_cache_demo.py --domain kitti --output runs/release/v11_cache_demo/cache_demo_kitti.json --max-entries 1 --device cuda
+CUDA_VISIBLE_DEVICES=1 conda run -n dream3r python -B dream3r/scripts/run_dream3r_v11_cache_demo.py --domain eth3d --output runs/release/v11_cache_demo/cache_demo_eth3d.json --max-entries 1 --device cuda
+conda run -n dream3r python -B dream3r/scripts/verify_release_candidate.py --root .
+conda run -n dream3r python -B -m pytest --assert=plain dream3r/tests/test_release_candidate_architecture.py dream3r/tests/test_release_candidate_verifier.py dream3r/tests/test_release_v11_architecture.py dream3r/tests/test_release_v11_verifier.py dream3r/tests/test_release_v11_smoke_model.py dream3r/tests/test_v11_demo_script.py -q
 ```
 
 ## Current Evidence
@@ -66,8 +74,10 @@ Local:
 ```text
 v1.1 verifier: pass
 v1.1 smoke: pass
+v1.1 demo: pass
+v1.1 cache-demo focused tests: 11 passed
 v1.0 fallback verifier: pass
-release tests: 12 passed
+release tests: 14 passed
 full test suite: 300 passed, 2 skipped
 ```
 
@@ -76,8 +86,12 @@ BUAA-Server:
 ```text
 v1.1 verifier: pass
 v1.1 smoke: pass
+v1.1 demo: pass
+v1.1 real-cache demo: KITTI/ETH3D pass
+v1.1 cache-demo focused tests: 11 passed
 v1.0 fallback verifier: pass
-release tests: 12 passed
+release tests: 14 passed
+v1.2 architecture tests: 4 passed
 ```
 
 ## Claim Boundary

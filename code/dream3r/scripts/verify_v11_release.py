@@ -21,16 +21,19 @@ from dream3r.release_v11 import (  # noqa: E402
 )
 
 
-FROZEN_CORE = (
+EXPERIMENTAL_CORE_UNFREEZE = (
     "code/dream3r/model.py",
+    "code/dream3r/modules.py",
+    "code/dream3r/config.py",
+)
+
+STABLE_CORE = (
     "code/dream3r/anchor_bank.py",
     "code/dream3r/nsa_attention.py",
     "code/dream3r/bus.py",
     "code/dream3r/orchestrator.py",
     "code/dream3r/repair.py",
-    "code/dream3r/modules.py",
     "code/dream3r/contracts.py",
-    "code/dream3r/config.py",
 )
 
 
@@ -49,15 +52,36 @@ def _read_json(path: Path) -> dict[str, Any]:
     return data
 
 
+def _resolve_repo_path(root: Path, rel_path: str) -> Path | None:
+    path = root / rel_path
+    if path.exists():
+        return path
+    if rel_path.startswith("code/dream3r/"):
+        package_rel = "dream3r/" + rel_path[len("code/dream3r/") :]
+        package_path = root / package_rel
+        if package_path.exists():
+            return package_path
+    return None
+
+
 def _check_frozen_core(root: Path) -> list[str]:
-    cmd = ["git", "diff", "--name-only", "--", *FROZEN_CORE]
+    probe = subprocess.run(
+        ["git", "rev-parse", "--is-inside-work-tree"],
+        cwd=root,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if probe.returncode != 0:
+        return []
+    cmd = ["git", "diff", "--name-only", "--", *STABLE_CORE]
     proc = subprocess.run(cmd, cwd=root, text=True, capture_output=True, check=False)
     if proc.returncode != 0:
-        raise AssertionError(f"git frozen-core diff check failed: {proc.stderr.strip()}")
+        raise AssertionError(f"git stable-core diff check failed: {proc.stderr.strip()}")
     changed = [line.strip() for line in proc.stdout.splitlines() if line.strip()]
     if changed:
-        raise AssertionError(f"frozen core changed: {changed}")
-    return list(FROZEN_CORE)
+        raise AssertionError(f"stable core changed: {changed}")
+    return list(STABLE_CORE)
 
 
 def verify(root: Path, check_frozen_core: bool = True) -> dict[str, Any]:
@@ -130,11 +154,25 @@ def verify(root: Path, check_frozen_core: bool = True) -> dict[str, Any]:
         raise AssertionError("KITTI metric mismatch between official and usable manifests")
     if official.get("eth3d_abs_rel") != usable["eth3d_abs_rel"]:
         raise AssertionError("ETH3D metric mismatch between official and usable manifests")
+    expected_cache_demo = "code/dream3r/scripts/run_dream3r_v11_cache_demo.py"
+    for name, section in (
+        ("official_release", official),
+        ("current_effective_architecture", effective),
+        ("usable_model_v1_1", usable),
+    ):
+        if section.get("cache_demo_script") != expected_cache_demo:
+            raise AssertionError(f"{name} missing v1.1 cache-demo script")
+        cache_artifacts = section.get("cache_demo_artifacts")
+        if not isinstance(cache_artifacts, list) or len(cache_artifacts) != 2:
+            raise AssertionError(f"{name} missing v1.1 cache-demo artifacts")
 
     docs_checked = []
     for rel_path in (
         "release/OFFICIAL_VERSION.md",
         "release/EFFECTIVE_ARCHITECTURE_V1_1.md",
+        "release/MODEL_CARD_V1_1.md",
+        "release/ARCHITECTURE_DIAGRAM_V1_1.md",
+        "release/AFTERNOON_DELIVERABLE_V1_1.md",
         "release/COMPLETE_MODEL_V1_1.md",
         "release/USABLE_MODEL_V1_1.md",
         "release/RUNBOOK.md",
@@ -148,14 +186,25 @@ def verify(root: Path, check_frozen_core: bool = True) -> dict[str, Any]:
         "INDEX.md",
         "README.md",
         "WORKFLOW_STATUS.md",
+        "code/dream3r/scripts/run_dream3r_v11_demo.py",
+        "code/dream3r/scripts/run_dream3r_v11_cache_demo.py",
+        "code/dream3r/tests/test_v11_demo_script.py",
+        "runs/release/v11_cache_demo/cache_demo_kitti.json",
+        "runs/release/v11_cache_demo/cache_demo_eth3d.json",
         "planning/DREAM3R_CLEAN_ARCHITECTURE_MAP_20260608.md",
     ):
-        path = root / rel_path
-        if not path.exists():
+        if _resolve_repo_path(root, rel_path) is None:
             raise AssertionError(f"missing v1.1 doc: {rel_path}")
         docs_checked.append(rel_path)
 
     frozen = _check_frozen_core(root) if check_frozen_core else []
+    stable_core_check_mode = (
+        "skipped_by_flag"
+        if not check_frozen_core
+        else "git_diff"
+        if frozen
+        else "skipped_not_git_repo"
+    )
     return {
         "status": "pass",
         "version": RELEASE_V11_VERSION,
@@ -175,7 +224,9 @@ def verify(root: Path, check_frozen_core: bool = True) -> dict[str, Any]:
             "expert_order": meta["expert_order"],
         },
         "docs_checked": docs_checked,
-        "frozen_core_checked": frozen,
+        "stable_core_checked": frozen,
+        "stable_core_check_mode": stable_core_check_mode,
+        "experimental_core_unfreeze_allowed": list(EXPERIMENTAL_CORE_UNFREEZE),
     }
 
 

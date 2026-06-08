@@ -62,19 +62,46 @@ The correct-state branch beats no-state and shuffled-state on both domains.
 ```text
 local v1.1 verifier: pass
 local v1.1 smoke: pass
+local v1.1 demo: pass
 local v1.0 fallback verifier: pass
-local release tests: 12 passed
+local release tests: 14 passed
 local full test suite: 300 passed, 2 skipped
 BUAA-Server v1.1 verifier: pass
 BUAA-Server v1.1 smoke: pass
+BUAA-Server v1.1 demo: pass
+BUAA-Server v1.1 real-cache demo: KITTI/ETH3D pass
+BUAA-Server v1.1 cache-demo focused tests: 11 passed
 BUAA-Server v1.0 fallback verifier: pass
-BUAA-Server release tests: 12 passed
+BUAA-Server release tests: 14 passed
+BUAA-Server v1.2 architecture tests: 4 passed
 ```
 
 Smoke artifact:
 
 ```text
 runs/release/v11_smoke/smoke_v11_release_model.json
+```
+
+Afternoon demo artifacts:
+
+```text
+runs/release/v11_demo/demo_kitti.json
+runs/release/v11_demo/demo_eth3d.json
+```
+
+Real-cache runtime artifacts:
+
+```text
+runs/release/v11_cache_demo/cache_demo_kitti.json
+runs/release/v11_cache_demo/cache_demo_eth3d.json
+```
+
+Presentation docs:
+
+```text
+release/MODEL_CARD_V1_1.md
+release/ARCHITECTURE_DIAGRAM_V1_1.md
+release/AFTERNOON_DELIVERABLE_V1_1.md
 ```
 
 ## Required Verification
@@ -84,6 +111,8 @@ Local:
 ```powershell
 python -B code\dream3r\scripts\verify_v11_release.py --root .
 python -B code\dream3r\scripts\smoke_v11_release_model.py --output runs\release\v11_smoke\smoke_v11_release_model.json
+python -B code\dream3r\scripts\run_dream3r_v11_demo.py --domain kitti --output runs\release\v11_demo\demo_kitti.json
+python -B code\dream3r\scripts\run_dream3r_v11_demo.py --domain eth3d --output runs\release\v11_demo\demo_eth3d.json
 python -B code\dream3r\scripts\verify_release_candidate.py --root .
 ```
 
@@ -91,8 +120,12 @@ Server:
 
 ```text
 cd /hdd3/kykt26/code/dream3r
-conda run -n dream3r python -B dream3r/scripts/verify_v11_release.py --root . --skip-frozen-core
+conda run -n dream3r python -B dream3r/scripts/verify_v11_release.py --root .
 conda run -n dream3r python -B dream3r/scripts/smoke_v11_release_model.py --output runs/release/v11_smoke/smoke_v11_release_model.json
+conda run -n dream3r python -B dream3r/scripts/run_dream3r_v11_demo.py --domain kitti --output runs/release/v11_demo/demo_kitti.json
+conda run -n dream3r python -B dream3r/scripts/run_dream3r_v11_demo.py --domain eth3d --output runs/release/v11_demo/demo_eth3d.json
+CUDA_VISIBLE_DEVICES=1 conda run -n dream3r python -B dream3r/scripts/run_dream3r_v11_cache_demo.py --domain kitti --output runs/release/v11_cache_demo/cache_demo_kitti.json --max-entries 1 --device cuda
+CUDA_VISIBLE_DEVICES=1 conda run -n dream3r python -B dream3r/scripts/run_dream3r_v11_cache_demo.py --domain eth3d --output runs/release/v11_cache_demo/cache_demo_eth3d.json --max-entries 1 --device cuda
 ```
 
 ## Stable Fallback

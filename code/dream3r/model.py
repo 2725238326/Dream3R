@@ -24,6 +24,7 @@ from dream3r.modules import (
     SpatialMemory, ComposerRouter,
 )
 from dream3r.composer_experts import ExpertRegistry
+from dream3r.proposal_set_decoder import ProposalSetDecoder
 
 
 def _select_cr2_suppress_mask(perm_out: Dict[str, torch.Tensor]) -> tuple[torch.Tensor, str]:
@@ -91,6 +92,7 @@ class Dream3R(nn.Module):
             self.composer = Composer_v01(n_regimes=n_regimes, n_models=n_models)
         else:
             d_mem        = c.get("d_memory", 128)
+            memory_frame_input_dim = c.get("memory_frame_input_dim", d_model)
             n_state      = c.get("n_state_tokens", 32)
             bank_cap     = c.get("bank_capacity", 256)
             nsa_k        = c.get("nsa_select_k", 8)
@@ -139,6 +141,7 @@ class Dream3R(nn.Module):
                 memory_use_nsa=memory_use_nsa,
                 enable_stable_memory=enable_stable_memory,
                 n_evidence=n_evidence, d_evidence=d_evidence,
+                frame_input_dim=memory_frame_input_dim,
             )
             self.permanence = Permanence(
                 d_input=d_model, d_slot=d_slot, n_slots=n_slots,
@@ -155,6 +158,25 @@ class Dream3R(nn.Module):
             self.composer.load_from_registry()
 
         self.bus = MemoryBus()
+        self.proposal_fusion_bridge = None
+        if bool(c.get("enable_proposal_fusion_bridge", False)):
+            self.proposal_fusion_bridge = ProposalSetDecoder(
+                n_experts=c.get("proposal_fusion_n_experts", 3),
+                d_memory=c.get(
+                    "proposal_fusion_d_memory",
+                    c.get("d_memory", c.get("d_state", 256)),
+                ),
+                token_dim=c.get("proposal_fusion_token_dim", 64),
+                state_dim=c.get("proposal_fusion_state_dim", 64),
+                hidden=c.get("proposal_fusion_hidden", 128),
+                num_layers=c.get("proposal_fusion_num_layers", 2),
+                num_heads=c.get("proposal_fusion_num_heads", 4),
+                use_state=c.get("proposal_fusion_use_state", True),
+                use_state_prior=c.get("proposal_fusion_use_state_prior", True),
+                prior_hidden=c.get("proposal_fusion_prior_hidden", 128),
+                prior_logit_scale=c.get("proposal_fusion_prior_logit_scale", 1.0),
+                residual_refine_scale=c.get("proposal_fusion_residual_refine_scale", 0.05),
+            )
 
     def _time(self, name: str):
         """Context-manager-free timing. Call _time_start/_time_end."""
@@ -168,6 +190,12 @@ class Dream3R(nn.Module):
             return grad_checkpoint(fn, *args, use_reentrant=False)
         return fn(*args)
 
+    @staticmethod
+    def _pool_memory_context(latent_state: torch.Tensor) -> torch.Tensor:
+        if latent_state.dim() == 3:
+            return latent_state.mean(dim=1)
+        return latent_state
+
     def forward(self,
                 x: torch.Tensor,
                 regime_probs: Optional[torch.Tensor] = None,
@@ -175,6 +203,8 @@ class Dream3R(nn.Module):
                 prev_object_slots: Optional[torch.Tensor] = None,
                 prev_object_slot_poses: Optional[torch.Tensor] = None,
                 timestep: int = 0,
+                proposal_pointmaps: Optional[torch.Tensor] = None,
+                proposal_confidences: Optional[torch.Tensor] = None,
                 ) -> Dict[str, torch.Tensor]:
         """
         One bus tick = one window.
@@ -189,6 +219,11 @@ class Dream3R(nn.Module):
         B = x.shape[0]
         device = x.device
         t = timestep
+        if self.proposal_fusion_bridge is not None:
+            if (proposal_pointmaps is None) != (proposal_confidences is None):
+                raise ValueError(
+                    "proposal_pointmaps and proposal_confidences must be provided together"
+                )
         if t == 0:
             self.bus.hard_reset()
         else:
@@ -409,6 +444,28 @@ class Dream3R(nn.Module):
             result["selected_expert"] = comp_out["selected_expert"]
             result["routing_logits"] = comp_out["routing_logits"]
             result["cost_adjusted_scores"] = comp_out["cost_adjusted_scores"]
+
+        if self.proposal_fusion_bridge is not None:
+            result["architecture_branch"] = "v12_core_state_conditioned_proposal_fusion"
+            result["proposal_fusion_enabled"] = torch.tensor(True, device=device)
+            if proposal_pointmaps is not None:
+                memory_context = self._pool_memory_context(mem_out["latent_state"])
+                fusion_out = self.proposal_fusion_bridge(
+                    proposal_pointmaps=proposal_pointmaps,
+                    proposal_confidences=proposal_confidences,
+                    memory_context=memory_context,
+                    conflict_score=critic_out["conflict_score"],
+                )
+                result["proposal_fusion"] = fusion_out
+                result["final_pointmap"] = fusion_out["final_pointmap"]
+                result["final_confidence"] = fusion_out["final_confidence"]
+                result["expert_weights"] = fusion_out["expert_weights"]
+                result["proposal_fusion_memory_context"] = memory_context
+            else:
+                result["proposal_fusion"] = None
+        else:
+            result["architecture_branch"] = "v03_perceiver_memory_router"
+            result["proposal_fusion_enabled"] = torch.tensor(False, device=device)
 
         if self.profile:
             result["timings"] = timings

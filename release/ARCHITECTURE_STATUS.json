@@ -11,6 +11,19 @@
     "eth3d_abs_rel": 0.057,
     "api": "dream3r.release_v11.build_dream3r_v11_release",
     "doc": "release/OFFICIAL_VERSION.md",
+    "model_card": "release/MODEL_CARD_V1_1.md",
+    "architecture_diagram": "release/ARCHITECTURE_DIAGRAM_V1_1.md",
+    "afternoon_deliverable": "release/AFTERNOON_DELIVERABLE_V1_1.md",
+    "demo_script": "code/dream3r/scripts/run_dream3r_v11_demo.py",
+    "demo_artifacts": [
+      "runs/release/v11_demo/demo_kitti.json",
+      "runs/release/v11_demo/demo_eth3d.json"
+    ],
+    "cache_demo_script": "code/dream3r/scripts/run_dream3r_v11_cache_demo.py",
+    "cache_demo_artifacts": [
+      "runs/release/v11_cache_demo/cache_demo_kitti.json",
+      "runs/release/v11_cache_demo/cache_demo_eth3d.json"
+    ],
     "stable_fallback": "v1.0-rc1",
     "policy": {
       "kitti": "v1.0-rc1 bounded StatePrior + residual",
@@ -28,6 +41,18 @@
     "eth3d_abs_rel": 0.057,
     "api": "dream3r.release_v11.build_dream3r_v11_release",
     "doc": "release/EFFECTIVE_ARCHITECTURE_V1_1.md",
+    "model_card": "release/MODEL_CARD_V1_1.md",
+    "architecture_diagram": "release/ARCHITECTURE_DIAGRAM_V1_1.md",
+    "demo_script": "code/dream3r/scripts/run_dream3r_v11_demo.py",
+    "demo_artifacts": [
+      "runs/release/v11_demo/demo_kitti.json",
+      "runs/release/v11_demo/demo_eth3d.json"
+    ],
+    "cache_demo_script": "code/dream3r/scripts/run_dream3r_v11_cache_demo.py",
+    "cache_demo_artifacts": [
+      "runs/release/v11_cache_demo/cache_demo_kitti.json",
+      "runs/release/v11_cache_demo/cache_demo_eth3d.json"
+    ],
     "stable_fallback": "v1.0-rc1",
     "policy": {
       "kitti": "v1.0-rc1 bounded StatePrior + residual",
@@ -62,7 +87,12 @@
       "code/dream3r/proposal_set_decoder.py",
       "code/dream3r/scf_head.py",
       "code/dream3r/scripts/verify_v11_release.py",
-      "code/dream3r/scripts/smoke_v11_release_model.py"
+      "code/dream3r/scripts/smoke_v11_release_model.py",
+      "code/dream3r/scripts/run_dream3r_v11_demo.py",
+      "code/dream3r/scripts/run_dream3r_v11_cache_demo.py",
+      "release/MODEL_CARD_V1_1.md",
+      "release/ARCHITECTURE_DIAGRAM_V1_1.md",
+      "release/AFTERNOON_DELIVERABLE_V1_1.md"
     ]
   },
   "stable_fallback": {
@@ -85,6 +115,16 @@
     "api": "dream3r.release_v11.build_dream3r_v11_release",
     "doc": "release/USABLE_MODEL_V1_1.md",
     "verifier": "code/dream3r/scripts/verify_v11_release.py",
+    "demo_script": "code/dream3r/scripts/run_dream3r_v11_demo.py",
+    "demo_artifacts": [
+      "runs/release/v11_demo/demo_kitti.json",
+      "runs/release/v11_demo/demo_eth3d.json"
+    ],
+    "cache_demo_script": "code/dream3r/scripts/run_dream3r_v11_cache_demo.py",
+    "cache_demo_artifacts": [
+      "runs/release/v11_cache_demo/cache_demo_kitti.json",
+      "runs/release/v11_cache_demo/cache_demo_eth3d.json"
+    ],
     "policy": {
       "kitti": "v1.0-rc1 bounded StatePrior + residual",
       "eth3d": "VGGT-Omega-expanded SCF correct-state"
@@ -112,6 +152,23 @@
       "unified_gate_artifact": "runs/v22_admission/domain_conditional_teacher/unified_gate_candidate_with_kitti_no_state_server.json",
       "promotable_to_official": true,
       "promotion_blocker": "none; v1.1.0 is official and v1.0 remains stable fallback"
+    },
+    {
+      "name": "core_state_conditioned_proposal_fusion",
+      "version": "v1.2-exp0",
+      "status": "experimental_scaffold_positive_server_validated_not_official",
+      "api": "dream3r.release_v12_experimental.build_dream3r_v12_experimental",
+      "plan": "planning/DREAM3R_V12_CONTROLLED_CORE_UNFREEZE_PLAN_20260608.md",
+      "opened_core_files": [
+        "code/dream3r/model.py",
+        "code/dream3r/modules.py",
+        "code/dream3r/config.py"
+      ],
+      "promotion_blocker": "needs real cache KITTI/ETH3D state/no-state/shuffle gate against v1.1.0",
+      "validation": {
+        "local": "v1.2 tests 4 passed; v1.1/v1.0 tests 9 passed; spatial/core tests 20 passed",
+        "server_gpu1": "v1.2 tests 4 passed; v1.1/v1.0 tests 9 passed; import smoke prints v1.2-exp0 and v1.1.0"
+      }
     }
   ],
   "not_official": [
@@ -144,16 +201,23 @@
       "rule": "not a geometry path"
     }
   ],
+  "controlled_core_unfreeze": {
+    "status": "active_for_v1_2_experimental_only",
+    "opened_files": [
+      "code/dream3r/model.py",
+      "code/dream3r/modules.py",
+      "code/dream3r/config.py"
+    ],
+    "fallback_rule": "v1.1.0 official API and v1.0-rc1 fallback must remain callable and regression-tested",
+    "promotion_rule": "v1.2-exp0 cannot replace v1.1.0 until metrics and correct/no-state/shuffle controls pass"
+  },
   "frozen_core": [
-    "code/dream3r/model.py",
     "code/dream3r/anchor_bank.py",
     "code/dream3r/nsa_attention.py",
     "code/dream3r/bus.py",
     "code/dream3r/orchestrator.py",
     "code/dream3r/repair.py",
-    "code/dream3r/modules.py",
-    "code/dream3r/contracts.py",
-    "code/dream3r/config.py"
+    "code/dream3r/contracts.py"
   ],
   "next_gate": {
     "name": "foundation3r_target_data_architecture_redesign",

@@ -206,12 +206,22 @@ def build_dream3r_v11_release(
     *,
     kitti_checkpoint: str | Path | None = None,
     eth3d_checkpoint: str | Path | None = None,
+    d_memory: int | None = None,
 ) -> Dream3RDomainConditionalRelease:
     """Build the v1.1.0 domain-conditional Dream3R wrapper."""
 
     if kitti_checkpoint is not None or eth3d_checkpoint is not None:
+        if d_memory is not None:
+            raise ValueError("d_memory override is only valid without checkpoints")
         return Dream3RDomainConditionalRelease.from_checkpoints(
             kitti_checkpoint=kitti_checkpoint,
             eth3d_checkpoint=eth3d_checkpoint,
+        )
+    if d_memory is not None:
+        return Dream3RDomainConditionalRelease(
+            Dream3RDomainConditionalConfig(
+                kitti=Dream3RReleaseConfig(d_memory=int(d_memory)),
+                eth3d_d_memory=int(d_memory),
+            )
         )
     return Dream3RDomainConditionalRelease()
