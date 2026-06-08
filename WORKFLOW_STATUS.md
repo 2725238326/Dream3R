@@ -1,5 +1,7 @@
 # Dream Workflow Status
 
+Last updated: 2026-06-09 (Project is moving into closing/pre-defense documentation. Keep the story small: current usable model is Dream3R `v1.1.0`, reports are under `reports/`, release evidence is under `release/`, and remaining work should be final-report/PPT packaging plus a short verification and limitations summary. Do not reopen broad architecture exploration unless explicitly requested.)
+
 Last updated: 2026-06-08 (Opening report expanded from a short outline into a fuller previous-stage report. Source: `reports/opening/DREAM3R_OPENING_REPORT_STUDENT_FINAL.md`; new material covers early Dream3R work, model-family review, framework decomposition, candidate-geometry cache/interface plan, experiment controls, feasibility, and expected outputs. PDF re-rendered under `reports/pdf/Dream3R_开题报告_20260608.pdf`; page count 5; QA first/last page images refreshed.)
 
 Last updated: 2026-06-08 (Midterm report refocused to answer "this period's main changes": current source `reports/midterm/DREAM3R_MIDTERM_REPORT_DRAFT.md` starts from v1.1.0 model identity, VGGT-Omega integration, Qwen diagnostic status, Foundation3R/non-promoted branches, validation chain, metrics, and remaining limits. Fixed model terms such as `Transformer` were kept. PDFs re-rendered under `reports/pdf/`; page counts: midterm 5, opening 4; midterm first/last QA images checked.)

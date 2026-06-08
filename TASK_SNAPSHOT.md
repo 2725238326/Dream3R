@@ -1,5 +1,7 @@
 # Dream Task Snapshot
 
+Last updated: 2026-06-09 (Closing-prep state: Dream3R should now be documented as a near-final deliverable, not a broad new exploration. Use `v1.1.0` as the current model package, keep `v1.0-rc1` as fallback, and present Qwen/Foundation3R as diagnostic or future work only. Next documentation should stay concise: final report, final PPT, artifact list, verification summary, and clear limitations.)
+
 Last updated: 2026-06-08 (Opening report expanded after user feedback: `reports/opening/DREAM3R_OPENING_REPORT_STUDENT_FINAL.md` now includes front-stage preparation and actual early work: paper/model-family review, Dream3R framework decomposition, candidate-geometry cache/interface plan, KITTI/ETH3D selection rationale, test controls, feasibility, and expected outputs. Re-rendered `reports/pdf/Dream3R_开题报告_20260608.pdf`; page count is 5, QA first/last PNGs refreshed.)
 
 Last updated: 2026-06-08 (Midterm report refocused after user feedback: `reports/midterm/DREAM3R_MIDTERM_REPORT_DRAFT.md` now opens with concrete stage changes, current model identity, completed tasks, evidence, and limits instead of a long research-background lead. Fixed terms such as `Transformer` remain as original names. Re-rendered PDFs: `reports/pdf/Dream3R_中期报告_20260608.pdf` is now 5 pages; `reports/pdf/Dream3R_开题报告_20260608.pdf` is 4 pages. QA PNGs refreshed under `reports/pdf/qa/`; midterm first/last pages visually checked.)

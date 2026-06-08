@@ -1,5 +1,7 @@
 # Dream Index
 
+Last updated: 2026-06-09 (Closing-prep note: use the existing `v1.1.0` release package, `reports/` opening/midterm drafts, and `release/` verification documents as the main final-report material base. Keep future documentation concise and avoid reopening model-family exploration.)
+
 Last updated: 2026-06-08 (Rendered report PDFs added: `reports/pdf/Dream3R_中期报告_20260608.pdf` and `reports/pdf/Dream3R_开题报告_20260608.pdf`; opening report student-style source added at `reports/opening/DREAM3R_OPENING_REPORT_STUDENT_FINAL.md`.)
 
 Last updated: 2026-06-08 (Midterm report/PPT language cleanup applied: main report, PPT outline/script, and optimization plan now use direct project-style framing rather than stiff "not X but Y" correction sentences.)
