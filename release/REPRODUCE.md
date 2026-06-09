@@ -174,7 +174,9 @@ fallback_contamination_count: 0
 failure_flags: []
 ```
 
-Run the 4-expert SCF controls:
+Run the historical 4-expert SCF controls. This reproduces the VGGT-Omega
+admission/control gate before the unified `v1.1.0` domain policy; do not use it
+as the current official state-control table.
 
 ```bash
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/hdd3/kykt26/code/dream3r \
@@ -193,7 +195,7 @@ Repeat with:
 --shuffle-state -> runs/v22_admission/vggt_omega_cache_gate/scf_shuffle_state_seed7
 ```
 
-Expected control result:
+Expected historical control result:
 
 ```text
 correct-state: KITTI 0.2296, ETH3D 0.0570
@@ -201,6 +203,7 @@ no-state:      KITTI 0.1966, ETH3D 0.0583
 shuffle-state: KITTI 0.2180, ETH3D 0.0598
 ```
 
-Interpretation: VGGT-Omega is admitted as a real optional teacher backend, but
-not as the RC model path because the state-causality control is not robust on
-KITTI.
+Interpretation: VGGT-Omega is admitted as a real teacher backend and later
+becomes the official ETH3D branch teacher in `v1.1.0`. This historical broad
+4-expert gate is not the final official policy because the KITTI control is not
+robust; KITTI therefore keeps the `v1.0-rc1` fallback branch.

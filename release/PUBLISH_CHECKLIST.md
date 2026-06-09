@@ -1,6 +1,30 @@
-# Dream3R v1.1 Publish Checklist
+# Dream3R v1.1 Final-Stage Publish Checklist
 
-Date: 2026-06-08
+Date: 2026-06-09
+
+Update 2026-06-10:
+
+```text
+handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_HANDOFF_20260610.md
+handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_START_PROMPT_20260610.md
+```
+
+These are the active start points for final-model improvement. They allow a
+final eval pack plus one small reversible v1.1 release-line fusion improvement.
+Promotion remains gated by KITTI/ETH3D metrics and state/no-state/shuffle
+controls.
+
+## Final-Stage Readiness
+
+Current boundary:
+
+```text
+planning/DREAM3R_FINAL_STAGE_READINESS_PLAN_20260609.md
+```
+
+Final-stage work is limited to report/PPT polish, artifact packaging,
+verification refresh, and submission-specific formatting. Do not reopen broad
+architecture search or promote Qwen/Foundation3R without a new explicit gate.
 
 ## Complete Official Package
 
@@ -14,6 +38,17 @@ smoke: code/dream3r/scripts/smoke_v11_release_model.py
 ```
 
 The stable fallback remains `v1.0-rc1`.
+
+## Final Deliverables
+
+Ready final-stage artifacts:
+
+- `reports/final/DREAM3R_FINAL_REPORT_20260609.md`
+- `reports/pdf/Dream3R_结题报告_20260609.pdf`
+- `reports/final/DREAM3R_FINAL_PPT_OUTLINE_AND_SCRIPT_20260609.md`
+- `reports/pptx/Dream3R_Final_Defense_20260609.pptx`
+- `reports/final/DREAM3R_FINAL_DELIVERABLE_INVENTORY_20260609.md`
+- `release/ARTIFACTS.json`
 
 ## Today Completion Plan
 
@@ -112,8 +147,9 @@ semantic annotations diagnostic only; no Router/Critic promotion
 
 ## Current Stop Condition
 
-Stop broad model exploration. For tonight, use `v1.1.0`; keep `v1.0-rc1`
-as the stable fallback.
+Stop broad model exploration. For the final stage, use `v1.1.0`; keep
+`v1.0-rc1` as the stable fallback.
 
-The next work should be presentation and manuscript packaging unless a new
-experiment is explicitly scoped with a release gate and a rollback plan.
+The next work should be final review, formatting, defense rehearsal polish, and
+verification refresh after edits unless a new experiment is explicitly scoped
+with a release gate and a rollback plan.

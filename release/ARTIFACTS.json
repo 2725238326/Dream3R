@@ -272,6 +272,54 @@
     "limitations": "release/LIMITATIONS.md",
     "non_claims": "release/NON_CLAIMS.md"
   },
+  "final_deliverables_20260609": {
+    "status": "final_stage_ready",
+    "official_model": "v1.1.0",
+    "stable_fallback": "v1.0-rc1",
+    "final_stage_plan": "planning/DREAM3R_FINAL_STAGE_READINESS_PLAN_20260609.md",
+    "final_report_source": "reports/final/DREAM3R_FINAL_REPORT_20260609.md",
+    "final_report_pdf": "reports/pdf/Dream3R_结题报告_20260609.pdf",
+    "final_report_pdf_qa": [
+      "reports/pdf/qa/Dream3R_结题报告_20260609_p001.png",
+      "reports/pdf/qa/Dream3R_结题报告_20260609_p005.png"
+    ],
+    "final_ppt_outline": "reports/final/DREAM3R_FINAL_PPT_OUTLINE_AND_SCRIPT_20260609.md",
+    "final_pptx": "reports/pptx/Dream3R_Final_Defense_20260609.pptx",
+    "final_pptx_render_qa": "artifact-tool rendered all 14 slides to PNG and contact sheet during closing pass; scratch previews were inspected before cleanup",
+    "final_deliverable_inventory": "reports/final/DREAM3R_FINAL_DELIVERABLE_INVENTORY_20260609.md",
+    "closing_local_evidence": [
+      "v1.1 verifier pass",
+      "v1.1 smoke pass",
+      "v1.1 KITTI demo pass",
+      "v1.1 ETH3D demo pass",
+      "v1.0 fallback verifier pass",
+      "final report PDF rendered, 5 pages",
+      "final PPTX rendered, 14 slides"
+    ],
+    "claim_boundary": "state-conditioned proposal-fusion 3R; not proposal-free foundation 3R"
+  },
+  "final_model_improvement_start_20260610": {
+    "status": "handoff_ready",
+    "official_baseline": "v1.1.0",
+    "stable_fallback": "v1.0-rc1",
+    "handoff": "handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_HANDOFF_20260610.md",
+    "short_prompt": "handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_START_PROMPT_20260610.md",
+    "allowed_lane": "final eval pack plus small reversible candidate-geometry fusion improvements",
+    "promotion_gate": [
+      "KITTI AbsRel <= 0.1448",
+      "ETH3D AbsRel <= 0.0570",
+      "KITTI correct-state beats no-state and shuffle-state",
+      "ETH3D correct-state beats no-state and shuffle-state",
+      "v1.0 fallback verifier passes",
+      "v1.1 verifier and targeted release tests pass"
+    ],
+    "forbidden_promotions": [
+      "Qwen geometry",
+      "Foundation3R",
+      "proposal-free decoding",
+      "v1.2-exp0"
+    ]
+  },
   "verification_entrypoints": {
     "release_verifier": "code/dream3r/scripts/verify_release_candidate.py",
     "release_verifier_test": "code/dream3r/tests/test_release_candidate_verifier.py",

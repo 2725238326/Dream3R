@@ -1,5 +1,9 @@
 # Dream Agent Master Prompt
 
+Last updated: 2026-06-10 (Final-model improvement handoff added. For active final-model work, hand the next agent `handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_HANDOFF_20260610.md` plus `handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_START_PROMPT_20260610.md`; this authorizes small, reversible v1.1 release-line fusion/evaluation improvements while keeping Qwen/Foundation3R/v1.2-exp0 non-official unless gates pass.)
+
+Last updated: 2026-06-09 (Final-stage readiness plan added. After `TASK_SNAPSHOT.md`, use `planning/DREAM3R_FINAL_STAGE_READINESS_PLAN_20260609.md` for final review/defense/documentation polishing boundaries: keep Dream3R `v1.1.0` official, `v1.0-rc1` fallback, Qwen diagnostic-only, and Foundation3R future/research-only; do not reopen broad architecture search.)
+
 Last updated: 2026-06-08 (Context compaction anchor added: after `TASK_SNAPSHOT.md`, read `handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md` before expanding older guidance. It records v1.1 usable model state, v1.0 fallback, Qwen/VGGT/Foundation3R boundaries, frozen-core policy, validation evidence, and next priorities.)
 
 Last updated: 2026-06-05 (Release candidate selected. Next agents should package/verify frozen-StatePrior + bounded residual as RC and treat VGGT-Omega as optional teacher, not release model. Use DEC-20260605-037 and `release/DREAM3R_RC_CARD.md`.)
@@ -47,14 +51,18 @@ Use this prompt whenever starting or resuming Dream / KYKT 3R research with Code
 For accelerated Dream3R architecture execution, hand the next agent:
 
 ```text
+E:\Dream3R\handoff\DREAM3R_FINAL_MODEL_IMPROVEMENT_HANDOFF_20260610.md
+E:\Dream3R\handoff\DREAM3R_FINAL_MODEL_IMPROVEMENT_START_PROMPT_20260610.md
+E:\Dream3R\planning\DREAM3R_FINAL_STAGE_READINESS_PLAN_20260609.md
 E:\Dream3R\handoff\CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md
 E:\Dream3R\handoff\ARCHITECTURE_V10_ACCELERATED_CONVERGENCE_AGENT_PROMPT.md
 ```
 
-That prompt supersedes residual-head micro-sweep behavior for architecture
-convergence work. It keeps the bounded frozen-StatePrior result as the baseline
-and directs the agent toward native student decoder/distillation or tightly
-gated teacher-bank admission.
+For active final-model improvement, use the 2026-06-10 handoff first. The
+architecture acceleration prompt is historical/future-use context and should not
+be used to reopen broad search. The allowed current lane is final eval pack plus
+small, reversible v1.1 candidate-geometry fusion improvements with explicit
+state/no-state/shuffle gates.
 
 Latest architecture gate results:
 
@@ -116,40 +124,43 @@ Your job is to advance an architecture-first 3R / spatial intelligence research 
 
 ### 0. Mandatory Load Protocol
 
-Read in this order. Position 1 (`TASK_SNAPSHOT.md`) is the highest-authority entry point and must be read FIRST on every session start, before any other file in this list. If `TASK_SNAPSHOT.md` shows status `in_progress` or `blocked`, do not start new work, resume from its `If interrupted, resume from` block. For Dream3R model work, read the 2026-06-08 context compaction immediately after `TASK_SNAPSHOT.md`.
+Read in this order. Position 1 (`TASK_SNAPSHOT.md`) is the highest-authority entry point and must be read FIRST on every session start, before any other file in this list. If `TASK_SNAPSHOT.md` shows status `in_progress` or `blocked`, do not start new work, resume from its `If interrupted, resume from` block. For current Dream3R final-model improvement work, read the 2026-06-10 final-model improvement handoff immediately after `TASK_SNAPSHOT.md`, then read the 2026-06-08 context compaction for detailed model state. For defense-only polish, use the 2026-06-09 final-stage readiness plan.
 
-1. `E:\kykt\Dream\TASK_SNAPSHOT.md`
-2. `E:\Dream3R\handoff\CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md`
-3. `E:\kykt\Dream\README.md`
-4. `E:\kykt\Dream\INDEX.md`
-5. `E:\kykt\Dream\WORKFLOW_STATUS.md`
-6. `E:\kykt\Dream\RESEARCH_STATE.md`
-7. `E:\kykt\Dream\paradigm\RESEARCH_WORKFLOW.md`
-8. `E:\kykt\Dream\paradigm\RESEARCH_DATA_MODEL.md`
-9. `E:\kykt\Dream\paradigm\RESEARCH_PARADIGM.md`
-10. `E:\kykt\Dream\paradigm\RESEARCH_SKILL_RULES_DRAFT.md`
-11. `E:\kykt\Dream\paradigm\RESEARCH_CODE_DISCIPLINE.md`
-12. `E:\kykt\Dream\paradigm\RESEARCH_CONTENT_ROADMAP.md`
-13. `E:\kykt\Dream\planning\MULTI_TRACK_RESEARCH_CANVAS.md`
-14. `E:\kykt\Dream\planning\RESEARCH_GRAPH_AND_PAPER_START.md`
-15. `E:\kykt\Dream\planning\BRANCH_COMPARISON_MATRIX.md`
-16. `E:\kykt\Dream\planning\ARCHITECTURE_MECHANISM_INTAKE.md`
-17. `E:\kykt\Dream\planning\ACTION_TAXONOMY_AND_PROXY_METRICS.md`
-18. `E:\kykt\Dream\planning\BRANCH_SHORTLIST_DECISION_SURFACE.md`
-19. `E:\kykt\Dream\registry\decision_registry.md`
-20. `E:\kykt\Dream\registry\research_unit_registry.md`
-21. `E:\kykt\Dream\registry\source_registry.md`
-22. `E:\kykt\Dream\handoff\FRONTEND_DESIGN_HANDOFF_PROMPT.md`
-23. `E:\kykt\Dream\paradigm\CROSS_SPEC_SIGNAL_CONTRACT.md`
-24. `E:\kykt\Dream\paradigm\TEACHER_AUDIENCE_PROFILE.md`
-25. `E:\kykt\Dream\literature\INDEX.md`
-26. `E:\kykt\Dream\planning\MEMORY_V03_DESIGN_STUDY.md`
-27. `E:\kykt\Dream\specs\SPEC-20260508-001-dream3r-c2-memory-v03-addendum.md`
-28. `E:\kykt\Dream\planning\MEMORY_V03_P0_PROTOTYPE_PLAN.md`
-29. `E:\kykt\Dream\specs\SPEC-20260508-002-dream3r-memory-v03-ablation-addendum.md`
-30. `E:\kykt\Dream\planning\MEMORY_V03_ABLATION_REVIEW.md`
-31. `E:\kykt\Dream\planning\MEMORY_V03_P0_EXECUTION_DEC_TEMPLATE.md`
-32. `E:\kykt\Dream\experiments\prototypes\memory_v03_p0\README.md`
+1. `E:\Dream3R\TASK_SNAPSHOT.md`
+2. `E:\Dream3R\handoff\DREAM3R_FINAL_MODEL_IMPROVEMENT_HANDOFF_20260610.md`
+3. `E:\Dream3R\handoff\DREAM3R_FINAL_MODEL_IMPROVEMENT_START_PROMPT_20260610.md`
+4. `E:\Dream3R\planning\DREAM3R_FINAL_STAGE_READINESS_PLAN_20260609.md`
+5. `E:\Dream3R\handoff\CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md`
+6. `E:\Dream3R\README.md`
+7. `E:\Dream3R\INDEX.md`
+8. `E:\Dream3R\WORKFLOW_STATUS.md`
+9. `E:\Dream3R\RESEARCH_STATE.md`
+10. `E:\Dream3R\paradigm\RESEARCH_WORKFLOW.md`
+11. `E:\Dream3R\paradigm\RESEARCH_DATA_MODEL.md`
+12. `E:\Dream3R\paradigm\RESEARCH_PARADIGM.md`
+13. `E:\Dream3R\paradigm\RESEARCH_SKILL_RULES_DRAFT.md`
+14. `E:\Dream3R\paradigm\RESEARCH_CODE_DISCIPLINE.md`
+15. `E:\Dream3R\paradigm\RESEARCH_CONTENT_ROADMAP.md`
+16. `E:\Dream3R\planning\MULTI_TRACK_RESEARCH_CANVAS.md`
+17. `E:\Dream3R\planning\RESEARCH_GRAPH_AND_PAPER_START.md`
+18. `E:\Dream3R\planning\BRANCH_COMPARISON_MATRIX.md`
+19. `E:\Dream3R\planning\ARCHITECTURE_MECHANISM_INTAKE.md`
+20. `E:\Dream3R\planning\ACTION_TAXONOMY_AND_PROXY_METRICS.md`
+21. `E:\Dream3R\planning\BRANCH_SHORTLIST_DECISION_SURFACE.md`
+22. `E:\Dream3R\registry\decision_registry.md`
+23. `E:\Dream3R\registry\research_unit_registry.md`
+24. `E:\Dream3R\registry\source_registry.md`
+25. `E:\Dream3R\handoff\FRONTEND_DESIGN_HANDOFF_PROMPT.md`
+26. `E:\Dream3R\paradigm\CROSS_SPEC_SIGNAL_CONTRACT.md`
+27. `E:\Dream3R\paradigm\TEACHER_AUDIENCE_PROFILE.md`
+28. `E:\Dream3R\literature\INDEX.md`
+29. `E:\Dream3R\planning\MEMORY_V03_DESIGN_STUDY.md`
+30. `E:\Dream3R\specs\SPEC-20260508-001-dream3r-c2-memory-v03-addendum.md`
+31. `E:\Dream3R\planning\MEMORY_V03_P0_PROTOTYPE_PLAN.md`
+32. `E:\Dream3R\specs\SPEC-20260508-002-dream3r-memory-v03-ablation-addendum.md`
+33. `E:\Dream3R\planning\MEMORY_V03_ABLATION_REVIEW.md`
+34. `E:\Dream3R\planning\MEMORY_V03_P0_EXECUTION_DEC_TEMPLATE.md`
+35. `E:\Dream3R\experiments\prototypes\memory_v03_p0\README.md`
 
 Then inspect the most relevant active file for the requested task:
 
@@ -549,5 +560,5 @@ In final responses:
 For a shorter handoff, give an agent this:
 
 ```text
-Use `E:\kykt\Dream\TASK_SNAPSHOT.md` first, then `E:\kykt\Dream\AGENT_MASTER_PROMPT.md`. Continue Dream from the current C2 Memory v0.3 direction: read `planning/MEMORY_V03_DESIGN_STUDY.md`, `specs/SPEC-20260508-001-dream3r-c2-memory-v03-addendum.md`, `planning/MEMORY_V03_P0_PROTOTYPE_PLAN.md`, `specs/SPEC-20260508-002-dream3r-memory-v03-ablation-addendum.md`, `planning/MEMORY_V03_ABLATION_REVIEW.md`, and `planning/MEMORY_V03_P0_EXECUTION_DEC_TEMPLATE.md`. Default next step is a user decision on whether to approve local static tensor P0 ABL-memory-0..8, revise the template, or return to research design. Do not execute P0 unless explicitly authorized in the active conversation. Treat cycle 024 scaffold as engineering baseline only, not research validation. Do not run models, download checkpoints, train/fine-tune, change KYKT app navigation, implement frontend, discard major branches, or finalize a thesis unless explicitly approved in the active conversation. Keep guidance files synchronized when creating or promoting workflow artifacts.
+Use `E:\Dream3R\TASK_SNAPSHOT.md` first, then `E:\Dream3R\AGENT_MASTER_PROMPT.md`. Continue Dream from the current C2 Memory v0.3 direction only if that historical lane is explicitly requested: read `planning/MEMORY_V03_DESIGN_STUDY.md`, `specs/SPEC-20260508-001-dream3r-c2-memory-v03-addendum.md`, `planning/MEMORY_V03_P0_PROTOTYPE_PLAN.md`, `specs/SPEC-20260508-002-dream3r-memory-v03-ablation-addendum.md`, `planning/MEMORY_V03_ABLATION_REVIEW.md`, and `planning/MEMORY_V03_P0_EXECUTION_DEC_TEMPLATE.md`. Current Dream3R final-model improvement work should instead start from `handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_HANDOFF_20260610.md`. Default next step for the historical C2 lane is a user decision on whether to approve local static tensor P0 ABL-memory-0..8, revise the template, or return to research design. Do not execute P0 unless explicitly authorized in the active conversation. Treat cycle 024 scaffold as engineering baseline only, not research validation. Do not download checkpoints, change KYKT app navigation, implement frontend, discard major branches, or finalize a thesis unless explicitly approved in the active conversation. Keep guidance files synchronized when creating or promoting workflow artifacts.
 ```

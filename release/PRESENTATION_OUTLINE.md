@@ -1,90 +1,97 @@
-# Dream3R-RC Presentation Outline
+# Dream3R v1.1.0 Final Presentation Outline
 
-Date: 2026-06-06
+Date: 2026-06-09
+Status: current closing/final-defense outline
 
-## Slide 1: Problem
+This file supersedes the earlier `Dream3R-RC` outline for presentation use.
+The old `v1.0-rc1` outline is now historical fallback material only.
 
-Long-sequence 3R needs more than a single-frame proposal model. Dream3R tests
-whether a learned state can improve proposal fusion without collapsing into
-spurious state dependence.
-
-## Slide 2: Release Candidate
+## Current Presentation Claim
 
 ```text
-frozen StatePrior + bounded residual refinement
+Dream3R v1.1.0 is a runnable and verifiable state-conditioned
+proposal-fusion 3R model package.
 ```
 
-Key metrics:
+Main metric:
 
 ```text
-KITTI / ETH3D: 0.1448 / 0.1475
+KITTI / ETH3D AbsRel: 0.1448 / 0.0570
 ```
 
-## Slide 3: Method Figure
-
-Use `release/METHOD_FIGURE.md`.
-
-Main message:
+Stable fallback:
 
 ```text
-proposal teachers + frozen StatePrior + bounded residual + shuffle-state gate
+v1.0-rc1, KITTI / ETH3D AbsRel: 0.1448 / 0.1475
 ```
 
-## Slide 4: Main Result Table
+## Recommended Slide Flow
 
-Use the selected RC table from `release/RESULT_TABLE.md`.
+1. Problem: front-feed 3R models now produce diverse candidate geometry.
+2. Model identity: `v1.1.0` is proposal-fusion, not proposal-free foundation 3R.
+3. Architecture: images -> teachers -> proposal bank -> Dream state/conflict -> domain policy -> pointmap.
+4. Branch policy: KITTI keeps `v1.0-rc1`; ETH3D uses VGGT-Omega-expanded SCF.
+5. Main result table: `v1.1.0` keeps KITTI stable and improves ETH3D.
+6. State controls: normal/no-state/shuffle pass on both domains.
+7. VGGT-Omega status: ETH3D teacher branch, not the whole model.
+8. Verification: verifier, smoke, demo, fallback verifier, cache-demo evidence.
+9. Non-promoted branches: Qwen, Foundation3R, `v1.2-exp0`.
+10. Deliverables: release docs, scripts, final report, final PPT.
+11. Limitations: proposal-bank dependency, narrow domains, real-cache demo boundary.
+12. Conclusion: clear official model package with honest non-claims.
 
-Emphasize:
+## Use These Current Tables
+
+Main model:
+
+| Version | KITTI | ETH3D | Role |
+| --- | ---: | ---: | --- |
+| `v1.0-rc1` | 0.1448 | 0.1475 | stable fallback |
+| `v1.1.0` | 0.1448 | 0.0570 | official final deliverable |
+
+State controls:
+
+| Domain | Normal | No-state | Shuffle-state |
+| --- | ---: | ---: | ---: |
+| KITTI | 0.1448 | 0.1553 | 0.1521 |
+| ETH3D | 0.0570 | 0.0583 | 0.0598 |
+
+Non-promoted branch table:
+
+| Branch | Status | Reason |
+| --- | --- | --- |
+| Qwen3-VL semantics | diagnostic only | no stable geometry-control gain |
+| Foundation3R proposal-free | future research | metrics and state controls are not promotable |
+| `v1.2-exp0` core bridge | experimental | no real-cache metric/control promotion |
+
+## Final Deck Artifact
+
+The current editable deck is:
 
 ```text
-beats best single expert
-does not claim oracle-level performance
-correct-state beats shuffled-state control
+reports/pptx/Dream3R_Final_Defense_20260609.pptx
 ```
 
-## Slide 5: Why VGGT-Omega Is Not The RC
-
-Use the VGGT-Omega oracle and control tables.
-
-Message:
+The source outline and script are:
 
 ```text
-real teacher, strong ETH3D evidence, not robust mixed-domain release path
+reports/final/DREAM3R_FINAL_PPT_OUTLINE_AND_SCRIPT_20260609.md
 ```
 
-## Slide 6: Why Qwen Is Not The RC
+## Claim Boundary
 
-Use the Qwen/VLM semantic gate table.
-
-Message:
+Safe:
 
 ```text
-semantic labels are diagnostic, not geometry control
-```
-
-## Slide 7: Honest Claim
-
-Claim:
-
-```text
-controlled state-conditioned proposal fusion
+state-conditioned proposal-fusion 3R release package
 ```
 
 Do not claim:
 
 ```text
-SOTA
-VGGT-Omega final model
-Qwen-guided geometry
-proposal-free native decoder
+proposal-free foundation 3R
+image-only inference
+Qwen geometry model
+Foundation3R promotion
+universal SOTA
 ```
-
-## Slide 8: Next Step
-
-Next research lane:
-
-```text
-domain-conditional VGGT-Omega teacher integration with KITTI/state-causality
-controls preserved as hard gates
-```
-

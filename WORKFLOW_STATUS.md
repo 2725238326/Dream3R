@@ -1,6 +1,14 @@
 # Dream Workflow Status
 
-Last updated: 2026-06-09 (Project is moving into closing/pre-defense documentation. Keep the story small: current usable model is Dream3R `v1.1.0`, reports are under `reports/`, release evidence is under `release/`, and remaining work should be final-report/PPT packaging plus a short verification and limitations summary. Do not reopen broad architecture exploration unless explicitly requested.)
+Last updated: 2026-06-10 (Final-model improvement lane opened. Current start docs are `handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_HANDOFF_20260610.md` and `handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_START_PROMPT_20260610.md`. The lane authorizes final eval pack work and small reversible v1.1 candidate-geometry fusion improvements, with promotion gated by KITTI/ETH3D metrics plus state/no-state/shuffle controls.)
+
+Last updated: 2026-06-09 (Final-stage readiness plan added at `planning/DREAM3R_FINAL_STAGE_READINESS_PLAN_20260609.md`. Current work should now be review, defense polish, artifact packaging, and verification refresh around Dream3R `v1.1.0`; broad architecture search and promotion of Qwen/Foundation3R remain closed without a new explicit gate.)
+
+Last updated: 2026-06-09 (Closing deliverable pass complete: final report source/PDF, final defense PPT source/PPTX, deliverable inventory, local v1.1/v1.0 verification refresh, and old-RC entrypoint cleanup are synced. Evidence: v1.1 verifier pass, v1.1 smoke pass, KITTI/ETH3D v1.1 demo pass, v1.0 fallback verifier pass, targeted release tests `18 passed`, artifact JSON parse pass, and `git diff --check` has no whitespace errors beyond Git line-ending warnings.)
+
+Last updated: 2026-06-09 (Added closing handoff and completion plan. Next agents should start from `handoff/DREAM3R_CLOSING_MAINLINE_AGENT_PROMPT.md` and execute `planning/DREAM3R_CLOSING_COMPLETION_PLAN_20260609.md`: verify v1.1.0, align release/report/PPT materials, fill artifact/limitation gaps, and allow at most small verified improvements around the current release line.)
+
+Last updated: 2026-06-09 (Project is moving into closing/pre-defense documentation. Keep the story small: current usable model is Dream3R `v1.1.0`, reports are under `reports/`, release evidence is under `release/`, and remaining work should be final-report/PPT packaging plus a short verification and limitations summary. Small low-risk optimization is allowed when it can be verified with the existing gates.)
 
 Last updated: 2026-06-08 (Opening report expanded from a short outline into a fuller previous-stage report. Source: `reports/opening/DREAM3R_OPENING_REPORT_STUDENT_FINAL.md`; new material covers early Dream3R work, model-family review, framework decomposition, candidate-geometry cache/interface plan, experiment controls, feasibility, and expected outputs. PDF re-rendered under `reports/pdf/Dream3R_开题报告_20260608.pdf`; page count 5; QA first/last page images refreshed.)
 
@@ -64,7 +72,7 @@ Last updated: 2026-06-06 (Training verification sweep closed: local full suite `
 
 Last updated: 2026-06-06 (Official v1.0-rc1 architecture API added at `code/dream3r/release_candidate.py`, with metadata and checkpoint-loading contract tested by `test_release_candidate_architecture.py`.)
 
-Last updated: 2026-06-06 (Formal Dream3R `v1.0-rc1` package added. Official entrypoint is `release/OFFICIAL_VERSION.md`; frozen architecture surface is `release/ARCHITECTURE_V1_0_RC.md`; read-only verifier is `code/dream3r/scripts/verify_release_candidate.py`.)
+Last updated: 2026-06-06 (Historical Dream3R `v1.0-rc1` package added. It was official at that point and is now the stable fallback under `v1.1.0`; frozen architecture surface is `release/ARCHITECTURE_V1_0_RC.md`; read-only verifier is `code/dream3r/scripts/verify_release_candidate.py`.)
 
 Last updated: 2026-06-06 (NativeStudentDecoder objective gates closed release-negative: dropout-consistency and temporal/scale proxy losses are implemented and tested, but GPU1 gate20 remains `0.1451/0.1480` with zero fallback contamination. Correct-state beats no-state/shuffle but does not beat RC `0.1448/0.1475`; stop same-loss native sweeps.)
 
@@ -123,17 +131,23 @@ Last updated: 2026-05-22 (cycle 043 architecture-focus round after user re-prior
 ## Current Phase
 
 ```text
-Phase 1.5: Dream3R release/research checkpoint, context compressed
-Current writing branch: midterm report v0.1 draft exists under
-  `reports/midterm/DREAM3R_MIDTERM_REPORT_DRAFT.md`; optimization plan and
-  20-slide PPT outline/script also exist under `reports/midterm/`. Next report
-  work is prose polishing, reference-format normalization, then PPTX generation.
+Phase 1.8: Dream3R final-model improvement start
+Current execution branch: v1.1.0 remains the official final model, but the next
+  agent is now authorized to build a final eval pack and attempt one small,
+  reversible candidate-geometry fusion improvement. Promotion requires no metric
+  regression and state/no-state/shuffle controls on KITTI and ETH3D.
 ```
 
 ## Current Mode
 
 ```text
 Current checkpoint:
+  Active handoff:
+    handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_HANDOFF_20260610.md
+    handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_START_PROMPT_20260610.md
+  Final-stage boundary: planning/DREAM3R_FINAL_STAGE_READINESS_PLAN_20260609.md.
+  Closing deliverables are now present under reports/final/, reports/pdf/, and
+  reports/pptx/, with release/ARTIFACTS.json updated to point to them.
   Read handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md after
   TASK_SNAPSHOT.md.
   Dream3R v1.1.0 is the official model package: KITTI 0.1448, ETH3D 0.0570.

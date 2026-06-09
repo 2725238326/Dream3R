@@ -2,6 +2,15 @@
 
 Date: 2026-06-05
 
+Update 2026-06-09: closing deliverable verification refreshed locally. Fresh
+local checks passed: v1.1 verifier `pass`, v1.1 full-model smoke `pass`,
+v1.1 KITTI demo `pass`, v1.1 ETH3D demo `pass`, and v1.0 fallback verifier
+`pass`. Final deliverables were added under `reports/final/`; rendered outputs
+are `reports/pdf/Dream3R_结题报告_20260609.pdf` (5 pages, first/last page QA
+PNGs generated) and `reports/pptx/Dream3R_Final_Defense_20260609.pptx` (14
+slides, artifact-tool preview/contact sheet generated). No training, checkpoint
+download, or new model-family promotion was performed in this closing pass.
+
 Update 2026-06-08: v1.1.0 real proposal-cache runtime demo added. The new
 entrypoint `code/dream3r/scripts/run_dream3r_v11_cache_demo.py` consumes
 existing SCF/VGGT-Omega cache entries, validates strict branch expert order,
@@ -108,7 +117,12 @@ shuffle-state KITTI/ETH3D: 0.1521 / 0.2467
 The correct-state result remains better than the shuffled-state control,
 especially on ETH3D.
 
-## VGGT-Omega Gate Evidence
+## Historical VGGT-Omega Gate Evidence
+
+This section is historical admission evidence. It explains why VGGT-Omega was
+accepted as an ETH3D branch teacher, not why it replaced every `v1.1.0` branch.
+Use the "Unified Domain-Conditional Gate Evidence" section for the current
+official `v1.1.0` controls.
 
 VGGT-Omega smoke test:
 
@@ -128,7 +142,7 @@ fallback_contamination_count: 0
 failure_flags: []
 ```
 
-4-expert SCF controls:
+Historical 4-expert SCF controls before the unified domain policy:
 
 ```text
 correct-state: KITTI 0.2296, ETH3D 0.0570

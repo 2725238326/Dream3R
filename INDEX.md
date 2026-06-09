@@ -1,6 +1,12 @@
 # Dream Index
 
-Last updated: 2026-06-09 (Closing-prep note: use the existing `v1.1.0` release package, `reports/` opening/midterm drafts, and `release/` verification documents as the main final-report material base. Keep future documentation concise and avoid reopening model-family exploration.)
+Last updated: 2026-06-10 (Final-model improvement handoff added: `handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_HANDOFF_20260610.md` and short start prompt `handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_START_PROMPT_20260610.md`. This is the current start point when the task is to improve the final v1.1.0 model rather than only polish defense materials.)
+
+Last updated: 2026-06-09 (Final-stage readiness docs added: `planning/DREAM3R_FINAL_STAGE_READINESS_PLAN_20260609.md` is the current boundary for review/defense/documentation polish. Closing deliverables remain synced for Dream3R `v1.1.0`; continuation anchors remain `handoff/DREAM3R_CLOSING_MAINLINE_AGENT_PROMPT.md` and `planning/DREAM3R_CLOSING_COMPLETION_PLAN_20260609.md`.)
+
+Last updated: 2026-06-09 (Closing deliverables added: final report source `reports/final/DREAM3R_FINAL_REPORT_20260609.md`, final PPT outline/script `reports/final/DREAM3R_FINAL_PPT_OUTLINE_AND_SCRIPT_20260609.md`, deliverable inventory `reports/final/DREAM3R_FINAL_DELIVERABLE_INVENTORY_20260609.md`, rendered PDF `reports/pdf/Dream3R_结题报告_20260609.pdf`, and editable PPTX `reports/pptx/Dream3R_Final_Defense_20260609.pptx`.)
+
+Last updated: 2026-06-09 (Closing-prep note: use the existing `v1.1.0` release package, `reports/` opening/midterm drafts, and `release/` verification documents as the main final-report material base. Future work should stay concise, with small verified improvements allowed around the current release line.)
 
 Last updated: 2026-06-08 (Rendered report PDFs added: `reports/pdf/Dream3R_中期报告_20260608.pdf` and `reports/pdf/Dream3R_开题报告_20260608.pdf`; opening report student-style source added at `reports/opening/DREAM3R_OPENING_REPORT_STUDENT_FINAL.md`.)
 
@@ -130,6 +136,9 @@ Quick navigation for humans and agents. **Read `TASK_SNAPSHOT.md` first** (it is
 | File | Role |
 |---|---|
 | `TASK_SNAPSHOT.md` | **Read first.** Highest-authority resume pointer: current task id, subtask board, status (`idle` / `in_progress` / `blocked`), `If interrupted, resume from` block, recent failure modes |
+| `handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_HANDOFF_20260610.md` | Current executable handoff for improving the final v1.1.0 model: final eval pack, small fusion improvements, gates, allowed files, and stop conditions |
+| `handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_START_PROMPT_20260610.md` | Short prompt to give another agent so it can start the final-model improvement lane immediately |
+| `planning/DREAM3R_FINAL_STAGE_READINESS_PLAN_20260609.md` | Current final-stage review/defense boundary: locked claims, allowed edits, forbidden promotions, checklist, and verification commands |
 | `handoff/CONTEXT_COMPACTION_20260608_V11_USABLE_MODEL.md` | Compressed 2026-06-08 handoff: current usable model, stable fallback, VGGT/Qwen/Foundation3R boundaries, validation evidence, server paths, non-claims, and next priorities |
 | `ARCHITECTURE.md` | Canonical Dream3R architecture map: official path, experimental path, rejected side lanes, frozen core, and next gate |
 | `README.md` | Workspace overview, purpose, non-negotiables |
@@ -156,7 +165,7 @@ Quick navigation for humans and agents. **Read `TASK_SNAPSHOT.md` first** (it is
 | `code/dream3r/scripts/verify_release_candidate.py` | Read-only package verifier for docs, artifacts, metrics, state-causality, stable-core policy, and controlled v1.2 core-unfreeze exceptions |
 | `code/dream3r/scripts/run_dream3r_v11_demo.py` | One-command v1.1 proposal-bank runtime demo; writes KITTI/ETH3D JSON artifacts |
 | `code/dream3r/scripts/eval_unified_domain_conditional_gate.py` | Read-only v1.1 promotion-candidate gate combining KITTI and ETH3D state/no-state/shuffle controls |
-| `code/dream3r/release_candidate.py` | Official importable v1.0-rc1 architecture wrapper |
+| `code/dream3r/release_candidate.py` | Stable fallback importable v1.0-rc1 architecture wrapper |
 | `code/dream3r/tests/test_release_candidate_verifier.py` | Unit test for the release verifier without git dependency |
 
 ## Subdirectories By Purpose
@@ -176,13 +185,28 @@ Quick navigation for humans and agents. **Read `TASK_SNAPSHOT.md` first** (it is
 |---|---|
 | `DREAM3R_OPENING_REPORT_STUDENT_FINAL.md` | 开题报告学生版源稿：背景、现状、目标、研究内容、技术路线、实验设计、可行性、进度、预期成果 |
 
+### `reports/final/` - 结题报告与结题答辩材料
+
+| File | Role |
+|---|---|
+| `DREAM3R_FINAL_REPORT_20260609.md` | 结题报告源稿：研究问题、v1.1.0 模型设计、实验对照、非正式分支、局限和结论 |
+| `DREAM3R_FINAL_PPT_OUTLINE_AND_SCRIPT_20260609.md` | 14 页结题答辩 PPT 页纲与讲稿 |
+| `DREAM3R_FINAL_DELIVERABLE_INVENTORY_20260609.md` | 结题产物清单：模型、验证、报告、PPT、局限和非声明 |
+
 ### `reports/pdf/` - 报告 PDF 输出
 
 | File | Role |
 |---|---|
+| `Dream3R_结题报告_20260609.pdf` | 结题报告 PDF |
 | `Dream3R_中期报告_20260608.pdf` | 中期报告 PDF |
 | `Dream3R_开题报告_20260608.pdf` | 开题报告 PDF |
 | `qa/` | PDF 渲染 QA 页图，用于检查中文和分页 |
+
+### `reports/pptx/` - 答辩 PPT 输出
+
+| File | Role |
+|---|---|
+| `Dream3R_Final_Defense_20260609.pptx` | 14 页可编辑结题答辩 PowerPoint |
 
 ### `paradigm/` - How Dream Operates
 

@@ -1,6 +1,10 @@
 # Dream Research Workspace
 
-Last updated: 2026-06-09 (Closing-prep state: treat Dream3R `v1.1.0` as the current deliverable for final documentation. Final-report work should focus on concise report/PPT packaging, artifact inventory, verification evidence, and limitations. Keep Qwen and Foundation3R as diagnostic/future-work branches.)
+Last updated: 2026-06-10 (Final-model improvement handoff added. Start active final-model work from `handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_HANDOFF_20260610.md` and the concise prompt `handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_START_PROMPT_20260610.md`; v1.1.0 remains official, v1.0-rc1 remains fallback, and allowed changes are final eval pack plus small reversible candidate-geometry fusion improvements with state/no-state/shuffle gates.)
+
+Last updated: 2026-06-09 (Final-stage readiness docs added. Start final review/defense work from `planning/DREAM3R_FINAL_STAGE_READINESS_PLAN_20260609.md`; final report/PPT sources are under `reports/final/`, rendered PDF/PPTX are under `reports/pdf/` and `reports/pptx/`, and `release/ARTIFACTS.json` records the inventory plus verification evidence. Use Dream3R `v1.1.0` as the official deliverable and `v1.0-rc1` as the stable fallback.)
+
+Last updated: 2026-06-09 (Closing-prep state: treat Dream3R `v1.1.0` as the current baseline deliverable for final documentation. Final-report work should focus on concise report/PPT packaging, artifact inventory, verification evidence, limitations, and any small verified improvement that stays within the release line. Keep Qwen and Foundation3R as diagnostic/future-work branches unless new controls pass.)
 
 Last updated: 2026-06-08 (Dream3R v1.1 real proposal-cache runtime demo added and verified: `code/dream3r/scripts/run_dream3r_v11_cache_demo.py` consumes existing SCF/VGGT-Omega caches, validates strict branch expert order, adapts cache `d_memory`, and writes `runs/release/v11_cache_demo/cache_demo_kitti.json` plus `cache_demo_eth3d.json`. BUAA-Server GPU1 real-cache KITTI/ETH3D pass; focused tests `12 passed`. This is runtime-contract evidence, not a benchmark rerun.)
 
@@ -38,9 +42,9 @@ Last updated: 2026-06-06 (Domain-conditional VGGT teacher optimization evaluated
 
 Last updated: 2026-06-06 (Training verification sweep closed: full local tests `273 passed, 2 skipped`; BUAA-Server GPU1 training/architecture subset `37 passed`; 1-epoch GPU1 smokes passed for StatePrior, ProposalSetDecoder frozen-prior, NativeStudent, and ImageStateStudent.)
 
-Last updated: 2026-06-06 (Dream3R official architecture wrapper added at `code/dream3r/release_candidate.py`; use `build_dream3r_release_candidate()` as the importable v1.0-rc1 architecture API. This fills the main code-surface gap between release docs and decoder/training scripts.)
+Last updated: 2026-06-06 (Historical fallback architecture wrapper added at `code/dream3r/release_candidate.py`; use `build_dream3r_release_candidate()` as the importable v1.0-rc1 fallback API. This was the official surface at the time and is now retained as the stable fallback under v1.1.0.)
 
-Last updated: 2026-06-06 (Dream3R formal version package added: `release/OFFICIAL_VERSION.md`, `release/ARCHITECTURE_V1_0_RC.md`, and `code/dream3r/scripts/verify_release_candidate.py`. The official version is `v1.0-rc1`, frozen-StatePrior + bounded residual, KITTI/ETH3D `0.1448/0.1475`.)
+Last updated: 2026-06-06 (Historical Dream3R v1.0-rc1 package added: `release/ARCHITECTURE_V1_0_RC.md` and `code/dream3r/scripts/verify_release_candidate.py`. It was the formal version at that point and is now the stable fallback under official `v1.1.0`; metrics KITTI/ETH3D `0.1448/0.1475`.)
 
 Last updated: 2026-06-06 (NativeStudentDecoder objective optimization gate closed: dropout-consistency plus temporal/scale proxy losses are implemented, locally/server tested, and GPU1 gate20-complete. Correct-state remains causal at `0.1451/0.1480` with zero fallback contamination but does not beat the RC `0.1448/0.1475`, so frozen-StatePrior + bounded residual remains the release candidate. See `decisions/DEC-20260606-038-native-student-objective-gates.md`.)
 
@@ -48,9 +52,9 @@ Last updated: 2026-06-06 (Dream3R fast module-completion and optimization plan a
 
 Last updated: 2026-06-06 (Dream3R implementation module map added at `planning/DREAM3R_IMPLEMENTATION_MODULE_MAP_20260606.md`; use it to understand each module, what is claimable, and where to continue fast.)
 
-Last updated: 2026-06-06 (Dream3R release candidate packaging advanced with external-facing method one-pager, method figure, result tables, presentation outline, and publish checklist. RC remains frozen-StatePrior + bounded residual `0.1448/0.1475`; VGGT-Omega and Qwen remain non-RC lanes. See `release/METHOD_ONEPAGER.md`, `release/METHOD_FIGURE.md`, `release/RESULT_TABLE.md`, and `release/PUBLISH_CHECKLIST.md`.)
+Last updated: 2026-06-06 (Historical release-candidate packaging advanced with external-facing method one-pager, method figure, result tables, presentation outline, and publish checklist. Those docs have since been updated or labeled for official `v1.1.0`; old RC-only numbers are fallback/history context.)
 
-Last updated: 2026-06-05 (Dream3R release candidate selected and packaged: frozen-StatePrior + bounded residual `0.1448/0.1475`. VGGT-Omega passed real smoke and oracle admission but failed release state-control on KITTI, so it remains an optional teacher lane. See `release/DREAM3R_RC_CARD.md`, `release/REPRODUCE.md`, and `release/VERIFY_REPORT.md`.)
+Last updated: 2026-06-05 (Historical Dream3R release candidate selected and packaged: frozen-StatePrior + bounded residual `0.1448/0.1475`. This is now `v1.0-rc1` stable fallback context; current official model is `v1.1.0`.)
 
 Last updated: 2026-06-04 (VGGT-Omega one-window real-backend smoke admitted on BUAA-Server GPU1 after user-provided checkpoint upload. See `decisions/DEC-20260604-035-vggt-omega-admission-runner.md` and `runs/v22_admission/vggt_omega_smoke/results_after_upload_fix_20260604.json`.)
 

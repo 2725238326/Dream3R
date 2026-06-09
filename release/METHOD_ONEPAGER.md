@@ -1,78 +1,80 @@
-# Dream3R-RC Method One-Pager
+# Dream3R v1.1.0 Method One-Pager
 
-Date: 2026-06-06
+Date: 2026-06-09
+Status: current closing one-pager
 
 ## One-Line Claim
 
-Dream3R-RC is a bounded state-conditioned proposal-fusion model that uses
-Dream state only when it survives state-causality controls.
+Dream3R v1.1.0 is a state-conditioned proposal-fusion 3R model package. It
+uses existing 3R teacher outputs as candidate geometry, then applies Dream
+state, confidence, conflict, and domain policy to produce the final pointmap.
 
-## Current Release Candidate
+## Current Official Model
 
 ```text
-frozen StatePrior + bounded residual refinement
+version: v1.1.0
+candidate: domain_conditional_vggt_teacher
+KITTI / ETH3D AbsRel: 0.1448 / 0.0570
+stable fallback: v1.0-rc1
 ```
 
-Selected metrics:
+Domain policy:
 
 ```text
-KITTI abs-rel: 0.1448
-ETH3D abs-rel: 0.1475
+KITTI -> v1.0-rc1 bounded StatePrior + residual
+ETH3D -> VGGT-Omega-expanded SCF correct-state
 ```
 
 Metric direction: lower is better.
 
 ## Architecture Summary
 
-Dream3R-RC does not claim to be a proposal-free geometry foundation model.
-It is a controlled proposal-fusion release candidate:
+Dream3R v1.1.0 is a controlled proposal-fusion release package:
 
 1. Real proposal teachers produce candidate geometry.
-2. A learned StatePrior path estimates state-conditioned proposal preference.
-3. The StatePrior is frozen before residual refinement.
-4. A bounded residual refinement improves the fused output without allowing
-   joint training to overwrite the state prior.
-5. The candidate is accepted only if correct-state behavior beats shuffled
-   state controls.
+2. Candidate geometry and confidence are normalized into a proposal bank.
+3. Dream state / memory context and conflict score condition fusion.
+4. A domain policy selects the verified KITTI or ETH3D branch.
+5. The candidate is accepted only because normal-state behavior beats no-state
+   and shuffled-state controls.
 
-See `release/METHOD_FIGURE.md` for the presentation diagram.
+See `release/ARCHITECTURE_DIAGRAM_V1_1.md` for the current diagram.
 
 ## Evidence Boundary
 
-The selected RC is supported by:
+Official state controls:
 
 ```text
-correct-state KITTI/ETH3D: 0.1448 / 0.1475
-shuffle-state KITTI/ETH3D: 0.1521 / 0.2467
+KITTI normal/no-state/shuffle: 0.1448 / 0.1553 / 0.1521
+ETH3D normal/no-state/shuffle: 0.0570 / 0.0583 / 0.0598
 ```
 
 This supports a narrow release claim: state-conditioned proposal fusion is
-useful under the current bounded setup.
+useful under the current branch policy and verification protocol.
 
-It does not support a broad SOTA claim.
+It does not support a universal SOTA claim.
 
-See `release/RESULT_TABLE.md` for the compact result tables.
+## Why VGGT-Omega Is In The ETH3D Branch Only
 
-## Why VGGT-Omega Is Not The RC
-
-VGGT-Omega is now a real admitted backend and a useful future teacher:
+VGGT-Omega is a real admitted backend and a useful teacher:
 
 ```text
 KITTI oracle gain: +1.18%, VGGT wins 2/50
 ETH3D oracle gain: +18.35%, VGGT wins 35/50
 ```
 
-But the release-control gate failed:
+The earlier broad 4-expert release-control gate failed on KITTI:
 
 ```text
 KITTI correct-state 0.2296, no-state 0.1966, shuffle-state 0.2180
 ETH3D correct-state 0.0570, no-state 0.0583, shuffle-state 0.0598
 ```
 
-Interpretation: VGGT-Omega is strong on ETH3D/indoor-like windows, but the
-current 4-expert state-conditioned cache gate is not a robust release path.
+Interpretation: VGGT-Omega is strong on ETH3D/indoor-like windows, while KITTI
+keeps the stable fallback branch. The later unified domain-conditional gate is
+what promoted `v1.1.0`.
 
-## Why Qwen Is Not In The RC
+## Why Qwen Is Not In The Official Model
 
 Qwen3-VL semantics were tested as an offline semantic signal, not as geometry.
 The controls did not justify promotion:
@@ -85,25 +87,27 @@ semantic Critic-prior: geometry-only F1 0.9211, real+geometry F1 0.8947
 
 Interpretation: Qwen remains diagnostic annotation evidence only.
 
-## Honest Release Position
+## Why Foundation3R Is Future Work
+
+Foundation3R and proposal-free decoders have executable contracts and training
+entrypoints, but current metrics and state controls are not promotable. The
+next proposal-free attempt must change target, data scale, representation, or
+architecture before it can challenge the `v1.1.0` release line.
+
+## Final Release Position
 
 Release as:
 
 ```text
-Dream3R-RC: controlled state-conditioned proposal fusion
+Dream3R v1.1.0: controlled state-conditioned proposal fusion
 ```
 
 Do not release as:
 
 ```text
-SOTA 3R model
-VGGT-Omega Dream3R
+proposal-free foundation 3R
+image-only geometry model
 Qwen-guided geometry model
-proposal-free native decoder
+Foundation3R promotion
+universal SOTA
 ```
-
-## Next Research Lane
-
-The next high-value research lane is domain-conditional teacher integration:
-use VGGT-Omega where its oracle evidence is strong, while keeping KITTI and
-state-causality controls as hard gates.

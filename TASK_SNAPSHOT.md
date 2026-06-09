@@ -1,5 +1,13 @@
 # Dream Task Snapshot
 
+Last updated: 2026-06-10 (Final-model improvement start handoff completed: added `handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_HANDOFF_20260610.md` and `handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_START_PROMPT_20260610.md`, synced entry docs and artifact manifest, updated v1.1 final limitations/non-claims, and corrected AGENT_MASTER paths to `E:\Dream3R`. Verification: v1.1 verifier pass, v1.0 fallback verifier pass, targeted release tests `18 passed`, `ARTIFACTS.json` parses, and `git diff --check` reports no whitespace errors beyond Git line-ending warnings.)
+
+Last updated: 2026-06-09 (Final-stage readiness documentation added: `planning/DREAM3R_FINAL_STAGE_READINESS_PLAN_20260609.md` now defines review/defense polish boundaries, locked v1.1.0 claims, allowed edits, forbidden promotions, final-stage checklist, and verification commands. Current status remains idle; next work should be final review/formatting/rehearsal polish plus verification refresh after edits.)
+
+Last updated: 2026-06-09 (Closing deliverable pass completed: final report source/PDF, final defense PPT source/PPTX, deliverable inventory, local v1.1/v1.0 verification refresh, and old-RC material cleanup are in place. Evidence: v1.1 verifier pass, v1.1 smoke pass, KITTI/ETH3D v1.1 demo pass, v1.0 fallback verifier pass, targeted release tests `18 passed`, `ARTIFACTS.json` parses, and `git diff --check` reports no whitespace errors beyond Git line-ending warnings.)
+
+Last updated: 2026-06-09 (Closing mainline handoff added: `handoff/DREAM3R_CLOSING_MAINLINE_AGENT_PROMPT.md` gives the next-agent prompt for final-stage work, and `planning/DREAM3R_CLOSING_COMPLETION_PLAN_20260609.md` defines the compact route to final report/PPT, verification evidence, artifact inventory, limitations, and small low-risk improvements. Use `v1.1.0` as the baseline deliverable, but allow minor verified optimization around the current release line.)
+
 Last updated: 2026-06-09 (Closing-prep state: Dream3R should now be documented as a near-final deliverable, not a broad new exploration. Use `v1.1.0` as the current model package, keep `v1.0-rc1` as fallback, and present Qwen/Foundation3R as diagnostic or future work only. Next documentation should stay concise: final report, final PPT, artifact list, verification summary, and clear limitations.)
 
 Last updated: 2026-06-08 (Opening report expanded after user feedback: `reports/opening/DREAM3R_OPENING_REPORT_STUDENT_FINAL.md` now includes front-stage preparation and actual early work: paper/model-family review, Dream3R framework decomposition, candidate-geometry cache/interface plan, KITTI/ETH3D selection rationale, test controls, feasibility, and expected outputs. Re-rendered `reports/pdf/Dream3R_开题报告_20260608.pdf`; page count is 5, QA first/last PNGs refreshed.)
@@ -146,7 +154,45 @@ Last updated: 2026-05-27 (state-conditioned reconstruction pivot: added `specs/S
 
 Last updated: 2026-05-22 (v0.5 iteration test plan added after user asked how to iterate, test, and start completing the architecture plans: `planning/DREAM3R_V05_ITERATION_TEST_PLAN.md` defines L0-L4 completion standards, S0 local v0.4 edge tests, S1 A6 KITTI 8-10 window memory evidence, S2 A2 staged adapter real-backend closure, S3 A5 Test3R off-path, S4 A3 dynamic-mask promotion design, server runbook outline, evidence schema, gates, risks, and a short agent prompt; `handoff/ARCHITECTURE_V05_AGENT_START_PROMPT.md` added. Planning only; no v0.5 axis closed. Earlier last-updated note follows.) Last updated: 2026-05-22 (cycle 043 architecture-focus round after user re-prioritization "架构是最重要的内容; 开题报告和综述放一边": W20 SOTA Feature Matrix expanded at `code/dream3r/SOTA_FEATURE_MATRIX.md` (family-grouped 2nd pass) + v0.5 axes spec drafted at `specs/SPEC-20260522-001-dream3r-v05-axes.md` (8 axes A1-A8 with explicit `closes_iff`); markdown only; v0.3 + v0.4 code byte-identical; both candidate-not-final per DEC-20260501-004; sync chain applied. Earlier last-updated note follows.) Last updated: 2026-05-22 (v0.4 architecture closure round, parallel to proposal track: added `code/dream3r/contracts.py` + `repair.py` + `orchestrator.py` + 3 new test files + `ARCHITECTURE_V04_STATUS.md`; 24 new tests + 130 pre-existing tests all pass; v0.3 model.py / modules.py / bus.py / anchor_bank.py / nsa_attention.py / composer_experts/* are byte-identical to before this round; driven by `ARCHITECTURE_V04_AGENT_PROMPT.md`. Proposal-track last-updated note follows.) Last updated: 2026-05-17 (post cycle 042: user 指令开题报告扩展为双支柱项目 — 支柱 A Dream3R 新架构模型 (已有 §1-§9) + 支柱 B KYKT 聚合管理平台 (待新增); PROPOSAL_EXPANSION_PLAN.md + AGENT_HANDOFF_PROPOSAL_EXPANSION.md 已创建; 待其他 agent 执行扩展写作)
 
-Status: **idle** (midterm report v0.1, optimization plan, and 20-slide PPT outline/script are started under `reports/midterm/`; v1.1 afternoon-deliverable package and real proposal-cache runtime demo remain verified locally plus on BUAA-Server GPU1. Next work is report polishing, PPTX generation, or a separately scoped v1.2 metric/control gate.)
+Status: **idle** (final-model improvement start handoff is ready. Dream3R `v1.1.0` remains the official baseline, `v1.0-rc1` remains the stable fallback, and Qwen/Foundation3R remain diagnostic or future-work branches unless new controls pass.)
+
+Current task: none.
+
+Last completed task: Dream3R final-model improvement handoff refresh.
+
+Next recommended task: hand off to a new agent to execute the final-model improvement lane: final eval pack first, then small verified v1.1 release-line fusion improvements.
+
+Active subtask board:
+
+| ID | Task | Status | Evidence |
+| --- | --- | --- | --- |
+| C20260610-FMI-S1 | Draft final-model improvement handoff | done | `handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_HANDOFF_20260610.md` |
+| C20260610-FMI-S2 | Draft concise next-agent start prompt | done | `handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_START_PROMPT_20260610.md` |
+| C20260610-FMI-S3 | Sync entry docs and artifact manifest | done | README/INDEX/WORKFLOW/AGENT_MASTER/ARTIFACTS/final inventory |
+| C20260610-FMI-S4 | Validate docs and close snapshot | done | v1.1 verifier pass; v1.0 verifier pass; targeted tests `18 passed`; JSON parse pass; `git diff --check` no whitespace errors |
+
+Subtask board:
+
+| ID | Task | Status | Evidence |
+| --- | --- | --- | --- |
+| C20260609-CL-S1 | Read closing handoff and completion plan | done | `handoff/DREAM3R_CLOSING_MAINLINE_AGENT_PROMPT.md`; `planning/DREAM3R_CLOSING_COMPLETION_PLAN_20260609.md` |
+| C20260609-CL-S2 | Refresh local v1.1/v1.0 verification | done | v1.1 verifier pass; v1.1 smoke pass; KITTI/ETH3D demo pass; v1.0 fallback verifier pass |
+| C20260609-CL-S3 | Draft final report and final PPT source | done | `reports/final/DREAM3R_FINAL_REPORT_20260609.md`; `reports/final/DREAM3R_FINAL_PPT_OUTLINE_AND_SCRIPT_20260609.md` |
+| C20260609-CL-S4 | Render final report PDF and PPTX | done | `reports/pdf/Dream3R_结题报告_20260609.pdf`; `reports/pptx/Dream3R_Final_Defense_20260609.pptx`; QA PNGs under `reports/pdf/qa/` |
+| C20260609-CL-S5 | Update artifact manifest and old-RC labels | done | `release/ARTIFACTS.json`; README/INDEX/release docs label old RC materials as historical/fallback |
+| C20260609-CL-S6 | Sync TASK/WORKFLOW/README/INDEX and close pass | done | final status files synced; v1.1/v1.0 verifiers and targeted tests pass |
+
+If interrupted, resume from:
+
+```text
+Final-model improvement handoff is ready. Give the next agent
+handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_START_PROMPT_20260610.md and have it
+read handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_HANDOFF_20260610.md first. It
+should start from v1.1.0, build a final eval pack, then attempt only one small,
+reversible candidate-geometry fusion improvement with state/no-state/shuffle
+gates. Do not promote Qwen, Foundation3R, or v1.2-exp0 without new verified
+controls.
+```
 
 ## Release-readiness gate (2026-06-05)
 
