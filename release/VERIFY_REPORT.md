@@ -2,6 +2,20 @@
 
 Date: 2026-06-05
 
+Update 2026-06-10: final-model improvement lane completed without promoting a
+new version. Fresh baseline checks passed before the attempt: v1.1 verifier
+`pass`, v1.0 fallback verifier `pass`, and targeted release tests `18 passed`.
+Added the final evaluation pack at
+`runs/release/v11_final_eval/final_eval_summary.json` and the compact table
+`release/FINAL_EVAL_TABLE_V1_1.md`. The pack summarizes the existing unified
+gate, v1.0 fallback metrics, v1.1 smoke report, and real-cache runtime demos;
+it is explicitly not a new benchmark rerun. A small reversible ETH3D SCF
+conflict-dampening candidate was implemented behind an explicit default-off
+switch and covered by focused tests (`10 passed`), but it was not promoted
+because no real KITTI/ETH3D state/no-state/shuffle benchmark gate was rerun for
+the candidate. Official model remains `v1.1.0`; stable fallback remains
+`v1.0-rc1`.
+
 Update 2026-06-09: closing deliverable verification refreshed locally. Fresh
 local checks passed: v1.1 verifier `pass`, v1.1 full-model smoke `pass`,
 v1.1 KITTI demo `pass`, v1.1 ETH3D demo `pass`, and v1.0 fallback verifier

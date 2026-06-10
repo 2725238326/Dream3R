@@ -1,5 +1,7 @@
 # Dream Workflow Status
 
+Last updated: 2026-06-10 (Final-model improvement lane closed neutral. Built `runs/release/v11_final_eval/final_eval_summary.json` and `release/FINAL_EVAL_TABLE_V1_1.md`, added a default-off ETH3D SCF conflict-dampening candidate, and recorded `runs/release/v11_final_eval/conflict_dampening_attempt.json`. Baseline v1.1/v1.0 verifiers and targeted release tests passed; candidate behavior tests passed, but no real candidate benchmark gate was rerun, so no promotion occurred. Official model remains Dream3R `v1.1.0`; `v1.0-rc1` remains stable fallback.)
+
 Last updated: 2026-06-10 (Final-model improvement lane opened. Current start docs are `handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_HANDOFF_20260610.md` and `handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_START_PROMPT_20260610.md`. The lane authorizes final eval pack work and small reversible v1.1 candidate-geometry fusion improvements, with promotion gated by KITTI/ETH3D metrics plus state/no-state/shuffle controls.)
 
 Last updated: 2026-06-09 (Final-stage readiness plan added at `planning/DREAM3R_FINAL_STAGE_READINESS_PLAN_20260609.md`. Current work should now be review, defense polish, artifact packaging, and verification refresh around Dream3R `v1.1.0`; broad architecture search and promotion of Qwen/Foundation3R remain closed without a new explicit gate.)
@@ -131,11 +133,11 @@ Last updated: 2026-05-22 (cycle 043 architecture-focus round after user re-prior
 ## Current Phase
 
 ```text
-Phase 1.8: Dream3R final-model improvement start
-Current execution branch: v1.1.0 remains the official final model, but the next
-  agent is now authorized to build a final eval pack and attempt one small,
-  reversible candidate-geometry fusion improvement. Promotion requires no metric
-  regression and state/no-state/shuffle controls on KITTI and ETH3D.
+Phase 1.8: Dream3R final-model improvement neutral close
+Current execution branch: v1.1.0 remains the official final model. The final
+  eval pack is built, and the single conflict-dampening candidate is recorded
+  as neutral/not promoted because it lacks a real KITTI/ETH3D state-control
+  metric gate.
 ```
 
 ## Current Mode
@@ -145,6 +147,10 @@ Current checkpoint:
   Active handoff:
     handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_HANDOFF_20260610.md
     handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_START_PROMPT_20260610.md
+  Final-model improvement result:
+    runs/release/v11_final_eval/final_eval_summary.json
+    release/FINAL_EVAL_TABLE_V1_1.md
+    runs/release/v11_final_eval/conflict_dampening_attempt.json
   Final-stage boundary: planning/DREAM3R_FINAL_STAGE_READINESS_PLAN_20260609.md.
   Closing deliverables are now present under reports/final/, reports/pdf/, and
   reports/pptx/, with release/ARTIFACTS.json updated to point to them.

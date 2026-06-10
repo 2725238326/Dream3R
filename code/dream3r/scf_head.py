@@ -52,11 +52,15 @@ class SCFHead(nn.Module):
         use_state:    if False, memory context is ablated to zeros.
         use_residual: if True, add a gated residual correction on top of the
                       convex fusion (default False per the L1 verdict).
+        conflict_dampening_strength:
+                      if >0, high conflict shrinks expert logits toward 0
+                      before softmax, making fusion weights more conservative.
     """
 
     def __init__(self, n_experts: int, d_memory: int, head_dim: int = 64,
                  hidden: int = 128, id_dim: int = 8,
-                 use_state: bool = True, use_residual: bool = False):
+                 use_state: bool = True, use_residual: bool = False,
+                 conflict_dampening_strength: float = 0.0):
         super().__init__()
         self.n_experts = int(n_experts)
         self.d_memory = int(d_memory)
@@ -64,6 +68,9 @@ class SCFHead(nn.Module):
         self.id_dim = int(id_dim)
         self.use_state = bool(use_state)
         self.use_residual = bool(use_residual)
+        self.conflict_dampening_strength = float(conflict_dampening_strength)
+        if not 0.0 <= self.conflict_dampening_strength <= 1.0:
+            raise ValueError("conflict_dampening_strength must be in [0, 1]")
 
         self.context_proj = nn.Linear(self.d_memory, self.head_dim)
         # Learnable per-expert prior so the head can express a global expert
@@ -95,6 +102,17 @@ class SCFHead(nn.Module):
             )
             nn.init.zeros_(self.residual_mlp[-1].weight)
             nn.init.zeros_(self.residual_mlp[-1].bias)
+
+    @staticmethod
+    def _apply_conflict_dampening(
+        logits: torch.Tensor,
+        conflict_signal: torch.Tensor,
+        strength: float,
+    ) -> torch.Tensor:
+        if strength <= 0.0:
+            return logits
+        scale = 1.0 - float(strength) * conflict_signal.clamp(0.0, 1.0)
+        return logits * scale.view(logits.shape[0], 1, 1, 1)
 
     def forward(
         self,
@@ -141,6 +159,11 @@ class SCFHead(nn.Module):
         conf = proposal_confidences.to(dtype)                            # [B,E,N,P,1]
         w_feat = torch.cat([conf, ctx_b, conflict_b, id_b], dim=-1)      # [B,E,N,P, w_in]
         logits = self.weight_mlp(w_feat).squeeze(-1)                     # [B,E,N,P]
+        logits = self._apply_conflict_dampening(
+            logits,
+            conf_sig,
+            self.conflict_dampening_strength,
+        )
         weights = torch.softmax(logits, dim=1)                          # over experts
 
         # ---- 6) convex fusion

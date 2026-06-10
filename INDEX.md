@@ -1,5 +1,7 @@
 # Dream Index
 
+Last updated: 2026-06-10 (Final-model improvement result added: `runs/release/v11_final_eval/final_eval_summary.json`, compact table `release/FINAL_EVAL_TABLE_V1_1.md`, and neutral candidate record `runs/release/v11_final_eval/conflict_dampening_attempt.json`. Official Dream3R remains `v1.1.0`; the conflict-dampening candidate is default-off and not promoted.)
+
 Last updated: 2026-06-10 (Final-model improvement handoff added: `handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_HANDOFF_20260610.md` and short start prompt `handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_START_PROMPT_20260610.md`. This is the current start point when the task is to improve the final v1.1.0 model rather than only polish defense materials.)
 
 Last updated: 2026-06-09 (Final-stage readiness docs added: `planning/DREAM3R_FINAL_STAGE_READINESS_PLAN_20260609.md` is the current boundary for review/defense/documentation polish. Closing deliverables remain synced for Dream3R `v1.1.0`; continuation anchors remain `handoff/DREAM3R_CLOSING_MAINLINE_AGENT_PROMPT.md` and `planning/DREAM3R_CLOSING_COMPLETION_PLAN_20260609.md`.)

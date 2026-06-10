@@ -1,5 +1,7 @@
 # Dream Task Snapshot
 
+Last updated: 2026-06-10 (Final-model improvement lane executed and closed neutral: baseline v1.1 verifier pass, v1.0 fallback verifier pass, targeted release tests `18 passed`; added reproducible final eval pack script/test, `runs/release/v11_final_eval/final_eval_summary.json`, `release/FINAL_EVAL_TABLE_V1_1.md`, and conflict-dampening attempt record. Implemented an explicit default-off ETH3D SCF conflict-dampening candidate with focused tests `10 passed`, but did not promote it because no real KITTI/ETH3D state/no-state/shuffle benchmark gate was rerun for the candidate. Official model remains `v1.1.0`; stable fallback remains `v1.0-rc1`.)
+
 Last updated: 2026-06-10 (Final-model improvement start handoff completed: added `handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_HANDOFF_20260610.md` and `handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_START_PROMPT_20260610.md`, synced entry docs and artifact manifest, updated v1.1 final limitations/non-claims, and corrected AGENT_MASTER paths to `E:\Dream3R`. Verification: v1.1 verifier pass, v1.0 fallback verifier pass, targeted release tests `18 passed`, `ARTIFACTS.json` parses, and `git diff --check` reports no whitespace errors beyond Git line-ending warnings.)
 
 Last updated: 2026-06-09 (Final-stage readiness documentation added: `planning/DREAM3R_FINAL_STAGE_READINESS_PLAN_20260609.md` now defines review/defense polish boundaries, locked v1.1.0 claims, allowed edits, forbidden promotions, final-stage checklist, and verification commands. Current status remains idle; next work should be final review/formatting/rehearsal polish plus verification refresh after edits.)
@@ -154,13 +156,13 @@ Last updated: 2026-05-27 (state-conditioned reconstruction pivot: added `specs/S
 
 Last updated: 2026-05-22 (v0.5 iteration test plan added after user asked how to iterate, test, and start completing the architecture plans: `planning/DREAM3R_V05_ITERATION_TEST_PLAN.md` defines L0-L4 completion standards, S0 local v0.4 edge tests, S1 A6 KITTI 8-10 window memory evidence, S2 A2 staged adapter real-backend closure, S3 A5 Test3R off-path, S4 A3 dynamic-mask promotion design, server runbook outline, evidence schema, gates, risks, and a short agent prompt; `handoff/ARCHITECTURE_V05_AGENT_START_PROMPT.md` added. Planning only; no v0.5 axis closed. Earlier last-updated note follows.) Last updated: 2026-05-22 (cycle 043 architecture-focus round after user re-prioritization "架构是最重要的内容; 开题报告和综述放一边": W20 SOTA Feature Matrix expanded at `code/dream3r/SOTA_FEATURE_MATRIX.md` (family-grouped 2nd pass) + v0.5 axes spec drafted at `specs/SPEC-20260522-001-dream3r-v05-axes.md` (8 axes A1-A8 with explicit `closes_iff`); markdown only; v0.3 + v0.4 code byte-identical; both candidate-not-final per DEC-20260501-004; sync chain applied. Earlier last-updated note follows.) Last updated: 2026-05-22 (v0.4 architecture closure round, parallel to proposal track: added `code/dream3r/contracts.py` + `repair.py` + `orchestrator.py` + 3 new test files + `ARCHITECTURE_V04_STATUS.md`; 24 new tests + 130 pre-existing tests all pass; v0.3 model.py / modules.py / bus.py / anchor_bank.py / nsa_attention.py / composer_experts/* are byte-identical to before this round; driven by `ARCHITECTURE_V04_AGENT_PROMPT.md`. Proposal-track last-updated note follows.) Last updated: 2026-05-17 (post cycle 042: user 指令开题报告扩展为双支柱项目 — 支柱 A Dream3R 新架构模型 (已有 §1-§9) + 支柱 B KYKT 聚合管理平台 (待新增); PROPOSAL_EXPANSION_PLAN.md + AGENT_HANDOFF_PROPOSAL_EXPANSION.md 已创建; 待其他 agent 执行扩展写作)
 
-Status: **idle** (final-model improvement start handoff is ready. Dream3R `v1.1.0` remains the official baseline, `v1.0-rc1` remains the stable fallback, and Qwen/Foundation3R remain diagnostic or future-work branches unless new controls pass.)
+Status: **idle** (final-model improvement lane has completed a neutral close. Dream3R `v1.1.0` remains the official model, `v1.0-rc1` remains the stable fallback, and the conflict-dampening candidate is default-off/not promoted until a real metric gate is rerun.)
 
 Current task: none.
 
-Last completed task: Dream3R final-model improvement handoff refresh.
+Last completed task: Dream3R final-model evaluation pack plus neutral conflict-dampening candidate attempt.
 
-Next recommended task: hand off to a new agent to execute the final-model improvement lane: final eval pack first, then small verified v1.1 release-line fusion improvements.
+Next recommended task: final review/submission polish. If real proposal-cache `.pt` files and benchmark runtime are available, the only model follow-up is to rerun the documented conflict-dampening candidate through the full KITTI/ETH3D state/no-state/shuffle gate before any promotion discussion.
 
 Active subtask board:
 
@@ -170,6 +172,9 @@ Active subtask board:
 | C20260610-FMI-S2 | Draft concise next-agent start prompt | done | `handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_START_PROMPT_20260610.md` |
 | C20260610-FMI-S3 | Sync entry docs and artifact manifest | done | README/INDEX/WORKFLOW/AGENT_MASTER/ARTIFACTS/final inventory |
 | C20260610-FMI-S4 | Validate docs and close snapshot | done | v1.1 verifier pass; v1.0 verifier pass; targeted tests `18 passed`; JSON parse pass; `git diff --check` no whitespace errors |
+| C20260610-FMI-S5 | Build final eval pack | done | `runs/release/v11_final_eval/final_eval_summary.json`; `release/FINAL_EVAL_TABLE_V1_1.md`; final eval pack test `1 passed` |
+| C20260610-FMI-S6 | Attempt small conflict-aware fusion improvement | neutral/not promoted | default-off ETH3D SCF conflict dampening; focused tests `10 passed`; no real metric gate rerun, so official remains `v1.1.0` |
+| C20260610-FMI-S7 | Sync final improvement result | done | `release/VERIFY_REPORT.md`; `release/ARTIFACTS.json`; `TASK_SNAPSHOT.md`; `WORKFLOW_STATUS.md` |
 
 Subtask board:
 

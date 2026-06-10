@@ -270,7 +270,8 @@
     "reproduce": "release/REPRODUCE.md",
     "verify_report": "release/VERIFY_REPORT.md",
     "limitations": "release/LIMITATIONS.md",
-    "non_claims": "release/NON_CLAIMS.md"
+    "non_claims": "release/NON_CLAIMS.md",
+    "final_eval_table_v1_1": "release/FINAL_EVAL_TABLE_V1_1.md"
   },
   "final_deliverables_20260609": {
     "status": "final_stage_ready",
@@ -320,6 +321,25 @@
       "v1.2-exp0"
     ]
   },
+  "final_model_improvement_result_20260610": {
+    "status": "final_eval_pack_complete_candidate_neutral",
+    "official_model": "v1.1.0",
+    "stable_fallback": "v1.0-rc1",
+    "final_eval_summary": "runs/release/v11_final_eval/final_eval_summary.json",
+    "final_eval_table": "release/FINAL_EVAL_TABLE_V1_1.md",
+    "improvement_attempt": "runs/release/v11_final_eval/conflict_dampening_attempt.json",
+    "candidate": "v1.1.1-candidate-conflict-dampening",
+    "candidate_verdict": "neutral_not_promoted_keep_v1.1.0_official",
+    "promotion_result": "not_promoted_no_real_benchmark_gate",
+    "local_evidence": [
+      "baseline v1.1 verifier pass",
+      "baseline v1.0 fallback verifier pass",
+      "baseline targeted release tests 18 passed",
+      "final eval pack script test 1 passed",
+      "conflict dampening/release contract tests 10 passed"
+    ],
+    "claim_boundary": "state-conditioned proposal-fusion 3R; conflict dampening is an unpromoted candidate switch only"
+  },
   "verification_entrypoints": {
     "release_verifier": "code/dream3r/scripts/verify_release_candidate.py",
     "release_verifier_test": "code/dream3r/tests/test_release_candidate_verifier.py",
@@ -330,6 +350,9 @@
     "v1_1_release_demo": "code/dream3r/scripts/run_dream3r_v11_demo.py",
     "v1_1_release_cache_demo": "code/dream3r/scripts/run_dream3r_v11_cache_demo.py",
     "v1_1_release_demo_test": "code/dream3r/tests/test_v11_demo_script.py",
+    "v1_1_final_eval_pack": "code/dream3r/scripts/build_v11_final_eval_pack.py",
+    "v1_1_final_eval_pack_test": "code/dream3r/tests/test_v11_final_eval_pack.py",
+    "v1_1_conflict_dampening_test": "code/dream3r/tests/test_scf_conflict_dampening.py",
     "v1_2_experimental_architecture_test": "code/dream3r/tests/test_release_v12_experimental_architecture.py",
     "unified_domain_conditional_gate": "code/dream3r/scripts/eval_unified_domain_conditional_gate.py",
     "unified_domain_conditional_gate_test": "code/dream3r/tests/test_unified_domain_conditional_gate.py"

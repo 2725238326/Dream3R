@@ -1,0 +1,203 @@
+{
+  "benchmark_note": "This pack consolidates the existing unified gate, fallback metrics, smoke report, and real-cache runtime demo. It does not rerun a formal benchmark.",
+  "candidate": "domain_conditional_vggt_teacher",
+  "claim_boundary": {
+    "not_claimed": [
+      "formal benchmark rerun in this pack",
+      "proposal-free foundation 3R",
+      "image-only inference",
+      "Qwen geometry backend",
+      "universal SOTA",
+      "long-sequence deployment"
+    ],
+    "safe_claim": "state-conditioned proposal-fusion 3R release package"
+  },
+  "formal_benchmark_rerun": false,
+  "fusion_improvement_attempt": {
+    "candidate_name": "v1.1.1-candidate-conflict-dampening",
+    "changed_code_paths": [
+      "code/dream3r/scf_head.py",
+      "code/dream3r/release_v11.py",
+      "code/dream3r/tests/test_scf_conflict_dampening.py",
+      "code/dream3r/tests/test_release_v11_architecture.py"
+    ],
+    "default_official_behavior_changed": false,
+    "directive": "Do not promote this dampening candidate from unit/contract evidence alone. Re-run the real KITTI/ETH3D state/no-state/shuffle gate before reconsidering it.",
+    "mechanism": "ETH3D SCF conflict_dampening_strength=0.35 logit shrinkage",
+    "metric_gate": {
+      "formal_benchmark_rerun": false,
+      "reason": "The local workspace has JSON mirrors of the release gates and cache demos but not the real proposal-cache .pt files needed to run a candidate metric gate.",
+      "required_for_promotion": [
+        "KITTI AbsRel <= 0.1448",
+        "ETH3D AbsRel <= 0.0570",
+        "KITTI correct-state beats no-state and shuffle",
+        "ETH3D correct-state beats no-state and shuffle",
+        "v1.0 fallback verifier passes",
+        "v1.1 verifier passes",
+        "targeted release tests pass"
+      ],
+      "status": "not_evaluated_on_real_benchmark"
+    },
+    "output_contract_changed": false,
+    "verdict": "neutral_not_promoted_keep_v1.1.0_official",
+    "verification": {
+      "baseline_before_candidate": {
+        "targeted_release_tests": "18 passed",
+        "v1_0_fallback_verifier": "pass",
+        "v1_1_verifier": "pass"
+      },
+      "candidate_behavior_tests": {
+        "command": "python -B -m pytest --assert=plain code\\dream3r\\tests\\test_scf_conflict_dampening.py code\\dream3r\\tests\\test_release_v11_architecture.py -q",
+        "result": "10 passed"
+      }
+    }
+  },
+  "metric": "AbsRel",
+  "metric_direction": "lower_is_better",
+  "non_official_lanes": {
+    "foundation3r": "proposal-free research lane, not promotable",
+    "proposal_free_decoder": "research scaffold, not official",
+    "qwen": "diagnostic-only semantic/cache evidence",
+    "v1.2-exp0": "experimental core bridge, not official"
+  },
+  "official_v1_1": {
+    "controls": {
+      "eth3d_state_beats_no_state": true,
+      "eth3d_state_beats_shuffle": true,
+      "kitti_state_beats_no_state": true,
+      "kitti_state_beats_shuffle": true
+    },
+    "metrics": {
+      "eth3d_no_state_abs_rel": 0.0583,
+      "eth3d_shuffle_abs_rel": 0.0598,
+      "eth3d_state_abs_rel": 0.057,
+      "kitti_no_state_abs_rel": 0.1553,
+      "kitti_shuffle_abs_rel": 0.1521,
+      "kitti_state_abs_rel": 0.1448
+    },
+    "policy": {
+      "eth3d": "VGGT-Omega-expanded SCF correct-state",
+      "kitti": "Dream3R v1.0-rc1 bounded StatePrior + residual"
+    },
+    "promotable_to_official": true
+  },
+  "pack": "v11_final_eval",
+  "runtime_cache_demo": {
+    "eth3d": {
+      "cache_entries_matched_domain": 50,
+      "cache_entries_total": 50,
+      "claim_boundary": {
+        "not_claimed": [
+          "benchmark rerun",
+          "proposal-free foundation 3R",
+          "image-only inference"
+        ],
+        "safe_claim": "v1.1 official release consumes proposal-cache entries"
+      },
+      "demo_mode": "proposal_cache_runtime",
+      "domain": "eth3d",
+      "entries_ran": 1,
+      "expert_order": [
+        "fast3r",
+        "mast3r",
+        "spann3r",
+        "vggt_omega"
+      ],
+      "mean_abs_rel_vs_cache_gt": 0.0814824253320694,
+      "status": "pass"
+    },
+    "kitti": {
+      "cache_entries_matched_domain": 246,
+      "cache_entries_total": 246,
+      "claim_boundary": {
+        "not_claimed": [
+          "benchmark rerun",
+          "proposal-free foundation 3R",
+          "image-only inference"
+        ],
+        "safe_claim": "v1.1 official release consumes proposal-cache entries"
+      },
+      "demo_mode": "proposal_cache_runtime",
+      "domain": "kitti",
+      "entries_ran": 1,
+      "expert_order": [
+        "fast3r",
+        "mast3r",
+        "spann3r"
+      ],
+      "mean_abs_rel_vs_cache_gt": 0.14787381887435913,
+      "status": "pass"
+    }
+  },
+  "smoke": {
+    "branches": {
+      "eth3d": {
+        "domain_branch": "eth3d_vggt_omega_scf",
+        "expert_weight_sum_max": 1.0,
+        "expert_weight_sum_min": 1.0,
+        "expert_weights_shape": [
+          2,
+          4,
+          2,
+          8
+        ],
+        "final_confidence_shape": [
+          2,
+          2,
+          8,
+          1
+        ],
+        "final_pointmap_shape": [
+          2,
+          2,
+          8,
+          3
+        ]
+      },
+      "kitti": {
+        "domain_branch": "kitti_v1_0_rc1",
+        "expert_weight_sum_max": 1.0,
+        "expert_weight_sum_min": 1.0,
+        "expert_weights_shape": [
+          2,
+          3,
+          2,
+          8
+        ],
+        "final_confidence_shape": [
+          2,
+          2,
+          8,
+          1
+        ],
+        "final_pointmap_shape": [
+          2,
+          2,
+          8,
+          3
+        ]
+      }
+    },
+    "status": "pass",
+    "version": "v1.1.0"
+  },
+  "source_json_paths": {
+    "artifacts": "release/ARTIFACTS.json",
+    "cache_demo_eth3d": "runs/release/v11_cache_demo/cache_demo_eth3d.json",
+    "cache_demo_kitti": "runs/release/v11_cache_demo/cache_demo_kitti.json",
+    "conflict_dampening_attempt": "runs/release/v11_final_eval/conflict_dampening_attempt.json",
+    "fallback_state": "runs/stage6_fusion/bounded_refine_sweep/frozen_prior_state_seed_7/results.json",
+    "smoke": "runs/release/v11_smoke/smoke_v11_release_model.json",
+    "unified_gate": "runs/v22_admission/domain_conditional_teacher/unified_gate_candidate_with_kitti_no_state_server.json"
+  },
+  "stable_fallback_v1_0": {
+    "candidate": "frozen_state_prior_bounded_residual",
+    "metrics": {
+      "eth3d_abs_rel": 0.1475,
+      "kitti_abs_rel": 0.1448
+    },
+    "version": "v1.0-rc1"
+  },
+  "status": "pass",
+  "version": "v1.1.0"
+}

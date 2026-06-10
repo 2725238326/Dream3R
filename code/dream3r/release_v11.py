@@ -46,6 +46,7 @@ class Dream3RDomainConditionalConfig:
     eth3d_hidden: int = 128
     eth3d_use_state: bool = True
     eth3d_use_residual: bool = False
+    eth3d_conflict_dampening_strength: float = 0.0
     eth3d_expert_order: tuple[str, ...] = ETH3D_EXPERT_ORDER
 
     @classmethod
@@ -63,6 +64,9 @@ class Dream3RDomainConditionalConfig:
             eth3d_use_state=bool(eth3d_config.get("use_state", True)),
             eth3d_use_residual=bool(
                 eth3d_config.get("use_residual", False)
+            ),
+            eth3d_conflict_dampening_strength=float(
+                eth3d_config.get("conflict_dampening_strength", 0.0)
             ),
             eth3d_expert_order=tuple(
                 eth3d_config.get("expert_order", ETH3D_EXPERT_ORDER)
@@ -94,6 +98,7 @@ class Dream3RDomainConditionalRelease(nn.Module):
             hidden=self.config.eth3d_hidden,
             use_state=self.config.eth3d_use_state,
             use_residual=self.config.eth3d_use_residual,
+            conflict_dampening_strength=self.config.eth3d_conflict_dampening_strength,
         )
 
     @staticmethod
@@ -108,6 +113,8 @@ class Dream3RDomainConditionalRelease(nn.Module):
             raise ValueError("v1.1.0 ETH3D policy requires use_state=True")
         if config.eth3d_use_residual:
             raise ValueError("v1.1.0 ETH3D policy uses convex SCF without residual")
+        if not 0.0 <= config.eth3d_conflict_dampening_strength <= 1.0:
+            raise ValueError("eth3d_conflict_dampening_strength must be in [0, 1]")
 
     @classmethod
     def from_checkpoints(
@@ -136,6 +143,7 @@ class Dream3RDomainConditionalRelease(nn.Module):
                 hidden=cfg.eth3d_hidden,
                 use_state=cfg.eth3d_use_state,
                 use_residual=cfg.eth3d_use_residual,
+                conflict_dampening_strength=cfg.eth3d_conflict_dampening_strength,
             )
             eth_head.load_state_dict(ckpt["head_state_dict"], strict=strict)
             eth_head.eval()
@@ -207,21 +215,28 @@ def build_dream3r_v11_release(
     kitti_checkpoint: str | Path | None = None,
     eth3d_checkpoint: str | Path | None = None,
     d_memory: int | None = None,
+    eth3d_conflict_dampening_strength: float = 0.0,
 ) -> Dream3RDomainConditionalRelease:
     """Build the v1.1.0 domain-conditional Dream3R wrapper."""
 
     if kitti_checkpoint is not None or eth3d_checkpoint is not None:
-        if d_memory is not None:
-            raise ValueError("d_memory override is only valid without checkpoints")
+        if d_memory is not None or eth3d_conflict_dampening_strength != 0.0:
+            raise ValueError(
+                "d_memory/conflict-dampening overrides are only valid without checkpoints"
+            )
         return Dream3RDomainConditionalRelease.from_checkpoints(
             kitti_checkpoint=kitti_checkpoint,
             eth3d_checkpoint=eth3d_checkpoint,
         )
-    if d_memory is not None:
+    if d_memory is not None or eth3d_conflict_dampening_strength != 0.0:
+        memory_dim = 32 if d_memory is None else int(d_memory)
         return Dream3RDomainConditionalRelease(
             Dream3RDomainConditionalConfig(
-                kitti=Dream3RReleaseConfig(d_memory=int(d_memory)),
-                eth3d_d_memory=int(d_memory),
+                kitti=Dream3RReleaseConfig(d_memory=memory_dim),
+                eth3d_d_memory=memory_dim,
+                eth3d_conflict_dampening_strength=float(
+                    eth3d_conflict_dampening_strength
+                ),
             )
         )
     return Dream3RDomainConditionalRelease()

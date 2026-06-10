@@ -1,0 +1,39 @@
+{
+  "candidate_name": "v1.1.1-candidate-conflict-dampening",
+  "default_official_behavior_changed": false,
+  "mechanism": "ETH3D SCF conflict_dampening_strength=0.35 logit shrinkage",
+  "output_contract_changed": false,
+  "changed_code_paths": [
+    "code/dream3r/scf_head.py",
+    "code/dream3r/release_v11.py",
+    "code/dream3r/tests/test_scf_conflict_dampening.py",
+    "code/dream3r/tests/test_release_v11_architecture.py"
+  ],
+  "verification": {
+    "baseline_before_candidate": {
+      "v1_1_verifier": "pass",
+      "v1_0_fallback_verifier": "pass",
+      "targeted_release_tests": "18 passed"
+    },
+    "candidate_behavior_tests": {
+      "command": "python -B -m pytest --assert=plain code\\dream3r\\tests\\test_scf_conflict_dampening.py code\\dream3r\\tests\\test_release_v11_architecture.py -q",
+      "result": "10 passed"
+    }
+  },
+  "metric_gate": {
+    "status": "not_evaluated_on_real_benchmark",
+    "formal_benchmark_rerun": false,
+    "reason": "The local workspace has JSON mirrors of the release gates and cache demos but not the real proposal-cache .pt files needed to run a candidate metric gate.",
+    "required_for_promotion": [
+      "KITTI AbsRel <= 0.1448",
+      "ETH3D AbsRel <= 0.0570",
+      "KITTI correct-state beats no-state and shuffle",
+      "ETH3D correct-state beats no-state and shuffle",
+      "v1.0 fallback verifier passes",
+      "v1.1 verifier passes",
+      "targeted release tests pass"
+    ]
+  },
+  "verdict": "neutral_not_promoted_keep_v1.1.0_official",
+  "directive": "Do not promote this dampening candidate from unit/contract evidence alone. Re-run the real KITTI/ETH3D state/no-state/shuffle gate before reconsidering it."
+}

@@ -73,6 +73,24 @@ def test_v11_builder_accepts_cache_memory_dimension_override() -> None:
     assert model.config.eth3d_d_memory == 128
 
 
+def test_v11_candidate_conflict_dampening_keeps_eth3d_contract() -> None:
+    model = build_dream3r_v11_release(eth3d_conflict_dampening_strength=0.35)
+    pointmaps = torch.randn(1, 4, 1, 3, 3)
+    confidences = torch.rand(1, 4, 1, 3, 1)
+    memory = torch.randn(1, 32)
+    conflict = torch.ones(1, 1)
+
+    out = model(pointmaps, confidences, memory, conflict, domain="eth3d")
+
+    assert model.config.eth3d_conflict_dampening_strength == 0.35
+    assert model.release_metadata()["config"]["eth3d_conflict_dampening_strength"] == 0.35
+    assert out["final_pointmap"].shape == (1, 1, 3, 3)
+    assert out["final_confidence"].shape == (1, 1, 3, 1)
+    assert out["expert_weights"].shape == (1, 4, 1, 3)
+    assert out["release_version"] == RELEASE_V11_VERSION
+    assert out["domain_branch"] == "eth3d_vggt_omega_scf"
+
+
 def test_v11_rejects_unsupported_domain_and_bad_config() -> None:
     model = build_dream3r_v11_release()
     pointmaps = torch.randn(1, 3, 1, 2, 3)
@@ -84,6 +102,11 @@ def test_v11_rejects_unsupported_domain_and_bad_config() -> None:
     with pytest.raises(ValueError, match="use_state=True"):
         Dream3RDomainConditionalRelease(
             Dream3RDomainConditionalConfig(eth3d_use_state=False)
+        )
+
+    with pytest.raises(ValueError, match="conflict_dampening_strength"):
+        Dream3RDomainConditionalRelease(
+            Dream3RDomainConditionalConfig(eth3d_conflict_dampening_strength=1.5)
         )
 
 

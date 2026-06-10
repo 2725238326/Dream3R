@@ -1,5 +1,7 @@
 # Dream Agent Master Prompt
 
+Last updated: 2026-06-10 (Final-model improvement lane closed neutral. Start from `TASK_SNAPSHOT.md` for the latest result: final eval pack/table exist, the default-off ETH3D SCF conflict-dampening candidate is tested but not promoted, and official Dream3R remains `v1.1.0` with `v1.0-rc1` fallback.)
+
 Last updated: 2026-06-10 (Final-model improvement handoff added. For active final-model work, hand the next agent `handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_HANDOFF_20260610.md` plus `handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_START_PROMPT_20260610.md`; this authorizes small, reversible v1.1 release-line fusion/evaluation improvements while keeping Qwen/Foundation3R/v1.2-exp0 non-official unless gates pass.)
 
 Last updated: 2026-06-09 (Final-stage readiness plan added. After `TASK_SNAPSHOT.md`, use `planning/DREAM3R_FINAL_STAGE_READINESS_PLAN_20260609.md` for final review/defense/documentation polishing boundaries: keep Dream3R `v1.1.0` official, `v1.0-rc1` fallback, Qwen diagnostic-only, and Foundation3R future/research-only; do not reopen broad architecture search.)

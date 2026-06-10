@@ -1,5 +1,7 @@
 # Dream Research Workspace
 
+Last updated: 2026-06-10 (Final-model improvement lane closed neutral. New outputs: `runs/release/v11_final_eval/final_eval_summary.json`, `release/FINAL_EVAL_TABLE_V1_1.md`, and `runs/release/v11_final_eval/conflict_dampening_attempt.json`. A default-off ETH3D SCF conflict-dampening candidate was added and tested, but it is not promoted without a real KITTI/ETH3D state-control metric gate; official model remains `v1.1.0`.)
+
 Last updated: 2026-06-10 (Final-model improvement handoff added. Start active final-model work from `handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_HANDOFF_20260610.md` and the concise prompt `handoff/DREAM3R_FINAL_MODEL_IMPROVEMENT_START_PROMPT_20260610.md`; v1.1.0 remains official, v1.0-rc1 remains fallback, and allowed changes are final eval pack plus small reversible candidate-geometry fusion improvements with state/no-state/shuffle gates.)
 
 Last updated: 2026-06-09 (Final-stage readiness docs added. Start final review/defense work from `planning/DREAM3R_FINAL_STAGE_READINESS_PLAN_20260609.md`; final report/PPT sources are under `reports/final/`, rendered PDF/PPTX are under `reports/pdf/` and `reports/pptx/`, and `release/ARTIFACTS.json` records the inventory plus verification evidence. Use Dream3R `v1.1.0` as the official deliverable and `v1.0-rc1` as the stable fallback.)
