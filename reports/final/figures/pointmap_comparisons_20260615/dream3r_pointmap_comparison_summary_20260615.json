@@ -1,0 +1,51 @@
+{
+  "eth3d": [
+    {
+      "index": 30,
+      "seq": "playground__images_rig_cam5_undistorted__0000",
+      "best_single_model": "Spann3R",
+      "best_single_absrel": 0.2534,
+      "dream3r_absrel": 0.14,
+      "improvement_pct": 44.8,
+      "figure": "/hdd3/kykt26/code/dream3r/reports/final/figures/pointmap_comparisons_20260615/dream3r_pointmap_compare_rank1_eth3d_idx030.png"
+    },
+    {
+      "index": 34,
+      "seq": "playground__images_rig_cam5_undistorted__0016",
+      "best_single_model": "VGGT-Omega",
+      "best_single_absrel": 0.2936,
+      "dream3r_absrel": 0.1646,
+      "improvement_pct": 43.9,
+      "figure": "/hdd3/kykt26/code/dream3r/reports/final/figures/pointmap_comparisons_20260615/dream3r_pointmap_compare_rank2_eth3d_idx034.png"
+    },
+    {
+      "index": 35,
+      "seq": "playground__images_rig_cam5_undistorted__0020",
+      "best_single_model": "VGGT-Omega",
+      "best_single_absrel": 0.2178,
+      "dream3r_absrel": 0.1253,
+      "improvement_pct": 42.5,
+      "figure": "/hdd3/kykt26/code/dream3r/reports/final/figures/pointmap_comparisons_20260615/dream3r_pointmap_compare_rank3_eth3d_idx035.png"
+    }
+  ],
+  "kitti": [
+    {
+      "index": 150,
+      "seq": "2011_09_28_drive_0138_sync_02",
+      "best_single_model": "Spann3R",
+      "best_single_absrel": 0.1673,
+      "dream3r_absrel": 0.1526,
+      "improvement_pct": 8.8,
+      "figure": "/hdd3/kykt26/code/dream3r/reports/final/figures/pointmap_comparisons_20260615/dream3r_pointmap_compare_rank1_kitti_idx150.png"
+    },
+    {
+      "index": 164,
+      "seq": "2011_09_28_drive_0154_sync_02",
+      "best_single_model": "MASt3R",
+      "best_single_absrel": 0.1161,
+      "dream3r_absrel": 0.1064,
+      "improvement_pct": 8.3,
+      "figure": "/hdd3/kykt26/code/dream3r/reports/final/figures/pointmap_comparisons_20260615/dream3r_pointmap_compare_rank2_kitti_idx164.png"
+    }
+  ]
+}
