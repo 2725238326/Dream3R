@@ -1,38 +1,6 @@
 {
   "recent_turns": {
-    "019ec526-2d87-7e33-b593-6afce353ceaf|019ec63a-6138-77e2-801e-a6236b557c0b|agent-turn-complete": 1781442582488,
-    "019ec526-2d87-7e33-b593-6afce353ceaf|019ec653-6689-7c12-a8c7-d4dfcaf2fe86|agent-turn-complete": 1781444008117,
-    "019ec526-2d87-7e33-b593-6afce353ceaf|019ec669-af17-72c2-889e-0892bfb05adc|agent-turn-complete": 1781445412520,
-    "019ec526-2d87-7e33-b593-6afce353ceaf|019ec66f-957b-7fa1-b405-42722f53ecdb|agent-turn-complete": 1781445770562,
-    "019ec526-2d87-7e33-b593-6afce353ceaf|019ec676-b497-7302-8010-81d5c21943aa|agent-turn-complete": 1781446240406,
-    "019ec526-2d87-7e33-b593-6afce353ceaf|019ec6a1-007b-78f3-ae98-2aaef3ed3c89|agent-turn-complete": 1781449981190,
-    "019ec526-2d87-7e33-b593-6afce353ceaf|019ec6b4-c54c-7152-bc9d-a8de670daace|agent-turn-complete": 1781450648422,
-    "019ec526-2d87-7e33-b593-6afce353ceaf|019ec6f9-98a1-7660-a82e-a1307bf74242|agent-turn-complete": 1781454831583,
-    "019ec526-2d87-7e33-b593-6afce353ceaf|019ec708-62b7-79f0-ae8a-8fa1c872ae45|agent-turn-complete": 1781455803998,
-    "019ec526-2d87-7e33-b593-6afce353ceaf|019ec711-b6ff-75f2-9c73-54df8b411f43|agent-turn-complete": 1781456409780,
-    "019ec70f-4cfb-7551-8f5e-ceeaa0b2dba1|019ec70f-4e5e-7810-88d8-d5d4e1e99437|agent-turn-complete": 1781456600226,
-    "019ec526-2d87-7e33-b593-6afce353ceaf|019ec718-7720-7693-828d-7ab23f43dffe|agent-turn-complete": 1781456856643,
-    "019ec526-2d87-7e33-b593-6afce353ceaf|019ec725-a1b0-7210-8dcf-2d65e4022e09|agent-turn-complete": 1781457715083,
-    "019ec526-2d87-7e33-b593-6afce353ceaf|019ec72f-f4cf-79f2-9e29-5b9b287353ec|agent-turn-complete": 1781458421306,
-    "019ec526-2d87-7e33-b593-6afce353ceaf|019ec734-c8ea-7023-ad3e-ca00200b93ab|agent-turn-complete": 1781458724857,
-    "019ec526-2d87-7e33-b593-6afce353ceaf|019ec741-c3c7-7d31-97e9-9c3f69d8dd6b|agent-turn-complete": 1781459534233,
-    "019ec526-2d87-7e33-b593-6afce353ceaf|019ec745-ec99-7d03-ba04-8dca3c7ff7a4|agent-turn-complete": 1781459819875,
-    "019ec526-2d87-7e33-b593-6afce353ceaf|019ec74c-e727-71d3-a19d-f03e3dcf1c70|agent-turn-complete": 1781460353799,
-    "019ec526-2d87-7e33-b593-6afce353ceaf|019ec754-7064-7f93-94ef-b37f2df309d3|agent-turn-complete": 1781460932638,
-    "019ec526-2d87-7e33-b593-6afce353ceaf|019ec75a-a1a1-7662-8c16-fe3eb9377b5e|agent-turn-complete": 1781461614746,
-    "019ec526-2d87-7e33-b593-6afce353ceaf|019ec7b6-9aea-7303-a8bc-d8b1759ad030|agent-turn-complete": 1781467275168,
-    "019ec526-2d87-7e33-b593-6afce353ceaf|019ec7ba-665e-7bf0-8bf7-86199b76f1e1|agent-turn-complete": 1781468171745,
-    "019ec8c1-2b69-73a3-b026-bc81e1940e6e|019ec8c1-2da5-7ec3-9e2a-63f68565e7c1|agent-turn-complete": 1781485114326,
-    "019ec988-cffc-7fe0-8f11-742220804e5c|019ec988-d196-7d21-845b-601cb4dacaf1|agent-turn-complete": 1781497799027,
-    "019ec526-2d87-7e33-b593-6afce353ceaf|019ec98a-ee3c-7642-9ff4-0ae38d7f45b4|agent-turn-complete": 1781500966354,
-    "019ecad0-4388-74e2-8196-1222642bfea0|019ecad0-4c90-7aa3-a8b2-fbb1f300a455|agent-turn-complete": 1781519215382,
-    "019ec526-2d87-7e33-b593-6afce353ceaf|019ecad1-20c7-7c91-a29c-1c3903ee686f|agent-turn-complete": 1781519232363,
-    "019ec526-2d87-7e33-b593-6afce353ceaf|019ecad3-a12d-7db2-b8fa-e3c866a0cbb4|agent-turn-complete": 1781519429306,
-    "019ecad3-f03b-7240-8763-fcb13dd1d8cf|019ecad3-f60b-79c1-b609-bad57d31f11a|agent-turn-complete": 1781519455556,
-    "019ecad9-bcd2-7090-aec5-0e3ad25a8959|019ecad9-be64-7d33-b420-0198f81a3618|agent-turn-complete": 1781519982699,
-    "019ec526-2d87-7e33-b593-6afce353ceaf|019ecade-155c-7ef3-a0c4-df1c1f7c46ee|agent-turn-complete": 1781520154410,
-    "019ec526-2d87-7e33-b593-6afce353ceaf|019ecae1-954a-7372-b5ee-a3da384bbd5b|agent-turn-complete": 1781520319389,
-    "019ec526-2d87-7e33-b593-6afce353ceaf|019ecb2b-ddda-77f2-a449-17efe801a43e|agent-turn-complete": 1781525783318
+    "019f389e-9ee0-7ec2-bd65-d7d1fea0eb51|019f389e-a0bb-7ee1-88f5-877a1e4305fb|agent-turn-complete": 1783361706925
   },
-  "last_event_at": "2026-06-15T12:16:23.322Z"
+  "last_event_at": "2026-07-06T18:15:06.941Z"
 }
